@@ -1,4 +1,4 @@
-package oskarinio143.heroes3;
+package oskarinio143.heroes3.exception;
 
 public class IncorrectNumber extends RuntimeException {
     public IncorrectNumber(String message) {

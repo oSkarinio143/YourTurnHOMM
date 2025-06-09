@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Unit Database Management</title>
+  <style>
+    :root {
+      --primary-blue: #1e88e5;
+      --dark-blue: #1565c0;
+      --light-gray: #f5f5f5;
+      --medium-gray: #e0e0e0;
+      --dark-gray: #333;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #cccccc; /* Szare tło */
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .database-container {
+      width: 100%;
+      max-width: 800px;
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 40px;
+      text-align: center;
+    }
+
+    .header {
+      margin-bottom: 40px;
+      color: var(--dark-gray);
+      position: relative;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .header::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: var(--primary-blue);
+      margin: 10px auto;
+      border-radius: 2px;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .db-option {
+      height: 160px;
+      background-color: var(--primary-blue);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      padding: 20px;
+    }
+
+    .db-option:hover {
+      background-color: var(--dark-blue);
+      transform: translateY(-7px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .db-option i {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+
+    .db-option h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    .back-button {
+      display: inline-block;
+      padding: 12px 30px;
+      background-color: var(--dark-gray);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+
+    .back-button:hover {
+      background-color: #555;
+    }
+
+    /* Responsywność */
+    @media (max-width: 600px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+      }
+
+      .db-option {
+        height: 140px;
+      }
+    }
+  </style>
+  <!-- Ikony z Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<div class="database-container">
+  <div class="header">
+    <h1>Unit Database Manager</h1>
+  </div>
+
+  <div class="grid-container">
+    <a th:href="@{/oskarinio143/heroes/database/add}" class="db-option">
+      <i class="fas fa-plus-circle"></i>
+      <h2>Add Unit</h2>
+    </a>
+
+    <a th:href="@{/oskarinio143/heroes/database/modify}" class="db-option">
+      <i class="fas fa-edit"></i>
+      <h2>Modify Unit</h2>
+    </a>
+
+    <a th:href="@{/oskarinio143/heroes/database/delete}" class="db-option">
+      <i class="fas fa-trash-alt"></i>
+      <h2>Delete Unit</h2>
+    </a>
+
+    <a th:href="@{/oskarinio143/heroes/database/view}" class="db-option">
+      <i class="fas fa-list"></i>
+      <h2>View Units</h2>
+    </a>
+  </div>
+
+  <a th:href="@{/oskarinio143/heroes}" class="back-button">Back to Main Menu</a>
+</div>
+</body>
+</html>
