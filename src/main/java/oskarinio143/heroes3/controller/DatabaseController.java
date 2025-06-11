@@ -1,8 +1,10 @@
 package oskarinio143.heroes3.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import oskarinio143.heroes3.Unit;
 import oskarinio143.heroes3.exception.ImageException;
 import oskarinio143.heroes3.service.DatabaseService;
 
@@ -10,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Controller
 @RequestMapping("/oskarinio143/heroes/database")
@@ -49,8 +52,21 @@ public class DatabaseController {
         Files.createDirectories(path.getParent()); // jeśli folder nie istnieje
         Files.write(path, image.getBytes());
         String imagePath = path.toString();
+        System.out.println(imagePath);
 
-        databaseService.saveUnit(name, attack, defense, shots, minDamage, maxDamage, hp, speed, description, imagePath);
+        databaseService.saveUnit(name, attack, defense, shots, minDamage, maxDamage, hp, speed, description, "/"+imagePath);
         return "redirect:/oskarinio143/heroes/database";
     }
+
+    @GetMapping("/view")
+    public String viewUnits(Model model){
+        List<Unit> units = databaseService.getAllUnits();
+        model.addAttribute("units", units);
+        return "viewUnits";
+    }
+
+//    @DeleteMapping("/delete")
+//    public String deleteUnit(){
+//
+//    }
 }

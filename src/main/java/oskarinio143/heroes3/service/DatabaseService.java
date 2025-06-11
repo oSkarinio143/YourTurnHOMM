@@ -1,10 +1,10 @@
 package oskarinio143.heroes3.service;
 
-import lombok.NonNull;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import oskarinio143.heroes3.Unit;
 import oskarinio143.heroes3.UnitRepository;
+
+import java.util.List;
 
 @Service
 public class DatabaseService {
@@ -25,9 +25,20 @@ public class DatabaseService {
             int hp,
             int speed,
             String description,
-            String imageFile
+            String imagePath
     ){
-        Unit unit = new Unit(name, attack, defense, shots, minDamage, maxDamage, hp, hp, speed, description, imageFile);
+        Unit unit = new Unit(name, attack, defense, shots, minDamage, maxDamage, hp, hp, speed, description, imagePath);
         unitRepository.save(unit);
+    }
+
+    public List<Unit> getAllUnits(){
+        List<Unit> units = unitRepository.findAll();
+        return units;
+    }
+
+    public void addUnit(){}
+
+    public void viewUnits(){
+
     }
 }

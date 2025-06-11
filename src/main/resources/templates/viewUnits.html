@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista jednostek</title>
+    <style>
+        body {
+            background-color: #e8eaf0;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .unit-container {
+            display: flex;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .unit-image {
+            max-width: 150px;
+            max-height: 150px;
+            margin-right: 20px;
+        }
+        .unit-stats {
+            flex-grow: 1;
+        }
+        .unit-stats p {
+            margin: 4px 0;
+        }
+        .separator {
+            border-top: 3px solid #007bff;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="main-container">
+    <h1>Jednostki</h1>
+    <div th:each="unit : ${units}">
+        <div class="unit-container">
+            <div>
+                <img th:src="@{${unit.imagePath}}" class="unit-image" alt="Unit Image"/>
+            </div>
+            <div class="unit-stats">
+                <p><strong>Nazwa:</strong> <span th:text="${unit.name}"/></p>
+                <p><strong>Atak:</strong> <span th:text="${unit.attack}"/></p>
+                <p><strong>Obrona:</strong> <span th:text="${unit.defense}"/></p>
+                <p><strong>Strzały:</strong> <span th:text="${unit.shots}"/></p>
+                <p><strong>Obrażenia:</strong> <span th:text="${unit.minDamage}"/> - <span th:text="${unit.maxDamage}"/></p>
+                <p><strong>HP:</strong> <span th:text="${unit.hp}"/></p>
+                <p><strong>HP pozostałe:</strong> <span th:text="${unit.hpLeft}"/></p>
+                <p><strong>Szybkość:</strong> <span th:text="${unit.speed}"/></p>
+                <p><strong>Opis:</strong> <span th:text="${unit.description}"/></p>
+            </div>
+        </div>
+        <div class="separator"></div>
+    </div>
+</div>
+</body>
+</html>
