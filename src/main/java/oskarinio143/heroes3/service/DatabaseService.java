@@ -78,15 +78,26 @@ public class DatabaseService {
         model.addAttribute("units", units);
     }
 
+    public void viewSingleUnit(Model model, String name){
+        Unit unit = getUnitByName(name);
+        model.addAttribute("unit", unit);
+    }
+
     public void removeUnit(String name){
         Unit unit = getUnitByName(name);
         unitRepository.delete(unit);
     }
 
-    public void modifyUnit(String name, int attack, int defense, int shots, int minDamage, int maxDamage, int hp, int speed, String description){
+    public void modifyUnit(String name, int attack, int defense, int shots, int minDamage, int maxDamage, int hp, int speed, Optional<String> descriptionOpt){
         Unit unitOld = getUnitByName(name);
-        Unit unitNew = new Unit(name, attack, defense, shots, minDamage, maxDamage, hp, hp, speed, description, unitOld.getImagePath());
-        unitRepository.save(unitNew);
+        if(descriptionOpt.isPresent()) {
+            Unit unitNew = new Unit(name, attack, defense, shots, minDamage, maxDamage, hp, hp, speed, descriptionOpt.get(), unitOld.getImagePath());
+            unitRepository.save(unitNew);
+        }
+        else{
+            Unit unitNew = new Unit(name, attack, defense, shots, minDamage, maxDamage, hp, hp, speed, "", unitOld.getImagePath());
+            unitRepository.save(unitNew);
+        }
     }
 
 }

@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/oskarinio143/heroes/database")
@@ -78,8 +79,7 @@ public class DatabaseController {
 
     @GetMapping("/modify/unit")
     public String handleModifyUnit(@RequestParam String name, Model model) {
-        Unit unit = databaseService.getUnitByName(name);
-        model.addAttribute("unit", unit);
+        databaseService.viewSingleUnit(model, name);
         return "modifyUnit";
     }
 
@@ -93,7 +93,7 @@ public class DatabaseController {
             @RequestParam int maxDamage,
             @RequestParam int hp,
             @RequestParam int speed,
-            @RequestParam String description
+            @RequestParam Optional<String> description
     ) throws IOException{
         databaseService.modifyUnit(name, attack, defense, shots, minDamage, maxDamage, hp, speed, description);
         return "redirect:/oskarinio143/heroes/database/modify";

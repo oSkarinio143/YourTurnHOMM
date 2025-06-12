@@ -195,10 +195,10 @@
       <input type="number" class="editable-input hidden" id="defense-input" th:value="${unit.defense}">
     </div>
 
-    <div class="stat-row" th:if="${unit.shots != null and unit.shots > 0}">
+    <div class="stat-row" th:if="${unit.shots != null}">
       <span class="stat-label">Strzały:</span>
       <span class="stat-value" id="shots-display" th:text="${unit.shots}"></span>
-      <input type="number" class="editable-input hidden" id="shots-input" th:value="${unit.shots}">
+      <input type="number" class="editable-input hidden" id="shots-input" th:value="${unit.shots}" name="shots">
     </div>
 
     <div class="stat-row">
