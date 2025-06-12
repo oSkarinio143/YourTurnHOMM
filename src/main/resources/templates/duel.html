@@ -295,7 +295,7 @@
       <div class="army-title">Gracz</div>
 
       <div class="unit-selector">
-        <form th:action="@{/oskarinio143/heroes/duel/select}" method="post" style="display: inline; width: 100%;">
+        <form th:action="@{/oskarinio143/heroes/duel/select}" method="post">
           <input type="hidden" name="side" value="left">
           <button type="submit" class="select-unit-btn">
             Wybierz jednostkę
@@ -315,29 +315,30 @@
 
         <!-- Lewa jednostka -->
         <div class="unit-display left-unit" id="leftUnitDisplay">
-          <div th:if="${selectedUnits[0] != ''}">
+          <!-- Zmiana 1: Użyj 'units' zamiast 'selectedUnits' -->
+          <div th:if="${units != null and units[0].name != null}">
             <img th:src="@{${units[0].imagePath}}"
                  alt="Left Unit Image"
                  style="max-width:150px; max-height:150px;"/>
           </div>
-          <div th:if="${selectedUnits[0] == ''}" class="unit-placeholder">?</div>
+          <div th:unless="${units != null and units[0].name != null}" class="unit-placeholder">?</div>
         </div>
 
         <div class="vs-text">VS</div>
 
         <!-- Prawa jednostka -->
         <div class="unit-display right-unit" id="rightUnitDisplay">
-          <div th:if="${selectedUnits[1] != ''}">
+          <!-- Zmiana 2: Analogicznie dla prawej strony -->
+          <div th:if="${units != null and units[1].name != null}">
             <img th:src="@{${units[1].imagePath}}"
                  alt="Right Unit Image"
                  style="max-width:150px; max-height:150px;"/>
           </div>
-          <div th:if="${selectedUnits[1] == ''}" class="unit-placeholder">?</div>
+          <div th:unless="${units != null and units[1].name != null}" class="unit-placeholder">?</div>
         </div>
 
       </div>
     </div>
-
 
     <!-- Prawa armia -->
     <div class="army-section right-army">
@@ -345,7 +346,7 @@
       <div class="army-title">Przeciwnik</div>
 
       <div class="unit-selector">
-        <form th:action="@{/oskarinio143/heroes/duel/select}" method="post" style="display: inline; width: 100%;">
+        <form th:action="@{/oskarinio143/heroes/duel/select}" method="post">
           <input type="hidden" name="side" value="right">
           <button type="submit" class="select-unit-btn">
             Wybierz jednostkę
@@ -366,130 +367,25 @@
       ← Powrót do bazy danych
     </button>
 
-    <button class="nav-btn battle-btn" id="startBattleBtn" onclick="startBattle()">
-      ⚔️ Rozpocznij pojedynek
-    </button>
+    <!-- Zmiana 3: Formularz do przesyłania ilości jednostek -->
+    <form th:action="@{/oskarinio143/heroes/duel/result}" method="post" style="display: inline;">
+      <input type="hidden" name="leftQuantity" id="leftQuantityInput">
+      <input type="hidden" name="rightQuantity" id="rightQuantityInput">
+      <button type="submit" class="nav-btn battle-btn">
+        ⚔️ Rozpocznij pojedynek
+      </button>
+    </form>
   </div>
 </div>
 
 <script>
-  function selectUnit(side) {
-    // Placeholder dla funkcji wyboru jednostki
-    console.log('Wybieranie jednostki dla strony:', side);
-    // Tutaj będzie logika otwierania modala lub przekierowania do wyboru jednostki
-
-    // Przykładowa funkcja pokazująca jak można aktualizować wyświetlanie jednostki
-    // updateUnitDisplay(side, 'Nazwa jednostki', 'ikona-lub-obrazek');
-  }
-
-  function updateUnitDisplay(side, unitData) {
-    // Funkcja do aktualizacji wyświetlania wybranej jednostki
-    const displayId = side === 'left' ? 'leftUnitDisplay' : 'rightUnitDisplay';
-    const display = document.getElementById(displayId);
-
-    if (unitData && unitData.name) {
-      display.innerHTML = `
-        <div style="font-size: 48px; margin-bottom: 10px;">${unitData.image || '⚔️'}</div>
-        <div style="font-weight: bold; color: #333; font-size: 14px; text-align: center;">${unitData.name}</div>
-      `;
-
-      // Zmień styl border na solid gdy jednostka jest wybrana
-      display.style.borderStyle = 'solid';
-      display.style.borderWidth = '3px';
-    } else {
-      // Przywróć znak zapytania jeśli brak danych
-      display.innerHTML = '<div class="unit-placeholder">?</div>';
-      display.style.borderStyle = 'dashed';
-      display.style.borderWidth = '2px';
-    }
-
-    updateBattleButtonState();
-  }
-
-  function goToDatabase() {
-    // Funkcja powrotu do bazy danych
-    console.log('Powrót do bazy danych');
-    window.location.href = '/baza-danych';
-  }
-
-  function startBattle() {
-    // Funkcja rozpoczęcia pojedynku
-    console.log('Rozpoczynanie pojedynku');
-
-    // Sprawdź czy jednostki zostały wybrane
-    const leftQuantity = document.getElementById('leftQuantity').value;
-    const rightQuantity = document.getElementById('rightQuantity').value;
-
-    if (leftQuantity > 0 && rightQuantity > 0) {
-      console.log(`Pojedynek: ${leftQuantity} vs ${rightQuantity}`);
-      // Przekierowanie do strony pojedynku
-      window.location.href = '/pojedynek';
-    } else {
-      alert('Proszę wybrać jednostki i podać ich ilość przed rozpoczęciem pojedynku!');
-    }
-  }
-
-  // Walidacja pól ilości
-  document.getElementById('leftQuantity').addEventListener('input', function(e) {
-    if (e.target.value < 1) e.target.value = 1;
-    updateBattleButtonState();
+  // Zmiana 4: Skrypt do obsługi ilości jednostek
+  document.querySelector('.battle-btn').addEventListener('click', function() {
+    document.getElementById('leftQuantityInput').value =
+    document.getElementById('leftQuantity').value;
+    document.getElementById('rightQuantityInput').value =
+    document.getElementById('rightQuantity').value;
   });
-
-  document.getElementById('rightQuantity').addEventListener('input', function(e) {
-    if (e.target.value < 1) e.target.value = 1;
-    updateBattleButtonState();
-  });
-
-  // Funkcja aktualizacji stanu przycisku pojedynku
-  function updateBattleButtonState() {
-    const leftQuantity = document.getElementById('leftQuantity').value;
-    const rightQuantity = document.getElementById('rightQuantity').value;
-    const battleBtn = document.getElementById('startBattleBtn');
-
-    // Sprawdź czy jednostki są wybrane (czy mają solid border)
-    const leftUnit = document.getElementById('leftUnitDisplay');
-    const rightUnit = document.getElementById('rightUnitDisplay');
-    const leftSelected = leftUnit.style.borderStyle === 'solid';
-    const rightSelected = rightUnit.style.borderStyle === 'solid';
-
-    if (leftSelected && rightSelected && leftQuantity > 0 && rightQuantity > 0) {
-      battleBtn.disabled = false;
-    } else {
-      battleBtn.disabled = true;
-    }
-  }
-
-  // Inicjalizacja - sprawdź czy są parametry URL z wybranymi jednostkami
-  document.addEventListener('DOMContentLoaded', function() {
-    updateBattleButtonState();
-    loadSelectedUnitsFromURL();
-  });
-
-  function loadSelectedUnitsFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const leftUnit = urlParams.get('leftUnit');
-    const rightUnit = urlParams.get('rightUnit');
-
-    if (leftUnit) {
-      // Tutaj załadujesz dane jednostki z serwera na podstawie ID
-      // Na razie przykładowe dane
-      updateUnitDisplay('left', {
-        name: 'Jednostka ' + leftUnit,
-        image: '🛡️',
-        id: leftUnit
-      });
-    }
-
-    if (rightUnit) {
-      // Tutaj załadujesz dane jednostki z serwera na podstawie ID
-      // Na razie przykładowe dane
-      updateUnitDisplay('right', {
-        name: 'Jednostka ' + rightUnit,
-        image: '⚔️',
-        id: rightUnit
-      });
-    }
-  }
 </script>
 </body>
 </html>

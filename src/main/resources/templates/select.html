@@ -67,6 +67,7 @@
     </div>
     <form th:action="@{/oskarinio143/heroes/duel}" method="post" style="margin-left: 20px;">
       <input type="hidden" th:name="name" th:value="${unit.name}" />
+      <input type="hidden" th:name="side" th:value="${side}"/>
       <button type="submit" style="
                 background-color: #007bff;
                 border: none;

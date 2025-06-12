@@ -19,8 +19,7 @@ public class DuelController {
     }
 
     @GetMapping
-    public String duelBoard(Model model){
-        duelService.loadEmptyList(model);
+    public String duelBoard(){
         return "duel";
     }
 
@@ -31,8 +30,8 @@ public class DuelController {
     }
 
     @PostMapping()
-    public String getUnit(Model model, @RequestParam String name){
-        duelService.loadUnit(model, name);
+    public String getUnit(Model model, @RequestParam String name, @RequestParam String side){
+        duelService.loadUnit(model, name, side);
         return "duel";
     }
 }
