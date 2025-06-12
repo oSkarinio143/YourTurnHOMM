@@ -20,7 +20,7 @@ public class Unit {
     private int attack;
     @NonNull
     private int defense;
-
+    @NonNull
     private int shots;
     @NonNull
     private int minDamage;

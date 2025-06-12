@@ -1,5 +1,6 @@
 package oskarinio143.heroes3.controller;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -47,26 +48,54 @@ public class DatabaseController {
             @RequestParam String description,
             @RequestParam MultipartFile image
     ) throws IOException{
-        String fileName = name + ".png";
-        Path path = Paths.get("unit-images", fileName);
-        Files.createDirectories(path.getParent()); // jeśli folder nie istnieje
-        Files.write(path, image.getBytes());
-        String imagePath = path.toString();
-        System.out.println(imagePath);
-
-        databaseService.saveUnit(name, attack, defense, shots, minDamage, maxDamage, hp, speed, description, "/"+imagePath);
+        databaseService.addUnit(name, attack, defense, shots, minDamage, maxDamage, hp, speed, description, image);
         return "redirect:/oskarinio143/heroes/database";
     }
 
     @GetMapping("/view")
     public String viewUnits(Model model){
-        List<Unit> units = databaseService.getAllUnits();
-        model.addAttribute("units", units);
+        databaseService.viewUnits(model);
         return "viewUnits";
     }
 
-//    @DeleteMapping("/delete")
-//    public String deleteUnit(){
-//
-//    }
+    @GetMapping("/delete")
+    public String deleteUnit(Model model){
+        databaseService.viewUnits(model);
+        return "deleteUnit";
+    }
+
+    @PostMapping("/delete")
+    public String handleDeleteUnit(@RequestParam String name) {
+        databaseService.removeUnit(name);
+        return "redirect:/oskarinio143/heroes/database";
+    }
+
+    @GetMapping("/modify")
+    public String handleModify(Model model){
+        databaseService.viewUnits(model);
+        return "modify";
+    }
+
+    @GetMapping("/modify/unit")
+    public String handleModifyUnit(@RequestParam String name, Model model) {
+        Unit unit = databaseService.getUnitByName(name);
+        model.addAttribute("unit", unit);
+        return "modifyUnit";
+    }
+
+    @PostMapping("/modify/unit")
+    public String saveModifiedUnit(
+            @RequestParam String name,
+            @RequestParam int attack,
+            @RequestParam int defense,
+            @RequestParam int shots,
+            @RequestParam int minDamage,
+            @RequestParam int maxDamage,
+            @RequestParam int hp,
+            @RequestParam int speed,
+            @RequestParam String description
+    ) throws IOException{
+        databaseService.modifyUnit(name, attack, defense, shots, minDamage, maxDamage, hp, speed, description);
+        return "redirect:/oskarinio143/heroes/database/modify";
+    }
 }

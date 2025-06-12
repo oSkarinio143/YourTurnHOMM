@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Karta jednostki</title>
+  <style>
+    body {
+      background-color: #e8eaf0;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card-container {
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 30px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .unit-image {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border: 3px solid #007bff;
+    }
+
+    .unit-name {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .stats-container {
+      text-align: left;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .stat-row:last-child {
+      border-bottom: none;
+    }
+
+    .stat-label {
+      font-weight: 600;
+      color: #555;
+      flex: 1;
+    }
+
+    .stat-value {
+      font-weight: bold;
+      color: #333;
+      text-align: right;
+    }
+
+    .description-section {
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 2px solid #007bff;
+    }
+
+    .description-label {
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .description-text {
+      color: #666;
+      line-height: 1.4;
+      font-style: italic;
+    }
+
+    .damage-range {
+      color: #e53935;
+      font-weight: bold;
+    }
+
+    .hp-section {
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      padding: 8px;
+      margin: 5px 0;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s;
+      flex: 1;
+      text-decoration: none;
+      text-align: center;
+      display: inline-block;
+    }
+
+    .btn-back {
+      background-color: #555;
+      color: white;
+    }
+
+    .btn-back:hover {
+      background-color: #333;
+    }
+
+    .btn-edit {
+      background-color: #1e88e5;
+      color: white;
+    }
+
+    .btn-edit:hover {
+      background-color: #1565c0;
+    }
+
+    .btn-save {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .btn-save:hover {
+      background-color: #45a049;
+    }
+
+    .editable-input {
+      border: 1px solid #007bff;
+      background-color: #f8f9ff;
+      padding: 4px 8px;
+      border-radius: 4px;
+      width: 80px;
+      text-align: right;
+      font-weight: bold;
+    }
+
+    .editable-textarea {
+      border: 1px solid #007bff;
+      background-color: #f8f9ff;
+      padding: 8px;
+      border-radius: 4px;
+      width: 100%;
+      resize: vertical;
+      min-height: 60px;
+      font-style: italic;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+<div class="card-container">
+  <img th:src="@{${unit.imagePath}}" class="unit-image" alt="Unit Image"/>
+
+  <div class="unit-name" th:text="${unit.name}"></div>
+
+  <div class="stats-container">
+    <div class="stat-row">
+      <span class="stat-label">Atak:</span>
+      <span class="stat-value" id="attack-display" th:text="${unit.attack}"></span>
+      <input type="number" class="editable-input hidden" id="attack-input" th:value="${unit.attack}">
+    </div>
+
+    <div class="stat-row">
+      <span class="stat-label">Obrona:</span>
+      <span class="stat-value" id="defense-display" th:text="${unit.defense}"></span>
+      <input type="number" class="editable-input hidden" id="defense-input" th:value="${unit.defense}">
+    </div>
+
+    <div class="stat-row" th:if="${unit.shots != null and unit.shots > 0}">
+      <span class="stat-label">Strzały:</span>
+      <span class="stat-value" id="shots-display" th:text="${unit.shots}"></span>
+      <input type="number" class="editable-input hidden" id="shots-input" th:value="${unit.shots}">
+    </div>
+
+    <div class="stat-row">
+      <span class="stat-label">Obrażenia:</span>
+      <span class="stat-value damage-range">
+                    <span id="minDamage-display" th:text="${unit.minDamage}"></span> - <span id="maxDamage-display" th:text="${unit.maxDamage}"></span>
+                </span>
+      <div class="hidden" id="damage-inputs">
+        <input type="number" class="editable-input" id="minDamage-input" th:value="${unit.minDamage}" style="width: 60px;">
+        -
+        <input type="number" class="editable-input" id="maxDamage-input" th:value="${unit.maxDamage}" style="width: 60px;">
+      </div>
+    </div>
+
+    <div class="stat-row hp-section">
+      <span class="stat-label">HP:</span>
+      <span class="stat-value" id="hp-display" th:text="${unit.hp}"></span>
+      <input type="number" class="editable-input hidden" id="hp-input" th:value="${unit.hp}">
+    </div>
+
+    <div class="stat-row hp-section" th:if="${unit.hpLeft != null}">
+      <span class="stat-label">HP pozostałe:</span>
+      <span class="stat-value" id="hpLeft-display" th:text="${unit.hpLeft}"></span>
+    </div>
+
+    <div class="stat-row">
+      <span class="stat-label">Szybkość:</span>
+      <span class="stat-value" id="speed-display" th:text="${unit.speed}"></span>
+      <input type="number" class="editable-input hidden" id="speed-input" th:value="${unit.speed}">
+    </div>
+  </div>
+
+  <div class="description-section" th:if="${unit.description != null and !#strings.isEmpty(unit.description)}">
+    <div class="description-label">Opis:</div>
+    <div class="description-text" id="description-display" th:text="${unit.description}"></div>
+    <textarea class="editable-textarea hidden" id="description-input" th:text="${unit.description}"></textarea>
+  </div>
+
+  <div class="button-container">
+    <a th:href="@{/oskarinio143/heroes/database}" class="btn btn-back">← Powrót do bazy</a>
+    <button class="btn btn-edit" id="editBtn" onclick="toggleEdit()">Edytuj</button>
+    <form class="hidden" id="saveForm" th:action="@{/oskarinio143/heroes/database/modify/unit}" method="post" style="flex: 1;">
+      <input type="hidden" name="name" th:value="${unit.name}">
+      <button type="submit" class="btn btn-save" style="width: 100%;" onclick="prepareFormData()">Zapisz</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  let isEditing = false;
+
+  function toggleEdit() {
+    isEditing = !isEditing;
+    const editBtn = document.getElementById('editBtn');
+    const saveForm = document.getElementById('saveForm');
+
+    if (isEditing) {
+      // Przełącz na tryb edycji
+      editBtn.classList.add('hidden');
+      saveForm.classList.remove('hidden');
+
+      // Pokaż pola input, ukryj wyświetlane wartości
+      const displays = document.querySelectorAll('[id$="-display"]');
+      const inputs = document.querySelectorAll('[id$="-input"], [id$="-inputs"]');
+
+      displays.forEach(display => display.classList.add('hidden'));
+      inputs.forEach(input => input.classList.remove('hidden'));
+    } else {
+      // Powrót do trybu wyświetlania
+      editBtn.classList.remove('hidden');
+      saveForm.classList.add('hidden');
+
+      const displays = document.querySelectorAll('[id$="-display"]');
+      const inputs = document.querySelectorAll('[id$="-input"], [id$="-inputs"]');
+
+      displays.forEach(display => display.classList.remove('hidden'));
+      inputs.forEach(input => input.classList.add('hidden'));
+    }
+  }
+
+  function prepareFormData() {
+    // Dodaj ukryte pola z danymi do formularza przed wysłaniem
+    const form = document.getElementById('saveForm');
+
+    // Najpierw dodaj name jako pierwsze pole
+    const nameField = form.querySelector('input[name="name"]');
+    if (nameField) {
+      nameField.remove();
+      form.insertBefore(nameField, form.firstChild);
+    }
+
+    const fields = ['attack', 'defense', 'shots', 'minDamage', 'maxDamage', 'hp', 'speed', 'description'];
+
+    fields.forEach(field => {
+      const input = document.getElementById(field + '-input');
+      if (input && input.value) {
+        // Usuń istniejące pole jeśli istnieje
+        const existingField = form.querySelector(`input[name="${field}"]`);
+        if (existingField) {
+          existingField.remove();
+        }
+
+        // Dodaj nowe ukryte pole
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = field;
+        hiddenInput.value = input.value;
+        form.appendChild(hiddenInput);
+      }
+    });
+  }
+</script>
+</body>
+</html>
