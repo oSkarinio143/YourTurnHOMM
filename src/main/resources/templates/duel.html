@@ -206,7 +206,6 @@
       background-color: #e53935;
     }
 
-    /* Nowe style dla przycisków nawigacji */
     .navigation-buttons {
       display: flex;
       justify-content: space-between;
@@ -282,6 +281,12 @@
     .battle-btn:disabled:before {
       display: none;
     }
+
+    .unit-info {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+    }
   </style>
 </head>
 <body>
@@ -297,8 +302,12 @@
       <div class="unit-selector">
         <form th:action="@{/oskarinio143/heroes/duel/select}" method="post">
           <input type="hidden" name="side" value="left">
+          <!-- Przekazanie aktualnie wybranych jednostek -->
+          <input type="hidden" name="currentLeftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
+          <input type="hidden" name="currentRightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
           <button type="submit" class="select-unit-btn">
-            Wybierz jednostkę
+            <span th:if="${leftUnit == null}">Wybierz jednostkę</span>
+            <span th:if="${leftUnit != null}">Zmień jednostkę</span>
           </button>
         </form>
       </div>
@@ -315,26 +324,26 @@
 
         <!-- Lewa jednostka -->
         <div class="unit-display left-unit" id="leftUnitDisplay">
-          <!-- Zmiana 1: Użyj 'units' zamiast 'selectedUnits' -->
-          <div th:if="${units != null and units[0].name != null}">
-            <img th:src="@{${units[0].imagePath}}"
+          <div th:if="${leftUnit != null}">
+            <img th:src="@{${leftUnit.imagePath}}"
                  alt="Left Unit Image"
-                 style="max-width:150px; max-height:150px;"/>
+                 style="max-width:120px; max-height:120px;"/>
+            <div class="unit-info" th:text="${leftUnit.name}"></div>
           </div>
-          <div th:unless="${units != null and units[0].name != null}" class="unit-placeholder">?</div>
+          <div th:unless="${leftUnit != null}" class="unit-placeholder">?</div>
         </div>
 
         <div class="vs-text">VS</div>
 
         <!-- Prawa jednostka -->
         <div class="unit-display right-unit" id="rightUnitDisplay">
-          <!-- Zmiana 2: Analogicznie dla prawej strony -->
-          <div th:if="${units != null and units[1].name != null}">
-            <img th:src="@{${units[1].imagePath}}"
+          <div th:if="${rightUnit != null}">
+            <img th:src="@{${rightUnit.imagePath}}"
                  alt="Right Unit Image"
-                 style="max-width:150px; max-height:150px;"/>
+                 style="max-width:120px; max-height:120px;"/>
+            <div class="unit-info" th:text="${rightUnit.name}"></div>
           </div>
-          <div th:unless="${units != null and units[1].name != null}" class="unit-placeholder">?</div>
+          <div th:unless="${rightUnit != null}" class="unit-placeholder">?</div>
         </div>
 
       </div>
@@ -348,8 +357,12 @@
       <div class="unit-selector">
         <form th:action="@{/oskarinio143/heroes/duel/select}" method="post">
           <input type="hidden" name="side" value="right">
+          <!-- Przekazanie aktualnie wybranych jednostek -->
+          <input type="hidden" name="currentLeftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
+          <input type="hidden" name="currentRightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
           <button type="submit" class="select-unit-btn">
-            Wybierz jednostkę
+            <span th:if="${rightUnit == null}">Wybierz jednostkę</span>
+            <span th:if="${rightUnit != null}">Zmień jednostkę</span>
           </button>
         </form>
       </div>
@@ -363,15 +376,17 @@
 
   <!-- Przyciski nawigacji -->
   <div class="navigation-buttons">
-    <button class="nav-btn back-btn" onclick="goToDatabase()">
+    <button class="nav-btn back-btn" onclick="window.history.back()">
       ← Powrót do bazy danych
     </button>
 
-    <!-- Zmiana 3: Formularz do przesyłania ilości jednostek -->
-    <form th:action="@{/oskarinio143/heroes/duel/result}" method="post" style="display: inline;">
+    <form th:action="@{/oskarinio143/heroes/duel/battle}" method="post" style="display: inline;">
+      <input type="hidden" name="leftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
+      <input type="hidden" name="rightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
       <input type="hidden" name="leftQuantity" id="leftQuantityInput">
       <input type="hidden" name="rightQuantity" id="rightQuantityInput">
-      <button type="submit" class="nav-btn battle-btn">
+      <button type="submit" class="nav-btn battle-btn"
+              th:disabled="${leftUnit == null || rightUnit == null}">
         ⚔️ Rozpocznij pojedynek
       </button>
     </form>
@@ -379,12 +394,13 @@
 </div>
 
 <script>
-  // Zmiana 4: Skrypt do obsługi ilości jednostek
-  document.querySelector('.battle-btn').addEventListener('click', function() {
-    document.getElementById('leftQuantityInput').value =
-    document.getElementById('leftQuantity').value;
-    document.getElementById('rightQuantityInput').value =
-    document.getElementById('rightQuantity').value;
+  document.querySelector('.battle-btn').addEventListener('click', function(e) {
+    if (!this.disabled) {
+      document.getElementById('leftQuantityInput').value =
+      document.getElementById('leftQuantity').value;
+      document.getElementById('rightQuantityInput').value =
+      document.getElementById('rightQuantity').value;
+    }
   });
 </script>
 </body>

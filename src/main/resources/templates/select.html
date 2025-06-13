@@ -49,40 +49,49 @@
   </style>
 </head>
 <body>
-<div th:each="unit : ${units}">
-  <div class="unit-container" style="display: flex; justify-content: space-between; align-items: center;">
-    <div>
-      <img th:src="@{${unit.imagePath}}" class="unit-image" alt="Unit Image"/>
+<div class="main-container">
+  <h1>Wybierz jednostkę</h1>
+
+  <div th:each="unit : ${units}">
+    <div class="unit-container" style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <img th:src="@{${unit.imagePath}}" class="unit-image" alt="Unit Image"/>
+      </div>
+      <div class="unit-stats" style="flex-grow: 1; margin-left: 20px;">
+        <p><strong>Nazwa:</strong> <span th:text="${unit.name}"/></p>
+        <p><strong>Atak:</strong> <span th:text="${unit.attack}"/></p>
+        <p><strong>Obrona:</strong> <span th:text="${unit.defense}"/></p>
+        <p><strong>Strzały:</strong> <span th:text="${unit.shots}"/></p>
+        <p><strong>Obrażenia:</strong> <span th:text="${unit.minDamage}"/> - <span th:text="${unit.maxDamage}"/></p>
+        <p><strong>HP:</strong> <span th:text="${unit.hp}"/></p>
+        <p><strong>HP pozostałe:</strong> <span th:text="${unit.hpLeft}"/></p>
+        <p><strong>Szybkość:</strong> <span th:text="${unit.speed}"/></p>
+        <p><strong>Opis:</strong> <span th:text="${unit.description}"/></p>
+      </div>
+      <form th:action="@{/oskarinio143/heroes/duel}" method="post" style="margin-left: 20px;">
+        <input type="hidden" th:name="name" th:value="${unit.name}" />
+        <input type="hidden" th:name="side" th:value="${side}"/>
+        <!-- Przekazanie aktualnie wybranych jednostek -->
+        <input type="hidden" th:name="currentLeftUnit" th:value="${currentLeftUnit}"/>
+        <input type="hidden" th:name="currentRightUnit" th:value="${currentRightUnit}"/>
+        <button type="submit" style="
+                  background-color: #007bff;
+                  border: none;
+                  color: white;
+                  padding: 10px 20px;
+                  font-size: 16px;
+                  border-radius: 5px;
+                  cursor: pointer;
+                  transition: background-color 0.3s ease;
+              "
+                onmouseover="this.style.backgroundColor='#0056b3'"
+                onmouseout="this.style.backgroundColor='#007bff'">
+          Wybierz
+        </button>
+      </form>
     </div>
-    <div class="unit-stats" style="flex-grow: 1; margin-left: 20px;">
-      <p><strong>Nazwa:</strong> <span th:text="${unit.name}"/></p>
-      <p><strong>Atak:</strong> <span th:text="${unit.attack}"/></p>
-      <p><strong>Obrona:</strong> <span th:text="${unit.defense}"/></p>
-      <p><strong>Strzały:</strong> <span th:text="${unit.shots}"/></p>
-      <p><strong>Obrażenia:</strong> <span th:text="${unit.minDamage}"/> - <span th:text="${unit.maxDamage}"/></p>
-      <p><strong>HP:</strong> <span th:text="${unit.hp}"/></p>
-      <p><strong>HP pozostałe:</strong> <span th:text="${unit.hpLeft}"/></p>
-      <p><strong>Szybkość:</strong> <span th:text="${unit.speed}"/></p>
-      <p><strong>Opis:</strong> <span th:text="${unit.description}"/></p>
-    </div>
-    <form th:action="@{/oskarinio143/heroes/duel}" method="post" style="margin-left: 20px;">
-      <input type="hidden" th:name="name" th:value="${unit.name}" />
-      <input type="hidden" th:name="side" th:value="${side}"/>
-      <button type="submit" style="
-                background-color: #007bff;
-                border: none;
-                color: white;
-                padding: 10px 20px;
-                font-size: 16px;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-            "
-              onmouseover="this.style.backgroundColor='#0056b3'"
-              onmouseout="this.style.backgroundColor='#007bff'">
-        Wybierz
-      </button>
-    </form>
+    <div class="separator"></div>
   </div>
-  <div class="separator"></div>
 </div>
+</body>
+</html>

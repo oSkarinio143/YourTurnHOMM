@@ -18,20 +18,30 @@ public class DuelService {
         this.databaseService = databaseService;
         this.unitRepository = unitRepository;
     }
+    public void prepareUnits(Model model, Unit currentLeftUnit, Unit currentRightUnit){
+        model.addAttribute("leftUnit", currentLeftUnit);
+        model.addAttribute("rightUnit", currentRightUnit);
+    }
 
-    public void selectUnit(Model model, String side){
+    public void selectUnit(Model model, String side, Unit currentLeftUnit, Unit currentRightUnit){
         databaseService.viewUnits(model);
+        if (currentLeftUnit != null){
+            model.addAttribute("currentLeftUnit", currentLeftUnit.getName());
+        }
+        if(currentRightUnit != null){
+            model.addAttribute("currentRightUnit", currentRightUnit.getName());
+        }
         model.addAttribute("side", side);
     }
 
-    public void loadUnit(Model model, String name, String side){
+    public void loadUnit(Model model, String name, String side, Unit leftUnit, Unit rightUnit){
         Unit unit = databaseService.getUnitByName(name);
-        List<Unit> units = new ArrayList<>(List.of(new Unit(), new Unit()));
-        if(side.equals("left"))
-            units.set(0, unit);
-        else if (side.equals("right"))
-            units.set(1, unit);
-        model.addAttribute("side", side);
-        model.addAttribute("units", units);
+        if(side.equals("left")){
+            model.addAttribute("leftUnit", unit);
+            model.addAttribute("rightUnit", rightUnit);
+        } else if (side.equals("right")) {
+            model.addAttribute("rightUnit", unit);
+            model.addAttribute("leftUnit", leftUnit);
+        }
     }
 }

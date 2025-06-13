@@ -7,6 +7,7 @@ import oskarinio143.heroes3.Unit;
 import oskarinio143.heroes3.service.DuelService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/oskarinio143/heroes/duel")
@@ -19,19 +20,29 @@ public class DuelController {
     }
 
     @GetMapping
-    public String duelBoard(){
+    public String prepareDuel(Model model,
+                            @RequestParam(required = false) Unit currentLeftUnit,
+                            @RequestParam(required = false) Unit currentRightUnit){
+        duelService.prepareUnits(model, currentLeftUnit, currentRightUnit);
         return "duel";
     }
 
     @PostMapping("/select")
-    public String selectUnit(Model model, @RequestParam String side){
-        duelService.selectUnit(model, side);
+    public String selectUnit(Model model,
+                             @RequestParam String side,
+                             @RequestParam(required = false) Unit currentLeftUnit,
+                             @RequestParam(required = false) Unit currentRightUnit){
+        duelService.selectUnit(model, side, currentLeftUnit, currentRightUnit);
         return "select";
     }
 
     @PostMapping()
-    public String getUnit(Model model, @RequestParam String name, @RequestParam String side){
-        duelService.loadUnit(model, name, side);
+    public String loadUnit(Model model,
+                          @RequestParam String name,
+                          @RequestParam String side,
+                          @RequestParam(required = false) Unit currentLeftUnit,
+                          @RequestParam(required = false) Unit currentRightUnit){
+        duelService.loadUnit(model, name, side, currentLeftUnit, currentRightUnit);
         return "duel";
     }
 }
