@@ -4,19 +4,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import oskarinio143.heroes3.Unit;
 import oskarinio143.heroes3.UnitRepository;
-
-import java.util.ArrayList;
-import java.util.List;
+import oskarinio143.heroes3.controller.BattleService;
 
 @Service
 public class DuelService {
 
     private final DatabaseService databaseService;
     private final UnitRepository unitRepository;
+    private final BattleService battleService;
 
-    public DuelService(DatabaseService databaseService, UnitRepository unitRepository) {
+    public DuelService(DatabaseService databaseService, UnitRepository unitRepository, BattleService battleService) {
         this.databaseService = databaseService;
         this.unitRepository = unitRepository;
+        this.battleService = battleService;
     }
     public void prepareUnits(Model model, Unit currentLeftUnit, Unit currentRightUnit){
         model.addAttribute("leftUnit", currentLeftUnit);
@@ -43,5 +43,13 @@ public class DuelService {
             model.addAttribute("rightUnit", unit);
             model.addAttribute("leftUnit", leftUnit);
         }
+    }
+
+    public void loadBattle(Unit leftUnit, Unit rightUnit, int leftQuantity, int rightQuantity, Model model){
+        model.addAttribute("leftUnit", leftUnit);
+        model.addAttribute("rightUnit", rightUnit);
+        model.addAttribute("leftQuantity", leftQuantity);
+        model.addAttribute("rightQuantity", rightQuantity);
+        battleService.startBattle(leftUnit, rightUnit, leftQuantity, rightQuantity);
     }
 }

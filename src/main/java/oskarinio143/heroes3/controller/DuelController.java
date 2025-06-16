@@ -45,4 +45,14 @@ public class DuelController {
         duelService.loadUnit(model, name, side, currentLeftUnit, currentRightUnit);
         return "duel";
     }
+
+    @PostMapping("/battle")
+    public String startBattle(Model model,
+                              @RequestParam Unit leftUnit,
+                              @RequestParam Unit rightUnit,
+                              @RequestParam int leftQuantity,
+                              @RequestParam int rightQuantity){
+        duelService.loadBattle(leftUnit, rightUnit, leftQuantity, rightQuantity, model);
+        return "battle";
+    }
 }
