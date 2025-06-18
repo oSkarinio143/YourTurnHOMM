@@ -228,6 +228,20 @@
     .back-btn {
       background-color: #6c757d;
       color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.4s ease-in-out;
+      min-width: 180px;
+      background-size: 200% auto;
+      background-image: linear-gradient(to right, #6c757d 0%, #495057 51%, #6c757d 100%);
+    }
+
+    .back-btn:hover {
+      background-position: right center; /* przesuwa gradient */
     }
 
     .back-btn:hover {
@@ -376,10 +390,11 @@
 
   <!-- Przyciski nawigacji -->
   <div class="navigation-buttons">
-    <button class="nav-btn back-btn" onclick="window.history.back()">
-      ← Powrót do bazy danych
-    </button>
-
+    <form th:action="@{/oskarinio143/heroes}" method="get" style="display: inline;">
+      <button type="submit" class="nav-btn back-btn">
+        Wróć do bazy danych
+      </button>
+    </form>
     <form th:action="@{/oskarinio143/heroes/duel/battle}" method="post" style="display: inline;">
       <input type="hidden" name="leftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
       <input type="hidden" name="rightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
@@ -387,10 +402,10 @@
       <input type="hidden" name="rightQuantity" id="rightQuantityInput">
       <button type="submit" class="nav-btn battle-btn"
               th:disabled="${leftUnit == null || rightUnit == null}">
-        ⚔️ Rozpocznij pojedynek
+         Rozpocznij pojedynek⚔️
       </button>
     </form>
-  </div>
+    </div>
 </div>
 
 <script>

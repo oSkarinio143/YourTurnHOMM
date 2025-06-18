@@ -123,13 +123,23 @@
       display: inline-block;
     }
 
-    .btn-back {
-      background-color: #555;
+    .back-btn {
+      background-color: #6c757d;
       color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.4s ease-in-out;
+      min-width: 180px;
+      background-size: 200% auto;
+      background-image: linear-gradient(to right, #6c757d 0%, #495057 51%, #6c757d 100%);
     }
 
-    .btn-back:hover {
-      background-color: #333;
+    .back-btn:hover {
+      background-position: right center; /* przesuwa gradient */
     }
 
     .btn-edit {
@@ -238,7 +248,11 @@
   </div>
 
   <div class="button-container">
-    <a th:href="@{/oskarinio143/heroes/database}" class="btn btn-back">← Powrót do bazy</a>
+    <a th:href="@{/oskarinio143/heroes/database/modify}">
+      <button class="btn back-btn">
+        Wróć do wyboru
+      </button>
+    </a>
     <button class="btn btn-edit" id="editBtn" onclick="toggleEdit()">Edytuj</button>
     <form class="hidden" id="saveForm" th:action="@{/oskarinio143/heroes/database/modify/unit}" method="post" style="flex: 1;">
       <input type="hidden" name="name" th:value="${unit.name}">

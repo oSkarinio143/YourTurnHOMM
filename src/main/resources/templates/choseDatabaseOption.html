@@ -36,6 +36,7 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
       padding: 40px;
       text-align: center;
+      position:relative;
     }
 
     .header {
@@ -63,7 +64,8 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 25px;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
+      padding-bottom: 40px; /* <-- dodaj to */
     }
 
     .db-option {
@@ -122,6 +124,36 @@
         height: 140px;
       }
     }
+
+    .sticky-bottom-center {
+      position: absolute;
+      bottom: 20px; /* odstęp od dołu kontenera */
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      padding: 0px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .back-btn {
+      background-color: #6c757d;
+      color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.4s ease-in-out;
+      min-width: 180px;
+      background-size: 200% auto;
+      background-image: linear-gradient(to right, #6c757d 0%, #495057 51%, #6c757d 100%);
+    }
+
+    .back-btn:hover {
+      background-position: right center; /* przesuwa gradient */
+    }
   </style>
   <!-- Ikony z Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -129,32 +161,37 @@
 <body>
 <div class="database-container">
   <div class="header">
-    <h1>Unit Database Manager</h1>
+    <h1>Operacje bazy danych</h1>
   </div>
 
   <div class="grid-container">
     <a th:href="@{/oskarinio143/heroes/database/add}" class="db-option">
       <i class="fas fa-plus-circle"></i>
-      <h2>Add Unit</h2>
+      <h2>Dodaj jednostkę</h2>
     </a>
 
     <a th:href="@{/oskarinio143/heroes/database/modify}" class="db-option">
       <i class="fas fa-edit"></i>
-      <h2>Modify Unit</h2>
+      <h2>Modyfikuj jednostkę</h2>
     </a>
 
     <a th:href="@{/oskarinio143/heroes/database/delete}" class="db-option">
       <i class="fas fa-trash-alt"></i>
-      <h2>Delete Unit</h2>
+      <h2>Usuń jednostkę</h2>
     </a>
 
     <a th:href="@{/oskarinio143/heroes/database/view}" class="db-option">
       <i class="fas fa-list"></i>
-      <h2>View Units</h2>
+      <h2>Widok jednostek</h2>
     </a>
+    <div class="sticky-bottom-center">
+    <a th:href="@{/oskarinio143/heroes}" class="back-link">
+      <button type="button" class="back-btn">
+        Wróć do menu głównego
+      </button>
+    </a>
+    </div>
   </div>
-
-  <a th:href="@{/oskarinio143/heroes}" class="back-button">Back to Main Menu</a>
 </div>
 </body>
 </html>

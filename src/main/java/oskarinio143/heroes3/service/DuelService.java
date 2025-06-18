@@ -4,7 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import oskarinio143.heroes3.Unit;
 import oskarinio143.heroes3.UnitRepository;
-import oskarinio143.heroes3.controller.BattleService;
+
+import java.util.Optional;
 
 @Service
 public class DuelService {
@@ -34,7 +35,7 @@ public class DuelService {
         model.addAttribute("side", side);
     }
 
-    public void loadUnit(Model model, String name, String side, Unit leftUnit, Unit rightUnit){
+    public void loadUnit(Model model, String name, String side, Unit leftUnit, Unit rightUnit, String leftUnitName, String rightUnitName){
         Unit unit = databaseService.getUnitByName(name);
         if(side.equals("left")){
             model.addAttribute("leftUnit", unit);
@@ -42,6 +43,11 @@ public class DuelService {
         } else if (side.equals("right")) {
             model.addAttribute("rightUnit", unit);
             model.addAttribute("leftUnit", leftUnit);
+        }
+
+        if(leftUnitName != null && rightUnitName != null){
+            model.addAttribute("leftUnit", unitRepository.getReferenceById(leftUnitName));
+            model.addAttribute("rightUnit", unitRepository.getReferenceById(rightUnitName));
         }
     }
 

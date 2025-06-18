@@ -42,8 +42,10 @@ public class DuelController {
                           @RequestParam String name,
                           @RequestParam String side,
                           @RequestParam(required = false) Unit currentLeftUnit,
-                          @RequestParam(required = false) Unit currentRightUnit){
-        duelService.loadUnit(model, name, side, currentLeftUnit, currentRightUnit);
+                          @RequestParam(required = false) Unit currentRightUnit,
+                          @RequestParam(required = false) String leftUnitName,
+                          @RequestParam(required = false) String rightUnitName){
+        duelService.loadUnit(model, name, side, currentLeftUnit, currentRightUnit, leftUnitName, rightUnitName);
         return "duel";
     }
 

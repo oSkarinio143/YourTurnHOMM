@@ -10,10 +10,10 @@ public class RoundInfo {
     private Unit fasterUnit;
     private int slowerQuantity;
     private int fasterQuantity;
-    private int slowerDmg;
-    private int fasterDmg;
+    private int atkDmg;
     private Unit atkUnit;
     private Unit defUnit;
     private Unit winnerUnit;
     private Unit loserUnit;
+    private int deathUnits;
 }

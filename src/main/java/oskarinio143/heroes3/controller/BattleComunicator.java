@@ -1,12 +1,10 @@
-package oskarinio143.heroes3;
+package oskarinio143.heroes3.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import oskarinio143.heroes3.controller.BattleService;
 
 import java.io.IOException;
 

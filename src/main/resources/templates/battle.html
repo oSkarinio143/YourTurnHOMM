@@ -237,12 +237,22 @@
     .back-btn {
       background-color: #6c757d;
       color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.4s ease-in-out;
+      min-width: 180px;
+      background-size: 200% auto;
+      background-image: linear-gradient(to right, #6c757d 0%, #495057 51%, #6c757d 100%);
     }
 
     .back-btn:hover {
-      background-color: #545b62;
+      background-position: right center; /* przesuwa gradient */
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* opcjonalnie cień */
     }
 
     .rematch-btn {
@@ -255,6 +265,62 @@
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
     }
+
+    .rematch-btn:disabled {
+      background: #ccc !important;    /* szare tło */
+      color: #666 !important;         /* ciemniejszy szary tekst */
+      cursor: not-allowed;            /* pokazuje „zajęte” */
+      filter: grayscale(50%);         /* lekko wyszarza cały przycisk */
+      box-shadow: none;               /* usuń cień hover */
+      transition: none;
+    }
+
+    .battle-btn {
+      background: linear-gradient(45deg, #ff6b35, #ff8e53);
+      color: white;
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .battle-btn:hover {
+      background: linear-gradient(45deg, #e55a2b, #ff7a40);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+    }
+
+    .battle-btn:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .battle-btn:hover:before {
+      left: 100%;
+    }
+
+    .battle-btn:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .battle-btn:disabled:hover {
+      background: #cccccc;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .battle-btn:disabled:before {
+      display: none;
+    }
+
   </style>
 </head>
 <body>
@@ -350,21 +416,31 @@
   </div>
 
   <div class="navigation-buttons">
-    <button class="nav-btn back-btn" onclick="window.history.back()">
-      ← Powrót do wyboru
-    </button>
-    <button class="nav-btn rematch-btn">
-      🔄 Rewanż
+    <form th:action="@{/oskarinio143/heroes/duel}" method="post">
+      <input type="hidden" name="leftUnitName"     th:value="${leftUnit.name}"     />
+      <input type="hidden" name="rightUnitName"    th:value="${rightUnit.name}"    />
+      <input type="hidden" name="name"    th:value="${leftUnit.name}"    />
+      <input type="hidden" name="side"    th:value="right"    />
+      <button type="submit" class="nav-btn back-btn">
+        Wróć do wyboru jednostek
+      </button>
+    </form>
+    <button id="refButton" class="nav-btn battle-btn"
+            onclick="localStorage.clear(); window.location.reload();"
+            disabled>
+      Rozpocznij pojedynek ponownie
     </button>
   </div>
 </div>
 
 <script th:inline="javascript">
-
   // 1. WYCZYŚĆ KONTENER LOGU PRZED WCZYTANIEM WIADOMOŚCI
-
+  let eventSource;
   // 4. OBSŁUGA ODSWIEŻANIA STRONY
   window.addEventListener('unload', () => {
+    if(eventSource){
+      eventSource.close();
+    }
     localStorage.clear()
     const battleLogContent = document.getElementById('battle-log-content');
     battleLogContent.innerHTML = ''; // Wyczysc fizyczne elementy DOM
@@ -372,6 +448,7 @@
   });
 
   const battleLogContent = document.getElementById('battle-log-content');
+
 
   // 1. WCZYTAJ HISTORIĘ PRZY ŁADOWANIU STRONY
   const savedMessages = JSON.parse(localStorage.getItem('battleMessages') || '[]');
@@ -382,86 +459,89 @@
 
   // 2. FUNKCJA TWORZĄCA ELEMENTY WIADOMOŚCI
   function createMessageElement(rawData) {
-    const element = document.createElement('div');
-    element.classList.add('attack-message');
 
-    // Obsłuż prefixy: ROUND:, ATTACKF:, ATTACKS:, VICTORY:
-    let text = rawData;
-    let prefix = null;
-    let content = rawData;
+      const element = document.createElement('div');
+      element.classList.add('attack-message');
 
-    // Sprawdź prefix
-    if (typeof rawData === 'string') {
-      if (rawData.startsWith('ROUND:')) {
-        prefix = 'round-message';
-        content = rawData.replace(/^ROUND:/, '').trim();
-      } else if (rawData.startsWith('ATTACKF:')) {
-        prefix = 'attackf-message';
-        content = rawData.replace(/^ATTACKF:/, '').trim();
-      } else if (rawData.startsWith('ATTACKS:')) {
-        prefix = 'attacks-message';
-        content = rawData.replace(/^ATTACKS:/, '').trim();
-      } else if (rawData.startsWith('VICTORY:')) {
-        prefix = 'victory-message';
-        content = rawData.replace(/^VICTORY:/, '').trim();
+      // Obsłuż prefixy: ROUND:, ATTACKF:, ATTACKS:, VICTORY:
+      let text = rawData;
+      let prefix = null;
+      let content = rawData;
+
+      // Sprawdź prefix
+      if (typeof rawData === 'string') {
+          if (rawData.startsWith('ROUND:')) {
+              prefix = 'round-message';
+              content = rawData.replace(/^ROUND:/, '').trim();
+          } else if (rawData.startsWith('ATTACKF:')) {
+              prefix = 'attackf-message';
+              content = rawData.replace(/^ATTACKF:/, '').trim();
+          } else if (rawData.startsWith('ATTACKS:')) {
+              prefix = 'attacks-message';
+              content = rawData.replace(/^ATTACKS:/, '').trim();
+          } else if (rawData.startsWith('VICTORY:')) {
+              prefix = 'victory-message';
+              content = rawData.replace(/^VICTORY:/, '').trim();
+              const btn = document.getElementById('refButton');
+              btn.disabled = false;
+          }
+
+          // Jeśli nie znaleziono prefixu, próbuj obsłużyć stare wiadomości JSON (z typem)
+          if (!prefix) {
+              try {
+                  const data = JSON.parse(rawData);
+                  // Jeśli typ, to nadaj stary styl
+                  switch (data.type) {
+                      case 'ROUND':
+                          prefix = 'round-message';
+                          break;
+                      case 'ATTACKF':
+                          prefix = 'attackf-message';
+                          break;
+                      case 'ATTACKS':
+                          prefix = 'attacks-message';
+                          break;
+                      case 'VICTORY':
+                          prefix = 'victory-message';
+                          const btn = document.getElementById('refButton');
+                          btn.disabled = false;
+                          break;
+                      default:
+                          prefix = 'neutral-message';
+                  }
+                  content = data.message;
+              } catch (e) {
+                  // Nie parsowalny JSON, nie rozpoznano prefixu – neutral
+                  prefix = 'neutral-message';
+                  content = rawData;
+              }
+          }
       }
-    }
 
-    // Jeśli nie znaleziono prefixu, próbuj obsłużyć stare wiadomości JSON (z typem)
-    if (!prefix) {
-      try {
-        const data = JSON.parse(rawData);
-        // Jeśli typ, to nadaj stary styl
-        switch (data.type) {
-          case 'ROUND':
-            prefix = 'round-message';
-            break;
-          case 'ATTACKF':
-            prefix = 'attackf-message';
-            break;
-          case 'ATTACKS':
-            prefix = 'attacks-message';
-            break;
-          case 'VICTORY':
-            prefix = 'victory-message';
-            break;
-          default:
-            prefix = 'neutral-message';
-        }
-        content = data.message;
-      } catch (e) {
-        // Nie parsowalny JSON, nie rozpoznano prefixu – neutral
-        prefix = 'neutral-message';
-        content = rawData;
+          element.classList.add(prefix);
+          element.innerHTML = content;
+
+          return element;
       }
-    }
 
-    element.classList.add(prefix);
-    element.innerHTML = content;
+      // 3. POŁĄCZENIE SSE Z AUTOMATYCZNYM ZAPISEM
+      const messages = [...savedMessages];
 
-    return element;
-  }
+      eventSource = new EventSource("http://localhost:8080/oskarinio143/heroes/duel/battle/stream");
 
-  // 3. POŁĄCZENIE SSE Z AUTOMATYCZNYM ZAPISEM
-  const messages = [...savedMessages];
+      eventSource.onmessage = (event) => {
+          if (event.data === "CLOSE") {
+              eventSource.close();
+              return;
+          }
 
-  let reconnectTried = false;
+          messages.push(event.data);
+          localStorage.setItem('battleMessages', JSON.stringify(messages));
 
-  var eventSource = new EventSource("http://localhost:8080/oskarinio143/heroes/duel/battle/stream");
-  eventSource.onmessage = (event) => {
-    if (event.data === "CLOSE") {
-      eventSource.close();
-      return;
-    }
-
-    messages.push(event.data);
-    localStorage.setItem('battleMessages', JSON.stringify(messages));
-
-    const messageElement = createMessageElement(event.data);
-    battleLogContent.appendChild(messageElement);
-    battleLogContent.scrollTop = battleLogContent.scrollHeight;
-  };
-
+          const messageElement = createMessageElement(event.data);
+          battleLogContent.appendChild(messageElement);
+          battleLogContent.scrollTop = battleLogContent.scrollHeight;
+      };
 </script>
 
 </body>

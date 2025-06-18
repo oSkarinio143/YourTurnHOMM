@@ -108,6 +108,37 @@
         .cancel {
             background-color: #cccccc;
         }
+
+        .sticky-bottom-center {
+            position: fixed;
+            bottom: 20px; /* odstęp od dolnej krawędzi */
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border-radius: 8px;
+            z-index: 9999;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            background-color: #6c757d;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.4s ease-in-out;
+            min-width: 180px;
+            background-size: 200% auto;
+            background-image: linear-gradient(to right, #6c757d 0%, #495057 51%, #6c757d 100%);
+        }
+
+        .back-btn:hover {
+            background-position: right center; /* przesuwa gradient */
+        }
     </style>
 </head>
 <body>
@@ -129,7 +160,7 @@
                 <p><strong>Szybkość:</strong> <span th:text="${unit.speed}"/></p>
                 <p><strong>Opis:</strong> <span th:text="${unit.description}"/></p>
             </div>
-            <button class="remove-button" onclick="showModal(this)">Remove</button>
+            <button class="remove-button" onclick="showModal(this)">Usuń</button>
         </div>
         <div class="separator"></div>
     </div>
@@ -161,4 +192,13 @@
     }
 </script>
 </body>
+<footer>
+    <div class="sticky-bottom-center">
+        <a th:href="@{/oskarinio143/heroes/database}" class="back-link">
+            <button type="button" class="back-btn">
+                Wróć do menu bazy danych
+            </button>
+        </a>
+    </div>
+</footer>
 </html>
