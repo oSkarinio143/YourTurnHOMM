@@ -125,8 +125,9 @@
       padding: 25px;
       min-height: 400px;
       max-height: 500px;
-      overflow-y: auto;
       border: 2px solid #f0f0f0;
+      display: flex;
+      flex-direction: column;
     }
 
     .battle-log h3 {
@@ -136,21 +137,13 @@
       font-size: 20px;
       border-bottom: 2px solid #007bff;
       padding-bottom: 10px;
+      flex-shrink: 0;
     }
 
-    .round {
-      margin-bottom: 20px;
-      padding: 15px;
-      background-color: #f8f9fa;
-      border-radius: 8px;
-      border-left: 4px solid #007bff;
-    }
-
-    .round-title {
-      font-weight: bold;
-      font-size: 16px;
-      color: #007bff;
-      margin-bottom: 10px;
+    #battle-log-content {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding-right: 15px;
     }
 
     .attack-message {
@@ -158,17 +151,45 @@
       padding: 8px 12px;
       border-radius: 6px;
       font-size: 14px;
+      word-wrap: break-word;
     }
 
-    .left-attack {
+    /* Nowe style na podstawie typu wiadomości */
+    .round-message {
+      background-color: #f1f1f1;
+      border-left: 3px solid #bdbdbd;
+      color: #333;
+    }
+
+    .attackf-message {
       background-color: #e3f2fd;
-      border-left: 3px solid #1e88e5;
+      border-left: 3px solid #2196f3;
       color: #0d47a1;
     }
 
-    .right-attack {
+    .attacks-message {
       background-color: #ffebee;
-      border-left: 3px solid #e53935;
+      border-left: 3px solid #f44336;
+      color: #b71c1c;
+    }
+
+    .victory-message {
+      background: linear-gradient(135deg, #ffd700, #ffed4e);
+      border-left: 3px solid #ff8f00;
+      color: #e65100;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+    }
+
+    .neutral-message {
+      background-color: #fffde7;
+      border-left: 3px solid #ffc107;
+      color: #5d4037;
+    }
+
+    .error-message {
+      background-color: #ffebee;
+      border-left: 3px solid #f44336;
       color: #b71c1c;
     }
 
@@ -177,21 +198,21 @@
       font-size: 16px;
     }
 
-    .battle-log::-webkit-scrollbar {
+    .battle-log::-webkit-scrollbar, #battle-log-content::-webkit-scrollbar {
       width: 8px;
     }
 
-    .battle-log::-webkit-scrollbar-track {
+    .battle-log::-webkit-scrollbar-track, #battle-log-content::-webkit-scrollbar-track {
       background-color: #f1f1f1;
       border-radius: 4px;
     }
 
-    .battle-log::-webkit-scrollbar-thumb {
+    .battle-log::-webkit-scrollbar-thumb, #battle-log-content::-webkit-scrollbar-thumb {
       background-color: #c1c1c1;
       border-radius: 4px;
     }
 
-    .battle-log::-webkit-scrollbar-thumb:hover {
+    .battle-log::-webkit-scrollbar-thumb:hover, #battle-log-content::-webkit-scrollbar-thumb:hover {
       background-color: #a8a8a8;
     }
 
@@ -241,7 +262,6 @@
   <h1>⚔️ Pojedynek w toku ⚔️</h1>
 
   <div class="battle-container">
-    <!-- Lewa jednostka -->
     <div class="unit-panel left-panel">
       <img th:src="@{${leftUnit.imagePath}}" alt="Jednostka gracza" class="unit-image">
       <div class="unit-name" th:text="${leftUnit.name}">Rogate Demony</div>
@@ -282,92 +302,12 @@
       </div>
     </div>
 
-    <!-- Log bitwy -->
-<!--
-
-    <div class="battle-log">
+    <div class="battle-log" id="battle-log">
       <h3>📜 Kronika Bitwy</h3>
-
-      <div class="round">
-        <div class="round-title">Runda 1:</div>
-        <div class="attack-message left-attack">
-          Rogate Demony zadają <span class="damage-number">56</span> obrażeń
-        </div>
-        <div class="attack-message right-attack">
-          Pikinierzy zadają <span class="damage-number">32</span> obrażenia
-        </div>
+      <div id="battle-log-content">
       </div>
     </div>
--->
-    <div class="battle-log">
-      <h3>📜 Kronika Bitwy</h3>
-    </div>
 
-    <script>
-      const battleLog = document.querySelector('.battle-log');
-      let currentRoundDiv = null;
-
-      const source = new EventSource("/battle");
-
-      source.onmessage = function(event) {
-        const msg = event.data;
-
-        if (msg.startsWith("ROUND:")) {
-          const roundNumber = msg.split(":")[1];
-
-          currentRoundDiv = document.createElement("div");
-          currentRoundDiv.classList.add("round");
-
-          const title = document.createElement("div");
-          title.classList.add("round-title");
-          title.textContent = `Runda ${roundNumber}:`;
-
-          currentRoundDiv.appendChild(title);
-          battleLog.appendChild(currentRoundDiv);
-        }
-
-        else if (msg.startsWith("ATTACK:")) {
-          const parts = msg.split(":"); // [ATTACK, LEWA/PRAWA, Nazwa, obrażenia]
-          const side = parts[1] === "LEWA" ? "left-attack" : "right-attack";
-          const unit = parts[2];
-          const damage = parts[3];
-
-          const attack = document.createElement("div");
-          attack.classList.add("attack-message", side);
-          attack.innerHTML = `${unit} zadają <span class="damage-number">${damage}</span> obrażeń`;
-
-          if (currentRoundDiv) {
-            currentRoundDiv.appendChild(attack);
-          }
-        }
-
-        else if (msg.startsWith("END:")) {
-          const parts = msg.split(":"); // [END, LEWA/PRAWA, Nazwa]
-          const side = parts[1] === "LEWA" ? "left-attack" : "right-attack";
-          const unit = parts[2];
-
-          const endMsg = document.createElement("div");
-          endMsg.classList.add("attack-message", side);
-          endMsg.innerHTML = `<strong>${unit} zostali pokonani ❌</strong>`;
-
-          if (currentRoundDiv) {
-            currentRoundDiv.appendChild(endMsg);
-          } else {
-            battleLog.appendChild(endMsg);
-          }
-
-          source.close(); // zakończ SSE po bitwie
-        }
-      };
-
-      source.onerror = function() {
-        console.error("❌ Błąd połączenia SSE");
-        source.close();
-      };
-    </script>
-
-
-    <!-- Prawa jednostka -->
     <div class="unit-panel right-panel">
       <img th:src="@{${rightUnit.imagePath}}" alt="Jednostka przeciwnika" class="unit-image">
       <div class="unit-name" th:text="${rightUnit.name}">Pikinierzy</div>
@@ -409,7 +349,6 @@
     </div>
   </div>
 
-  <!-- Przyciski nawigacji -->
   <div class="navigation-buttons">
     <button class="nav-btn back-btn" onclick="window.history.back()">
       ← Powrót do wyboru
@@ -419,5 +358,111 @@
     </button>
   </div>
 </div>
+
+<script th:inline="javascript">
+
+  // 1. WYCZYŚĆ KONTENER LOGU PRZED WCZYTANIEM WIADOMOŚCI
+
+  // 4. OBSŁUGA ODSWIEŻANIA STRONY
+  window.addEventListener('unload', () => {
+    localStorage.clear()
+    const battleLogContent = document.getElementById('battle-log-content');
+    battleLogContent.innerHTML = ''; // Wyczysc fizyczne elementy DOM
+    console.log("siekierout")
+  });
+
+  const battleLogContent = document.getElementById('battle-log-content');
+
+  // 1. WCZYTAJ HISTORIĘ PRZY ŁADOWANIU STRONY
+  const savedMessages = JSON.parse(localStorage.getItem('battleMessages') || '[]');
+  savedMessages.forEach(msg => {
+    const messageElement = createMessageElement(msg);
+    battleLogContent.appendChild(messageElement);
+  });
+
+  // 2. FUNKCJA TWORZĄCA ELEMENTY WIADOMOŚCI
+  function createMessageElement(rawData) {
+    const element = document.createElement('div');
+    element.classList.add('attack-message');
+
+    // Obsłuż prefixy: ROUND:, ATTACKF:, ATTACKS:, VICTORY:
+    let text = rawData;
+    let prefix = null;
+    let content = rawData;
+
+    // Sprawdź prefix
+    if (typeof rawData === 'string') {
+      if (rawData.startsWith('ROUND:')) {
+        prefix = 'round-message';
+        content = rawData.replace(/^ROUND:/, '').trim();
+      } else if (rawData.startsWith('ATTACKF:')) {
+        prefix = 'attackf-message';
+        content = rawData.replace(/^ATTACKF:/, '').trim();
+      } else if (rawData.startsWith('ATTACKS:')) {
+        prefix = 'attacks-message';
+        content = rawData.replace(/^ATTACKS:/, '').trim();
+      } else if (rawData.startsWith('VICTORY:')) {
+        prefix = 'victory-message';
+        content = rawData.replace(/^VICTORY:/, '').trim();
+      }
+    }
+
+    // Jeśli nie znaleziono prefixu, próbuj obsłużyć stare wiadomości JSON (z typem)
+    if (!prefix) {
+      try {
+        const data = JSON.parse(rawData);
+        // Jeśli typ, to nadaj stary styl
+        switch (data.type) {
+          case 'ROUND':
+            prefix = 'round-message';
+            break;
+          case 'ATTACKF':
+            prefix = 'attackf-message';
+            break;
+          case 'ATTACKS':
+            prefix = 'attacks-message';
+            break;
+          case 'VICTORY':
+            prefix = 'victory-message';
+            break;
+          default:
+            prefix = 'neutral-message';
+        }
+        content = data.message;
+      } catch (e) {
+        // Nie parsowalny JSON, nie rozpoznano prefixu – neutral
+        prefix = 'neutral-message';
+        content = rawData;
+      }
+    }
+
+    element.classList.add(prefix);
+    element.innerHTML = content;
+
+    return element;
+  }
+
+  // 3. POŁĄCZENIE SSE Z AUTOMATYCZNYM ZAPISEM
+  const messages = [...savedMessages];
+
+  let reconnectTried = false;
+
+  var eventSource = new EventSource("http://localhost:8080/oskarinio143/heroes/duel/battle/stream");
+  eventSource.onmessage = (event) => {
+    if (event.data === "CLOSE") {
+      eventSource.close();
+      return;
+    }
+
+    messages.push(event.data);
+    localStorage.setItem('battleMessages', JSON.stringify(messages));
+
+    const messageElement = createMessageElement(event.data);
+    battleLogContent.appendChild(messageElement);
+    battleLogContent.scrollTop = battleLogContent.scrollHeight;
+  };
+
+</script>
+
 </body>
 </html>

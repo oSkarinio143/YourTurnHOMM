@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/oskarinio143/heroes/duel")
+@CrossOrigin(origins = "*")
 public class DuelController {
 
     private final DuelService duelService;
