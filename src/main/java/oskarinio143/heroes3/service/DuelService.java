@@ -2,10 +2,8 @@ package oskarinio143.heroes3.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import oskarinio143.heroes3.Unit;
-import oskarinio143.heroes3.UnitRepository;
-
-import java.util.Optional;
+import oskarinio143.heroes3.model.Unit;
+import oskarinio143.heroes3.repository.UnitRepository;
 
 @Service
 public class DuelService {

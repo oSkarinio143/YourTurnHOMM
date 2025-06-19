@@ -3,11 +3,8 @@ package oskarinio143.heroes3.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import oskarinio143.heroes3.Unit;
+import oskarinio143.heroes3.model.Unit;
 import oskarinio143.heroes3.service.DuelService;
-
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/oskarinio143/heroes/duel")

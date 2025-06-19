@@ -1,19 +1,12 @@
 package oskarinio143.heroes3.controller;
 
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import oskarinio143.heroes3.Unit;
-import oskarinio143.heroes3.exception.ImageException;
 import oskarinio143.heroes3.service.DatabaseService;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 import java.util.Optional;
 
 @Controller

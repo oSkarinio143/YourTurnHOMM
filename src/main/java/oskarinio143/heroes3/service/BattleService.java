@@ -1,28 +1,27 @@
 package oskarinio143.heroes3.service;
 
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import oskarinio143.heroes3.RoundInfo;
-import oskarinio143.heroes3.Unit;
+import oskarinio143.heroes3.model.RoundInfo;
+import oskarinio143.heroes3.model.Unit;
 import oskarinio143.heroes3.controller.BattleComunicator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@EnableAsync
 @Service
 public class BattleService {
 
     private final BattleComunicator battleComunicator;
-    private final double ATK_RATE = 0.1;
-    private final double DEF_RATE = 0.1;
+    @Value("${battle.rates.attack}")
+    private double ATK_RATE;
+    @Value("${battle.rates.defense}")
+    private double DEF_RATE;
 
     public BattleService(BattleComunicator battleComunicator) {
         this.battleComunicator = battleComunicator;
     }
 
-    @Async
     public void startBattle(Unit leftUnit, Unit rightUnit, int leftQuantity, int rightQuantity){
         sleep(1000);
         RoundInfo roundInfo = setRoundInfo(leftUnit, rightUnit,leftQuantity,rightQuantity);

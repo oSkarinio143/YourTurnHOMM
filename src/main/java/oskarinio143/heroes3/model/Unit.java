@@ -1,9 +1,8 @@
-package oskarinio143.heroes3;
+package oskarinio143.heroes3.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @RequiredArgsConstructor
