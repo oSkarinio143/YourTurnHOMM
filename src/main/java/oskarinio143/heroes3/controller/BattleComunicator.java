@@ -1,52 +1,35 @@
 package oskarinio143.heroes3.controller;
 
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import oskarinio143.heroes3.service.CommunicationService;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 @RestController
+@RequestMapping("oskarinio143/heroes/duel/")
 @CrossOrigin(origins = "*")
 public class BattleComunicator {
-    private volatile SseEmitter emitter;
+    private final CommunicationService communicationService;
 
-    @GetMapping(path = "/oskarinio143/heroes/duel/battle/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter stream() {
-        if (emitter != null) {
-            emitter.complete();    // zamkniemy stare połączenie, jeśli gdzieś „wisiało”
-        }
-        emitter = new SseEmitter(0L);  // bez limitu czasu
-        emitter.onCompletion(() -> System.out.println("SSE zakończone"));
-        emitter.onTimeout(() -> System.out.println("SSE timeout"));
-
-        return emitter;
+    public BattleComunicator(CommunicationService communicationService) {
+        this.communicationService = communicationService;
     }
 
-    public void sendMessage(String message) {
-        if (emitter != null) {
-            try {
-                System.out.println("Wysłanie");
-                emitter.send(message);
-            } catch (IOException e) {
-                System.out.println("Zlapane");
-                emitter.complete();
-            }
-        }
+    @GetMapping("generateUUID")
+    public String generateUUID(){
+        return communicationService.createUserUUID();
     }
 
-    public void closeConnection(){
-        if(emitter != null){
-            System.out.println("Zamkniecie");
-            try {
-                emitter.send("CLOSE");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            emitter.complete();
-        }
+    @GetMapping(path = "battle/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter stream(@RequestParam String userUUID) {
+        return communicationService.createEmitter(userUUID);
     }
 }

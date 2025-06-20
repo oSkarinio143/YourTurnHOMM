@@ -51,8 +51,9 @@ public class DuelController {
                               @RequestParam Unit leftUnit,
                               @RequestParam Unit rightUnit,
                               @RequestParam int leftQuantity,
-                              @RequestParam int rightQuantity){
-        duelService.loadBattle(leftUnit, rightUnit, leftQuantity, rightQuantity, model);
+                              @RequestParam int rightQuantity,
+                              @RequestParam String userUUID){
+        duelService.loadBattle(leftUnit, rightUnit, leftQuantity, rightQuantity, model, userUUID);
         return "battle";
     }
 }

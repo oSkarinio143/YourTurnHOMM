@@ -49,11 +49,11 @@ public class DuelService {
         }
     }
 
-    public void loadBattle(Unit leftUnit, Unit rightUnit, int leftQuantity, int rightQuantity, Model model){
+    public void loadBattle(Unit leftUnit, Unit rightUnit, int leftQuantity, int rightQuantity, Model model, String userUUID){
         model.addAttribute("leftUnit", leftUnit);
         model.addAttribute("rightUnit", rightUnit);
         model.addAttribute("leftQuantity", leftQuantity);
         model.addAttribute("rightQuantity", rightQuantity);
-        battleService.startBattle(leftUnit, rightUnit, leftQuantity, rightQuantity);
+        battleService.startBattle(leftUnit, rightUnit, leftQuantity, rightQuantity, userUUID);
     }
 }

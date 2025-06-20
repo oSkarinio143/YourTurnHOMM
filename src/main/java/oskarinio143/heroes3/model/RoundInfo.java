@@ -3,9 +3,12 @@ package oskarinio143.heroes3.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.print.DocFlavor;
+
 @Getter
 @Setter
 public class RoundInfo {
+    private String UserUUID;
     private Unit slowerUnit;
     private Unit fasterUnit;
     private int slowerQuantity;

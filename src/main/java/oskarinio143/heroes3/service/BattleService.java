@@ -1,6 +1,8 @@
 package oskarinio143.heroes3.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import oskarinio143.heroes3.model.RoundInfo;
 import oskarinio143.heroes3.model.Unit;
@@ -9,33 +11,35 @@ import oskarinio143.heroes3.controller.BattleComunicator;
 import java.util.ArrayList;
 import java.util.List;
 
+@EnableAsync
 @Service
 public class BattleService {
 
-    private final BattleComunicator battleComunicator;
+    private final CommunicationService communicationService;
     @Value("${battle.rates.attack}")
     private double ATK_RATE;
     @Value("${battle.rates.defense}")
     private double DEF_RATE;
 
-    public BattleService(BattleComunicator battleComunicator) {
-        this.battleComunicator = battleComunicator;
+    public BattleService(CommunicationService communicationService) {
+        this.communicationService = communicationService;
     }
 
-    public void startBattle(Unit leftUnit, Unit rightUnit, int leftQuantity, int rightQuantity){
+    @Async
+    public void startBattle(Unit leftUnit, Unit rightUnit, int leftQuantity, int rightQuantity, String userUUID){
         sleep(1000);
-        RoundInfo roundInfo = setRoundInfo(leftUnit, rightUnit,leftQuantity,rightQuantity);
+        RoundInfo roundInfo = setRoundInfo(leftUnit, rightUnit, leftQuantity, rightQuantity, userUUID);
         findWinner(roundInfo);
         sendWinnerMess(roundInfo);
-
     }
 
-    public RoundInfo setRoundInfo(Unit leftUnit, Unit rightUnit, int leftQuantity, int rightQuantity){
+    public RoundInfo setRoundInfo(Unit leftUnit, Unit rightUnit, int leftQuantity, int rightQuantity, String userUUID){
         RoundInfo roundInfo = new RoundInfo();
         roundInfo.setFasterUnit(findFaster(leftUnit, rightUnit));
         roundInfo.setSlowerUnit(findSlower(leftUnit, rightUnit));
         roundInfo.setFasterQuantity(findFasterQuantity(roundInfo.getFasterUnit(), leftUnit, leftQuantity, rightQuantity));
         roundInfo.setSlowerQuantity(findSlowerQuantity(roundInfo.getSlowerUnit(), leftUnit, leftQuantity, rightQuantity));
+        roundInfo.setUserUUID(userUUID);
         return roundInfo;
     }
 
@@ -44,7 +48,7 @@ public class BattleService {
         int counter = 0;
         while (unitsQuantites.get(0) != 0 && unitsQuantites.get(1) != 0){
             counter++;
-            sendRoundMess(counter);
+            sendRoundMess(roundInfo, counter);
             unitsQuantites = startRound(roundInfo, unitsQuantites.get(0), unitsQuantites.get(1));
         }
         setWinner(roundInfo, unitsQuantites);
@@ -174,25 +178,28 @@ public class BattleService {
         return DEF_RATE * unit.getDefense() + 1;
     }
 
-    private void sendRoundMess(int number){
-        battleComunicator.sendMessage("ROUND:Runda " + number);
+    private void sendRoundMess(RoundInfo roundInfo, int number){
+        communicationService.sendMessage(roundInfo.getUserUUID(), "ROUND:Runda " + number);
         sleep(2000);
     }
 
     private void sendAttackMess(RoundInfo roundInfo, int unitQuantity, String firOrSec, String attackType){
         if(unitQuantity > 0) {
             if (roundInfo.getDeathUnits() > 0)
-                battleComunicator.sendMessage(attackType + ":Jednostka " + unitQuantity + "x" + roundInfo.getAtkUnit().getName() + " atakuje " + firOrSec
-                        + " zadajac " + roundInfo.getAtkDmg() + ".<br>Pokonuje " + roundInfo.getDeathUnits() + "x" + roundInfo.getDefUnit().getName());
+                communicationService.sendMessage(roundInfo.getUserUUID(), attackType + ":Jednostka " + unitQuantity + "x"
+                        + roundInfo.getAtkUnit().getName() + " atakuje " + firOrSec + " zadajac " + roundInfo.getAtkDmg()
+                        + ".<br>Pokonuje " + roundInfo.getDeathUnits() + "x" + roundInfo.getDefUnit().getName());
             else
-                battleComunicator.sendMessage(attackType + ":Jednostka " + unitQuantity + "x" + roundInfo.getAtkUnit().getName() + " atakuje " + firOrSec
-                        + " zadajac " + roundInfo.getAtkDmg());
+                communicationService.sendMessage(roundInfo.getUserUUID(), attackType + ":Jednostka " + unitQuantity + "x"
+                        + roundInfo.getAtkUnit().getName() + " atakuje " + firOrSec + " zadajac " + roundInfo.getAtkDmg());
         }
         sleep(1000);
     }
 
     private void sendWinnerMess(RoundInfo roundInfo){
-        battleComunicator.sendMessage("VICTORY:" + roundInfo.getLoserUnit().getName() + " gina. " + roundInfo.getWinnerUnit().getName() + " wygrywaja pojedynek");
+        communicationService.sendMessage(roundInfo.getUserUUID(), "VICTORY:" + roundInfo.getLoserUnit().getName() + " gina. "
+                + roundInfo.getWinnerUnit().getName() + " wygrywaja pojedynek");
+        communicationService.closeConnection(roundInfo.getUserUUID());
     }
 
     private void sleep(long ms) {

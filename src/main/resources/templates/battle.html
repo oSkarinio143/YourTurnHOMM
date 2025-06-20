@@ -426,7 +426,7 @@
       </button>
     </form>
     <button id="refButton" class="nav-btn battle-btn"
-            onclick="localStorage.clear(); window.location.reload();"
+            onclick="window.location.reload();"
             disabled>
       Rozpocznij pojedynek ponownie
     </button>
@@ -434,114 +434,135 @@
 </div>
 
 <script th:inline="javascript">
-  // 1. WYCZYŚĆ KONTENER LOGU PRZED WCZYTANIEM WIADOMOŚCI
-  let eventSource;
-  // 4. OBSŁUGA ODSWIEŻANIA STRONY
-  window.addEventListener('unload', () => {
-    if(eventSource){
-      eventSource.close();
-    }
-    localStorage.clear()
+  const uuid = localStorage.getItem("uuid");
+  // Główna funkcja inicjalizująca
+  async function initializeBattle() {
+    // Najpierw pobierz UUID
+    const uuid = localStorage.getItem("uuid");
+
+    // Teraz inicjalizuj resztę kodu
+    initializeEventHandlers();
+    loadSavedMessages();
+    startEventSource();
+  }
+
+  function initializeEventHandlers() {
+    // 4. OBSŁUGA ODSWIEŻANIA STRONY
+    window.addEventListener('unload', () => {
+      if(eventSource){
+        eventSource.close();
+      }
+      localStorage.removeItem("battleMessages");
+      const battleLogContent = document.getElementById('battle-log-content');
+      battleLogContent.innerHTML = ''; // Wyczysc fizyczne elementy DOM
+    });
+  }
+
+  function loadSavedMessages() {
     const battleLogContent = document.getElementById('battle-log-content');
-    battleLogContent.innerHTML = ''; // Wyczysc fizyczne elementy DOM
-    console.log("siekierout")
-  });
 
-  const battleLogContent = document.getElementById('battle-log-content');
+    // 1. WCZYTAJ HISTORIĘ PRZY ŁADOWANIU STRONY
+    const savedMessages = JSON.parse(localStorage.getItem('battleMessages') || '[]');
+    savedMessages.forEach(msg => {
+      const messageElement = createMessageElement(msg);
+      battleLogContent.appendChild(messageElement);
+    });
+  }
 
+  let eventSource;
 
-  // 1. WCZYTAJ HISTORIĘ PRZY ŁADOWANIU STRONY
-  const savedMessages = JSON.parse(localStorage.getItem('battleMessages') || '[]');
-  savedMessages.forEach(msg => {
-    const messageElement = createMessageElement(msg);
-    battleLogContent.appendChild(messageElement);
-  });
+  function startEventSource() {
+    const battleLogContent = document.getElementById('battle-log-content');
+
+    // 3. POŁĄCZENIE SSE Z AUTOMATYCZNYM ZAPISEM
+    const savedMessages = JSON.parse(localStorage.getItem('battleMessages') || '[]');
+    const messages = [...savedMessages];
+
+    eventSource = new EventSource(`http://localhost:8080/oskarinio143/heroes/duel/battle/stream?userUUID=${uuid}`);
+
+    eventSource.onmessage = (event) => {
+      if (event.data === "CLOSE") {
+        eventSource.close();
+        return;
+      }
+
+      messages.push(event.data);
+      localStorage.setItem('battleMessages', JSON.stringify(messages));
+
+      const messageElement = createMessageElement(event.data);
+      battleLogContent.appendChild(messageElement);
+      battleLogContent.scrollTop = battleLogContent.scrollHeight;
+    };
+  }
 
   // 2. FUNKCJA TWORZĄCA ELEMENTY WIADOMOŚCI
   function createMessageElement(rawData) {
+    const element = document.createElement('div');
+    element.classList.add('attack-message');
 
-      const element = document.createElement('div');
-      element.classList.add('attack-message');
+    // Obsłuż prefixy: ROUND:, ATTACKF:, ATTACKS:, VICTORY:
+    let text = rawData;
+    let prefix = null;
+    let content = rawData;
 
-      // Obsłuż prefixy: ROUND:, ATTACKF:, ATTACKS:, VICTORY:
-      let text = rawData;
-      let prefix = null;
-      let content = rawData;
+    // Sprawdź prefix
+    if (typeof rawData === 'string') {
+      if (rawData.startsWith('ROUND:')) {
+        prefix = 'round-message';
+        content = rawData.replace(/^ROUND:/, '').trim();
+      } else if (rawData.startsWith('ATTACKF:')) {
+        prefix = 'attackf-message';
+        content = rawData.replace(/^ATTACKF:/, '').trim();
+      } else if (rawData.startsWith('ATTACKS:')) {
+        prefix = 'attacks-message';
+        content = rawData.replace(/^ATTACKS:/, '').trim();
+      } else if (rawData.startsWith('VICTORY:')) {
+        prefix = 'victory-message';
+        content = rawData.replace(/^VICTORY:/, '').trim();
+        const btn = document.getElementById('refButton');
+        btn.disabled = false;
+      }
 
-      // Sprawdź prefix
-      if (typeof rawData === 'string') {
-          if (rawData.startsWith('ROUND:')) {
+      // Jeśli nie znaleziono prefixu, próbuj obsłużyć stare wiadomości JSON (z typem)
+      if (!prefix) {
+        try {
+          const data = JSON.parse(rawData);
+          // Jeśli typ, to nadaj stary styl
+          switch (data.type) {
+            case 'ROUND':
               prefix = 'round-message';
-              content = rawData.replace(/^ROUND:/, '').trim();
-          } else if (rawData.startsWith('ATTACKF:')) {
+              break;
+            case 'ATTACKF':
               prefix = 'attackf-message';
-              content = rawData.replace(/^ATTACKF:/, '').trim();
-          } else if (rawData.startsWith('ATTACKS:')) {
+              break;
+            case 'ATTACKS':
               prefix = 'attacks-message';
-              content = rawData.replace(/^ATTACKS:/, '').trim();
-          } else if (rawData.startsWith('VICTORY:')) {
+              break;
+            case 'VICTORY':
               prefix = 'victory-message';
-              content = rawData.replace(/^VICTORY:/, '').trim();
               const btn = document.getElementById('refButton');
               btn.disabled = false;
+              break;
+            default:
+              prefix = 'neutral-message';
           }
-
-          // Jeśli nie znaleziono prefixu, próbuj obsłużyć stare wiadomości JSON (z typem)
-          if (!prefix) {
-              try {
-                  const data = JSON.parse(rawData);
-                  // Jeśli typ, to nadaj stary styl
-                  switch (data.type) {
-                      case 'ROUND':
-                          prefix = 'round-message';
-                          break;
-                      case 'ATTACKF':
-                          prefix = 'attackf-message';
-                          break;
-                      case 'ATTACKS':
-                          prefix = 'attacks-message';
-                          break;
-                      case 'VICTORY':
-                          prefix = 'victory-message';
-                          const btn = document.getElementById('refButton');
-                          btn.disabled = false;
-                          break;
-                      default:
-                          prefix = 'neutral-message';
-                  }
-                  content = data.message;
-              } catch (e) {
-                  // Nie parsowalny JSON, nie rozpoznano prefixu – neutral
-                  prefix = 'neutral-message';
-                  content = rawData;
-              }
-          }
+          content = data.message;
+        } catch (e) {
+          // Nie parsowalny JSON, nie rozpoznano prefixu – neutral
+          prefix = 'neutral-message';
+          content = rawData;
+        }
       }
+    }
 
-          element.classList.add(prefix);
-          element.innerHTML = content;
+    element.classList.add(prefix);
+    element.innerHTML = content;
 
-          return element;
-      }
+    return element;
+  }
 
-      // 3. POŁĄCZENIE SSE Z AUTOMATYCZNYM ZAPISEM
-      const messages = [...savedMessages];
-
-      eventSource = new EventSource("http://localhost:8080/oskarinio143/heroes/duel/battle/stream");
-
-      eventSource.onmessage = (event) => {
-          if (event.data === "CLOSE") {
-              eventSource.close();
-              return;
-          }
-
-          messages.push(event.data);
-          localStorage.setItem('battleMessages', JSON.stringify(messages));
-
-          const messageElement = createMessageElement(event.data);
-          battleLogContent.appendChild(messageElement);
-          battleLogContent.scrollTop = battleLogContent.scrollHeight;
-      };
+  // URUCHOM INICJALIZACJĘ
+  initializeBattle();
 </script>
 
 </body>

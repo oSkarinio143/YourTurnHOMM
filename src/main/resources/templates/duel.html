@@ -400,23 +400,52 @@
       <input type="hidden" name="rightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
       <input type="hidden" name="leftQuantity" id="leftQuantityInput">
       <input type="hidden" name="rightQuantity" id="rightQuantityInput">
+      <input type="hidden" id="userUUIDInput" name="userUUID" value="">
       <button type="submit" class="nav-btn battle-btn"
               th:disabled="${leftUnit == null || rightUnit == null}">
          Rozpocznij pojedynek⚔️
       </button>
     </form>
-    </div>
+    <script>
+      var uuid = localStorage.getItem("uuid")
+      async function getUUID() {
+        uuid = await fetch("http://localhost:8080/oskarinio143/heroes/duel/generateUUID")
+          .then(res => res.text())
+          .then(text => {
+          return text;
+        });
+      }
+
+      async function setUUID() {
+        await getUUID();
+        passUUID();
+      }
+
+      async function loadUUID(){
+        passUUID();
+      }
+
+      function passUUID(){
+        localStorage.setItem("uuid", uuid);
+        document.getElementById("userUUIDInput").value = uuid;
+      }
+
+      if(uuid == null){
+        setUUID();
+      }
+      passUUID();
+
+      document.querySelector('.battle-btn').addEventListener('click', function(e) {
+        if (!this.disabled) {
+          document.getElementById('leftQuantityInput').value =
+          document.getElementById('leftQuantity').value;
+          document.getElementById('rightQuantityInput').value =
+          document.getElementById('rightQuantity').value;
+        }
+      });
+    </script>
+  </div>
 </div>
 
-<script>
-  document.querySelector('.battle-btn').addEventListener('click', function(e) {
-    if (!this.disabled) {
-      document.getElementById('leftQuantityInput').value =
-      document.getElementById('leftQuantity').value;
-      document.getElementById('rightQuantityInput').value =
-      document.getElementById('rightQuantity').value;
-    }
-  });
-</script>
 </body>
 </html>
