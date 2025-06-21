@@ -3,20 +3,32 @@ package oskarinio143.heroes3.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.print.DocFlavor;
+import java.util.ArrayList;
 
-@Getter
 @Setter
-public class RoundInfo {
-    private String UserUUID;
-    private Unit slowerUnit;
+@Getter
+public class RoundInfo implements Cloneable{
+    @Override
+    public RoundInfo clone() {
+        try {
+            RoundInfo copy = (RoundInfo) super.clone();
+            return copy;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError("Clone powinien być wspierany", e);
+        }
+    }
+
+    private String userUUID;
+    private int roundCounter;
+    private int fasterDmg;
+    private int slowerDmg;
+    private int fasterDeathUnits;
+    private int slowerDeathUnits;
+    private int fasterLiveUnits;
+    private int slowerLiveUnits;
     private Unit fasterUnit;
-    private int slowerQuantity;
-    private int fasterQuantity;
-    private int atkDmg;
-    private Unit atkUnit;
-    private Unit defUnit;
+    private Unit slowerUnit;
     private Unit winnerUnit;
     private Unit loserUnit;
-    private int deathUnits;
+    private boolean isWinner;
 }

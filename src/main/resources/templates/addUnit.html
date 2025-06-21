@@ -173,5 +173,47 @@
         </div>
     </form>
 </div>
+<!-- Proste div‑owe okienko: -->
+<style>
+    .modal-box {
+        background: white;
+        padding: 40px;
+        width: 600px;
+        height: 180px;
+        max-width: 90%;
+        max-height: 80%;
+        box-sizing: border-box;
+        text-align: center;
+
+        border: 5px solid;
+        border-image: linear-gradient(to right, #000000, #444444) 1;
+    }
+</style>
+
+<div id="errorModal" style="
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+">
+    <div class="modal-box">
+        <p th:text="${errorMessage}" style="
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 20px;
+    ">
+            Tutaj będzie komunikat
+        </p>
+        <button onclick="document.getElementById('errorModal').style.display='none'" class = "back-btn">
+            Zamknij
+        </button>
+    </div>
+</div>
+
+<script th:if="${errorMessage}">
+    document.getElementById('errorModal').style.display = 'flex';
+</script>
 </body>
 </html>

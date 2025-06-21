@@ -2,7 +2,6 @@ package oskarinio143.heroes3.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import oskarinio143.heroes3.exception.EmitterUnavailable;
 
 import java.io.IOException;
 import java.util.Map;
@@ -22,11 +21,10 @@ public class CommunicationService {
     }
 
     public SseEmitter createEmitter(String userUUID){
-        SseEmitter emitter = new SseEmitter(0L);
+        SseEmitter emitter = new SseEmitter(3600000L);
         emitter.onCompletion(() -> System.out.println("SSE zakończone"));
         emitter.onTimeout(() -> System.out.println("SSE timeout"));
         emitters.put(userUUID, emitter);
-        System.out.println("Poczatek emittera");
         return emitter;
     }
 
@@ -35,9 +33,10 @@ public class CommunicationService {
         if(userEmitter != null) {
             try {
                 userEmitter.send(message);
-            } catch (IOException e) {
-                userEmitter.completeWithError(new EmitterUnavailable("EmmitterUnavailable"));
+            } catch (IOException | IllegalStateException e) {
+                System.out.println("ZLAPANE");
                 emitters.remove(userUUID);
+                userEmitter.complete();
             }
         }
     }
@@ -47,9 +46,9 @@ public class CommunicationService {
         if(userEmitter != null){
             try {
                 userEmitter.send("CLOSE");
-                System.out.println("Koniec Emittera");
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                emitters.remove(userUUID);
+                userEmitter.complete();
             }
             userEmitter.complete();
             emitters.remove(userUUID);

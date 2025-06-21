@@ -4,37 +4,90 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
+import oskarinio143.heroes3.model.AttackInfo;
 import oskarinio143.heroes3.model.RoundInfo;
 import oskarinio143.heroes3.model.Unit;
-import oskarinio143.heroes3.controller.BattleComunicator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import static java.lang.Thread.sleep;
 
 @EnableAsync
 @Service
 public class BattleService {
 
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private final CommunicationService communicationService;
+    private final MessageCreatorService messageCreatorService;
+
     @Value("${battle.rates.attack}")
     private double ATK_RATE;
     @Value("${battle.rates.defense}")
     private double DEF_RATE;
 
-    public BattleService(CommunicationService communicationService) {
+    public BattleService(CommunicationService communicationService, MessageCreatorService messageCreatorService) {
         this.communicationService = communicationService;
+        this.messageCreatorService = messageCreatorService;
     }
 
     @Async
     public void startBattle(Unit leftUnit, Unit rightUnit, int leftQuantity, int rightQuantity, String userUUID){
-        sleep(1000);
-        RoundInfo roundInfo = setRoundInfo(leftUnit, rightUnit, leftQuantity, rightQuantity, userUUID);
+        AttackInfo roundInfo = setAttackInfo(leftUnit, rightUnit, leftQuantity, rightQuantity, userUUID);
         findWinner(roundInfo);
-        sendWinnerMess(roundInfo);
+        //messageCreatorService.sendWinnerMess(roundInfo);
     }
 
-    public RoundInfo setRoundInfo(Unit leftUnit, Unit rightUnit, int leftQuantity, int rightQuantity, String userUUID){
+    public void findWinner(AttackInfo attackInfo){
         RoundInfo roundInfo = new RoundInfo();
+        List<Integer> unitsQuantites = new ArrayList<>(List.of(attackInfo.getFasterQuantity(), attackInfo.getSlowerQuantity()));
+        int counter = 0;
+        int delay = -2;
+        while (unitsQuantites.get(0) != 0 && unitsQuantites.get(1) != 0){
+            counter++;
+            delay += 4;
+            roundInfo.setRoundCounter(counter);
+            unitsQuantites = startRound(roundInfo, attackInfo, unitsQuantites.get(0), unitsQuantites.get(1));
+            RoundInfo snapshotRoundInfo = roundInfo.clone();
+            SingleRoundSimulator singleRoundSimulator = new SingleRoundSimulator(messageCreatorService, this, snapshotRoundInfo);
+            scheduler.schedule(singleRoundSimulator, delay, TimeUnit.SECONDS);
+        }
+    }
+
+    public boolean isWinner(RoundInfo roundInfo){
+        if(roundInfo.getSlowerLiveUnits() == 0) {
+            roundInfo.setWinnerUnit(roundInfo.getFasterUnit());
+            roundInfo.setLoserUnit(roundInfo.getSlowerUnit());
+            return true;
+        }
+        if(roundInfo.getFasterLiveUnits() == 0){
+            roundInfo.setLoserUnit(roundInfo.getSlowerUnit());
+            roundInfo.setWinnerUnit(roundInfo.getFasterUnit());
+            return true;
+        }
+        return false;
+    }
+
+    public void setRoundInfoFaster(RoundInfo roundInfo, AttackInfo attackInfo){
+        roundInfo.setFasterDmg(attackInfo.getAtkDmg());
+        roundInfo.setFasterLiveUnits(attackInfo.getAttackingUnits());
+        roundInfo.setSlowerDeathUnits(attackInfo.getDeathUnits());
+        roundInfo.setFasterUnit(attackInfo.getFasterUnit());
+        roundInfo.setUserUUID(attackInfo.getUserUUID());
+    }
+
+    public void setRoundInfoSlower(RoundInfo roundInfo, AttackInfo attackInfo){
+        roundInfo.setSlowerDmg(attackInfo.getAtkDmg());
+        roundInfo.setSlowerLiveUnits(attackInfo.getAttackingUnits());
+        roundInfo.setFasterDeathUnits(attackInfo.getDeathUnits());
+        roundInfo.setSlowerUnit(attackInfo.getSlowerUnit());
+    }
+
+    public AttackInfo setAttackInfo(Unit leftUnit, Unit rightUnit, int leftQuantity, int rightQuantity, String userUUID){
+        AttackInfo roundInfo = new AttackInfo();
         roundInfo.setFasterUnit(findFaster(leftUnit, rightUnit));
         roundInfo.setSlowerUnit(findSlower(leftUnit, rightUnit));
         roundInfo.setFasterQuantity(findFasterQuantity(roundInfo.getFasterUnit(), leftUnit, leftQuantity, rightQuantity));
@@ -43,38 +96,20 @@ public class BattleService {
         return roundInfo;
     }
 
-    public void findWinner(RoundInfo roundInfo){
-        List<Integer> unitsQuantites = new ArrayList<>(List.of(roundInfo.getFasterQuantity(), roundInfo.getSlowerQuantity()));
-        int counter = 0;
-        while (unitsQuantites.get(0) != 0 && unitsQuantites.get(1) != 0){
-            counter++;
-            sendRoundMess(roundInfo, counter);
-            unitsQuantites = startRound(roundInfo, unitsQuantites.get(0), unitsQuantites.get(1));
-        }
-        setWinner(roundInfo, unitsQuantites);
-    }
+    public List<Integer> startRound(RoundInfo roundInfo, AttackInfo attackInfo, int fasterQuantity, int slowerQuantity){
+        attackInfo.setAtkUnit(attackInfo.getFasterUnit());
+        attackInfo.setDefUnit(attackInfo.getSlowerUnit());
+        slowerQuantity = countLiveUnitsAfterAttack(attackInfo, fasterQuantity, slowerQuantity);
+        attackInfo.setAttackingUnits(fasterQuantity);
+        //messageCreatorService.sendAttackMess(attackInfo, "pierwsza", "ATTACKF");
+        setRoundInfoFaster(roundInfo, attackInfo);
 
-    public void setWinner(RoundInfo roundInfo, List<Integer> unitsQuantites){
-        if(unitsQuantites.get(0) == 0) {
-            roundInfo.setWinnerUnit(roundInfo.getSlowerUnit());
-            roundInfo.setLoserUnit(roundInfo.getFasterUnit());
-        }
-        else if (unitsQuantites.get(1) == 0) {
-            roundInfo.setWinnerUnit(roundInfo.getFasterUnit());
-            roundInfo.setLoserUnit(roundInfo.getSlowerUnit());
-        }
-    }
-
-    public List<Integer> startRound(RoundInfo roundInfo, int fasterQuantity, int slowerQuantity){
-        roundInfo.setAtkUnit(roundInfo.getFasterUnit());
-        roundInfo.setDefUnit(roundInfo.getSlowerUnit());
-        slowerQuantity = countLiveUnitsAfterAttack(roundInfo, fasterQuantity, slowerQuantity);
-        sendAttackMess(roundInfo, fasterQuantity, "pierwsza", "ATTACKF");
-
-        roundInfo.setAtkUnit(roundInfo.getSlowerUnit());
-        roundInfo.setDefUnit(roundInfo.getFasterUnit());
-        fasterQuantity = countLiveUnitsAfterAttack(roundInfo, slowerQuantity, fasterQuantity);
-        sendAttackMess(roundInfo, slowerQuantity, "druga", "ATTACKS");
+        attackInfo.setAtkUnit(attackInfo.getSlowerUnit());
+        attackInfo.setDefUnit(attackInfo.getFasterUnit());
+        fasterQuantity = countLiveUnitsAfterAttack(attackInfo, slowerQuantity, fasterQuantity);
+        attackInfo.setAttackingUnits(slowerQuantity);
+        //messageCreatorService.sendAttackMess(attackInfo, "druga", "ATTACKS");
+        setRoundInfoSlower(roundInfo, attackInfo);
 
         return new ArrayList<>(List.of(fasterQuantity, slowerQuantity));
     }
@@ -110,13 +145,13 @@ public class BattleService {
         return rightQuantity;
     }
 
-    public int countLiveUnitsAfterAttack(RoundInfo roundInfo, int attackingQuantity, int defendingQuantity){
+    public int countLiveUnitsAfterAttack(AttackInfo roundInfo, int attackingQuantity, int defendingQuantity){
         int attackingDmg = generateDmg(roundInfo.getAtkUnit(), roundInfo.getDefUnit(), attackingQuantity);
         setDmg(roundInfo, attackingDmg);
         return countLiveUnits(roundInfo, attackingDmg, defendingQuantity);
     }
 
-    public int countLiveUnits(RoundInfo roundInfo, int dmg, int enemyQuantity){
+    public int countLiveUnits(AttackInfo roundInfo, int dmg, int enemyQuantity){
         int deathUnits;
         int leftHp = roundInfo.getDefUnit().getHpLeft();
         if(leftHp - dmg > 0)
@@ -142,7 +177,7 @@ public class BattleService {
             unit.setHpLeft(unit.getHpLeft() - (dmg - unit.getHp() * deathUnits));
     }
 
-    public void setDmg(RoundInfo roundInfo, int dmg){
+    public void setDmg(AttackInfo roundInfo, int dmg){
         roundInfo.setAtkDmg(dmg);
     }
 
@@ -176,35 +211,5 @@ public class BattleService {
     public double countDefRate(Unit unit) {
         //Statystyka defa z każdym poziomem podnosi bazowy def o 10%
         return DEF_RATE * unit.getDefense() + 1;
-    }
-
-    private void sendRoundMess(RoundInfo roundInfo, int number){
-        communicationService.sendMessage(roundInfo.getUserUUID(), "ROUND:Runda " + number);
-        sleep(2000);
-    }
-
-    private void sendAttackMess(RoundInfo roundInfo, int unitQuantity, String firOrSec, String attackType){
-        if(unitQuantity > 0) {
-            if (roundInfo.getDeathUnits() > 0)
-                communicationService.sendMessage(roundInfo.getUserUUID(), attackType + ":Jednostka " + unitQuantity + "x"
-                        + roundInfo.getAtkUnit().getName() + " atakuje " + firOrSec + " zadajac " + roundInfo.getAtkDmg()
-                        + ".<br>Pokonuje " + roundInfo.getDeathUnits() + "x" + roundInfo.getDefUnit().getName());
-            else
-                communicationService.sendMessage(roundInfo.getUserUUID(), attackType + ":Jednostka " + unitQuantity + "x"
-                        + roundInfo.getAtkUnit().getName() + " atakuje " + firOrSec + " zadajac " + roundInfo.getAtkDmg());
-        }
-        sleep(1000);
-    }
-
-    private void sendWinnerMess(RoundInfo roundInfo){
-        communicationService.sendMessage(roundInfo.getUserUUID(), "VICTORY:" + roundInfo.getLoserUnit().getName() + " gina. "
-                + roundInfo.getWinnerUnit().getName() + " wygrywaja pojedynek");
-        communicationService.closeConnection(roundInfo.getUserUUID());
-    }
-
-    private void sleep(long ms) {
-        try {
-            Thread.sleep(ms);
-        } catch (InterruptedException ignored) {}
     }
 }

@@ -34,7 +34,7 @@ public class DuelService {
     }
 
     public void loadUnit(Model model, String name, String side, Unit leftUnit, Unit rightUnit, String leftUnitName, String rightUnitName){
-        Unit unit = databaseService.getUnitByName(name);
+        Unit unit = unitRepository.getReferenceById(name);
         if(side.equals("left")){
             model.addAttribute("leftUnit", unit);
             model.addAttribute("rightUnit", rightUnit);

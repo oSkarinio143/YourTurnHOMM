@@ -3,9 +3,9 @@ package oskarinio143.heroes3.service;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
+import oskarinio143.heroes3.exception.DuplicateUnitException;
 import oskarinio143.heroes3.model.Unit;
 import oskarinio143.heroes3.repository.UnitRepository;
-import oskarinio143.heroes3.exception.UnitNotFoundException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,15 +26,6 @@ public class DatabaseService {
     public List<Unit> getAllUnits(){
         List<Unit> units = unitRepository.findAll();
         return units;
-    }
-
-    public Unit getUnitByName(String name){
-        Optional<Unit> unitOpt = unitRepository.findById(name);
-        if(unitOpt.isPresent()){
-            Unit unit = unitOpt.get();
-            return unit;
-        }
-        throw new UnitNotFoundException();
     }
 
     public void saveUnit(
@@ -64,12 +55,14 @@ public class DatabaseService {
                         String description,
                         MultipartFile image) throws IOException {
 
+        if(unitRepository.existsById(name))
+            throw new DuplicateUnitException("Jednostka o tej nazwie jest już w bazie");
+
         String fileName = name + ".png";
         Path path = Paths.get("unit-images", fileName);
         Files.createDirectories(path.getParent()); // jeśli folder nie istnieje
         Files.write(path, image.getBytes());
         String imagePath = "/" + path.toString();
-        System.out.println(path);
         saveUnit(name, attack, defense, shots, minDamage, maxDamage, hp, speed, description, imagePath);
     }
 
@@ -79,18 +72,17 @@ public class DatabaseService {
     }
 
     public void viewSingleUnit(Model model, String name){
-        Unit unit = getUnitByName(name);
-        System.out.println(unit.getImagePath());
+        Unit unit = unitRepository.getReferenceById(name);
         model.addAttribute("unit", unit);
     }
 
     public void removeUnit(String name){
-        Unit unit = getUnitByName(name);
+        Unit unit = unitRepository.getReferenceById(name);
         unitRepository.delete(unit);
     }
 
     public void modifyUnit(String name, int attack, int defense, int shots, int minDamage, int maxDamage, int hp, int speed, Optional<String> descriptionOpt){
-        Unit unit = getUnitByName(name);
+        Unit unit = unitRepository.getReferenceById(name);
         unit.setAttack(attack);
         unit.setDefense(defense);
         unit.setShots(shots);
