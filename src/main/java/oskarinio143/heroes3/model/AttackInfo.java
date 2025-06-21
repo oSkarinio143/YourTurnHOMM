@@ -1,11 +1,15 @@
 package oskarinio143.heroes3.model;
 
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@RequiredArgsConstructor
 public class AttackInfo {
+    @NonNull
     private String UserUUID;
     private Unit atkUnit;
     private Unit defUnit;

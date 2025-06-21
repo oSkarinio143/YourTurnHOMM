@@ -54,6 +54,6 @@ public class DuelService {
         model.addAttribute("rightUnit", rightUnit);
         model.addAttribute("leftQuantity", leftQuantity);
         model.addAttribute("rightQuantity", rightQuantity);
-        battleService.startBattle(leftUnit, rightUnit, leftQuantity, rightQuantity, userUUID);
+        battleService.prepareBattle(leftUnit, rightUnit, leftQuantity, rightQuantity, userUUID);
     }
 }

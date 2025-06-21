@@ -33,7 +33,7 @@ public class CommunicationService {
         if(userEmitter != null) {
             try {
                 userEmitter.send(message);
-            } catch (IOException | IllegalStateException e) {
+            } catch (IOException e) {
                 System.out.println("ZLAPANE");
                 emitters.remove(userUUID);
                 userEmitter.complete();
