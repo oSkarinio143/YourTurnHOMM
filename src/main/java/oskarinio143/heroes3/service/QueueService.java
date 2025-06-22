@@ -45,25 +45,10 @@ public class QueueService {
     }
 
     public void sendWinnerMess(RoundInfo roundInfo){
-        if(isWinner(roundInfo)){
+        if(roundInfo.getWinnerUnit() != null){
             roundInfo.setTempDelay(roundInfo.getTempDelay() + 1);
             Runnable sendWinner = () -> messageCreatorService.sendWinnerMess(roundInfo);
             scheduler.schedule(sendWinner, roundInfo.getMessageDelay() + roundInfo.getTempDelay(), TimeUnit.SECONDS);
         }
-    }
-
-
-    public boolean isWinner(RoundInfo roundInfo){
-        if(roundInfo.getSlowerLiveUnits() == 0) {
-            roundInfo.setWinnerUnit(roundInfo.getFasterUnit());
-            roundInfo.setLoserUnit(roundInfo.getSlowerUnit());
-            return true;
-        }
-        if(roundInfo.getFasterLiveUnits() == 0){
-            roundInfo.setLoserUnit(roundInfo.getSlowerUnit());
-            roundInfo.setWinnerUnit(roundInfo.getFasterUnit());
-            return true;
-        }
-        return false;
     }
 }

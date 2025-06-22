@@ -20,7 +20,6 @@ public class BattleService {
 
     private final MessageCreatorService messageCreatorService;
     private final QueueService queueService;
-    //private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     @Value("${battle.rates.attack}")
     private double ATK_RATE;
@@ -50,13 +49,12 @@ public class BattleService {
     public void startRound(RoundInfo roundInfo, AttackInfo attackInfo){
         startAttackFaster(roundInfo, attackInfo);
         startAttackSlower(roundInfo, attackInfo);
+        isWinner(roundInfo);
     }
 
     public void sendRoundMessages(RoundInfo roundInfo){
         RoundInfo snapshotRoundInfo = roundInfo.clone();
         queueService.createQueue(snapshotRoundInfo);
-        //SingleRoundSimulator singleRoundSimulator = new SingleRoundSimulator(messageCreatorService, this, snapshotRoundInfo);
-        //scheduler.schedule(singleRoundSimulator, roundInfo.getMessageDelay(), TimeUnit.SECONDS);
     }
 
     public void setNextRoundInfo(RoundInfo roundInfo){
