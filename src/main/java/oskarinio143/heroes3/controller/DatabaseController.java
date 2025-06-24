@@ -1,5 +1,7 @@
 package oskarinio143.heroes3.controller;
 
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +32,7 @@ public class DatabaseController {
     }
 
     @PostMapping("/add")
-    public String handleAddUnit(
+    public String handleAddUnit(@Valid
             @RequestParam String name,
             @RequestParam int attack,
             @RequestParam int defense,
@@ -42,6 +44,7 @@ public class DatabaseController {
             @RequestParam String description,
             @RequestParam MultipartFile image
     ) throws IOException{
+        System.out.println("Tutaj błąd");
         databaseService.addUnit(name, attack, defense, shots, minDamage, maxDamage, hp, speed, description, image);
         return "redirect:/oskarinio143/heroes/database";
     }
@@ -77,7 +80,7 @@ public class DatabaseController {
     }
 
     @PostMapping("/modify/unit")
-    public String saveModifiedUnit(
+    public String saveModifiedUnit(@Valid
             @RequestParam String name,
             @RequestParam int attack,
             @RequestParam int defense,
@@ -87,7 +90,7 @@ public class DatabaseController {
             @RequestParam int hp,
             @RequestParam int speed,
             @RequestParam Optional<String> description
-    ) throws IOException{
+    ){
         databaseService.modifyUnit(name, attack, defense, shots, minDamage, maxDamage, hp, speed, description);
         return "redirect:/oskarinio143/heroes/database/modify";
     }

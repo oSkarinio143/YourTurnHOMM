@@ -11,17 +11,6 @@ import java.util.ArrayList;
 @Getter
 @RequiredArgsConstructor
 public class RoundInfo implements Cloneable{
-    @Override
-    public RoundInfo clone() {
-        try {
-            RoundInfo copy = (RoundInfo) super.clone();
-            return copy;
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError("Clone powinien być wspierany", e);
-        }
-    }
-
-
     @NonNull
     private String userUUID;
     @NonNull
@@ -40,4 +29,14 @@ public class RoundInfo implements Cloneable{
     private Unit loserUnit;
     private boolean isWinner;
     private int tempDelay;
+
+    @Override
+    public RoundInfo clone() {
+        try {
+            RoundInfo copy = (RoundInfo) super.clone();
+            return copy;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError("Clone powinien być wspierany", e);
+        }
+    }
 }

@@ -181,6 +181,24 @@
       font-style: italic;
     }
 
+    .modal-box {
+      background: white;
+      padding: 20px;
+      width: 600px;
+      max-width: 90%;
+      max-height: 80%;
+      box-sizing: border-box;
+      text-align: center;
+
+      border: 5px solid;
+      border-image: linear-gradient(to right, #000000, #444444) 1;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px; /* 20px między elementami: tekstem i przyciskiem */
+    }
+
     .hidden {
       display: none;
     }
@@ -261,6 +279,58 @@
   </div>
 </div>
 
+<div id="incorrectModal" style="
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+">
+  <div class="modal-box">
+    <p th:utext="${incorrectMessage}" style="
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 20px;
+    ">
+      Tutaj będzie komunikat
+    </p>
+    <button onclick="document.getElementById('incorrectModal').style.display='none'" class = "back-btn">
+      Zamknij
+    </button>
+  </div>
+</div>
+
+<div id="nullModal" style="
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+">
+  <div class="modal-box">
+    <p th:utext="${nullMessage}" style="
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 20px;
+    ">
+      Tutaj będzie komunikat
+    </p>
+    <button onclick="document.getElementById('nullModal').style.display='none'" class = "back-btn">
+      Zamknij
+    </button>
+  </div>
+</div>
+
+<script th:if="${nullMessage}">
+  document.getElementById('nullModal').style.display = 'flex';
+</script>
+
+<script th:if="${incorrectMessage}">
+  document.getElementById('incorrectModal').style.display = 'flex';
+</script>
+
 <script>
   let isEditing = false;
 
@@ -308,7 +378,7 @@
 
     fields.forEach(field => {
       const input = document.getElementById(field + '-input');
-      if (input && input.value) {
+      if (input) {
         // Usuń istniejące pole jeśli istnieje
         const existingField = form.querySelector(`input[name="${field}"]`);
         if (existingField) {

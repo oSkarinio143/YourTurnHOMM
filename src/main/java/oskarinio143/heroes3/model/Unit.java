@@ -2,37 +2,55 @@ package oskarinio143.heroes3.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import oskarinio143.heroes3.validation.ValidDamageRange;
 
+@ValidDamageRange
 @Entity
 @RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 public class Unit {
 
     @Id
-    @NonNull
+    @NotNull
     private String name;
-    @NonNull
-    private int attack;
-    @NonNull
-    private int defense;
 
-    private int shots;
-    @NonNull
-    private int minDamage;
-    @NonNull
-    private int maxDamage;
-    @NonNull
-    private int hp;
-    @NonNull
-    private int hpLeft;
-    @NonNull
-    private int speed;
+    @NotNull
+    @Min(1)
+    private Integer attack;
+
+    @NotNull
+    @Min(1)
+    private Integer defense;
+
+    @Min(0)
+    private Integer shots;
+
+    @NotNull
+    @Min(1)
+    private Integer minDamage;
+
+    @NotNull
+    @Min(1)
+    private Integer maxDamage;
+
+    @NotNull
+    @Min(1)
+    private Integer hp;
+
+    @NotNull
+    private Integer hpLeft;
+
+    @NotNull
+    @Min(1)
+    private Integer speed;
 
     private String description;
-    @NonNull
+
+    @NotNull
     private String imagePath;
 }

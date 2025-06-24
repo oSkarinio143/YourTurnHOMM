@@ -1,9 +1,14 @@
 package oskarinio143.heroes3.service;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
+import oskarinio143.heroes3.controller.GlobalExceptionHandler;
 import oskarinio143.heroes3.exception.DuplicateUnitException;
+import oskarinio143.heroes3.exception.TransactionSystemAddException;
+import oskarinio143.heroes3.exception.TransactionSystemModifyException;
 import oskarinio143.heroes3.model.Unit;
 import oskarinio143.heroes3.repository.UnitRepository;
 
@@ -63,7 +68,12 @@ public class DatabaseService {
         Files.createDirectories(path.getParent()); // jeśli folder nie istnieje
         Files.write(path, image.getBytes());
         String imagePath = "/" + path.toString();
-        saveUnit(name, attack, defense, shots, minDamage, maxDamage, hp, speed, description, imagePath);
+
+        try {
+            saveUnit(name, attack, defense, shots, minDamage, maxDamage, hp, speed, description, imagePath);
+        }catch (TransactionSystemException ex){
+            throw new TransactionSystemAddException("", ex.getCause());
+        }
     }
 
     public void viewUnits(Model model){
@@ -92,7 +102,11 @@ public class DatabaseService {
         unit.setHpLeft(hp);
         unit.setSpeed(speed);
         descriptionOpt.ifPresent(unit::setDescription);
-        unitRepository.save(unit);
+        try {
+            unitRepository.save(unit);
+        }catch (TransactionSystemException ex){
+            throw new TransactionSystemModifyException(name, ex.getCause());
+        }
     }
 
 }

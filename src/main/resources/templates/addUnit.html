@@ -175,11 +175,11 @@
 </div>
 <!-- Proste div‑owe okienko: -->
 <style>
+
     .modal-box {
         background: white;
-        padding: 40px;
+        padding: 20px;
         width: 600px;
-        height: 180px;
         max-width: 90%;
         max-height: 80%;
         box-sizing: border-box;
@@ -187,10 +187,15 @@
 
         border: 5px solid;
         border-image: linear-gradient(to right, #000000, #444444) 1;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px; /* 20px między elementami: tekstem i przyciskiem */
     }
 </style>
 
-<div id="errorModal" style="
+<div id="duplicateModal" style="
     display: none;
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -199,21 +204,75 @@
     justify-content: center;
 ">
     <div class="modal-box">
-        <p th:text="${errorMessage}" style="
+        <p th:text="${duplicateMessage}" style="
         font-size: 1.5em;
         font-weight: bold;
         margin-bottom: 20px;
     ">
             Tutaj będzie komunikat
         </p>
-        <button onclick="document.getElementById('errorModal').style.display='none'" class = "back-btn">
+        <button onclick="document.getElementById('duplicateModal').style.display='none'" class = "back-btn">
             Zamknij
         </button>
     </div>
 </div>
 
-<script th:if="${errorMessage}">
-    document.getElementById('errorModal').style.display = 'flex';
+
+<div id="incorrectModal" style="
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+">
+    <div class="modal-box">
+        <p th:utext="${incorrectMessage}" style="
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 20px;
+    ">
+            Tutaj będzie komunikat
+        </p>
+        <button onclick="document.getElementById('incorrectModal').style.display='none'" class = "back-btn">
+            Zamknij
+        </button>
+    </div>
+</div>
+
+<div id="nullModal" style="
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+">
+    <div class="modal-box">
+        <p th:utext="${nullMessage}" style="
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 20px;
+    ">
+            Tutaj będzie komunikat
+        </p>
+        <button onclick="document.getElementById('nullModal').style.display='none'" class = "back-btn">
+            Zamknij
+        </button>
+    </div>
+</div>
+
+<script th:if="${duplicateMessage}">
+    document.getElementById('duplicateModal').style.display = 'flex';
 </script>
+
+<script th:if="${incorrectMessage}">
+    document.getElementById('incorrectModal').style.display = 'flex';
+</script>
+
+<script th:if="${nullMessage}">
+    document.getElementById('nullModal').style.display = 'flex';
+</script>
+
 </body>
 </html>
