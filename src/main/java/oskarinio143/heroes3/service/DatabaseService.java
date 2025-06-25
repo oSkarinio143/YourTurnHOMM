@@ -1,15 +1,14 @@
 package oskarinio143.heroes3.service;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
-import oskarinio143.heroes3.controller.GlobalExceptionHandler;
 import oskarinio143.heroes3.exception.DuplicateUnitException;
 import oskarinio143.heroes3.exception.TransactionSystemAddException;
 import oskarinio143.heroes3.exception.TransactionSystemModifyException;
+import oskarinio143.heroes3.model.BattleUnit;
 import oskarinio143.heroes3.model.Unit;
 import oskarinio143.heroes3.repository.UnitRepository;
 

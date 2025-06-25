@@ -2,7 +2,6 @@ package oskarinio143.heroes3.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,10 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import oskarinio143.heroes3.exception.DuplicateUnitException;
 import oskarinio143.heroes3.exception.TransactionSystemAddException;
 import oskarinio143.heroes3.exception.TransactionSystemModifyException;
-import oskarinio143.heroes3.model.Unit;
 import oskarinio143.heroes3.service.ExceptionHandlerService;
-
-import java.util.List;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

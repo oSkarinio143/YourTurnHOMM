@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import oskarinio143.heroes3.exception.TransactionSystemAddException;
+import oskarinio143.heroes3.model.BattleUnit;
 import oskarinio143.heroes3.model.Unit;
 
 import java.util.Arrays;

@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import oskarinio143.heroes3.model.DuelInfo;
-import oskarinio143.heroes3.model.Unit;
 import oskarinio143.heroes3.service.DuelService;
 
 @Controller

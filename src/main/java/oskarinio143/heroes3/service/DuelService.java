@@ -3,10 +3,9 @@ package oskarinio143.heroes3.service;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import oskarinio143.heroes3.model.DuelInfo;
+import oskarinio143.heroes3.model.BattleUnit;
 import oskarinio143.heroes3.model.Unit;
 import oskarinio143.heroes3.repository.UnitRepository;
-
-import java.util.Optional;
 
 @Service
 public class DuelService {
@@ -59,6 +58,10 @@ public class DuelService {
         model.addAttribute("rightUnit", duelInfo.getRightUnit());
         model.addAttribute("leftQuantity", duelInfo.getLeftQuantity());
         model.addAttribute("rightQuantity", duelInfo.getRightQuantity());
-        battleService.prepareBattle(duelInfo.getLeftUnit(), duelInfo.getRightUnit(), duelInfo.getLeftQuantity(), duelInfo.getRightQuantity(), duelInfo.getName());
+        model.addAttribute("leftHeroAttack", duelInfo.getLeftHeroAttack());
+        model.addAttribute("leftHeroDefense", duelInfo.getLeftHeroDefense());
+        model.addAttribute("rightHeroAttack", duelInfo.getRightHeroAttack());
+        model.addAttribute("rightHeroDefense", duelInfo.getRightHeroDefense());
+        battleService.prepareBattle(duelInfo);
     }
 }

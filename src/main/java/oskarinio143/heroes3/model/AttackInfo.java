@@ -11,15 +11,15 @@ import lombok.Setter;
 public class AttackInfo {
     @NonNull
     private String UserUUID;
-    private Unit atkUnit;
-    private Unit defUnit;
-    private Unit fasterUnit;
-    private Unit slowerUnit;
+    private BattleUnit atkUnit;
+    private BattleUnit defUnit;
+    private BattleUnit fasterUnit;
+    private BattleUnit slowerUnit;
     private int attackingUnits;
     private int deathUnits;
     private int fasterQuantity;
     private int slowerQuantity;
     private int atkDmg;
-    private Unit winnerUnit;
-    private Unit loserUnit;
+    private BattleUnit winnerUnit;
+    private BattleUnit loserUnit;
 }

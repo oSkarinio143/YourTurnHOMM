@@ -5,8 +5,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-
 @Setter
 @Getter
 @RequiredArgsConstructor
@@ -23,10 +21,10 @@ public class RoundInfo implements Cloneable{
     private int slowerDeathUnits;
     private int fasterLiveUnits;
     private int slowerLiveUnits;
-    private Unit fasterUnit;
-    private Unit slowerUnit;
-    private Unit winnerUnit;
-    private Unit loserUnit;
+    private BattleUnit fasterUnit;
+    private BattleUnit slowerUnit;
+    private BattleUnit winnerUnit;
+    private BattleUnit loserUnit;
     private boolean isWinner;
     private int tempDelay;
 
