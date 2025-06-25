@@ -20,36 +20,25 @@ public class DuelController {
 
     @GetMapping
     public String prepareDuel(Model model, @ModelAttribute DuelInfo duelInfo){
-        duelService.prepareUnits(model, duelInfo.getLeftUnit(), duelInfo.getRightUnit());
+        duelService.prepareUnits(model, duelInfo);
         return "duel";
     }
 
     @PostMapping("/select")
     public String selectUnit(Model model, @ModelAttribute DuelInfo duelInfo){
-        duelService.selectUnit(model, duelInfo.getSide(), duelInfo.getLeftUnit(), duelInfo.getRightUnit());
+        duelService.selectUnit(model, duelInfo);
         return "select";
     }
 
     @PostMapping()
-    public String loadUnit(Model model,
-                          @RequestParam String name,
-                          @RequestParam String side,
-                          @RequestParam(required = false) Unit currentLeftUnit,
-                          @RequestParam(required = false) Unit currentRightUnit,
-                          @RequestParam(required = false) String leftUnitName,
-                          @RequestParam(required = false) String rightUnitName){
-        duelService.loadUnit(model, name, side, currentLeftUnit, currentRightUnit, leftUnitName, rightUnitName);
+    public String loadUnit(Model model, @ModelAttribute DuelInfo duelInfo){
+        duelService.loadUnit(model, duelInfo);
         return "duel";
     }
 
     @PostMapping("/battle")
-    public String startBattle(Model model,
-                              @RequestParam Unit leftUnit,
-                              @RequestParam Unit rightUnit,
-                              @RequestParam int leftQuantity,
-                              @RequestParam int rightQuantity,
-                              @RequestParam String userUUID){
-        duelService.loadBattle(leftUnit, rightUnit, leftQuantity, rightQuantity, model, userUUID);
+    public String startBattle(Model model, @ModelAttribute DuelInfo duelInfo){
+        duelService.loadBattle(model, duelInfo);
         return "battle";
     }
 }

@@ -417,9 +417,9 @@
 
   <div class="navigation-buttons">
     <form th:action="@{/oskarinio143/heroes/duel}" method="post">
-      <input type="hidden" name="leftUnitName"     th:value="${leftUnit.name}"     />
-      <input type="hidden" name="rightUnitName"    th:value="${rightUnit.name}"    />
-      <input type="hidden" name="name"    th:value="${leftUnit.name}"    />
+      <input type="hidden" name="leftUnit"     th:value="${leftUnit.name}"     />
+      <input type="hidden" name="rightUnit"    th:value="${rightUnit.name}"    />
+      <input type="hidden" name="name"    th:value="${rightUnit.name}"    />
       <input type="hidden" name="side"    th:value="right"    />
       <button type="submit" class="nav-btn back-btn">
         Wróć do wyboru jednostek

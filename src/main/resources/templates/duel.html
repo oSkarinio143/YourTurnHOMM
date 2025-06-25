@@ -37,7 +37,7 @@
       min-height: 500px;
       display: grid;
       grid-template-columns: 1fr 2fr 1fr;
-      grid-template-rows: 1fr auto;
+      grid-template-rows: 1fr;
       gap: 30px;
       align-items: start;
       flex: 1;
@@ -49,6 +49,8 @@
       flex-direction: column;
       align-items: center;
       gap: 20px;
+      position: relative;
+      min-height: 500px;
     }
 
     .hero-section {
@@ -284,47 +286,32 @@
       background-color: #e53935;
     }
 
-    .navigation-buttons {
+    /* Przyciski nawigacji w sekcjach armii */
+    .army-nav-button {
       position: absolute;
-      bottom: 40px;
-      left: 40px;
-      right: 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .nav-btn {
-      padding: 15px 30px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 15px 20px;
       border: none;
       border-radius: 10px;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
-      min-width: 180px;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .back-btn {
       background-color: #6c757d;
       color: white;
-      padding: 15px 30px;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.4s ease-in-out;
-      min-width: 180px;
       background-size: 200% auto;
       background-image: linear-gradient(to right, #6c757d 0%, #495057 51%, #6c757d 100%);
     }
 
     .back-btn:hover {
       background-position: right center;
-    }
-
-    .back-btn:hover {
       background-color: #545b62;
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
@@ -414,8 +401,8 @@
           <form th:action="@{/oskarinio143/heroes/duel/select}" method="post">
             <input type="hidden" name="side" value="left">
             <!-- Przekazanie aktualnie wybranych jednostek -->
-            <input type="hidden" name="currentLeftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
-            <input type="hidden" name="currentRightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
+            <input type="hidden" name="leftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
+            <input type="hidden" name="rightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
             <button type="submit" class="select-unit-btn">
               <span th:if="${leftUnit == null}">Wybierz jednostkę</span>
               <span th:if="${leftUnit != null}">Zmień jednostkę</span>
@@ -427,6 +414,13 @@
           <label class="quantity-label">Podaj ilość:</label>
           <input type="number" class="quantity-input" id="leftQuantity" min="1" placeholder="0" value="1">
         </div>
+
+        <!-- Przycisk Wróć do bazy danych w lewym dolnym rogu -->
+        <form th:action="@{/oskarinio143/heroes}" method="get" style="position: absolute; bottom: 0; left: 0; right: 0;">
+          <button type="submit" class="army-nav-button back-btn">
+            Wróć do bazy danych
+          </button>
+        </form>
       </div>
 
       <!-- Centrum - pole bitwy -->
@@ -469,8 +463,8 @@
           <form th:action="@{/oskarinio143/heroes/duel/select}" method="post">
             <input type="hidden" name="side" value="right">
             <!-- Przekazanie aktualnie wybranych jednostek -->
-            <input type="hidden" name="currentLeftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
-            <input type="hidden" name="currentRightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
+            <input type="hidden" name="leftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
+            <input type="hidden" name="rightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
             <button type="submit" class="select-unit-btn">
               <span th:if="${rightUnit == null}">Wybierz jednostkę</span>
               <span th:if="${rightUnit != null}">Zmień jednostkę</span>
@@ -482,6 +476,23 @@
           <label class="quantity-label">Podaj ilość:</label>
           <input type="number" class="quantity-input" id="rightQuantity" min="1" placeholder="0" value="1">
         </div>
+
+        <!-- Przycisk Rozpocznij pojedynek w prawym dolnym rogu -->
+        <form th:action="@{/oskarinio143/heroes/duel/battle}" method="post" style="position: absolute; bottom: 0; left: 0; right: 0;">
+          <input type="hidden" name="leftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
+          <input type="hidden" name="rightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
+          <input type="hidden" name="leftQuantity" id="leftQuantityInput">
+          <input type="hidden" name="rightQuantity" id="rightQuantityInput">
+          <input type="hidden" name="leftHeroAttack" id="leftHeroAttackInput">
+          <input type="hidden" name="leftHeroDefense" id="leftHeroDefenseInput">
+          <input type="hidden" name="rightHeroAttack" id="rightHeroAttackInput">
+          <input type="hidden" name="rightHeroDefense" id="rightHeroDefenseInput">
+          <input type="hidden" id="userUUIDInput" name="userUUID" value="">
+          <button type="submit" class="army-nav-button battle-btn"
+                  th:disabled="${leftUnit == null || rightUnit == null}">
+            Rozpocznij pojedynek⚔️
+          </button>
+        </form>
       </div>
     </div>
 
@@ -501,75 +512,52 @@
     </div>
   </div>
 
-  <!-- Przyciski nawigacji -->
-  <div class="navigation-buttons">
-    <form th:action="@{/oskarinio143/heroes}" method="get" style="display: inline;">
-      <button type="submit" class="nav-btn back-btn">
-        Wróć do bazy danych
-      </button>
-    </form>
-    <form th:action="@{/oskarinio143/heroes/duel/battle}" method="post" style="display: inline;">
-      <input type="hidden" name="leftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
-      <input type="hidden" name="rightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
-      <input type="hidden" name="leftQuantity" id="leftQuantityInput">
-      <input type="hidden" name="rightQuantity" id="rightQuantityInput">
-      <input type="hidden" name="leftHeroAttack" id="leftHeroAttackInput">
-      <input type="hidden" name="leftHeroDefense" id="leftHeroDefenseInput">
-      <input type="hidden" name="rightHeroAttack" id="rightHeroAttackInput">
-      <input type="hidden" name="rightHeroDefense" id="rightHeroDefenseInput">
-      <input type="hidden" id="userUUIDInput" name="userUUID" value="">
-      <button type="submit" class="nav-btn battle-btn"
-              th:disabled="${leftUnit == null || rightUnit == null}">
-        Rozpocznij pojedynek⚔️
-      </button>
-    </form>
-    <script>
-      var uuid = localStorage.getItem("uuid")
-      async function getUUID() {
-        uuid = await fetch("http://localhost:8080/oskarinio143/heroes/duel/generateUUID")
-          .then(res => res.text())
-          .then(text => {
-          return text;
-        });
-      }
-
-      async function setUUID() {
-        await getUUID();
-        passUUID();
-      }
-
-      async function loadUUID(){
-        passUUID();
-      }
-
-      function passUUID(){
-        localStorage.setItem("uuid", uuid);
-        document.getElementById("userUUIDInput").value = uuid;
-      }
-
-      if(uuid == null){
-        setUUID();
-      }
-      passUUID();
-
-      document.querySelector('.battle-btn').addEventListener('click', function(e) {
-        if (!this.disabled) {
-          document.getElementById('leftQuantityInput').value =
-          document.getElementById('leftQuantity').value;
-          document.getElementById('rightQuantityInput').value =
-          document.getElementById('rightQuantity').value;
-          document.getElementById('leftHeroAttackInput').value =
-          document.getElementById('leftHeroAttack').value;
-          document.getElementById('leftHeroDefenseInput').value =
-          document.getElementById('leftHeroDefense').value;
-          document.getElementById('rightHeroAttackInput').value =
-          document.getElementById('rightHeroAttack').value;
-          document.getElementById('rightHeroDefenseInput').value =
-          document.getElementById('rightHeroDefense').value;
-        }
+  <script>
+    var uuid = localStorage.getItem("uuid")
+    async function getUUID() {
+      uuid = await fetch("http://localhost:8080/oskarinio143/heroes/duel/generateUUID")
+        .then(res => res.text())
+        .then(text => {
+        return text;
       });
-    </script>
-  </div>
+    }
+
+    async function setUUID() {
+      await getUUID();
+      passUUID();
+    }
+
+    async function loadUUID(){
+      passUUID();
+    }
+
+    function passUUID(){
+      localStorage.setItem("uuid", uuid);
+      document.getElementById("userUUIDInput").value = uuid;
+    }
+
+    if(uuid == null){
+      setUUID();
+    }
+    passUUID();
+
+    document.querySelector('.battle-btn').addEventListener('click', function(e) {
+      if (!this.disabled) {
+        document.getElementById('leftQuantityInput').value =
+        document.getElementById('leftQuantity').value;
+        document.getElementById('rightQuantityInput').value =
+        document.getElementById('rightQuantity').value;
+        document.getElementById('leftHeroAttackInput').value =
+        document.getElementById('leftHeroAttack').value;
+        document.getElementById('leftHeroDefenseInput').value =
+        document.getElementById('leftHeroDefense').value;
+        document.getElementById('rightHeroAttackInput').value =
+        document.getElementById('rightHeroAttack').value;
+        document.getElementById('rightHeroDefenseInput').value =
+        document.getElementById('rightHeroDefense').value;
+      }
+    });
+  </script>
 </div>
 
 </body>

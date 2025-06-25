@@ -2,8 +2,11 @@ package oskarinio143.heroes3.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import oskarinio143.heroes3.model.DuelInfo;
 import oskarinio143.heroes3.model.Unit;
 import oskarinio143.heroes3.repository.UnitRepository;
+
+import java.util.Optional;
 
 @Service
 public class DuelService {
@@ -17,43 +20,45 @@ public class DuelService {
         this.unitRepository = unitRepository;
         this.battleService = battleService;
     }
-    public void prepareUnits(Model model, Unit currentLeftUnit, Unit currentRightUnit){
-        model.addAttribute("leftUnit", currentLeftUnit);
-        model.addAttribute("rightUnit", currentRightUnit);
+    public void prepareUnits(Model model, DuelInfo duelInfo){
+        model.addAttribute("leftUnit", duelInfo.getLeftUnit());
+        model.addAttribute("rightUnit", duelInfo.getRightUnit());
     }
 
-    public void selectUnit(Model model, String side, Unit currentLeftUnit, Unit currentRightUnit){
+    public void selectUnit(Model model, DuelInfo duelInfo){
         databaseService.viewUnits(model);
-        if (currentLeftUnit != null){
-            model.addAttribute("currentLeftUnit", currentLeftUnit.getName());
+        if (duelInfo.getLeftUnit() != null){
+            model.addAttribute("leftUnit", duelInfo.getLeftUnit().getName());
         }
-        if(currentRightUnit != null){
-            model.addAttribute("currentRightUnit", currentRightUnit.getName());
+        if(duelInfo.getRightUnit() != null){
+            model.addAttribute("rightUnit", duelInfo.getRightUnit().getName());
         }
-        model.addAttribute("side", side);
+        model.addAttribute("side", duelInfo.getSide());
     }
 
-    public void loadUnit(Model model, String name, String side, Unit leftUnit, Unit rightUnit, String leftUnitName, String rightUnitName){
-        Unit unit = unitRepository.getReferenceById(name);
-        if(side.equals("left")){
+    public void loadUnit(Model model, DuelInfo duelInfo){
+        Unit unit = unitRepository.getReferenceById(duelInfo.getName());
+
+        if(duelInfo.getLeftUnit() != null && duelInfo.getRightUnit() != null){
+            model.addAttribute("leftUnit", unitRepository.getReferenceById(duelInfo.getLeftUnit().getName()));
+            model.addAttribute("rightUnit", unitRepository.getReferenceById(duelInfo.getRightUnit().getName()));
+        }
+
+
+        if(duelInfo.getSide().equals("left")){
             model.addAttribute("leftUnit", unit);
-            model.addAttribute("rightUnit", rightUnit);
-        } else if (side.equals("right")) {
+            model.addAttribute("rightUnit", duelInfo.getRightUnit());
+        } else if (duelInfo.getSide().equals("right")) {
             model.addAttribute("rightUnit", unit);
-            model.addAttribute("leftUnit", leftUnit);
-        }
-
-        if(leftUnitName != null && rightUnitName != null){
-            model.addAttribute("leftUnit", unitRepository.getReferenceById(leftUnitName));
-            model.addAttribute("rightUnit", unitRepository.getReferenceById(rightUnitName));
+            model.addAttribute("leftUnit", duelInfo.getLeftUnit());
         }
     }
 
-    public void loadBattle(Unit leftUnit, Unit rightUnit, int leftQuantity, int rightQuantity, Model model, String userUUID){
-        model.addAttribute("leftUnit", leftUnit);
-        model.addAttribute("rightUnit", rightUnit);
-        model.addAttribute("leftQuantity", leftQuantity);
-        model.addAttribute("rightQuantity", rightQuantity);
-        battleService.prepareBattle(leftUnit, rightUnit, leftQuantity, rightQuantity, userUUID);
+    public void loadBattle(Model model, DuelInfo duelInfo){
+        model.addAttribute("leftUnit", duelInfo.getLeftUnit());
+        model.addAttribute("rightUnit", duelInfo.getRightUnit());
+        model.addAttribute("leftQuantity", duelInfo.getLeftQuantity());
+        model.addAttribute("rightQuantity", duelInfo.getRightQuantity());
+        battleService.prepareBattle(duelInfo.getLeftUnit(), duelInfo.getRightUnit(), duelInfo.getLeftQuantity(), duelInfo.getRightQuantity(), duelInfo.getName());
     }
 }
