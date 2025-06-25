@@ -3,6 +3,7 @@ package oskarinio143.heroes3.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import oskarinio143.heroes3.model.DuelInfo;
 import oskarinio143.heroes3.model.Unit;
 import oskarinio143.heroes3.service.DuelService;
 
@@ -18,19 +19,14 @@ public class DuelController {
     }
 
     @GetMapping
-    public String prepareDuel(Model model,
-                            @RequestParam(required = false) Unit currentLeftUnit,
-                            @RequestParam(required = false) Unit currentRightUnit){
-        duelService.prepareUnits(model, currentLeftUnit, currentRightUnit);
+    public String prepareDuel(Model model, @ModelAttribute DuelInfo duelInfo){
+        duelService.prepareUnits(model, duelInfo.getLeftUnit(), duelInfo.getRightUnit());
         return "duel";
     }
 
     @PostMapping("/select")
-    public String selectUnit(Model model,
-                             @RequestParam String side,
-                             @RequestParam(required = false) Unit currentLeftUnit,
-                             @RequestParam(required = false) Unit currentRightUnit){
-        duelService.selectUnit(model, side, currentLeftUnit, currentRightUnit);
+    public String selectUnit(Model model, @ModelAttribute DuelInfo duelInfo){
+        duelService.selectUnit(model, duelInfo.getSide(), duelInfo.getLeftUnit(), duelInfo.getRightUnit());
         return "select";
     }
 

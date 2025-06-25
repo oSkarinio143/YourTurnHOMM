@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DuelInfo {
+    private String side;
     private Unit leftUnit;
     private Unit rightUnit;
     private int leftQuantity;
