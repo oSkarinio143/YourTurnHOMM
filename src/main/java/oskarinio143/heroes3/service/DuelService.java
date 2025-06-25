@@ -22,6 +22,8 @@ public class DuelService {
     public void prepareUnits(Model model, DuelInfo duelInfo){
         model.addAttribute("leftUnit", duelInfo.getLeftUnit());
         model.addAttribute("rightUnit", duelInfo.getRightUnit());
+//        model.addAttribute("leftQuantity", duelInfo.getLeftQuantity());
+//        model.addAttribute("rightQuantity", duelInfo.getRightQuantity());
     }
 
     public void selectUnit(Model model, DuelInfo duelInfo){
@@ -32,16 +34,22 @@ public class DuelService {
         if(duelInfo.getRightUnit() != null){
             model.addAttribute("rightUnit", duelInfo.getRightUnit().getName());
         }
+        System.out.println(duelInfo.getLeftQuantity());
+        model.addAttribute("leftQuantity", duelInfo.getLeftQuantity());
+//        model.addAttribute("rightQuantity", duelInfo.getRightQuantity());
         model.addAttribute("side", duelInfo.getSide());
     }
 
     public void loadUnit(Model model, DuelInfo duelInfo){
         Unit unit = unitRepository.getReferenceById(duelInfo.getName());
 
+        System.out.println(duelInfo.getLeftQuantity());
+
         if(duelInfo.getLeftUnit() != null && duelInfo.getRightUnit() != null){
             model.addAttribute("leftUnit", unitRepository.getReferenceById(duelInfo.getLeftUnit().getName()));
             model.addAttribute("rightUnit", unitRepository.getReferenceById(duelInfo.getRightUnit().getName()));
         }
+        model.addAttribute("leftQuantity", duelInfo.getLeftQuantity());
 
 
         if(duelInfo.getSide().equals("left")){

@@ -1,5 +1,6 @@
 package oskarinio143.heroes3.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class DuelController {
     }
 
     @PostMapping("/battle")
-    public String startBattle(Model model, @ModelAttribute DuelInfo duelInfo){
+    public String startBattle(Model model, @Valid @ModelAttribute DuelInfo duelInfo){
         duelService.loadBattle(model, duelInfo);
         return "battle";
     }

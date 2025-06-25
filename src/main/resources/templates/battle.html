@@ -13,7 +13,7 @@
     }
 
     .main-container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
     }
 
@@ -26,8 +26,8 @@
 
     .battle-container {
       display: grid;
-      grid-template-columns: 1fr 2fr 1fr;
-      gap: 20px;
+      grid-template-columns: 1fr 1.5fr 2fr 1.5fr 1fr;
+      gap: 15px;
       margin-bottom: 30px;
     }
 
@@ -43,12 +43,34 @@
       justify-content: flex-start;
     }
 
+    .hero-panel {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      text-align: center;
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
     .left-panel {
       border-left: 4px solid #1e88e5;
     }
 
     .right-panel {
       border-right: 4px solid #e53935;
+    }
+
+    .left-hero-panel {
+      border-left: 4px solid #4caf50;
+      background: linear-gradient(135deg, #f8fff8, #ffffff);
+    }
+
+    .right-hero-panel {
+      border-right: 4px solid #ff9800;
+      background: linear-gradient(135deg, #fff8f0, #ffffff);
     }
 
     .unit-image {
@@ -63,6 +85,23 @@
       font-weight: bold;
       color: #333;
       margin-bottom: 10px;
+    }
+
+    .hero-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .left-hero-panel .hero-title {
+      color: #2e7d32;
+    }
+
+    .right-hero-panel .hero-title {
+      color: #ef6c00;
     }
 
     .unit-count {
@@ -97,11 +136,25 @@
       line-height: 1.6;
     }
 
+    .hero-stats {
+      text-align: left;
+      font-size: 14px;
+      color: #555;
+      line-height: 1.8;
+    }
+
     .stat-row {
       display: flex;
       justify-content: space-between;
       margin-bottom: 6px;
       padding: 2px 0;
+    }
+
+    .hero-stat-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding: 4px 0;
     }
 
     .stat-label {
@@ -116,6 +169,19 @@
 
     .right-panel .stat-value {
       color: #e53935;
+    }
+
+    .hero-stat-value {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .left-hero-panel .hero-stat-value {
+      color: #2e7d32;
+    }
+
+    .right-hero-panel .hero-stat-value {
+      color: #ef6c00;
     }
 
     .battle-log {
@@ -250,9 +316,9 @@
     }
 
     .back-btn:hover {
-      background-position: right center; /* przesuwa gradient */
+      background-position: right center;
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* opcjonalnie cień */
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .rematch-btn {
@@ -267,11 +333,11 @@
     }
 
     .rematch-btn:disabled {
-      background: #ccc !important;    /* szare tło */
-      color: #666 !important;         /* ciemniejszy szary tekst */
-      cursor: not-allowed;            /* pokazuje „zajęte” */
-      filter: grayscale(50%);         /* lekko wyszarza cały przycisk */
-      box-shadow: none;               /* usuń cień hover */
+      background: #ccc !important;
+      color: #666 !important;
+      cursor: not-allowed;
+      filter: grayscale(50%);
+      box-shadow: none;
       transition: none;
     }
 
@@ -321,6 +387,18 @@
       display: none;
     }
 
+    /* Responsive design */
+    @media (max-width: 1200px) {
+      .battle-container {
+        grid-template-columns: 1fr 2fr 1fr;
+        gap: 15px;
+      }
+
+      .hero-panel {
+        display: none;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -328,6 +406,23 @@
   <h1>⚔️ Pojedynek w toku ⚔️</h1>
 
   <div class="battle-container">
+    <!-- Blok bohatera gracza (lewy) -->
+    <div class="hero-panel left-hero-panel">
+      <div class="hero-title">🛡️ Bohater Gracza</div>
+      <div class="stats-divider"></div>
+      <div class="hero-stats">
+        <div class="hero-stat-row">
+          <span class="stat-label">Atak:</span>
+          <span class="hero-stat-value" th:text="${leftHeroAttack}">12</span>
+        </div>
+        <div class="hero-stat-row">
+          <span class="stat-label">Obrona:</span>
+          <span class="hero-stat-value" th:text="${leftHeroDefense}">8</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blok jednostki gracza -->
     <div class="unit-panel left-panel">
       <img th:src="@{${leftUnit.imagePath}}" alt="Jednostka gracza" class="unit-image">
       <div class="unit-name" th:text="${leftUnit.name}">Rogate Demony</div>
@@ -339,11 +434,11 @@
       <div class="unit-stats">
         <div class="stat-row">
           <span class="stat-label">Atak:</span>
-          <span class="stat-value" th:text="${leftUnit.attack}">10</span>
+          <span class="stat-value" th:text="${leftUnit.attack + '(' + (leftUnit.attack + leftHeroAttack) + ')'}">10</span>
         </div>
         <div class="stat-row">
           <span class="stat-label">Obrona:</span>
-          <span class="stat-value" th:text="${leftUnit.defense}">10</span>
+          <span class="stat-value" th:text="${leftUnit.defense + '(' + (leftUnit.defense + leftHeroDefense) + ')'}">10</span>
         </div>
         <div class="stat-row">
           <span class="stat-label">Obrażenia:</span>
@@ -368,12 +463,14 @@
       </div>
     </div>
 
+    <!-- Kronika bitwy (środek) -->
     <div class="battle-log" id="battle-log">
       <h3>📜 Kronika Bitwy</h3>
       <div id="battle-log-content">
       </div>
     </div>
 
+    <!-- Blok jednostki przeciwnika -->
     <div class="unit-panel right-panel">
       <img th:src="@{${rightUnit.imagePath}}" alt="Jednostka przeciwnika" class="unit-image">
       <div class="unit-name" th:text="${rightUnit.name}">Pikinierzy</div>
@@ -385,11 +482,11 @@
       <div class="unit-stats">
         <div class="stat-row">
           <span class="stat-label">Atak:</span>
-          <span class="stat-value" th:text="${rightUnit.attack}">4</span>
+          <span class="stat-value" th:text="${rightUnit.attack + '(' + (rightUnit.attack + rightHeroAttack) + ')'}">4</span>
         </div>
         <div class="stat-row">
           <span class="stat-label">Obrona:</span>
-          <span class="stat-value" th:text="${rightUnit.defense}">5</span>
+          <span class="stat-value" th:text="${rightUnit.defense + '(' + (rightUnit.defense + rightHeroDefense) + ')'}">5</span>
         </div>
         <div class="stat-row">
           <span class="stat-label">Obrażenia:</span>
@@ -410,6 +507,22 @@
         <div class="stat-row" th:if="${rightUnit.shots != null and rightUnit.shots > 0}">
           <span class="stat-label">Strzały:</span>
           <span class="stat-value" th:text="${rightUnit.shots}">24</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blok bohatera przeciwnika (prawy) -->
+    <div class="hero-panel right-hero-panel">
+      <div class="hero-title">⚔️ Bohater Przeciwnika</div>
+      <div class="stats-divider"></div>
+      <div class="hero-stats">
+        <div class="hero-stat-row">
+          <span class="stat-label">Atak:</span>
+          <span class="hero-stat-value" th:text="${rightHeroAttack}">6</span>
+        </div>
+        <div class="hero-stat-row">
+          <span class="stat-label">Obrona:</span>
+          <span class="hero-stat-value" th:text="${rightHeroDefense}">4</span>
         </div>
       </div>
     </div>

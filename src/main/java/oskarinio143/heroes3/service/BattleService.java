@@ -39,8 +39,9 @@ public class BattleService {
 
         attackInfo.setFasterUnit(findFaster(leftBattleUnit, rightBattleUnit));
         attackInfo.setSlowerUnit(findSlower(leftBattleUnit, rightBattleUnit));
+
         attackInfo.setFasterQuantity(findFasterQuantity(attackInfo.getFasterUnit(), leftBattleUnit, duelInfo.getLeftQuantity(), duelInfo.getRightQuantity()));
-        attackInfo.setSlowerQuantity(findSlowerQuantity(attackInfo.getSlowerUnit(), rightBattleUnit, duelInfo.getLeftQuantity(), duelInfo.getRightQuantity()));
+        attackInfo.setSlowerQuantity(findSlowerQuantity(attackInfo.getSlowerUnit(), rightBattleUnit, duelInfo.getRightQuantity(), duelInfo.getLeftQuantity()));
         return attackInfo;
     }
 
@@ -208,12 +209,12 @@ public class BattleService {
 
     public double countAtkRate(BattleUnit unit){
         //Statystyka ataku z każdym poziomem podnosi bazowy atk o 10%
-        return ATK_RATE * unit.getBasicAtk() + 1;
+        return ATK_RATE * (unit.getBasicAtk() + unit.getHeroAtk()) + 1;
     }
 
     public double countDefRate(BattleUnit unit) {
         //Statystyka defa z każdym poziomem podnosi bazowy def o 10%
-        return DEF_RATE * unit.getBasicDef() + 1;
+        return DEF_RATE * (unit.getBasicDef() + unit.getHeroDef()) + 1;
     }
 
     public boolean isWinner(RoundInfo roundInfo){

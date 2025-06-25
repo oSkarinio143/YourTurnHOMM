@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.util.List;
 @NoArgsConstructor
+
 @Getter
 @Setter
 
@@ -34,8 +35,9 @@ public class BattleUnit {
         this.hp = battleUnit.hp;
         this.hpLeft = battleUnit.hpLeft;
         this.shots = battleUnit.shots;
-        this.isRange = battleUnit.isRange;
-        this.skills = battleUnit.skills;
+        this.isRange = shots > 0 ? true : false;
+        //this.skills = battleUnit.skills;
+        //Narazie nie dodaje skilli
     }
 
     public static class BattleUnitBuilder {
