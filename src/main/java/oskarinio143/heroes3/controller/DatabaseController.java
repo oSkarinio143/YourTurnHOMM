@@ -44,7 +44,6 @@ public class DatabaseController {
             @RequestParam String description,
             @RequestParam MultipartFile image
     ) throws IOException{
-        System.out.println("Tutaj błąd");
         databaseService.addUnit(name, attack, defense, shots, minDamage, maxDamage, hp, speed, description, image);
         return "redirect:/oskarinio143/heroes/database";
     }

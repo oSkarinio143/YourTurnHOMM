@@ -13,7 +13,7 @@
     }
 
     .main-container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
     }
 
@@ -24,6 +24,12 @@
     }
 
     .battle-arena {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .main-battle-section {
       background-color: white;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
@@ -31,8 +37,11 @@
       min-height: 500px;
       display: grid;
       grid-template-columns: 1fr 2fr 1fr;
+      grid-template-rows: 1fr auto;
       gap: 30px;
       align-items: start;
+      flex: 1;
+      position: relative;
     }
 
     .army-section {
@@ -40,6 +49,75 @@
       flex-direction: column;
       align-items: center;
       gap: 20px;
+    }
+
+    .hero-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 25px 20px;
+      border-radius: 12px;
+      background-color: #f8f9fa;
+      border: 2px solid #e9ecef;
+      width: 200px;
+      height: 350px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-section.left-hero {
+      border-color: #1e88e5;
+      background-color: #e3f2fd;
+    }
+
+    .hero-section.right-hero {
+      border-color: #e53935;
+      background-color: #ffebee;
+    }
+
+    .hero-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .stat-group {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #555;
+      text-align: center;
+    }
+
+    .stat-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: bold;
+      box-sizing: border-box;
+    }
+
+    .stat-input:focus {
+      outline: none;
+      border-color: #1e88e5;
+      box-shadow: 0 0 5px rgba(30, 136, 229, 0.3);
+    }
+
+    .right-hero .stat-input:focus {
+      border-color: #e53935;
+      box-shadow: 0 0 5px rgba(229, 57, 53, 0.3);
     }
 
     .army-title {
@@ -207,11 +285,13 @@
     }
 
     .navigation-buttons {
+      position: absolute;
+      bottom: 40px;
+      left: 40px;
+      right: 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 30px;
-      padding: 0 20px;
     }
 
     .nav-btn {
@@ -241,7 +321,7 @@
     }
 
     .back-btn:hover {
-      background-position: right center; /* przesuwa gradient */
+      background-position: right center;
     }
 
     .back-btn:hover {
@@ -308,82 +388,115 @@
   <h1>Panel pojedynków</h1>
 
   <div class="battle-arena">
-    <!-- Lewa armia -->
-    <div class="army-section left-army">
-      <div class="army-color-indicator blue-indicator"></div>
-      <div class="army-title">Gracz</div>
+    <!-- Sekcja bohatera gracza -->
+    <div class="hero-section left-hero">
+      <div class="hero-title">Statystyki bohatera gracza</div>
 
-      <div class="unit-selector">
-        <form th:action="@{/oskarinio143/heroes/duel/select}" method="post">
-          <input type="hidden" name="side" value="left">
-          <!-- Przekazanie aktualnie wybranych jednostek -->
-          <input type="hidden" name="currentLeftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
-          <input type="hidden" name="currentRightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
-          <button type="submit" class="select-unit-btn">
-            <span th:if="${leftUnit == null}">Wybierz jednostkę</span>
-            <span th:if="${leftUnit != null}">Zmień jednostkę</span>
-          </button>
-        </form>
+      <div class="stat-group">
+        <label class="stat-label">Atak:</label>
+        <input type="number" class="stat-input" id="leftHeroAttack" min="0" placeholder="0" value="0">
       </div>
 
-      <div class="quantity-section">
-        <label class="quantity-label">Podaj ilość:</label>
-        <input type="number" class="quantity-input" id="leftQuantity" min="1" placeholder="0" value="1">
+      <div class="stat-group">
+        <label class="stat-label">Obrona:</label>
+        <input type="number" class="stat-input" id="leftHeroDefense" min="0" placeholder="0" value="0">
       </div>
     </div>
 
-    <!-- Centrum - pole bitwy -->
-    <div class="battle-center">
-      <div class="unit-display-container">
+    <!-- Główny blok z bitwą -->
+    <div class="main-battle-section">
+      <!-- Lewa armia -->
+      <div class="army-section left-army">
+        <div class="army-color-indicator blue-indicator"></div>
+        <div class="army-title">Gracz</div>
 
-        <!-- Lewa jednostka -->
-        <div class="unit-display left-unit" id="leftUnitDisplay">
-          <div th:if="${leftUnit != null}">
-            <img th:src="@{${leftUnit.imagePath}}"
-                 alt="Left Unit Image"
-                 style="max-width:120px; max-height:120px;"/>
-            <div class="unit-info" th:text="${leftUnit.name}"></div>
-          </div>
-          <div th:unless="${leftUnit != null}" class="unit-placeholder">?</div>
+        <div class="unit-selector">
+          <form th:action="@{/oskarinio143/heroes/duel/select}" method="post">
+            <input type="hidden" name="side" value="left">
+            <!-- Przekazanie aktualnie wybranych jednostek -->
+            <input type="hidden" name="currentLeftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
+            <input type="hidden" name="currentRightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
+            <button type="submit" class="select-unit-btn">
+              <span th:if="${leftUnit == null}">Wybierz jednostkę</span>
+              <span th:if="${leftUnit != null}">Zmień jednostkę</span>
+            </button>
+          </form>
         </div>
 
-        <div class="vs-text">VS</div>
+        <div class="quantity-section">
+          <label class="quantity-label">Podaj ilość:</label>
+          <input type="number" class="quantity-input" id="leftQuantity" min="1" placeholder="0" value="1">
+        </div>
+      </div>
 
-        <!-- Prawa jednostka -->
-        <div class="unit-display right-unit" id="rightUnitDisplay">
-          <div th:if="${rightUnit != null}">
-            <img th:src="@{${rightUnit.imagePath}}"
-                 alt="Right Unit Image"
-                 style="max-width:120px; max-height:120px;"/>
-            <div class="unit-info" th:text="${rightUnit.name}"></div>
+      <!-- Centrum - pole bitwy -->
+      <div class="battle-center">
+        <div class="unit-display-container">
+
+          <!-- Lewa jednostka -->
+          <div class="unit-display left-unit" id="leftUnitDisplay">
+            <div th:if="${leftUnit != null}">
+              <img th:src="@{${leftUnit.imagePath}}"
+                   alt="Left Unit Image"
+                   style="max-width:120px; max-height:120px;"/>
+              <div class="unit-info" th:text="${leftUnit.name}"></div>
+            </div>
+            <div th:unless="${leftUnit != null}" class="unit-placeholder">?</div>
           </div>
-          <div th:unless="${rightUnit != null}" class="unit-placeholder">?</div>
+
+          <div class="vs-text">VS</div>
+
+          <!-- Prawa jednostka -->
+          <div class="unit-display right-unit" id="rightUnitDisplay">
+            <div th:if="${rightUnit != null}">
+              <img th:src="@{${rightUnit.imagePath}}"
+                   alt="Right Unit Image"
+                   style="max-width:120px; max-height:120px;"/>
+              <div class="unit-info" th:text="${rightUnit.name}"></div>
+            </div>
+            <div th:unless="${rightUnit != null}" class="unit-placeholder">?</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Prawa armia -->
+      <div class="army-section right-army">
+        <div class="army-color-indicator red-indicator"></div>
+        <div class="army-title">Przeciwnik</div>
+
+        <div class="unit-selector">
+          <form th:action="@{/oskarinio143/heroes/duel/select}" method="post">
+            <input type="hidden" name="side" value="right">
+            <!-- Przekazanie aktualnie wybranych jednostek -->
+            <input type="hidden" name="currentLeftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
+            <input type="hidden" name="currentRightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
+            <button type="submit" class="select-unit-btn">
+              <span th:if="${rightUnit == null}">Wybierz jednostkę</span>
+              <span th:if="${rightUnit != null}">Zmień jednostkę</span>
+            </button>
+          </form>
         </div>
 
+        <div class="quantity-section">
+          <label class="quantity-label">Podaj ilość:</label>
+          <input type="number" class="quantity-input" id="rightQuantity" min="1" placeholder="0" value="1">
+        </div>
       </div>
     </div>
 
-    <!-- Prawa armia -->
-    <div class="army-section right-army">
-      <div class="army-color-indicator red-indicator"></div>
-      <div class="army-title">Przeciwnik</div>
+    <!-- Sekcja bohatera przeciwnika -->
+    <div class="hero-section right-hero">
+      <div class="hero-title">Statystyki bohatera przeciwnika</div>
 
-      <div class="unit-selector">
-        <form th:action="@{/oskarinio143/heroes/duel/select}" method="post">
-          <input type="hidden" name="side" value="right">
-          <!-- Przekazanie aktualnie wybranych jednostek -->
-          <input type="hidden" name="currentLeftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
-          <input type="hidden" name="currentRightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
-          <button type="submit" class="select-unit-btn">
-            <span th:if="${rightUnit == null}">Wybierz jednostkę</span>
-            <span th:if="${rightUnit != null}">Zmień jednostkę</span>
-          </button>
-        </form>
+      <div class="stat-group">
+        <label class="stat-label">Atak:</label>
+        <input type="number" class="stat-input" id="rightHeroAttack" min="0" placeholder="0" value="0">
       </div>
 
-      <div class="quantity-section">
-        <label class="quantity-label">Podaj ilość:</label>
-        <input type="number" class="quantity-input" id="rightQuantity" min="1" placeholder="0" value="1">
+      <div class="stat-group">
+        <label class="stat-label">Obrona:</label>
+        <input type="number" class="stat-input" id="rightHeroDefense" min="0" placeholder="0" value="0">
       </div>
     </div>
   </div>
@@ -400,10 +513,14 @@
       <input type="hidden" name="rightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
       <input type="hidden" name="leftQuantity" id="leftQuantityInput">
       <input type="hidden" name="rightQuantity" id="rightQuantityInput">
+      <input type="hidden" name="leftHeroAttack" id="leftHeroAttackInput">
+      <input type="hidden" name="leftHeroDefense" id="leftHeroDefenseInput">
+      <input type="hidden" name="rightHeroAttack" id="rightHeroAttackInput">
+      <input type="hidden" name="rightHeroDefense" id="rightHeroDefenseInput">
       <input type="hidden" id="userUUIDInput" name="userUUID" value="">
       <button type="submit" class="nav-btn battle-btn"
               th:disabled="${leftUnit == null || rightUnit == null}">
-         Rozpocznij pojedynek⚔️
+        Rozpocznij pojedynek⚔️
       </button>
     </form>
     <script>
@@ -441,6 +558,14 @@
           document.getElementById('leftQuantity').value;
           document.getElementById('rightQuantityInput').value =
           document.getElementById('rightQuantity').value;
+          document.getElementById('leftHeroAttackInput').value =
+          document.getElementById('leftHeroAttack').value;
+          document.getElementById('leftHeroDefenseInput').value =
+          document.getElementById('leftHeroDefense').value;
+          document.getElementById('rightHeroAttackInput').value =
+          document.getElementById('rightHeroAttack').value;
+          document.getElementById('rightHeroDefenseInput').value =
+          document.getElementById('rightHeroDefense').value;
         }
       });
     </script>

@@ -1,5 +1,6 @@
 package oskarinio143.heroes3.service;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
@@ -33,6 +34,7 @@ public class DatabaseService {
         return units;
     }
 
+    @Transactional
     public void saveUnit(
             String name,
             int attack,
@@ -49,6 +51,7 @@ public class DatabaseService {
         unitRepository.save(unit);
     }
 
+    @Transactional
     public void addUnit(String name,
                         int attack,
                         int defense,
@@ -86,11 +89,13 @@ public class DatabaseService {
         model.addAttribute("unit", unit);
     }
 
+    @Transactional
     public void removeUnit(String name){
         Unit unit = unitRepository.getReferenceById(name);
         unitRepository.delete(unit);
     }
 
+    @Transactional
     public void modifyUnit(String name, int attack, int defense, int shots, int minDamage, int maxDamage, int hp, int speed, Optional<String> descriptionOpt){
         Unit unit = unitRepository.getReferenceById(name);
         unit.setAttack(attack);

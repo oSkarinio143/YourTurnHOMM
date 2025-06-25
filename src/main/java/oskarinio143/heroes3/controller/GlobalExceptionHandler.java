@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateUnitException.class)
     public String handleDuplicateUnitException(DuplicateUnitException exception, RedirectAttributes attributes){
-        attributes.addFlashAttribute("errorMessage", exception.getMessage());
+        attributes.addFlashAttribute("duplicateMessage", exception.getMessage());
         return "redirect:/oskarinio143/heroes/database/add";
     }
 
