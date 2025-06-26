@@ -43,7 +43,7 @@ public class MessageCreatorService {
     }
 
     public void createMessageAttackFasterBasic(RoundInfo roundInfo){
-        communicationService.sendMessage(roundInfo.getUserUUID(), "ATTACKF:Jednostka " + roundInfo.getFasterLiveUnits() + "x"
+        communicationService.sendMessage(roundInfo.getUserUUID(), "ATTACKF:Jednostka " + roundInfo.getFasterLastAttackUnits() + "x"
                 + roundInfo.getFasterUnit().getName() + " atakuje pierwsza, zadajac " + roundInfo.getFasterDmg() + ".");
     }
 

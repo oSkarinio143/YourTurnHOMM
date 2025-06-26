@@ -387,6 +387,43 @@
       color: #666;
       margin-top: 5px;
     }
+
+    .modal-box {
+      background: white;
+      padding: 20px;
+      width: 600px;
+      max-width: 90%;
+      max-height: 80%;
+      box-sizing: border-box;
+      text-align: center;
+
+      border: 5px solid;
+      border-image: linear-gradient(to right, #000000, #444444) 1;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px; /* 20px między elementami: tekstem i przyciskiem */
+    }
+
+    .back-btn {
+      background-color: #6c757d;
+      color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.4s ease-in-out;
+      min-width: 180px;
+      background-size: 200% auto;
+      background-image: linear-gradient(to right, #6c757d 0%, #495057 51%, #6c757d 100%);
+    }
+
+    .back-btn:hover {
+      background-position: right center; /* przesuwa gradient */
+    }
   </style>
 </head>
 <body>
@@ -433,7 +470,7 @@
 
         <div class="quantity-section">
           <label class="quantity-label">Podaj ilość:</label>
-          <input type="number" class="quantity-input" id="leftQuantity" min="1" placeholder="0" th:value="${leftQuantity != null ? leftQuantity : '1'}">
+          <input type="number" class="quantity-input" id="leftQuantity" min="0" placeholder="0" th:value="${leftQuantity != null ? leftQuantity : ''}">
         </div>
 
         <!-- Przycisk Wróć do bazy danych w lewym dolnym rogu -->
@@ -495,7 +532,7 @@
 
         <div class="quantity-section">
           <label class="quantity-label">Podaj ilość:</label>
-          <input type="number" class="quantity-input" id="rightQuantity" min="1" placeholder="0" value="1">
+          <input type="number" class="quantity-input" id="rightQuantity" min="0" placeholder="0" th:value="${rightQuantity != null ? rightQuantity : ''}">
         </div>
 
         <!-- Przycisk Rozpocznij pojedynek w prawym dolnym rogu -->
@@ -532,6 +569,32 @@
       </div>
     </div>
   </div>
+
+  <div id="smallValueModal" style="
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+">
+    <div class="modal-box">
+      <p th:utext="${smallMessage}" style="
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 20px;
+    ">
+        Tutaj będzie komunikat
+      </p>
+      <button onclick="document.getElementById('smallValueModal').style.display='none'" class = "back-btn">
+        Zamknij
+      </button>
+    </div>
+  </div>
+
+  <script th:if="${smallMessage}">
+    document.getElementById('smallValueModal').style.display = 'flex';
+  </script>
 
   <script>
     var uuid = localStorage.getItem("uuid")

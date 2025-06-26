@@ -3,6 +3,7 @@ package oskarinio143.heroes3.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import org.springframework.transaction.TransactionSystemException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -47,5 +48,13 @@ public class GlobalExceptionHandler {
         if(exceptionHandlerService.isEmptyValue(exception))
             return exceptionHandlerService.getAppropriateUrl(attributes, request);
         return "redirect:/oskarinio143/heroes";
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public String handleArgumentNotValidException(MethodArgumentNotValidException exception, RedirectAttributes attributes, HttpServletRequest request){
+        if(exceptionHandlerService.isBattleEndpoint(request))
+            exceptionHandlerService.createMessageTooSmallValue(attributes);
+        exceptionHandlerService.passData(attributes, request);
+        return "redirect:/oskarinio143/heroes/duel";
     }
 }

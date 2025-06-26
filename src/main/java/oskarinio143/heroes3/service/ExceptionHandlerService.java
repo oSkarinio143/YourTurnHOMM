@@ -5,6 +5,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import oskarinio143.heroes3.model.BattleUnit;
@@ -54,6 +55,30 @@ public class ExceptionHandlerService {
         return true;
     }
 
+    public boolean isBattleEndpoint(HttpServletRequest request){
+        String path = request.getRequestURL().toString();
+        List<String> pathParts = Arrays.asList(path.split("/"));
+        System.out.println(pathParts);
+        if (pathParts.getLast().equals("battle"))
+            return true;
+        return false;
+    }
+
+    public void passData(RedirectAttributes attributes, HttpServletRequest request){
+        attributes.addAttribute("leftUnit", request.getParameter("leftUnit"));
+        attributes.addAttribute("rightUnit", request.getParameter("rightUnit"));
+        attributes.addAttribute("leftHeroAttack", request.getParameter("leftHeroAttack"));
+        attributes.addAttribute("leftHeroDefense", request.getParameter("leftHeroDefense"));
+        attributes.addAttribute("rightHeroAttack", request.getParameter("rightHeroAttack"));
+        attributes.addAttribute("rightHeroDefense", request.getParameter("rightHeroDefense"));
+
+        System.out.println(request.getParameter("LeftHeroAttack"));
+        if(!request.getParameter("leftQuantity").isEmpty())
+            attributes.addFlashAttribute("leftQuantity", request.getParameter("leftQuantity"));
+        if(!request.getParameter("rightQuantity").isEmpty())
+            attributes.addFlashAttribute("rightQuantity", request.getParameter("rightQuantity"));
+    }
+
     public void createMessageEmptyField(MethodArgumentTypeMismatchException exception, RedirectAttributes attributes){
         String field = exception.getParameter().getParameterName();
         String message = "Pole " + field + " nie zostalo uzupelnione, spróbuj ponownie";
@@ -78,5 +103,10 @@ public class ExceptionHandlerService {
         String message = "Podano wartość " + unit.getMaxDamage() + " w polu MaxDamage"
                 + "<br>" + violation.getMessage();
         attributes.addFlashAttribute("incorrectMessage", message);
+    }
+
+    public void createMessageTooSmallValue(RedirectAttributes attributes){
+        String message = "Podano ilość jednostek mniejszą niż 1";
+        attributes.addFlashAttribute("smallMessage", message);
     }
 }

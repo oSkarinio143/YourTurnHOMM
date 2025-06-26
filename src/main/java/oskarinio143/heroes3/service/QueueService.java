@@ -29,11 +29,9 @@ public class QueueService {
     }
 
     public void sendAttackFasterMess(RoundInfo roundInfo){
-        if(roundInfo.getFasterLiveUnits() > 0) {
-            roundInfo.setTempDelay(roundInfo.getTempDelay() + 1);
-            Runnable sendFasterAttack = () -> messageCreatorService.sendAttackFasterMess(roundInfo);
-            scheduler.schedule(sendFasterAttack, roundInfo.getMessageDelay() + roundInfo.getTempDelay(), TimeUnit.SECONDS);
-        }
+        roundInfo.setTempDelay(roundInfo.getTempDelay() + 1);
+        Runnable sendFasterAttack = () -> messageCreatorService.sendAttackFasterMess(roundInfo);
+        scheduler.schedule(sendFasterAttack, roundInfo.getMessageDelay() + roundInfo.getTempDelay(), TimeUnit.SECONDS);
     }
 
     public void sendAttackSlowerMess(RoundInfo roundInfo){

@@ -38,7 +38,7 @@ public class BattleService {
         BattleUnit rightBattleUnit = prepareBattleUnit(duelInfo.getRightUnit(), duelInfo.getRightHeroAttack(), duelInfo.getRightHeroDefense());
 
         attackInfo.setFasterUnit(findFaster(leftBattleUnit, rightBattleUnit));
-        attackInfo.setSlowerUnit(findSlower(leftBattleUnit, rightBattleUnit));
+        attackInfo.setSlowerUnit(findSlower(attackInfo, leftBattleUnit, rightBattleUnit));
 
         attackInfo.setFasterQuantity(findFasterQuantity(attackInfo.getFasterUnit(), leftBattleUnit, duelInfo.getLeftQuantity(), duelInfo.getRightQuantity()));
         attackInfo.setSlowerQuantity(findSlowerQuantity(attackInfo.getSlowerUnit(), rightBattleUnit, duelInfo.getRightQuantity(), duelInfo.getLeftQuantity()));
@@ -109,6 +109,7 @@ public class BattleService {
         roundInfo.setFasterLiveUnits(attackInfo.getAttackingUnits());
         roundInfo.setSlowerDeathUnits(attackInfo.getDeathUnits());
         roundInfo.setFasterUnit(attackInfo.getFasterUnit());
+        roundInfo.setFasterLastAttackUnits(roundInfo.getFasterLiveUnits());
     }
 
     public void setRoundInfoSlower(RoundInfo roundInfo, AttackInfo attackInfo){
@@ -116,6 +117,7 @@ public class BattleService {
         roundInfo.setSlowerLiveUnits(attackInfo.getAttackingUnits());
         roundInfo.setFasterDeathUnits(attackInfo.getDeathUnits());
         roundInfo.setSlowerUnit(attackInfo.getSlowerUnit());
+        roundInfo.setFasterLiveUnits(roundInfo.getFasterLiveUnits() - roundInfo.getFasterDeathUnits());
     }
 
     public BattleUnit findFaster(BattleUnit leftUnit, BattleUnit rightUnit){
@@ -130,8 +132,8 @@ public class BattleService {
         return rightUnit;
     }
 
-    public BattleUnit findSlower(BattleUnit leftUnit, BattleUnit rightUnit){
-        if(findFaster(leftUnit, rightUnit) == leftUnit){
+    public BattleUnit findSlower(AttackInfo attackInfo, BattleUnit leftUnit, BattleUnit rightUnit){
+        if(attackInfo.getFasterUnit() == leftUnit){
             return rightUnit;
         }
         return leftUnit;
@@ -186,10 +188,10 @@ public class BattleService {
     }
 
     public int generateDmg(BattleUnit battleUnit, BattleUnit enemyUnit, int quantity){
-        double unitAtk = countAtkRate(battleUnit);
-        double enemyDef = countDefRate(enemyUnit);
         int basicDmg = drawDmg(battleUnit, quantity);
-        return  (int) (basicDmg * unitAtk / enemyDef);
+        double unitAtk = countBonusAtkRate(battleUnit, enemyUnit);
+        double enemyUnitDef = countBonusDefRate(battleUnit, enemyUnit);
+        return  (int) (basicDmg * unitAtk * enemyUnitDef);
     }
 
     public int drawDmg(BattleUnit battleUnit, int quantity){
@@ -207,14 +209,16 @@ public class BattleService {
         return (int) (Math.random() * (maxDmg - minDmg + 1) + minDmg);
     }
 
-    public double countAtkRate(BattleUnit unit){
-        //Statystyka ataku z każdym poziomem podnosi bazowy atk o 10%
-        return ATK_RATE * (unit.getBasicAtk() + unit.getHeroAtk()) + 1;
+    public double countBonusAtkRate(BattleUnit unit, BattleUnit enemyUnit){
+        //Różnica statystyk ataku i obrony jednostek zwiększa atak za każdy punkt o 5%
+        double unitAtk = 1 + (ATK_RATE * ((unit.getBasicAtk() + unit.getHeroAtk()) - (enemyUnit.getBasicDef() + enemyUnit.getHeroDef())));
+        return Math.max(1, Math.min(unitAtk, 4));
     }
 
-    public double countDefRate(BattleUnit unit) {
-        //Statystyka defa z każdym poziomem podnosi bazowy def o 10%
-        return DEF_RATE * (unit.getBasicDef() + unit.getHeroDef()) + 1;
+    public double countBonusDefRate(BattleUnit unit, BattleUnit enemyUnit){
+        //Różnica statystyk ataku i obrony jednostek zwiększa obronę za każdy punkt o 2.5%
+        double enemyDef = 1 - (DEF_RATE * ((unit.getBasicDef() + unit.getHeroDef()) - (enemyUnit.getBasicAtk() + enemyUnit.getHeroAtk())));
+        return Math.min(1, Math.max(enemyDef, 0.7));
     }
 
     public boolean isWinner(RoundInfo roundInfo){
@@ -224,6 +228,7 @@ public class BattleService {
             return true;
         }
         if(roundInfo.getFasterLiveUnits() == 0){
+            System.out.println("Wchodze");
             roundInfo.setLoserUnit(roundInfo.getSlowerUnit());
             roundInfo.setWinnerUnit(roundInfo.getFasterUnit());
             return true;

@@ -26,7 +26,9 @@ public class RoundInfo implements Cloneable{
     private BattleUnit winnerUnit;
     private BattleUnit loserUnit;
     private boolean isWinner;
+    private int fasterLastAttackUnits;
     private int tempDelay;
+
 
     @Override
     public RoundInfo clone() {
