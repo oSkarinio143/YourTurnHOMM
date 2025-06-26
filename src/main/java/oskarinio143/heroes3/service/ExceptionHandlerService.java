@@ -72,10 +72,10 @@ public class ExceptionHandlerService {
         attributes.addAttribute("rightHeroAttack", request.getParameter("rightHeroAttack"));
         attributes.addAttribute("rightHeroDefense", request.getParameter("rightHeroDefense"));
 
-        System.out.println(request.getParameter("LeftHeroAttack"));
-        if(!request.getParameter("leftQuantity").isEmpty())
+        System.out.println("Jestes w bledzie");
+        if(request.getParameter("leftQuantity") != null)
             attributes.addFlashAttribute("leftQuantity", request.getParameter("leftQuantity"));
-        if(!request.getParameter("rightQuantity").isEmpty())
+        if(request.getParameter("rightQuantity") != null)
             attributes.addFlashAttribute("rightQuantity", request.getParameter("rightQuantity"));
     }
 

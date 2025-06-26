@@ -25,14 +25,14 @@ public class DuelController {
     }
 
     @PostMapping("/select")
-    public String selectUnit(Model model, @ModelAttribute DuelInfo duelInfo){
-        duelService.selectUnit(model, duelInfo);
+    public String selectUnit(Model model, @ModelAttribute DuelInfo duelInfo, @RequestParam String side){
+        duelService.selectUnit(model, duelInfo, side);
         return "select";
     }
 
     @PostMapping()
-    public String loadUnit(Model model, @ModelAttribute DuelInfo duelInfo){
-        duelService.loadUnit(model, duelInfo);
+    public String loadUnit(Model model, @ModelAttribute DuelInfo duelInfo, @RequestParam String side, @RequestParam String name){
+        duelService.loadUnit(model, duelInfo, side, name);
         return "duel";
     }
 

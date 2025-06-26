@@ -456,10 +456,9 @@
         <div class="unit-selector">
           <form th:action="@{/oskarinio143/heroes/duel/select}" method="post">
             <input type="hidden" name="side" value="left">
-            <!-- Przekazanie aktualnie wybranych jednostek -->
             <input type="hidden" name="leftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
             <input type="hidden" name="rightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
-            <input type="hidden" name="leftQuantity" th:value="${leftQuantity != null ? leftQuantity : ''}">
+<!--            <input type="hidden" name="leftQuantity" th:value="${leftQuantity != null ? leftQuantity : ''}">-->
             <!--            <input type="hidden" name="rightQuantity" th:value="${rightQuantity != null ? rightQuantity : ''}">-->
             <button type="submit" class="select-unit-btn"  id="sendLeft">
               <span th:if="${leftUnit == null}">Wybierz jednostkę</span>
@@ -520,7 +519,6 @@
         <div class="unit-selector">
           <form th:action="@{/oskarinio143/heroes/duel/select}" method="post">
             <input type="hidden" name="side" value="right">
-            <!-- Przekazanie aktualnie wybranych jednostek -->
             <input type="hidden" name="leftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
             <input type="hidden" name="rightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
             <button type="submit" class="select-unit-btn">
