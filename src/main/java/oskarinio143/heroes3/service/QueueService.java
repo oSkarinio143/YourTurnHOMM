@@ -1,7 +1,7 @@
 package oskarinio143.heroes3.service;
 
 import org.springframework.stereotype.Service;
-import oskarinio143.heroes3.model.RoundInfo;
+import oskarinio143.heroes3.model.servicedto.RoundInfo;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

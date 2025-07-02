@@ -1,10 +1,10 @@
-package oskarinio143.heroes3.model;
+package oskarinio143.heroes3.model.servicedto;
 
 import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import oskarinio143.heroes3.model.entity.Unit;
 
 @NoArgsConstructor
 @Getter

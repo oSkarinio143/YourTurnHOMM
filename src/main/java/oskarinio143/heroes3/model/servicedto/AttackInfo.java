@@ -1,4 +1,4 @@
-package oskarinio143.heroes3.model;
+package oskarinio143.heroes3.model.servicedto;
 
 import lombok.Getter;
 import lombok.NonNull;

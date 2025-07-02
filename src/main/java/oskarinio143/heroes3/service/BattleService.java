@@ -4,7 +4,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
-import oskarinio143.heroes3.model.*;
+import oskarinio143.heroes3.model.entity.Unit;
+import oskarinio143.heroes3.model.servicedto.AttackInfo;
+import oskarinio143.heroes3.model.servicedto.BattleUnit;
+import oskarinio143.heroes3.model.servicedto.DuelInfo;
+import oskarinio143.heroes3.model.servicedto.RoundInfo;
 
 import static java.lang.Thread.sleep;
 

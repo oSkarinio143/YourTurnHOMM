@@ -2,9 +2,8 @@ package oskarinio143.heroes3.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import oskarinio143.heroes3.model.DuelInfo;
-import oskarinio143.heroes3.model.BattleUnit;
-import oskarinio143.heroes3.model.Unit;
+import oskarinio143.heroes3.model.servicedto.DuelInfo;
+import oskarinio143.heroes3.model.entity.Unit;
 import oskarinio143.heroes3.repository.UnitRepository;
 
 @Service

@@ -8,8 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import oskarinio143.heroes3.exception.DuplicateUnitException;
 import oskarinio143.heroes3.exception.TransactionSystemAddException;
 import oskarinio143.heroes3.exception.TransactionSystemModifyException;
-import oskarinio143.heroes3.model.BattleUnit;
-import oskarinio143.heroes3.model.Unit;
+import oskarinio143.heroes3.model.entity.Unit;
 import oskarinio143.heroes3.repository.UnitRepository;
 
 import java.io.IOException;

@@ -1,8 +1,7 @@
 package oskarinio143.heroes3.service;
 
 import org.springframework.stereotype.Service;
-import oskarinio143.heroes3.model.AttackInfo;
-import oskarinio143.heroes3.model.RoundInfo;
+import oskarinio143.heroes3.model.servicedto.RoundInfo;
 
 @Service
 public class MessageCreatorService {
