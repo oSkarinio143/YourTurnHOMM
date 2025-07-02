@@ -38,7 +38,7 @@ public class SecurityConfig {
                                                     "/oskarinio143/heroes/database",
                                                     "/oskarinio143/heroes/database/view",
                                                     "/oskarinio143/heroes/duel",
-                                                    "/oskarinio143/heroes/duel/**").hasAnyRole("USER", "ADMIN")
+                                                    "/oskarinio143/heroes/duel/**").hasRole("USER")
                         .requestMatchers("/oskarinio143/heroes/database/add",
                                                     "/oskarinio143/heroes/database/modify",
                                                     "/oskarinio143/heroes/database/delete").hasRole("ADMIN")

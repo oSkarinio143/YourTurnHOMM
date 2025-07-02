@@ -22,7 +22,7 @@ public class User {
     @NonNull
     private String password;
     @NonNull
-    private List<String> role;
+    private List<String> roles = new ArrayList<>();
     @OneToOne
     @JoinColumn(name = "refreshToken")
     private RefreshToken refreshToken;
@@ -37,5 +37,9 @@ public class User {
         if(refreshToken.getUser() != this) {
             refreshToken.setUser(this);
         }
+    }
+
+    public void addRole(String role){
+        roles.add(role);
     }
 }

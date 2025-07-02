@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import oskarinio143.heroes3.model.LoginForm;
+import oskarinio143.heroes3.model.Role;
 import oskarinio143.heroes3.model.servicedto.LoginServiceData;
 import oskarinio143.heroes3.model.entity.RefreshToken;
 import oskarinio143.heroes3.model.entity.User;
@@ -18,15 +19,13 @@ import oskarinio143.heroes3.repository.UserRepository;
 public class LoginService {
 
     private final UserRepository userRepository;
-    private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
 
 
-    public LoginService(UserRepository userRepository, AuthenticationManager authenticationManager, TokenService tokenService, PasswordEncoder passwordEncoder, RefreshTokenRepository refreshTokenRepository) {
+    public LoginService(UserRepository userRepository, TokenService tokenService, PasswordEncoder passwordEncoder, RefreshTokenRepository refreshTokenRepository) {
         this.userRepository = userRepository;
-        this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
         this.passwordEncoder = passwordEncoder;
         this.refreshTokenRepository = refreshTokenRepository;
@@ -64,7 +63,7 @@ public class LoginService {
     public LoginServiceData getLoginServiceData(LoginForm loginForm){
         String hashedPassword = passwordEncoder.encode(loginForm.getPassword());
         LoginServiceData loginServiceData = new LoginServiceData(loginForm.getUsername(), hashedPassword);
-        loginServiceData.addRole("ROLE_USER");
+        loginServiceData.addRole(Role.ROLE_USER.name());
         return loginServiceData;
     }
 
@@ -101,7 +100,8 @@ public class LoginService {
         RefreshToken refreshToken = new RefreshToken(loginServiceData.getRefreshToken());
         refreshTokenRepository.save(refreshToken);
 
-        User user = new User(loginServiceData.getUsername(), loginServiceData.getPassword(), loginServiceData.getRoles());
+        User user = new User(loginServiceData.getUsername(), loginServiceData.getPassword());
+        user.setRoles(loginServiceData.getRoles());
         user.setRefreshToken(refreshToken);
         userRepository.save(user);
     }
