@@ -28,5 +28,4 @@ public class LoginValidationData {
     public void addErrorMessage(String message){
         errorMessages += message + "<br>";
     }
-
 }
