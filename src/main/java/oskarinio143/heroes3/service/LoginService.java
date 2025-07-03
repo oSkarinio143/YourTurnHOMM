@@ -4,14 +4,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import oskarinio143.heroes3.model.LoginForm;
 import oskarinio143.heroes3.model.Role;
 import oskarinio143.heroes3.model.servicedto.LoginServiceData;
 import oskarinio143.heroes3.model.entity.RefreshToken;
 import oskarinio143.heroes3.model.entity.User;
+import oskarinio143.heroes3.model.servicedto.LoginValidationData;
 import oskarinio143.heroes3.repository.RefreshTokenRepository;
 import oskarinio143.heroes3.repository.UserRepository;
 
@@ -22,42 +23,30 @@ public class LoginService {
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final LoginValidationService loginValidationService;
 
 
-    public LoginService(UserRepository userRepository, TokenService tokenService, PasswordEncoder passwordEncoder, RefreshTokenRepository refreshTokenRepository) {
+    public LoginService(UserRepository userRepository, TokenService tokenService, PasswordEncoder passwordEncoder, RefreshTokenRepository refreshTokenRepository, LoginValidationService loginValidationService) {
         this.userRepository = userRepository;
         this.tokenService = tokenService;
         this.passwordEncoder = passwordEncoder;
         this.refreshTokenRepository = refreshTokenRepository;
+        this.loginValidationService = loginValidationService;
     }
 
     @Transactional
-    public String registerUser(LoginForm loginForm, HttpServletResponse response) {
-        if (!checkUsernameCorrect(loginForm))
-            return "";
-        if (!checkPasswordCorrect(loginForm))
-            return "";
+    public String registerUser(LoginForm loginForm, HttpServletResponse response, RedirectAttributes redirectAttributes) {
+        LoginValidationData loginValidationData = loginValidationService.getLoginValidationData(redirectAttributes, loginForm);
+        if(loginValidationService.whetherPassValidation(loginValidationData))
+            userRegisterConfig(loginForm, response);
+        return loginValidationData.getNextView();
+    }
+
+    public void userRegisterConfig(LoginForm loginForm, HttpServletResponse response){
         LoginServiceData loginServiceData = getLoginServiceData(loginForm);
         getTokens(loginServiceData);
         setCookieTokens(loginServiceData, response);
         saveData(loginServiceData);
-        return "redirect:/oskarinio143/heroes";
-    }
-
-    public boolean checkUsernameCorrect(LoginForm loginForm){
-        return (isMinSize(loginForm.getUsername(), 4) && isMaxSize(loginForm.getUsername(), 16));
-    }
-
-    public boolean isMinSize(String text, int length) {
-        return text.length() >= length;
-    }
-
-    public boolean isMaxSize(String text, int length) {
-        return text.length() <= length;
-    }
-
-    public boolean checkPasswordCorrect(LoginForm loginForm) {
-        return (isMinSize(loginForm.getUsername(), 4) && isMaxSize(loginForm.getUsername(), 16));
     }
 
     public LoginServiceData getLoginServiceData(LoginForm loginForm){

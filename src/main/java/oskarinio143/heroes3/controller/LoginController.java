@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import oskarinio143.heroes3.model.LoginForm;
 import oskarinio143.heroes3.model.entity.User;
 import oskarinio143.heroes3.service.LoginService;
@@ -36,7 +37,7 @@ public class LoginController {
     }
 
     @PostMapping("register")
-    public String register(@ModelAttribute LoginForm loginForm, HttpServletResponse response){
-        return loginService.registerUser(loginForm, response);
+    public String register(@ModelAttribute LoginForm loginForm, HttpServletResponse response, RedirectAttributes redirectAttributes){
+        return loginService.registerUser(loginForm, response, redirectAttributes);
     }
 }

@@ -15,10 +15,12 @@
       font-family: 'Arial', sans-serif;
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       position: relative;
       overflow: hidden;
+      padding-top: 50px;
     }
 
     /* Animowane tło z pływającymi elementami */
@@ -115,9 +117,10 @@
       padding: 50px 40px;
       width: 100%;
       max-width: 450px;
-      position: relative;
       z-index: 10;
       animation: slideIn 0.8s ease-out;
+      margin-top: calc(50vh - 400px);
+      min-height: 600px;
     }
 
     @keyframes slideIn {
@@ -347,9 +350,15 @@
 
     /* Responsive design */
     @media (max-width: 480px) {
+      body {
+        padding-top: 20px;
+      }
+
       .register-container {
         padding: 30px 25px;
         margin: 20px;
+        margin-top: calc(50vh - 350px);
+        min-height: 500px;
       }
 
       .register-title {
@@ -364,6 +373,68 @@
         padding: 15px;
       }
     }
+
+    .modal-box {
+      background: #fff5f5;
+      padding: 25px;
+      width: 1000px;
+      max-width: 90%;
+      box-sizing: border-box;
+      text-align: center;
+      border: 2px solid #dc3545;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 8px 16px rgba(220, 53, 69, 0.15);
+      margin-top: 20px;
+      border-radius: 8px;
+      z-index: 15;
+      position: relative;
+    }
+
+    .back-btn {
+      background-color: #6c757d;
+      color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.4s ease-in-out;
+      min-width: 180px;
+      background-size: 200% auto;
+      background-image: linear-gradient(to right, #6c757d 0%, #495057 51%, #6c757d 100%);
+    }
+
+    .back-btn:hover {
+      background-position: right center;
+    }
+
+    #incorrectValueModal {
+      display: none;
+      margin-top: 20px;
+      z-index: 15;
+    }
+
+    /* Animacja pojawiania się modala */
+    #incorrectValueModal.show {
+      display: block;
+      animation: modalFadeIn 0.3s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -430,6 +501,37 @@
     Masz już konto? <a href="/oskarinio143/heroes/login">Zaloguj się</a>
   </div>
 </div>
+
+<div id="incorrectValueModal">
+  <div class="modal-box">
+    <p th:utext="${errorMessage}" style="
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 20px;
+    ">
+      Tutaj będzie komunikat
+    </p>
+  </div>
+</div>
+
+<script th:if="${errorMessage}">
+  // Funkcja do zamknięcia modala
+  function closeModal() {
+    const modal = document.getElementById('incorrectValueModal');
+    modal.style.display = 'none';
+    modal.classList.remove('show');
+  }
+
+  // Wyświetl modal
+  const modal = document.getElementById('incorrectValueModal');
+  modal.style.display = 'block';
+  modal.classList.add('show');
+
+  // Automatycznie ukryj po 5 sekundach
+  setTimeout(function() {
+    closeModal();
+  }, 5000);
+</script>
 
 <script>
   function togglePassword(fieldId) {
@@ -523,23 +625,6 @@
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
 
-    if (username.length < 3) {
-      e.preventDefault();
-      alert('Nazwa użytkownika musi mieć co najmniej 3 znaki');
-      return;
-    }
-
-    if (password.length < 4) {
-      e.preventDefault();
-      alert('Hasło musi mieć co najmniej 6 znaków');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      e.preventDefault();
-      alert('Hasła nie są zgodne');
-      return;
-    }
   });
 
   // Efekt paralaksy dla tła
