@@ -4,15 +4,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Service;
-import oskarinio143.heroes3.model.servicedto.LoginServiceData;
+import oskarinio143.heroes3.model.servicedto.UserServiceData;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
@@ -28,7 +23,7 @@ public class TokenService {
         );
     }
 
-    public String generateToken(LoginServiceData loginServiceData) {
+    public String generateToken(UserServiceData loginServiceData, long time) {
         return Jwts.builder()
                 .setSubject(loginServiceData.getUsername())
                 .claim("roles", loginServiceData.getRoles())  // możesz dodać inne dane

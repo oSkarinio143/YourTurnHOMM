@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter
 @Setter
-public class LoginServiceData {
+public class UserServiceData {
     @NonNull
     private String username;
     @NonNull

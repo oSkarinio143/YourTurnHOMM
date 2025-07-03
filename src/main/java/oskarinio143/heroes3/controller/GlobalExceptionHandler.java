@@ -2,6 +2,7 @@ package oskarinio143.heroes3.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ValidationException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -52,6 +53,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public String handleArgumentNotValidException(MethodArgumentNotValidException exception, RedirectAttributes attributes, HttpServletRequest request){
+//        if(request.getRequestURI().equals("/oskarinio143/heroes/register"))
+//            throw new ValidationException();
         if(exceptionHandlerService.isBattleEndpoint(request))
             exceptionHandlerService.createMessageTooSmallValue(attributes);
         exceptionHandlerService.passData(attributes, request);
