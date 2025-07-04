@@ -15,18 +15,15 @@ public class UserService {
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final LoginValidationService loginValidationService;
 
 
-    public UserService(UserRepository userRepository, TokenService tokenService, PasswordEncoder passwordEncoder, RefreshTokenRepository refreshTokenRepository, LoginValidationService loginValidationService) {
+    public UserService(UserRepository userRepository, TokenService tokenService, PasswordEncoder passwordEncoder, RefreshTokenRepository refreshTokenRepository) {
         this.userRepository = userRepository;
         this.tokenService = tokenService;
         this.passwordEncoder = passwordEncoder;
         this.refreshTokenRepository = refreshTokenRepository;
-        this.loginValidationService = loginValidationService;
     }
 
-    //reg, log, ref
     public UserServiceData getUserServiceData(LoginForm loginForm){
         String hashedPassword = passwordEncoder.encode(loginForm.getPassword());
         UserServiceData userServiceData = new UserServiceData(loginForm.getUsername(), hashedPassword);
@@ -34,7 +31,6 @@ public class UserService {
         return userServiceData;
     }
 
-    //reg, log, ref
     public void generateAndSetTokens(UserServiceData loginServiceData){
         loginServiceData.setAccessToken(tokenService.generateToken(loginServiceData, 3600000));
         loginServiceData.setRefreshToken(tokenService.generateToken(loginServiceData, 3600000 * 24 * 7));

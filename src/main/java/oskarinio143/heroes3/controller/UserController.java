@@ -59,7 +59,7 @@ public class UserController {
         try{
             UserServiceData userServiceData = registerService.registerUser(loginForm);
             cookieHelper.setCookieTokens(userServiceData, response);
-            redirectAttributes.addFlashAttribute("registerMessage", "Udało się zarejestrować użytkownika");
+            redirectAttributes.addFlashAttribute("welcomeUserMessage", "Udało się zarejestrować użytkownika");
             return Route.REDIRECT;
         }catch (DataIntegrityViolationException e){
             redirectAttributes.addFlashAttribute("errorMessage", "Użytkownik istnieje już w bazie danych");

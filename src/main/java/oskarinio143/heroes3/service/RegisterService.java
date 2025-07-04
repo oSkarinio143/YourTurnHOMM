@@ -37,9 +37,6 @@ public class RegisterService {
 
     @Transactional
     public void saveData(UserServiceData loginServiceData){
-//        if(userRepository.findByUsername(loginServiceData.getUsername()).isPresent())
-//            throw new UserAlreadyExistsInDatabase();
-
         RefreshToken refreshToken = new RefreshToken(loginServiceData.getRefreshToken());
         refreshTokenRepository.save(refreshToken);
 
