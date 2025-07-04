@@ -1,54 +1,52 @@
 package oskarinio143.heroes3.service;
 
 import jakarta.transaction.Transactional;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.ObjectError;
-import oskarinio143.heroes3.exception.UserAlreadyExistsInDatabase;
-import oskarinio143.heroes3.model.LoginForm;
+import oskarinio143.heroes3.model.RegisterForm;
+import oskarinio143.heroes3.model.Role;
 import oskarinio143.heroes3.model.entity.RefreshToken;
 import oskarinio143.heroes3.model.entity.User;
 import oskarinio143.heroes3.model.servicedto.UserServiceData;
 import oskarinio143.heroes3.repository.RefreshTokenRepository;
 import oskarinio143.heroes3.repository.UserRepository;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 @Service
 public class RegisterService {
     private final UserRepository userRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
-    public RegisterService(UserRepository userRepository, RefreshTokenRepository refreshTokenRepository, UserService userService) {
+    public RegisterService(UserRepository userRepository, UserService userService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.refreshTokenRepository = refreshTokenRepository;
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
-    public UserServiceData registerUser(LoginForm loginForm){
-        UserServiceData userServiceData = userService.getUserServiceData(loginForm);
+    public UserServiceData registerUser(RegisterForm registerForm){
+        UserServiceData userServiceData = getUserServiceData(registerForm);
         userService.generateAndSetTokens(userServiceData);
         saveData(userServiceData);
         return userServiceData;
     }
 
-    @Transactional
-    public void saveData(UserServiceData loginServiceData){
-        RefreshToken refreshToken = new RefreshToken(loginServiceData.getRefreshToken());
-        refreshTokenRepository.save(refreshToken);
-
-        User user = new User(loginServiceData.getUsername(), loginServiceData.getPassword());
-        user.setRoles(loginServiceData.getRoles());
-        user.setRefreshToken(refreshToken);
-        userRepository.save(user);
+    public UserServiceData getUserServiceData(RegisterForm registerForm){
+        String hashedPassword = passwordEncoder.encode(registerForm.getPassword());
+        UserServiceData userServiceData = new UserServiceData(registerForm.getUsername(), hashedPassword);
+        userServiceData.addRole(Role.ROLE_USER.name());
+        return userServiceData;
     }
 
-    public String prepareErrorMessage(List<ObjectError> errorsMessageList){
-        StringBuilder errorMessage = new StringBuilder();
-        errorsMessageList.forEach(v -> errorMessage.append(v.getDefaultMessage() + "<br>"));
-        return errorMessage.toString();
+    @Transactional
+    public void saveData(UserServiceData userServiceData){
+        RefreshToken refreshToken = userService.getAndSaveRefreshToken(userServiceData.getRefreshToken());
+        User user = new User(userServiceData.getUsername(), userServiceData.getPassword());
+        user.setRoles(userServiceData.getRoles());
+        user.setRefreshToken(refreshToken);
+        userRepository.save(user);
     }
 }

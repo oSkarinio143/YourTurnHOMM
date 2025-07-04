@@ -4,11 +4,12 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import oskarinio143.heroes3.model.Route;
 import oskarinio143.heroes3.model.servicedto.DuelInfo;
 import oskarinio143.heroes3.service.DuelService;
 
 @Controller
-@RequestMapping("/oskarinio143/heroes/duel")
+@RequestMapping(Route.MAIN + Route.DUEL)
 @CrossOrigin(origins = "*")
 public class DuelController {
 
@@ -24,7 +25,7 @@ public class DuelController {
         return "duel";
     }
 
-    @PostMapping("/select")
+    @PostMapping(Route.SELECT)
     public String selectUnit(Model model, @ModelAttribute DuelInfo duelInfo, @RequestParam String side){
         duelService.selectUnit(model, duelInfo, side);
         return "select";
@@ -36,7 +37,7 @@ public class DuelController {
         return "duel";
     }
 
-    @PostMapping("/battle")
+    @PostMapping(Route.BATTLE)
     public String startBattle(Model model, @Valid @ModelAttribute DuelInfo duelInfo){
         duelService.loadBattle(model, duelInfo);
         return "battle";

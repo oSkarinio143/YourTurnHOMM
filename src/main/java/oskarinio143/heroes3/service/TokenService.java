@@ -16,6 +16,7 @@ import java.util.Date;
 @Service
 public class TokenService {
     private final SecretKey secretKey;
+    private Date now;
 
     public TokenService(@Value("${jwt.secret.base64}") String secretKeyString){
         this.secretKey = Keys.hmacShaKeyFor(
@@ -24,11 +25,12 @@ public class TokenService {
     }
 
     public String generateToken(UserServiceData loginServiceData, long time) {
+        now = new Date();
         return Jwts.builder()
                 .setSubject(loginServiceData.getUsername())
                 .claim("roles", loginServiceData.getRoles())  // możesz dodać inne dane
                 .setIssuedAt(new Date())
-                .setExpiration(Date.from(Instant.now().plus(24, ChronoUnit.HOURS)))
+                .setExpiration(new Date(new Date().getTime() + time))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }

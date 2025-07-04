@@ -6,13 +6,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import oskarinio143.heroes3.model.Route;
 import oskarinio143.heroes3.service.DatabaseService;
 
 import java.io.IOException;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/oskarinio143/heroes/database")
+@RequestMapping(Route.MAIN + Route.DATABASE)
 public class DatabaseController {
 
     private final DatabaseService databaseService;
@@ -26,7 +27,7 @@ public class DatabaseController {
         return "choseDatabaseOption";
     }
 
-    @GetMapping("/add")
+    @GetMapping(Route.ADD)
     public String addUnit(){
         return "addUnit";
     }
@@ -45,40 +46,40 @@ public class DatabaseController {
             @RequestParam MultipartFile image
     ) throws IOException{
         databaseService.addUnit(name, attack, defense, shots, minDamage, maxDamage, hp, speed, description, image);
-        return "redirect:/oskarinio143/heroes/database";
+        return Route.REDIRECT + Route.DATABASE;
     }
 
-    @GetMapping("/view")
+    @GetMapping(Route.VIEW)
     public String viewUnits(Model model){
         databaseService.viewUnits(model);
         return "viewUnits";
     }
 
-    @GetMapping("/delete")
+    @GetMapping(Route.DELETE)
     public String deleteUnit(Model model){
         databaseService.viewUnits(model);
         return "deleteUnit";
     }
 
-    @PostMapping("/delete")
+    @PostMapping(Route.DELETE)
     public String handleDeleteUnit(@RequestParam String name) {
         databaseService.removeUnit(name);
-        return "redirect:/oskarinio143/heroes/database";
+        return Route.REDIRECT + Route.DATABASE;
     }
 
-    @GetMapping("/modify")
+    @GetMapping(Route.MODIFY)
     public String handleModify(Model model){
         databaseService.viewUnits(model);
         return "modify";
     }
 
-    @GetMapping("/modify/unit")
+    @GetMapping(Route.MODIFY + Route.UNIT)
     public String handleModifyUnit(@RequestParam String name, Model model) {
         databaseService.viewSingleUnit(model, name);
         return "modifyUnit";
     }
 
-    @PostMapping("/modify/unit")
+    @PostMapping(Route.MODIFY + Route.UNIT)
     public String saveModifiedUnit(@Valid
             @RequestParam String name,
             @RequestParam int attack,
@@ -91,6 +92,7 @@ public class DatabaseController {
             @RequestParam Optional<String> description
     ){
         databaseService.modifyUnit(name, attack, defense, shots, minDamage, maxDamage, hp, speed, description);
-        return "redirect:/oskarinio143/heroes/database/modify";
+        return Route.REDIRECT + Route.DATABASE + Route.MODIFY;
+
     }
 }

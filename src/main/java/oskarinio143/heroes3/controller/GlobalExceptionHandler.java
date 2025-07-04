@@ -2,16 +2,15 @@ package oskarinio143.heroes3.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ValidationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import oskarinio143.heroes3.exception.DuplicateUnitException;
-import oskarinio143.heroes3.exception.TransactionSystemAddException;
-import oskarinio143.heroes3.exception.TransactionSystemModifyException;
+import oskarinio143.heroes3.exception.*;
+import oskarinio143.heroes3.model.Route;
 import oskarinio143.heroes3.service.ExceptionHandlerService;
 
 @ControllerAdvice
@@ -53,11 +52,29 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public String handleArgumentNotValidException(MethodArgumentNotValidException exception, RedirectAttributes attributes, HttpServletRequest request){
-//        if(request.getRequestURI().equals("/oskarinio143/heroes/register"))
-//            throw new ValidationException();
         if(exceptionHandlerService.isBattleEndpoint(request))
             exceptionHandlerService.createMessageTooSmallValue(attributes);
         exceptionHandlerService.passData(attributes, request);
         return "redirect:/oskarinio143/heroes/duel";
     }
+
+    //Wyżej do sprawdzenia
+    @ExceptionHandler (UsernameNotFoundException.class)
+    public String handleUsernameNotFoundException(RedirectAttributes redirectAttributes, UsernameNotFoundException usernameNotFoundException) {
+        redirectAttributes.addFlashAttribute("errorMessage", "Uzytkownik " + usernameNotFoundException.getMessage() + " nie istnieje w bazie danych");
+        return Route.REDIRECT + Route.LOGIN;
+    }
+
+    @ExceptionHandler (UsernameNotMatchingPassword.class)
+    public String handleUsernameNotMatchingPassword(RedirectAttributes redirectAttributes){
+        redirectAttributes.addFlashAttribute("errorMessage", "Nazwa uzytkownika i haslo nie pasuja do siebie");
+        return Route.REDIRECT + Route.LOGIN;
+    }
+
+    @ExceptionHandler (DataIntegrityViolationException.class)
+    public String handleDataIntegrityViolationException(RedirectAttributes redirectAttributes){
+        redirectAttributes.addFlashAttribute("errorMessage", "Użytkownik istnieje już w bazie danych");
+        return Route.REDIRECT + Route.REGISTER;
+    }
+
 }
