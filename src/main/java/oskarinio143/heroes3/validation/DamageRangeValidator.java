@@ -8,7 +8,7 @@ public class DamageRangeValidator implements ConstraintValidator<ValidDamageRang
 
     @Override
     public boolean isValid(Unit unit, ConstraintValidatorContext context) {
-        if (unit.getMinDamage() == null || unit.getMaxDamage() == null) {
+        if (Integer.valueOf(unit.getMinDamage()) == null || Integer.valueOf(unit.getMaxDamage()) == null) {
             return true;
         }
         return unit.getMaxDamage() >= unit.getMinDamage();

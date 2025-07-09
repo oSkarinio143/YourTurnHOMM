@@ -53,6 +53,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public String handleArgumentNotValidException(MethodArgumentNotValidException exception, RedirectAttributes attributes, HttpServletRequest request){
+        System.out.println("Lapie");
         if(exceptionHandlerService.isBattleEndpoint(request))
             exceptionHandlerService.createMessageTooSmallValue(attributes);
         exceptionHandlerService.passData(attributes, request);

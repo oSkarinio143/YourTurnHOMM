@@ -32,49 +32,26 @@ public class DatabaseService {
         return units;
     }
 
-    @Transactional
-    public void saveUnit(
-            String name,
-            int attack,
-            int defense,
-            int shots,
-            int minDamage,
-            int maxDamage,
-            int hp,
-            int speed,
-            String description,
-            String imagePath
-    ){
-        Unit unit = new Unit(name, attack, defense, shots, minDamage, maxDamage, hp, hp, speed, description, imagePath);
-        unitRepository.save(unit);
-    }
-
-    public void addUnit(String name,
-                        int attack,
-                        int defense,
-                        int shots,
-                        int minDamage,
-                        int maxDamage,
-                        int hp,
-                        int speed,
-                        String description,
-                        MultipartFile image) throws IOException {
-
-        if(unitRepository.existsById(name)) {
+    public void addUnit(Unit unit, MultipartFile image) throws IOException {
+        if(unitRepository.existsById(unit.getName())) {
             throw new DuplicateUnitException("Jednostka o tej nazwie jest już w bazie");
         }
+        String imagePath = getImagePath(unit.getName(),image);
+        unit.setImagePath(imagePath);
+        unit.setHpLeft(unit.getHp());
+        try {
+            unitRepository.save(unit);
+        }catch (TransactionSystemException ex){
+            throw new TransactionSystemAddException("", ex.getCause());
+        }
+    }
 
+    public String getImagePath(String name, MultipartFile image) throws IOException {
         String fileName = name + ".png";
         Path path = Paths.get("unit-images", fileName);
         Files.createDirectories(path.getParent()); // jeśli folder nie istnieje
         Files.write(path, image.getBytes());
-        String imagePath = "/" + path.toString();
-
-        try {
-            saveUnit(name, attack, defense, shots, minDamage, maxDamage, hp, speed, description, imagePath);
-        }catch (TransactionSystemException ex){
-            throw new TransactionSystemAddException("", ex.getCause());
-        }
+        return  "/" + path.toString();
     }
 
     public void viewUnits(Model model){
@@ -93,21 +70,13 @@ public class DatabaseService {
         unitRepository.delete(unit);
     }
 
-    public void modifyUnit(String name, int attack, int defense, int shots, int minDamage, int maxDamage, int hp, int speed, Optional<String> descriptionOpt){
-        Unit unit = unitRepository.getReferenceById(name);
-        unit.setAttack(attack);
-        unit.setDefense(defense);
-        unit.setShots(shots);
-        unit.setMinDamage(minDamage);
-        unit.setMaxDamage(maxDamage);
-        unit.setHp(hp);
-        unit.setHpLeft(hp);
-        unit.setSpeed(speed);
-        descriptionOpt.ifPresent(unit::setDescription);
-        try {
+    public void modifyUnit(Unit unit) throws IOException {
+        Unit oldUnit = unitRepository.getReferenceById(unit.getName());
+        unit.setImagePath(oldUnit.getImagePath());
+        try{
             unitRepository.save(unit);
         }catch (TransactionSystemException ex){
-            throw new TransactionSystemModifyException(name, ex.getCause());
+            throw new TransactionSystemModifyException(unit.getName(), ex.getCause());
         }
     }
 

@@ -3,9 +3,12 @@ package oskarinio143.heroes3.controller;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import oskarinio143.heroes3.model.constant.Route;
+import oskarinio143.heroes3.model.entity.Unit;
 import oskarinio143.heroes3.service.DatabaseService;
 
 import java.io.IOException;
@@ -32,19 +35,8 @@ public class DatabaseController {
     }
 
     @PostMapping("/add")
-    public String handleAddUnit(@Valid
-            @RequestParam String name,
-            @RequestParam int attack,
-            @RequestParam int defense,
-            @RequestParam int shots,
-            @RequestParam int minDamage,
-            @RequestParam int maxDamage,
-            @RequestParam int hp,
-            @RequestParam int speed,
-            @RequestParam String description,
-            @RequestParam MultipartFile image
-    ) throws IOException{
-        databaseService.addUnit(name, attack, defense, shots, minDamage, maxDamage, hp, speed, description, image);
+    public String handleAddUnit(@Valid @ModelAttribute Unit unit, @RequestParam MultipartFile image) throws IOException{
+        databaseService.addUnit(unit, image);
         return Route.REDIRECT + Route.DATABASE;
     }
 
@@ -79,18 +71,8 @@ public class DatabaseController {
     }
 
     @PostMapping(Route.MODIFY + Route.UNIT)
-    public String saveModifiedUnit(@Valid
-            @RequestParam String name,
-            @RequestParam int attack,
-            @RequestParam int defense,
-            @RequestParam int shots,
-            @RequestParam int minDamage,
-            @RequestParam int maxDamage,
-            @RequestParam int hp,
-            @RequestParam int speed,
-            @RequestParam Optional<String> description
-    ){
-        databaseService.modifyUnit(name, attack, defense, shots, minDamage, maxDamage, hp, speed, description);
+    public String saveModifiedUnit(@Valid @ModelAttribute Unit unit) throws IOException {
+        databaseService.modifyUnit(unit);
         return Route.REDIRECT + Route.DATABASE + Route.MODIFY;
 
     }
