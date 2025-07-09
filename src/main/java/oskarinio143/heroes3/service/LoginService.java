@@ -4,13 +4,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import oskarinio143.heroes3.exception.UsernameNotMatchingPassword;
-import oskarinio143.heroes3.model.LoginForm;
-import oskarinio143.heroes3.model.Role;
+import oskarinio143.heroes3.model.form.LoginForm;
 import oskarinio143.heroes3.model.entity.RefreshToken;
 import oskarinio143.heroes3.model.entity.User;
 import oskarinio143.heroes3.model.servicedto.UserServiceData;
-import oskarinio143.heroes3.repository.RefreshTokenRepository;
-import oskarinio143.heroes3.repository.UserRepository;
 
 @Service
 public class LoginService {
@@ -28,7 +25,8 @@ public class LoginService {
         User user = getUser(loginForm);
         UserServiceData userServiceData = getUserServiceData(user);
         userService.generateAndSetTokens(userServiceData);
-        user.setRefreshToken(userService.getAndSaveRefreshToken(userServiceData.getRefreshToken()));
+        RefreshToken refreshToken = userService.getRefreshToken(userServiceData.getRefreshToken());
+        userService.setRefreshToken(user, refreshToken);
         return userServiceData;
     }
 

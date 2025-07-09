@@ -1,6 +1,6 @@
 package oskarinio143.heroes3.service;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.ObjectError;
 import oskarinio143.heroes3.exception.UsernameNotFoundException;
@@ -27,14 +27,12 @@ public class UserService {
     }
 
     public void generateAndSetTokens(UserServiceData userServiceData){
-        userServiceData.setAccessToken(tokenService.generateToken(userServiceData, 3600000));
+        userServiceData.setAccessToken(tokenService.generateToken(userServiceData, 3600000 / 4));
         userServiceData.setRefreshToken(tokenService.generateToken(userServiceData, 3600000 * 24 * 7));
     }
 
-    public RefreshToken getAndSaveRefreshToken(String refreshTokenString){
-        RefreshToken refreshToken = new RefreshToken(refreshTokenString);
-        refreshTokenRepository.save(refreshToken);
-        return refreshToken;
+    public RefreshToken getRefreshToken(String refreshTokenString){
+        return new RefreshToken(refreshTokenString);
 
     }
 
@@ -47,5 +45,19 @@ public class UserService {
     public User getUserByUsernameOrThrow(String username){
         return userRepository.findByUsername(username)
                 .orElseThrow(() ->new UsernameNotFoundException(username));
+    }
+
+    @Transactional
+    public void deleteToken(String username){
+        User user = userRepository.findByUsernameOrThrow(username);
+        setRefreshToken(user, null);
+    }
+
+    @Transactional
+    public void setRefreshToken(User user, RefreshToken refreshToken){
+        if(refreshToken == null && user.getRefreshToken() != null)
+            user.setRefreshToken(null);
+        else if (refreshToken.getUser() != user)
+            user.setRefreshToken(refreshToken);
     }
 }

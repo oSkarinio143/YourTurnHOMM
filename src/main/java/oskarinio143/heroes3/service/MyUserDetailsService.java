@@ -1,10 +1,9 @@
 package oskarinio143.heroes3.service;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import oskarinio143.heroes3.model.CustomUserDetails;
+import oskarinio143.heroes3.model.servicedto.CustomUserDetails;
 import oskarinio143.heroes3.model.entity.User;
 import oskarinio143.heroes3.repository.UserRepository;
 

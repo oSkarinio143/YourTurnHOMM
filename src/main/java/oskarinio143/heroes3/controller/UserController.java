@@ -1,16 +1,17 @@
 package oskarinio143.heroes3.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import oskarinio143.heroes3.config.CookieHelper;
-import oskarinio143.heroes3.model.LoginForm;
-import oskarinio143.heroes3.model.RegisterForm;
-import oskarinio143.heroes3.model.Route;
+import oskarinio143.heroes3.helper.CookieHelper;
+import oskarinio143.heroes3.model.form.LoginForm;
+import oskarinio143.heroes3.model.form.RegisterForm;
+import oskarinio143.heroes3.model.constant.Route;
 import oskarinio143.heroes3.model.servicedto.UserServiceData;
 import oskarinio143.heroes3.service.LoginService;
 import oskarinio143.heroes3.service.RegisterService;
@@ -33,7 +34,11 @@ public class UserController {
     }
 
     @GetMapping(Route.LOGIN)
-    public String loginView(){
+    public String loginView(Model model,
+                            @RequestParam(name = "logout", required = false) String logoutType){
+
+        if(logoutType != null && logoutType.equals("auto"))
+            model.addAttribute("autoLogoutMessage", "Zostałeś automatycznie wylogowany z powodu braku aktywności");
         return "login.html";
     }
 
@@ -47,6 +52,7 @@ public class UserController {
             redirectAttributes.addFlashAttribute("errorMessage", userService.prepareErrorMessage(bindingResult.getAllErrors()));
             return Route.REDIRECT + Route.LOGIN;
         }
+
         UserServiceData userServiceData = loginService.loginUser(loginForm);
         cookieHelper.setCookieTokens(userServiceData, response);
         redirectAttributes.addFlashAttribute("welcomeUserMessage","Udało się poprawnie zalogować użytkownika");
@@ -75,22 +81,19 @@ public class UserController {
     }
 
     @GetMapping(Route.REFRESH)
-    public String refreshView(){
-        return "Hejka refToken";
-    }
-
-    @PostMapping(Route.REFRESH)
     public String refreshToken(){
+        System.out.println("odswieżam");
         return Route.REDIRECT;
-    }
-
-    @GetMapping(Route.LOGOUT)
-    public String logoutView(){
-        return "HejkaLogout";
     }
 
     @PostMapping(Route.LOGOUT)
-    public String logoutUser(){
-        return Route.REDIRECT;
+    public String logoutUser(RedirectAttributes redirectAttributes,
+                             HttpServletResponse response,
+                             HttpServletRequest request){
+        String username = cookieHelper.getUsernameFromCooke(request);
+        cookieHelper.removeAccessCookie(response);
+        userService.deleteToken(username);
+        redirectAttributes.addFlashAttribute("logoutMessage", "Użytkownik został wylogowany");
+        return Route.REDIRECT + Route.LOGIN;
     }
 }

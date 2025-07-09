@@ -1,5 +1,7 @@
 package oskarinio143.heroes3.service;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -57,6 +59,14 @@ public class TokenService {
                 .getBody()
                 .getExpiration();
         return expiration.before(new Date());
+    }
+
+    public boolean isTokenExpiredSafe(String token){
+        boolean isTokenExpired = true;
+        try{
+            isTokenExpired = isTokenExpired(token);
+        }catch (ExpiredJwtException ignored){}
+        return isTokenExpired;
     }
 }
 

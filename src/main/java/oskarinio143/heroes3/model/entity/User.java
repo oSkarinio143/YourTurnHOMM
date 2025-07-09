@@ -2,13 +2,14 @@ package oskarinio143.heroes3.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import oskarinio143.heroes3.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@NoArgsConstructor
 @RequiredArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 
@@ -23,20 +24,13 @@ public class User {
     private String password;
     @NonNull
     private List<String> roles = new ArrayList<>();
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "refreshToken")
     private RefreshToken refreshToken;
 
     @Transient
     public String getTokenHash() {
         return refreshToken != null ? refreshToken.getTokenHash() : null;
-    }
-
-    public void setRefreshToken(RefreshToken refreshToken){
-        this.refreshToken = refreshToken;
-        if(refreshToken.getUser() != this) {
-            refreshToken.setUser(this);
-        }
     }
 
     public void addRole(String role){

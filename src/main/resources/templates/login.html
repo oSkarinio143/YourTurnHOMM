@@ -315,25 +315,6 @@
       font-size: 14px;
     }
 
-    /* Responsive design */
-    @media (max-width: 480px) {
-      .login-container {
-        padding: 30px 25px;
-        margin: 20px;
-      }
-
-      .login-title {
-        font-size: 28px;
-      }
-
-      .form-input {
-        padding: 12px 15px;
-      }
-
-      .login-button {
-        padding: 15px;
-      }
-    }
     /* Nowy styl modala - pojawia się pod formularzem */
     .modal-overlay {
       position: absolute;
@@ -367,7 +348,7 @@
       border: 1px solid rgba(220, 53, 69, 0.25);
       padding: 20px;
       width: 100%;
-      max-width: 500px; /* Szeroki modal */
+      max-width: 500px;
       position: relative;
       transform: scale(0.95);
       transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -387,15 +368,15 @@
     }
 
     .modal-icon {
-      width: 40px; /* Mniejszy */
-      height: 40px; /* Mniejszy */
+      width: 40px;
+      height: 40px;
       background: linear-gradient(45deg, #dc3545, #c82333);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 18px; /* Mniejszy */
+      font-size: 18px;
       animation: pulse 2s ease-in-out infinite;
     }
 
@@ -406,7 +387,7 @@
     }
 
     .modal-title {
-      font-size: 18px; /* Mniejszy */
+      font-size: 18px;
       font-weight: bold;
       color: #dc3545;
       margin: 0;
@@ -415,11 +396,11 @@
     /* Zawartość modala */
     .modal-content {
       text-align: center;
-      margin-bottom: 15px; /* Mniejszy margines */
+      margin-bottom: 15px;
     }
 
     .modal-message {
-      font-size: 14px; /* Mniejszy */
+      font-size: 14px;
       color: #495057;
       line-height: 1.5;
       margin: 0;
@@ -431,14 +412,14 @@
       display: flex;
       justify-content: center;
       gap: 10px;
-      margin-top: 10px; /* Mniejszy margines */
+      margin-top: 10px;
     }
 
     .modal-button {
-      padding: 8px 20px; /* Mniejsze przyciski */
+      padding: 8px 20px;
       border: none;
       border-radius: 8px;
-      font-size: 13px; /* Mniejszy */
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -514,20 +495,86 @@
       to { transform: scaleX(0); }
     }
 
+    /* Animacje wejścia */
+    .modal-container::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #dc3545, #c82333, #dc3545);
+      border-radius: 14px;
+      z-index: -1;
+      opacity: 0.3;
+      animation: borderGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes borderGlow {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.6; }
+    }
+
+    /* Style specjalnie dla modala wylogowania */
+    .modal-overlay.logout-modal .modal-container {
+      background: linear-gradient(135deg, #f0f8ff 0%, #e3f2fd 100%);
+      border: 1px solid rgba(30, 136, 229, 0.25);
+      box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.15),
+      0 8px 20px rgba(30, 136, 229, 0.2);
+    }
+
+    .modal-overlay.logout-modal .modal-icon {
+      background: linear-gradient(45deg, #1e88e5, #1565c0);
+      animation: logoutPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes logoutPulse {
+      0% { transform: scale(1); box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3); }
+      50% { transform: scale(1.05); box-shadow: 0 6px 20px rgba(30, 136, 229, 0.5); }
+      100% { transform: scale(1); box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3); }
+    }
+
+    .modal-overlay.logout-modal .modal-title {
+      color: #1e88e5;
+    }
+
+    .modal-overlay.logout-modal .modal-message {
+      color: #1565c0;
+    }
+
+    .modal-overlay.logout-modal .modal-button-primary {
+      background: linear-gradient(45deg, #1e88e5, #1565c0);
+      box-shadow: 0 4px 10px rgba(30, 136, 229, 0.3);
+    }
+
+    .modal-overlay.logout-modal .modal-button-primary:hover {
+      background: linear-gradient(45deg, #1565c0, #0d47a1);
+      box-shadow: 0 6px 15px rgba(30, 136, 229, 0.4);
+    }
+
+    .modal-overlay.logout-modal .modal-close:hover {
+      background: rgba(30, 136, 229, 0.1);
+      color: #1e88e5;
+    }
+
+    .modal-overlay.logout-modal .modal-progress {
+      background: linear-gradient(45deg, #1e88e5, #1565c0);
+    }
+
+    .modal-overlay.logout-modal .modal-container::before {
+      background: linear-gradient(45deg, #1e88e5, #1565c0, #1e88e5);
+      opacity: 0.2;
+    }
+
     /* Responsywność */
     @media (max-width: 480px) {
-      body {
-        padding-top: 20px;
-      }
-
-      .register-container {
+      .login-container {
         padding: 30px 25px;
         margin: 20px;
-        margin-top: calc(50vh - 350px);
-        min-height: 500px;
       }
 
-      .register-title {
+      .login-title {
         font-size: 28px;
       }
 
@@ -535,13 +582,13 @@
         padding: 12px 15px;
       }
 
-      .register-button {
+      .login-button {
         padding: 15px;
       }
 
       .modal-container {
-        padding: 15px; /* Mniejsze paddingi */
-        max-width: 90%; /* Węższy na małych ekranach */
+        padding: 15px;
+        max-width: 90%;
       }
 
       .modal-title {
@@ -561,26 +608,6 @@
       .modal-button {
         width: 100%;
       }
-    }
-
-    /* Animacje wejścia */
-    .modal-container::before {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(45deg, #dc3545, #c82333, #dc3545);
-      border-radius: 14px;
-      z-index: -1;
-      opacity: 0.3;
-      animation: borderGlow 3s ease-in-out infinite;
-    }
-
-    @keyframes borderGlow {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 0.6; }
     }
   </style>
 </head>
@@ -634,10 +661,11 @@
   <div class="register-link">
     Nie masz konta? <a href="/oskarinio143/heroes/register">Zarejestruj się</a>
   </div>
-  <!-- Modal umieszczony pod formularzem -->
+
+  <!-- Modal błędów -->
   <div id="errorModal" class="modal-overlay">
     <div class="modal-container">
-      <button class="modal-close" onclick="closeModal()">×</button>
+      <button class="modal-close" onclick="closeModal('errorModal')">×</button>
 
       <div class="modal-header">
         <div class="modal-icon">⚠️</div>
@@ -646,11 +674,10 @@
 
       <div class="modal-content">
         <div id="modalMessage" th:if="${errorMessage}" th:utext="${errorMessage}"></div>
-        </p>
       </div>
 
       <div class="modal-actions">
-        <button class="modal-button modal-button-primary" onclick="closeModal()">
+        <button class="modal-button modal-button-primary" onclick="closeModal('errorModal')">
           Rozumiem
         </button>
       </div>
@@ -658,49 +685,113 @@
       <div class="modal-progress"></div>
     </div>
   </div>
+  <!-- Modal wylogowania -->
+  <div id="logoutModal" class="modal-overlay logout-modal">
+    <div class="modal-container">
+      <button class="modal-close" onclick="closeModal('logoutModal')">×</button>
 
-</div>
+      <div class="modal-header">
+        <div class="modal-icon">🚪</div>
+        <h2 class="modal-title">Wylogowano</h2>
+      </div>
 
-<script th:if="${errorMessage}">
+      <div class="modal-content">
+        <div id="logoutMessage" th:if="${logoutMessage}" th:utext="${logoutMessage}"></div>
+      </div>
 
-  // Funkcja do zamknięcia modala
-  function closeModal() {
-    const modal = document.getElementById('errorModal');
+      <div class="modal-actions">
+        <button class="modal-button modal-button-primary" onclick="closeModal('logoutModal')">
+          OK
+        </button>
+      </div>
+
+      <div class="modal-progress"></div>
+    </div>
+  </div>
+
+  <div id="autoLogoutModal" class="modal-overlay logout-modal">
+    <div class="modal-container">
+      <button class="modal-close" onclick="closeModal('autoLogoutModal')">×</button>
+
+      <div class="modal-header">
+        <div class="modal-icon">🚪</div>
+        <h2 class="modal-title">Wylogowano</h2>
+      </div>
+
+      <div class="modal-content">
+        <div id="autoLogoutMessage" th:if="${autoLogoutMessage}" th:utext="${autoLogoutMessage}"></div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="modal-button modal-button-primary" onclick="closeModal('autoLogoutModal')">
+          OK
+        </button>
+      </div>
+
+      <div class="modal-progress"></div>
+    </div>
+  </div>
+
+<script th:if="${autoLogoutMessage}">
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
     modal.classList.remove('show');
-
-    // Usuń modal z DOM po animacji
-    setTimeout(() => {
-      modal.style.display = 'none';
-    }, 300);
+    setTimeout(() => modal.style.display = 'none', 300);
   }
 
-
-  // Wyświetl modal
-  const modal = document.getElementById('errorModal');
+  const modal = document.getElementById('autoLogoutModal');
   modal.style.display = 'flex';
+  setTimeout(() => modal.classList.add('show'), 10);
+  setTimeout(() => closeModal('autoLogoutModal'), 5000);
 
-  // Dodaj animację pojawienia się z małym opóźnieniem
-  setTimeout(() => {
-    modal.classList.add('show');
-  }, 10);
-
-  // Automatycznie ukryj po 5 sekundach
-  setTimeout(() => {
-    closeModal();
-  }, 5000);
-
-  // Zamknij modal po kliknięciu w overlay
   modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      closeModal();
-    }
+    if (e.target === modal) closeModal('autoLogoutModal');
   });
 
-  // Zamknij modal klawiszem Escape
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('show')) {
-      closeModal();
-    }
+    if (e.key === 'Escape' && modal.classList.contains('show')) closeModal('autoLogoutModal');
+  });
+</script>
+
+<script th:if="${logoutMessage}">
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.remove('show');
+    setTimeout(() => modal.style.display = 'none', 300);
+  }
+
+  const modal = document.getElementById('logoutModal');
+  modal.style.display = 'flex';
+  setTimeout(() => modal.classList.add('show'), 10);
+  setTimeout(() => closeModal('logoutModal'), 5000);
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal('logoutModal');
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('show')) closeModal('logoutModal');
+  });
+</script>
+
+<script th:if="${errorMessage}">
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.remove('show');
+    setTimeout(() => modal.style.display = 'none', 300);
+  }
+
+  const modal = document.getElementById('errorModal');
+  modal.style.display = 'flex';
+  setTimeout(() => modal.classList.add('show'), 10);
+  setTimeout(() => closeModal('errorModal'), 5000);
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal('errorModal');
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('show')) closeModal('errorModal');
   });
 </script>
 
@@ -735,7 +826,6 @@
   document.querySelector('form').addEventListener('submit', function(e) {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-
   });
 
   // Efekt paralaksy dla tła

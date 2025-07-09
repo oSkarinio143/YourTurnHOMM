@@ -2,7 +2,7 @@ package oskarinio143.heroes3.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import oskarinio143.heroes3.model.RegisterForm;
+import oskarinio143.heroes3.model.form.RegisterForm;
 
 public class SamePasswordValidator implements ConstraintValidator<ValidSamePassword, RegisterForm> {
     @Override

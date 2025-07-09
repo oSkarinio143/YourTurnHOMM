@@ -1,4 +1,4 @@
-package oskarinio143.heroes3.model;
+package oskarinio143.heroes3.model.constant;
 
 import lombok.Getter;
 

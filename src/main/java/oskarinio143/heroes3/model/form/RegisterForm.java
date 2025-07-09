@@ -1,9 +1,8 @@
-package oskarinio143.heroes3.model;
+package oskarinio143.heroes3.model.form;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import oskarinio143.heroes3.validation.ValidSamePassword;
 

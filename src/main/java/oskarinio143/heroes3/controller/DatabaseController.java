@@ -1,12 +1,11 @@
 package oskarinio143.heroes3.controller;
 
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import oskarinio143.heroes3.model.Route;
+import oskarinio143.heroes3.model.constant.Route;
 import oskarinio143.heroes3.service.DatabaseService;
 
 import java.io.IOException;

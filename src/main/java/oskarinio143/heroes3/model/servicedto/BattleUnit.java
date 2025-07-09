@@ -1,7 +1,7 @@
 package oskarinio143.heroes3.model.servicedto;
 
 import lombok.*;
-import oskarinio143.heroes3.model.Skill;
+import oskarinio143.heroes3.model.constant.Skill;
 
 import java.util.List;
 @NoArgsConstructor

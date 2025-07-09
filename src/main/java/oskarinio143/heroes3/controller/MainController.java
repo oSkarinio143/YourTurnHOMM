@@ -3,7 +3,7 @@ package oskarinio143.heroes3.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
-import oskarinio143.heroes3.model.Route;
+import oskarinio143.heroes3.model.constant.Route;
 
 @Slf4j
 @Controller

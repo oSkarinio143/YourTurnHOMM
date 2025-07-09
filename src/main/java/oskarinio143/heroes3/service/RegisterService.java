@@ -3,16 +3,12 @@ package oskarinio143.heroes3.service;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.ObjectError;
-import oskarinio143.heroes3.model.RegisterForm;
-import oskarinio143.heroes3.model.Role;
+import oskarinio143.heroes3.model.form.RegisterForm;
+import oskarinio143.heroes3.model.constant.Role;
 import oskarinio143.heroes3.model.entity.RefreshToken;
 import oskarinio143.heroes3.model.entity.User;
 import oskarinio143.heroes3.model.servicedto.UserServiceData;
-import oskarinio143.heroes3.repository.RefreshTokenRepository;
 import oskarinio143.heroes3.repository.UserRepository;
-
-import java.util.List;
 
 @Service
 public class RegisterService {
@@ -43,10 +39,10 @@ public class RegisterService {
 
     @Transactional
     public void saveData(UserServiceData userServiceData){
-        RefreshToken refreshToken = userService.getAndSaveRefreshToken(userServiceData.getRefreshToken());
+        RefreshToken refreshToken = new RefreshToken(userServiceData.getRefreshToken());
         User user = new User(userServiceData.getUsername(), userServiceData.getPassword());
         user.setRoles(userServiceData.getRoles());
-        user.setRefreshToken(refreshToken);
+        userService.setRefreshToken(user, refreshToken);
         userRepository.save(user);
     }
 }
