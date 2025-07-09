@@ -98,7 +98,7 @@ public class ExceptionHandlerService {
 
     public void createMessageTooSmallDmg(ConstraintViolation<?> violation, RedirectAttributes attributes){
         Unit unit = (Unit) violation.getInvalidValue();
-        String message = "Podano wartość " + unit.getMaxDamage() + " w polu MaxDamage"
+        String message = "Podano wartość " + unit.getMinDamage() + " w polu MinDamage"
                 + "<br>" + violation.getMessage();
         attributes.addFlashAttribute("incorrectMessage", message);
     }

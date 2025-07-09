@@ -49,7 +49,6 @@ public class DatabaseService {
         unitRepository.save(unit);
     }
 
-    @Transactional
     public void addUnit(String name,
                         int attack,
                         int defense,
@@ -61,8 +60,9 @@ public class DatabaseService {
                         String description,
                         MultipartFile image) throws IOException {
 
-        if(unitRepository.existsById(name))
+        if(unitRepository.existsById(name)) {
             throw new DuplicateUnitException("Jednostka o tej nazwie jest już w bazie");
+        }
 
         String fileName = name + ".png";
         Path path = Paths.get("unit-images", fileName);
@@ -93,7 +93,6 @@ public class DatabaseService {
         unitRepository.delete(unit);
     }
 
-    @Transactional
     public void modifyUnit(String name, int attack, int defense, int shots, int minDamage, int maxDamage, int hp, int speed, Optional<String> descriptionOpt){
         Unit unit = unitRepository.getReferenceById(name);
         unit.setAttack(attack);

@@ -5,7 +5,7 @@
   <title>Karta jednostki</title>
   <style>
     body {
-      background-color: #e8eaf0;
+      background: #e8eaf0;
       font-family: Arial, sans-serif;
       padding: 20px;
       margin: 0;
@@ -14,17 +14,15 @@
       justify-content: center;
       align-items: center;
     }
-
     .card-container {
-      background-color: white;
+      background: white;
       border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 10px 30px rgba(0,0,0,.15);
       padding: 30px;
       max-width: 400px;
       width: 100%;
       text-align: center;
     }
-
     .unit-image {
       width: 200px;
       height: 200px;
@@ -33,7 +31,6 @@
       margin-bottom: 20px;
       border: 3px solid #007bff;
     }
-
     .unit-name {
       font-size: 24px;
       font-weight: bold;
@@ -41,11 +38,9 @@
       margin-bottom: 20px;
       text-align: center;
     }
-
     .stats-container {
       text-align: left;
     }
-
     .stat-row {
       display: flex;
       justify-content: space-between;
@@ -53,53 +48,44 @@
       padding: 8px 0;
       border-bottom: 1px solid #e0e0e0;
     }
-
     .stat-row:last-child {
       border-bottom: none;
     }
-
     .stat-label {
       font-weight: 600;
       color: #555;
       flex: 1;
     }
-
     .stat-value {
       font-weight: bold;
       color: #333;
       text-align: right;
     }
-
     .description-section {
       margin-top: 20px;
       padding-top: 15px;
       border-top: 2px solid #007bff;
     }
-
     .description-label {
       font-weight: 600;
       color: #555;
       margin-bottom: 8px;
     }
-
     .description-text {
       color: #666;
       line-height: 1.4;
       font-style: italic;
     }
-
     .damage-range {
       color: #e53935;
       font-weight: bold;
     }
-
     .hp-section {
-      background-color: #f8f9fa;
+      background: #f8f9fa;
       border-radius: 8px;
       padding: 8px;
       margin: 5px 0;
     }
-
     .button-container {
       display: flex;
       justify-content: space-between;
@@ -108,7 +94,6 @@
       padding-top: 20px;
       border-top: 1px solid #e0e0e0;
     }
-
     .btn {
       padding: 12px 24px;
       border: none;
@@ -116,15 +101,14 @@
       cursor: pointer;
       font-weight: 600;
       font-size: 14px;
-      transition: all 0.3s;
+      transition: all .3s;
       flex: 1;
       text-decoration: none;
       text-align: center;
       display: inline-block;
     }
-
     .back-btn {
-      background-color: #6c757d;
+      background: #6c757d;
       color: white;
       padding: 15px 30px;
       border: none;
@@ -132,47 +116,40 @@
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.4s ease-in-out;
+      transition: background .4s ease-in-out;
       min-width: 180px;
       background-size: 200% auto;
-      background-image: linear-gradient(to right, #6c757d 0%, #495057 51%, #6c757d 100%);
+      background-image: linear-gradient(to right,#6c757d 0%,#495057 51%,#6c757d 100%);
     }
-
     .back-btn:hover {
-      background-position: right center; /* przesuwa gradient */
+      background-position: right center;
     }
-
     .btn-edit {
-      background-color: #1e88e5;
+      background: #1e88e5;
       color: white;
     }
-
     .btn-edit:hover {
-      background-color: #1565c0;
+      background: #1565c0;
     }
-
     .btn-save {
-      background-color: #4caf50;
+      background: #4caf50;
       color: white;
     }
-
     .btn-save:hover {
-      background-color: #45a049;
+      background: #45a049;
     }
-
     .editable-input {
       border: 1px solid #007bff;
-      background-color: #f8f9ff;
+      background: #f8f9ff;
       padding: 4px 8px;
       border-radius: 4px;
       width: 80px;
       text-align: right;
       font-weight: bold;
     }
-
     .editable-textarea {
       border: 1px solid #007bff;
-      background-color: #f8f9ff;
+      background: #f8f9ff;
       padding: 8px;
       border-radius: 4px;
       width: 100%;
@@ -180,7 +157,6 @@
       min-height: 60px;
       font-style: italic;
     }
-
     .modal-box {
       background: white;
       padding: 20px;
@@ -189,16 +165,13 @@
       max-height: 80%;
       box-sizing: border-box;
       text-align: center;
-
       border: 5px solid;
-      border-image: linear-gradient(to right, #000000, #444444) 1;
-
+      border-image: linear-gradient(to right,#000,#444) 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px; /* 20px między elementami: tekstem i przyciskiem */
+      gap: 20px;
     }
-
     .hidden {
       display: none;
     }
@@ -206,190 +179,125 @@
 </head>
 <body>
 <div class="card-container">
-  <img th:src="@{${unit.imagePath}}" class="unit-image" alt="Unit Image"/>
-
+  <img th:src="@{${unit.imagePath}}" class="unit-image" alt="Unit Image">
   <div class="unit-name" th:text="${unit.name}"></div>
-
   <div class="stats-container">
     <div class="stat-row">
       <span class="stat-label">Atak:</span>
       <span class="stat-value" id="attack-display" th:text="${unit.attack}"></span>
       <input type="number" class="editable-input hidden" id="attack-input" th:value="${unit.attack}">
     </div>
-
     <div class="stat-row">
       <span class="stat-label">Obrona:</span>
       <span class="stat-value" id="defense-display" th:text="${unit.defense}"></span>
       <input type="number" class="editable-input hidden" id="defense-input" th:value="${unit.defense}">
     </div>
-
     <div class="stat-row" th:if="${unit.shots != null}">
       <span class="stat-label">Strzały:</span>
       <span class="stat-value" id="shots-display" th:text="${unit.shots}"></span>
       <input type="number" class="editable-input hidden" id="shots-input" th:value="${unit.shots}" name="shots">
     </div>
-
     <div class="stat-row">
       <span class="stat-label">Obrażenia:</span>
       <span class="stat-value damage-range">
-                    <span id="minDamage-display" th:text="${unit.minDamage}"></span> - <span id="maxDamage-display" th:text="${unit.maxDamage}"></span>
-                </span>
+        <span id="minDamage-display" th:text="${unit.minDamage}"></span> - <span id="maxDamage-display" th:text="${unit.maxDamage}"></span>
+      </span>
       <div class="hidden" id="damage-inputs">
-        <input type="number" class="editable-input" id="minDamage-input" th:value="${unit.minDamage}" style="width: 60px;">
+        <input type="number" class="editable-input" id="minDamage-input" th:value="${unit.minDamage}" style="width:60px">
         -
-        <input type="number" class="editable-input" id="maxDamage-input" th:value="${unit.maxDamage}" style="width: 60px;">
+        <input type="number" class="editable-input" id="maxDamage-input" th:value="${unit.maxDamage}" style="width:60px">
       </div>
     </div>
-
     <div class="stat-row hp-section">
       <span class="stat-label">HP:</span>
       <span class="stat-value" id="hp-display" th:text="${unit.hp}"></span>
       <input type="number" class="editable-input hidden" id="hp-input" th:value="${unit.hp}">
     </div>
-
     <div class="stat-row hp-section" th:if="${unit.hpLeft != null}">
       <span class="stat-label">HP pozostałe:</span>
       <span class="stat-value" id="hpLeft-display" th:text="${unit.hpLeft}"></span>
     </div>
-
     <div class="stat-row">
       <span class="stat-label">Szybkość:</span>
       <span class="stat-value" id="speed-display" th:text="${unit.speed}"></span>
       <input type="number" class="editable-input hidden" id="speed-input" th:value="${unit.speed}">
     </div>
   </div>
-
   <div class="description-section" th:if="${unit.description != null and !#strings.isEmpty(unit.description)}">
     <div class="description-label">Opis:</div>
     <div class="description-text" id="description-display" th:text="${unit.description}"></div>
     <textarea class="editable-textarea hidden" id="description-input" th:text="${unit.description}"></textarea>
   </div>
-
   <div class="button-container">
     <a th:href="@{/oskarinio143/heroes/database/modify}">
-      <button class="btn back-btn">
-        Wróć do wyboru
-      </button>
+      <button class="btn back-btn">Wróć do wyboru</button>
     </a>
     <button class="btn btn-edit" id="editBtn" onclick="toggleEdit()">Edytuj</button>
-    <form class="hidden" id="saveForm" th:action="@{/oskarinio143/heroes/database/modify/unit}" method="post" style="flex: 1;">
+    <form class="hidden" id="saveForm" th:action="@{/oskarinio143/heroes/database/modify/unit}" method="post" style="flex:1">
       <input type="hidden" name="name" th:value="${unit.name}">
-      <button type="submit" class="btn btn-save" style="width: 100%;" onclick="prepareFormData()">Zapisz</button>
+      <button type="submit" class="btn btn-save" style="width:100%" onclick="prepareFormData()">Zapisz</button>
     </form>
   </div>
 </div>
-
-<div id="incorrectModal" style="
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    align-items: center;
-    justify-content: center;
-">
+<div id="incorrectModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center">
   <div class="modal-box">
-    <p th:utext="${incorrectMessage}" style="
-        font-size: 1.5em;
-        font-weight: bold;
-        margin-bottom: 20px;
-    ">
-      Tutaj będzie komunikat
-    </p>
-    <button onclick="document.getElementById('incorrectModal').style.display='none'" class = "back-btn">
-      Zamknij
-    </button>
+    <p th:utext="${incorrectMessage}" style="font-size:1.5em;font-weight:bold;margin-bottom:20px">Tutaj będzie komunikat</p>
+    <button onclick="document.getElementById('incorrectModal').style.display='none'" class="back-btn">Zamknij</button>
   </div>
 </div>
-
-<div id="nullModal" style="
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    align-items: center;
-    justify-content: center;
-">
+<div id="nullModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center">
   <div class="modal-box">
-    <p th:utext="${nullMessage}" style="
-        font-size: 1.5em;
-        font-weight: bold;
-        margin-bottom: 20px;
-    ">
-      Tutaj będzie komunikat
-    </p>
-    <button onclick="document.getElementById('nullModal').style.display='none'" class = "back-btn">
-      Zamknij
-    </button>
+    <p th:utext="${nullMessage}" style="font-size:1.5em;font-weight:bold;margin-bottom:20px">Tutaj będzie komunikat</p>
+    <button onclick="document.getElementById('nullModal').style.display='none'" class="back-btn">Zamknij</button>
   </div>
 </div>
-
 <script th:if="${nullMessage}">
-  document.getElementById('nullModal').style.display = 'flex';
+  document.getElementById('nullModal').style.display='flex';
 </script>
-
 <script th:if="${incorrectMessage}">
-  document.getElementById('incorrectModal').style.display = 'flex';
+  document.getElementById('incorrectModal').style.display='flex';
 </script>
-
 <script>
-  let isEditing = false;
-
-  function toggleEdit() {
-    isEditing = !isEditing;
-    const editBtn = document.getElementById('editBtn');
-    const saveForm = document.getElementById('saveForm');
-
-    if (isEditing) {
-      // Przełącz na tryb edycji
+  let isEditing=false;
+  function toggleEdit(){
+    isEditing=!isEditing;
+    const editBtn=document.getElementById('editBtn');
+    const saveForm=document.getElementById('saveForm');
+    if(isEditing){
       editBtn.classList.add('hidden');
       saveForm.classList.remove('hidden');
-
-      // Pokaż pola input, ukryj wyświetlane wartości
-      const displays = document.querySelectorAll('[id$="-display"]');
-      const inputs = document.querySelectorAll('[id$="-input"], [id$="-inputs"]');
-
-      displays.forEach(display => display.classList.add('hidden'));
-      inputs.forEach(input => input.classList.remove('hidden'));
-    } else {
-      // Powrót do trybu wyświetlania
+      const displays=document.querySelectorAll('[id$="-display"]');
+      const inputs=document.querySelectorAll('[id$="-input"],[id$="-inputs"]');
+      displays.forEach(display=>display.classList.add('hidden'));
+      inputs.forEach(input=>input.classList.remove('hidden'));
+    }else{
       editBtn.classList.remove('hidden');
       saveForm.classList.add('hidden');
-
-      const displays = document.querySelectorAll('[id$="-display"]');
-      const inputs = document.querySelectorAll('[id$="-input"], [id$="-inputs"]');
-
-      displays.forEach(display => display.classList.remove('hidden'));
-      inputs.forEach(input => input.classList.add('hidden'));
+      const displays=document.querySelectorAll('[id$="-display"]');
+      const inputs=document.querySelectorAll('[id$="-input"],[id$="-inputs"]');
+      displays.forEach(display=>display.classList.remove('hidden'));
+      inputs.forEach(input=>input.classList.add('hidden'));
     }
   }
-
-  function prepareFormData() {
-    // Dodaj ukryte pola z danymi do formularza przed wysłaniem
-    const form = document.getElementById('saveForm');
-
-    // Najpierw dodaj name jako pierwsze pole
-    const nameField = form.querySelector('input[name="name"]');
-    if (nameField) {
+  function prepareFormData(){
+    const form=document.getElementById('saveForm');
+    const nameField=form.querySelector('input[name="name"]');
+    if(nameField){
       nameField.remove();
-      form.insertBefore(nameField, form.firstChild);
+      form.insertBefore(nameField,form.firstChild);
     }
-
-    const fields = ['attack', 'defense', 'shots', 'minDamage', 'maxDamage', 'hp', 'speed', 'description'];
-
-    fields.forEach(field => {
-      const input = document.getElementById(field + '-input');
-      if (input) {
-        // Usuń istniejące pole jeśli istnieje
-        const existingField = form.querySelector(`input[name="${field}"]`);
-        if (existingField) {
+    const fields=['attack','defense','shots','minDamage','maxDamage','hp','speed','description'];
+    fields.forEach(field=>{
+      const input=document.getElementById(field+'-input');
+      if(input){
+        const existingField=form.querySelector(`input[name="${field}"]`);
+        if(existingField){
           existingField.remove();
         }
-
-        // Dodaj nowe ukryte pole
-        const hiddenInput = document.createElement('input');
-        hiddenInput.type = 'hidden';
-        hiddenInput.name = field;
-        hiddenInput.value = input.value;
+        const hiddenInput=document.createElement('input');
+        hiddenInput.type='hidden';
+        hiddenInput.name=field;
+        hiddenInput.value=input.value;
         form.appendChild(hiddenInput);
       }
     });

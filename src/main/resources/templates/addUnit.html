@@ -11,65 +11,55 @@
             --medium-gray: #e0e0e0;
             --dark-gray: #333;
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
         body {
-            background-color: #cccccc;
+            background: #ccc;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
-
         .form-container {
-            background-color: white;
+            background: white;
             padding: 40px;
             border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,.15);
             max-width: 700px;
             width: 100%;
         }
-
         h1 {
             text-align: center;
             color: var(--dark-gray);
             margin-bottom: 30px;
         }
-
         form {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
-
         .form-group {
             display: flex;
             flex-direction: column;
         }
-
         label {
             font-weight: 600;
             margin-bottom: 6px;
         }
-
         input, textarea {
             padding: 10px;
             border: 1px solid var(--medium-gray);
             border-radius: 8px;
         }
-
         textarea {
             resize: vertical;
             min-height: 80px;
         }
-
         .form-actions {
             grid-column: span 2;
             display: flex;
@@ -77,30 +67,26 @@
             align-items: center;
             margin-top: 20px;
         }
-
         .submit-button {
-            background-color: var(--primary-blue);
+            background: var(--primary-blue);
             color: white;
             padding: 12px 30px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            transition: background 0.3s;
+            transition: background .3s;
         }
-
         .submit-button:hover {
-            background-color: var(--dark-blue);
+            background: var(--dark-blue);
         }
-
         .back-link {
             text-decoration: none;
             color: var(--dark-gray);
             font-weight: 500;
         }
-
         .back-btn {
-            background-color: #6c757d;
+            background: #6c757d;
             color: white;
             padding: 15px 30px;
             border: none;
@@ -108,14 +94,28 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.4s ease-in-out;
+            transition: background .4s ease-in-out;
             min-width: 180px;
             background-size: 200% auto;
             background-image: linear-gradient(to right, #6c757d 0%, #495057 51%, #6c757d 100%);
         }
-
         .back-btn:hover {
-            background-position: right center; /* przesuwa gradient */
+            background-position: right center;
+        }
+        .modal-box {
+            background: white;
+            padding: 20px;
+            width: 600px;
+            max-width: 90%;
+            max-height: 80%;
+            box-sizing: border-box;
+            text-align: center;
+            border: 5px solid;
+            border-image: linear-gradient(to right, #000, #444) 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
         }
     </style>
 </head>
@@ -141,7 +141,7 @@
         </div>
         <div class="form-group">
             <label for="minDamage">Min Damage</label>
-            <input type="number" id="minDamage" name="minDamage"required>
+            <input type="number" id="minDamage" name="minDamage" required>
         </div>
         <div class="form-group">
             <label for="maxDamage">Max Damage</label>
@@ -155,124 +155,48 @@
             <label for="hp">Health Points</label>
             <input type="number" id="hp" name="hp">
         </div>
-        <div class="form-group" style="grid-column: span 2;">
+        <div class="form-group" style="grid-column:span 2">
             <label for="description">Description</label>
             <textarea id="description" name="description"></textarea>
         </div>
-        <div class="form-group" style="grid-column: span 2;">
+        <div class="form-group" style="grid-column:span 2">
             <label for="image">Image</label>
             <input type="file" id="image" name="image" accept="image/*">
         </div>
         <div class="form-actions">
             <a th:href="@{/oskarinio143/heroes/database}" class="back-link">
-                <button type="button" class="back-btn">
-                    Wróć do menu bazy danych
-                </button>
+                <button type="button" class="back-btn">Wróć do menu bazy danych</button>
             </a>
             <button type="submit" class="submit-button">Add Unit</button>
         </div>
     </form>
 </div>
-<!-- Proste div‑owe okienko: -->
-<style>
-
-    .modal-box {
-        background: white;
-        padding: 20px;
-        width: 600px;
-        max-width: 90%;
-        max-height: 80%;
-        box-sizing: border-box;
-        text-align: center;
-
-        border: 5px solid;
-        border-image: linear-gradient(to right, #000000, #444444) 1;
-
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px; /* 20px między elementami: tekstem i przyciskiem */
-    }
-</style>
-
-<div id="duplicateModal" style="
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    align-items: center;
-    justify-content: center;
-">
+<div id="duplicateModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center">
     <div class="modal-box">
-        <p th:text="${duplicateMessage}" style="
-        font-size: 1.5em;
-        font-weight: bold;
-        margin-bottom: 20px;
-    ">
-            Tutaj będzie komunikat
-        </p>
-        <button onclick="document.getElementById('duplicateModal').style.display='none'" class = "back-btn">
-            Zamknij
-        </button>
+        <p th:text="${duplicateMessage}" style="font-size:1.5em;font-weight:bold;margin-bottom:20px">Tutaj będzie komunikat</p>
+        <button onclick="document.getElementById('duplicateModal').style.display='none'" class="back-btn">Zamknij</button>
     </div>
 </div>
-
-
-<div id="incorrectModal" style="
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    align-items: center;
-    justify-content: center;
-">
+<div id="incorrectModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center">
     <div class="modal-box">
-        <p th:utext="${incorrectMessage}" style="
-        font-size: 1.5em;
-        font-weight: bold;
-        margin-bottom: 20px;
-    ">
-            Tutaj będzie komunikat
-        </p>
-        <button onclick="document.getElementById('incorrectModal').style.display='none'" class = "back-btn">
-            Zamknij
-        </button>
+        <p th:utext="${incorrectMessage}" style="font-size:1.5em;font-weight:bold;margin-bottom:20px">Tutaj będzie komunikat</p>
+        <button onclick="document.getElementById('incorrectModal').style.display='none'" class="back-btn">Zamknij</button>
     </div>
 </div>
-
-<div id="nullModal" style="
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    align-items: center;
-    justify-content: center;
-">
+<div id="nullModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center">
     <div class="modal-box">
-        <p th:utext="${nullMessage}" style="
-        font-size: 1.5em;
-        font-weight: bold;
-        margin-bottom: 20px;
-    ">
-            Tutaj będzie komunikat
-        </p>
-        <button onclick="document.getElementById('nullModal').style.display='none'" class = "back-btn">
-            Zamknij
-        </button>
+        <p th:utext="${nullMessage}" style="font-size:1.5em;font-weight:bold;margin-bottom:20px">Tutaj będzie komunikat</p>
+        <button onclick="document.getElementById('nullModal').style.display='none'" class="back-btn">Zamknij</button>
     </div>
 </div>
-
 <script th:if="${duplicateMessage}">
-    document.getElementById('duplicateModal').style.display = 'flex';
+    document.getElementById('duplicateModal').style.display='flex';
 </script>
-
 <script th:if="${incorrectMessage}">
-    document.getElementById('incorrectModal').style.display = 'flex';
+    document.getElementById('incorrectModal').style.display='flex';
 </script>
-
 <script th:if="${nullMessage}">
-    document.getElementById('nullModal').style.display = 'flex';
+    document.getElementById('nullModal').style.display='flex';
 </script>
-
 </body>
 </html>

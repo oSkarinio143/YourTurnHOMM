@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Heroes III Simulator</title>
+    <title>Heroes III</title>
     <style>
         :root {
             --primary-blue: #1e88e5;
@@ -22,7 +22,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #cccccc 0%, #1565c0 100%);
+            background: linear-gradient(135deg, #ccc 0%, #1565c0 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -34,9 +34,9 @@
             position: relative;
             width: 100%;
             max-width: 600px;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, .95);
             border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .2);
             padding: 40px;
             text-align: center;
             backdrop-filter: blur(10px);
@@ -55,7 +55,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, .1);
         }
 
         .header::after {
@@ -75,42 +75,30 @@
             margin-bottom: 30px;
         }
 
-        .menu-button {
-            height: 140px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
-            color: white;
+        .menu-button, .logout-button {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             border-radius: 15px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(30, 136, 229, 0.3);
-            padding: 20px;
+            transition: all .3s ease;
             text-decoration: none;
             position: relative;
             overflow: hidden;
         }
 
-        .menu-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .menu-button:hover::before {
-            left: 100%;
+        .menu-button {
+            height: 140px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: #fff;
+            flex-direction: column;
+            box-shadow: 0 8px 20px rgba(30, 136, 229, .3);
+            padding: 20px;
         }
 
         .menu-button:hover {
             transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(30, 136, 229, 0.4);
+            box-shadow: 0 12px 30px rgba(30, 136, 229, .4);
         }
 
         .menu-button i {
@@ -123,47 +111,28 @@
             font-weight: 600;
         }
 
-        .logout-button {
+        .logout-form {
             grid-column: 1 / -1;
+        }
+
+        .logout-button {
             height: 60px;
-            background: white;
+            width: 100%;
+            max-width: 200px;
+            margin: 0 auto;
+            background: #fff;
             color: var(--primary-blue);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, .1);
             padding: 15px;
-            text-decoration: none;
             font-size: 1.1rem;
             font-weight: 600;
-            position: relative;
-            overflow: hidden;
             border: 2px solid var(--primary-blue);
-            margin: 0 auto;
-            max-width: 200px;
-        }
-
-        .logout-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .logout-button:hover::before {
-            left: 100%;
+            border-radius: 12px;
         }
 
         .logout-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(220, 53, 69, 0.4);
+            box-shadow: 0 8px 20px rgba(220, 53, 69, .4);
         }
 
         .logout-button i {
@@ -171,7 +140,24 @@
             font-size: 1.2rem;
         }
 
-        /* Modal styles remain the same */
+        .menu-button::before,
+        .logout-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .2), transparent);
+            transition: left .5s;
+        }
+
+        .menu-button:hover::before,
+        .logout-button:hover::before {
+            left: 100%;
+        }
+
+        /* Modal styles */
         .modal-overlay {
             position: absolute;
             top: 100%;
@@ -181,7 +167,7 @@
             opacity: 0;
             visibility: hidden;
             transform: translateY(20px);
-            transition: all 0.3s ease;
+            transition: all .3s ease;
             margin-top: 15px;
             display: flex;
             justify-content: center;
@@ -196,21 +182,17 @@
         .modal-container {
             background: linear-gradient(135deg, #f8fff8 0%, #e8f5e8 100%);
             border-radius: 12px;
-            box-shadow:
-            0 10px 25px rgba(0, 0, 0, 0.2),
-            0 5px 15px rgba(40, 167, 69, 0.25);
-            border: 2px solid rgba(40, 167, 69, 0.3);
+            box-shadow: 0 10px 25px rgba(0,0,0,.2), 0 5px 15px rgba(40,167,69,.25);
+            border: 2px solid rgba(40, 167, 69, .3);
             padding: 20px;
             width: 90%;
             max-width: 400px;
             position: relative;
-            transform: scale(0.95);
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform: scale(.95);
+            transition: all .3s cubic-bezier(.34, 1.56, .64, 1);
         }
 
-        .modal-overlay.show .modal-container {
-            transform: scale(1);
-        }
+        .modal-overlay.show .modal-container { transform: scale(1); }
 
         .modal-header {
             display: flex;
@@ -228,45 +210,20 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #fff;
             font-size: 24px;
             animation: successPulse 2s ease-in-out infinite;
-            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, .3);
         }
 
         @keyframes successPulse {
-            0% { transform: scale(1); box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3); }
-            50% { transform: scale(1.1); box-shadow: 0 6px 20px rgba(40, 167, 69, 0.5); }
-            100% { transform: scale(1); box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3); }
+            50% { transform: scale(1.1); box-shadow: 0 6px 20px rgba(40, 167, 69, .5); }
         }
 
-        .modal-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #155724;
-            margin: 0;
-        }
-
-        .modal-content {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-message {
-            font-size: 16px;
-            color: #155724;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0 10px;
-            font-weight: 500;
-        }
-
-        .modal-actions {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-        }
+        .modal-title { font-size: 20px; font-weight: bold; color: #155724; margin: 0; }
+        .modal-content { text-align: center; margin-bottom: 20px; }
+        .modal-message { font-size: 16px; color: #155724; line-height: 1.6; margin: 0; padding: 0 10px; font-weight: 500; }
+        .modal-actions { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
 
         .modal-button {
             padding: 12px 24px;
@@ -275,21 +232,21 @@
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all .3s ease;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: .5px;
         }
 
         .modal-button-primary {
             background: linear-gradient(45deg, #28a745, #20c997);
-            color: white;
-            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, .3);
         }
 
         .modal-button-primary:hover {
             background: linear-gradient(45deg, #218838, #1e7e34);
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
+            box-shadow: 0 6px 16px rgba(40, 167, 69, .4);
         }
 
         .modal-close {
@@ -307,11 +264,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            transition: all .3s ease;
         }
 
         .modal-close:hover {
-            background: rgba(40, 167, 69, 0.1);
+            background: rgba(40, 167, 69, .1);
             color: #28a745;
             transform: rotate(90deg);
         }
@@ -328,43 +285,24 @@
             animation: progressShrink 5s linear forwards;
         }
 
-        @keyframes progressShrink {
-            from { transform: scaleX(1); }
-            to { transform: scaleX(0); }
-        }
+        @keyframes progressShrink { to { transform: scaleX(0); } }
 
         .modal-container::before {
             content: '';
             position: absolute;
-            top: -3px;
-            left: -3px;
-            right: -3px;
-            bottom: -3px;
+            top: -3px; left: -3px; right: -3px; bottom: -3px;
             background: linear-gradient(45deg, #28a745, #20c997, #28a745);
             border-radius: 15px;
             z-index: -1;
-            opacity: 0.4;
+            opacity: .4;
             animation: borderGlow 3s ease-in-out infinite;
         }
 
-        @keyframes borderGlow {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 0.7; }
-        }
+        @keyframes borderGlow { 50% { opacity: .7; } }
 
-        .success-particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            overflow: hidden;
-            border-radius: 12px;
-        }
+        .success-particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: 12px; }
 
-        .success-particles::before,
-        .success-particles::after {
+        .success-particles::before, .success-particles::after {
             content: '';
             position: absolute;
             width: 6px;
@@ -374,43 +312,19 @@
             animation: float 4s ease-in-out infinite;
         }
 
-        .success-particles::before {
-            top: 20%;
-            left: 20%;
-            animation-delay: -2s;
-        }
+        .success-particles::before { top: 20%; left: 20%; animation-delay: -2s; }
+        .success-particles::after { top: 60%; right: 20%; animation-delay: -1s; }
 
-        .success-particles::after {
-            top: 60%;
-            right: 20%;
-            animation-delay: -1s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
-            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
-        }
+        @keyframes float { 50% { transform: translateY(-20px) rotate(180deg); opacity: 1; } }
 
         /* Responsywność */
         @media (max-width: 600px) {
-            .grid-container {
-                grid-template-columns: 1fr;
-            }
-
-            .container {
-                padding: 30px 20px;
-            }
-
-            .header h1 {
-                font-size: 2.5rem;
-            }
-
-            .menu-button {
-                height: 120px;
-            }
+            .grid-container { grid-template-columns: 1fr; }
+            .container { padding: 30px 20px; }
+            .header h1 { font-size: 2.5rem; }
+            .menu-button { height: 120px; }
         }
     </style>
-    <!-- Ikony z Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -430,7 +344,7 @@
             <h2>Pojedynek</h2>
         </a>
 
-        <form th:action="@{heroes/logout}" method="post" style="grid-column: 1 / -1;">
+        <form th:action="@{heroes/logout}" method="post" class="logout-form">
             <button type="submit" class="logout-button">
                 <i class="fas fa-sign-out-alt"></i>
                 Wyloguj
@@ -447,8 +361,7 @@
                 <h2 class="modal-title">Witamy!</h2>
             </div>
             <div class="modal-content">
-                <p class="modal-message"></p>
-                <div id="modalMessage" th:if="${welcomeUserMessage}" th:utext="${welcomeUserMessage}"></div>
+                <p class="modal-message" th:if="${welcomeUserMessage}" th:utext="${welcomeUserMessage}"></p>
             </div>
             <div class="modal-actions">
                 <button class="modal-button modal-button-primary" onclick="closeModal()">Świetnie!</button>

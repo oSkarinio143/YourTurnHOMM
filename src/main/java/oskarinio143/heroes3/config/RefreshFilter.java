@@ -29,6 +29,9 @@ public class RefreshFilter extends OncePerRequestFilter {
     private UserRepository userRepository;
     @Autowired
     private CookieHelper cookieHelper;
+    /* Wiem że to nie jest optymalne, ale chciałem używać refreshTokenów w aplikacji, a z frontem w thymeleaf z tego co rozumiem jest
+    to trudne. Nie znalazłem lepszego rozwiązania niż taki filter. Być może powinienem całkowicie usunąć refreshTokeny.
+     */
 
     private static final List<String> PUBLIC_PATHS = new ArrayList<>(List.of(
             Route.MAIN + Route.LOGIN,

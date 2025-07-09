@@ -28,14 +28,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(TransactionSystemAddException.class)
-    public String handleTransactionSystemAddException(TransactionSystemException exception, RedirectAttributes attributes){
+    public String handleTransactionSystemAddException(TransactionSystemAddException exception, RedirectAttributes attributes){
+        System.out.println("Blad przy dodawaniu");
         ConstraintViolation<?> violation = exceptionHandlerService.getViolation(exception);
         exceptionHandlerService.createMessageIncorrectValue(violation, attributes);
         return "redirect:/oskarinio143/heroes/database/add";
     }
 
     @ExceptionHandler(TransactionSystemModifyException.class)
-    public String handleTransactionSystemModifyException(TransactionSystemException exception, RedirectAttributes attributes){
+    public String handleTransactionSystemModifyException(TransactionSystemModifyException exception, RedirectAttributes attributes){
         ConstraintViolation<?> violation = exceptionHandlerService.getViolation(exception);
         exceptionHandlerService.createMessageIncorrectValue(violation, attributes);
         attributes.addAttribute("name", exception.getMessage());
