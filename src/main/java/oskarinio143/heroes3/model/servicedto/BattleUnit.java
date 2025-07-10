@@ -36,9 +36,7 @@ public class BattleUnit {
         this.hp = battleUnit.hp;
         this.hpLeft = battleUnit.hpLeft;
         this.shots = battleUnit.shots;
-        this.isRange = shots > 0 ? true : false;
-        //this.skills = battleUnit.skills;
-        //Narazie nie dodaje skilli
+        this.isRange = shots > 0;
     }
 
     public static class BattleUnitBuilder {

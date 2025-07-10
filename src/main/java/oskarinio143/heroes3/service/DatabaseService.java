@@ -16,7 +16,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DatabaseService {
@@ -25,11 +24,6 @@ public class DatabaseService {
 
     public DatabaseService(UnitRepository unitRepository) {
         this.unitRepository = unitRepository;
-    }
-
-    public List<Unit> getAllUnits(){
-        List<Unit> units = unitRepository.findAll();
-        return units;
     }
 
     public void addUnit(Unit unit, MultipartFile image) throws IOException {
@@ -46,16 +40,8 @@ public class DatabaseService {
         }
     }
 
-    public String getImagePath(String name, MultipartFile image) throws IOException {
-        String fileName = name + ".png";
-        Path path = Paths.get("unit-images", fileName);
-        Files.createDirectories(path.getParent()); // jeśli folder nie istnieje
-        Files.write(path, image.getBytes());
-        return  "/" + path.toString();
-    }
-
     public void viewUnits(Model model){
-        List<Unit> units = getAllUnits();
+        List<Unit> units = unitRepository.findAll();
         model.addAttribute("units", units);
     }
 
@@ -70,14 +56,26 @@ public class DatabaseService {
         unitRepository.delete(unit);
     }
 
-    public void modifyUnit(Unit unit) throws IOException {
+    @Transactional
+    public void modifyUnit(Unit unit){
         Unit oldUnit = unitRepository.getReferenceById(unit.getName());
-        unit.setImagePath(oldUnit.getImagePath());
-        try{
-            unitRepository.save(unit);
-        }catch (TransactionSystemException ex){
-            throw new TransactionSystemModifyException(unit.getName(), ex.getCause());
-        }
+        oldUnit.setAttack(unit.getAttack());
+        oldUnit.setDefense(unit.getDefense());
+        oldUnit.setShots(unit.getShots());
+        oldUnit.setMinDamage(unit.getMinDamage());
+        oldUnit.setMaxDamage(unit.getMaxDamage());
+        oldUnit.setHp(unit.getHp());
+        oldUnit.setSpeed(unit.getSpeed());
+        oldUnit.setDescription(unit.getDescription());
+        unitRepository.save(oldUnit);
+    }
+
+    public String getImagePath(String name, MultipartFile image) throws IOException {
+        String fileName = name + ".png";
+        Path path = Paths.get("unit-images", fileName);
+        Files.createDirectories(path.getParent()); // jeśli folder nie istnieje
+        Files.write(path, image.getBytes());
+        return  "/" + path.toString();
     }
 
 }

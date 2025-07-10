@@ -17,13 +17,17 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @NonNull
     @Column(unique = true)
     private String username;
+
     @NonNull
     private String password;
+
     @NonNull
     private List<String> roles = new ArrayList<>();
+
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "refreshToken")
     private RefreshToken refreshToken;

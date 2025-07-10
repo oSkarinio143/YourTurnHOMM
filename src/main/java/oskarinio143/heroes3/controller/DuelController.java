@@ -1,21 +1,27 @@
 package oskarinio143.heroes3.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import oskarinio143.heroes3.model.constant.Route;
 import oskarinio143.heroes3.model.servicedto.DuelInfo;
 import oskarinio143.heroes3.service.DuelService;
+import oskarinio143.heroes3.service.ExceptionHandlerService;
 
 @Controller
 @RequestMapping(Route.MAIN + Route.DUEL)
 @CrossOrigin(origins = "*")
 public class DuelController {
 
+    private final ExceptionHandlerService exceptionHandlerService;
     private final DuelService duelService;
 
-    public DuelController(DuelService duelService) {
+    public DuelController(ExceptionHandlerService exceptionHandlerService, DuelService duelService) {
+        this.exceptionHandlerService = exceptionHandlerService;
         this.duelService = duelService;
     }
 
@@ -38,8 +44,17 @@ public class DuelController {
     }
 
     @PostMapping(Route.BATTLE)
-    public String startBattle(Model model, @Valid @ModelAttribute DuelInfo duelInfo){
+    public String startBattle(@Valid @ModelAttribute DuelInfo duelInfo,
+                              BindingResult bindingResult,
+                              RedirectAttributes redirectAttributes,
+                              HttpServletRequest request,
+                              Model model){
+        if(bindingResult.hasErrors()){
+            redirectAttributes.addFlashAttribute("smallMessage", exceptionHandlerService.createMessageValidError(bindingResult));
+            exceptionHandlerService.passDataDuel(redirectAttributes, request);
+            return Route.REDIRECT + Route.DUEL;
+        }
         duelService.loadBattle(model, duelInfo);
-        return "battle";
+        return Route.BATTLE;
     }
 }

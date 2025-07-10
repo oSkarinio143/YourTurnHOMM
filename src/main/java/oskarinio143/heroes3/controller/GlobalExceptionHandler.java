@@ -2,6 +2,8 @@ package oskarinio143.heroes3.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,6 +17,7 @@ import oskarinio143.heroes3.service.ExceptionHandlerService;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
     private final ExceptionHandlerService exceptionHandlerService;
 
     public GlobalExceptionHandler(ExceptionHandlerService exceptionHandlerService) {
@@ -27,40 +30,6 @@ public class GlobalExceptionHandler {
         return "redirect:/oskarinio143/heroes/database/add";
     }
 
-    @ExceptionHandler(TransactionSystemAddException.class)
-    public String handleTransactionSystemAddException(TransactionSystemAddException exception, RedirectAttributes attributes){
-        System.out.println("Blad przy dodawaniu");
-        ConstraintViolation<?> violation = exceptionHandlerService.getViolation(exception);
-        exceptionHandlerService.createMessageIncorrectValue(violation, attributes);
-        return "redirect:/oskarinio143/heroes/database/add";
-    }
-
-    @ExceptionHandler(TransactionSystemModifyException.class)
-    public String handleTransactionSystemModifyException(TransactionSystemModifyException exception, RedirectAttributes attributes){
-        ConstraintViolation<?> violation = exceptionHandlerService.getViolation(exception);
-        exceptionHandlerService.createMessageIncorrectValue(violation, attributes);
-        attributes.addAttribute("name", exception.getMessage());
-        return "redirect:/oskarinio143/heroes/database/modify/unit";
-    }
-
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public String handleArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception, RedirectAttributes attributes, HttpServletRequest request){
-        exceptionHandlerService.createMessageEmptyField(exception, attributes);
-        if(exceptionHandlerService.isEmptyValue(exception))
-            return exceptionHandlerService.getAppropriateUrl(attributes, request);
-        return "redirect:/oskarinio143/heroes";
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public String handleArgumentNotValidException(MethodArgumentNotValidException exception, RedirectAttributes attributes, HttpServletRequest request){
-        System.out.println("Lapie");
-        if(exceptionHandlerService.isBattleEndpoint(request))
-            exceptionHandlerService.createMessageTooSmallValue(attributes);
-        exceptionHandlerService.passData(attributes, request);
-        return "redirect:/oskarinio143/heroes/duel";
-    }
-
-    //Wyżej do sprawdzenia
     @ExceptionHandler (UsernameNotFoundException.class)
     public String handleUsernameNotFoundException(RedirectAttributes redirectAttributes, UsernameNotFoundException usernameNotFoundException) {
         redirectAttributes.addFlashAttribute("errorMessage", "Uzytkownik " + usernameNotFoundException.getMessage() + " nie istnieje w bazie danych");

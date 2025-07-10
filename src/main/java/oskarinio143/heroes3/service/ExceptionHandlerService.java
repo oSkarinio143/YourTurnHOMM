@@ -1,68 +1,24 @@
 package oskarinio143.heroes3.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionSystemException;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import oskarinio143.heroes3.model.entity.Unit;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Service
 public class ExceptionHandlerService {
-    public boolean isEmptyValue(MethodArgumentTypeMismatchException exception){
-        String value = exception.getValue().toString();
-        if(value.equals(""))
-            return true;
-        return false;
+
+    private final MessageSource messageSource;
+
+    public ExceptionHandlerService(MessageSource messageSource) {
+        this.messageSource = messageSource;
     }
 
-    public String checkEndpoint(HttpServletRequest request){
-        String path = request.getRequestURL().toString();
-        List<String> pathParts = Arrays.asList(path.split("/"));
-        return pathParts.getLast();
-    }
-
-    public String getAppropriateUrl(RedirectAttributes attributes, HttpServletRequest request){
-        if(checkEndpoint(request).equals("add")) {
-            return "redirect:/oskarinio143/heroes/database/add";
-        }
-        if(checkEndpoint(request).equals("unit")) {
-            attributes.addAttribute("name", request.getParameter("name"));
-            return "redirect:/oskarinio143/heroes/database/modify/unit";
-        }
-        return "redirect:/oskarinio143/heroes";
-    }
-
-    public ConstraintViolation<?> getViolation(TransactionSystemException exception){
-        Throwable cause = exception.getCause();
-        ConstraintViolationException newCause = (ConstraintViolationException) cause.getCause();
-        List<ConstraintViolation<?>> violations =  newCause.getConstraintViolations().stream().toList();
-        return violations.getFirst();
-    }
-
-    public boolean isMaxDmgCorrect(ConstraintViolation<?> violation){
-        if(violation.getInvalidValue() instanceof Unit unit){
-            if(unit.getMaxDamage() < unit.getMinDamage())
-                return false;
-        }
-        return true;
-    }
-
-    public boolean isBattleEndpoint(HttpServletRequest request){
-        String path = request.getRequestURL().toString();
-        List<String> pathParts = Arrays.asList(path.split("/"));
-        System.out.println(pathParts);
-        if (pathParts.getLast().equals("battle"))
-            return true;
-        return false;
-    }
-
-    public void passData(RedirectAttributes attributes, HttpServletRequest request){
+    public void passDataDuel(RedirectAttributes attributes, HttpServletRequest request){
         attributes.addAttribute("leftUnit", request.getParameter("leftUnit"));
         attributes.addAttribute("rightUnit", request.getParameter("rightUnit"));
         attributes.addAttribute("leftHeroAttack", request.getParameter("leftHeroAttack"));
@@ -70,41 +26,29 @@ public class ExceptionHandlerService {
         attributes.addAttribute("rightHeroAttack", request.getParameter("rightHeroAttack"));
         attributes.addAttribute("rightHeroDefense", request.getParameter("rightHeroDefense"));
 
-        System.out.println("Jestes w bledzie");
         if(request.getParameter("leftQuantity") != null)
             attributes.addFlashAttribute("leftQuantity", request.getParameter("leftQuantity"));
         if(request.getParameter("rightQuantity") != null)
             attributes.addFlashAttribute("rightQuantity", request.getParameter("rightQuantity"));
     }
 
-    public void createMessageEmptyField(MethodArgumentTypeMismatchException exception, RedirectAttributes attributes){
-        String field = exception.getParameter().getParameterName();
-        String message = "Pole " + field + " nie zostalo uzupelnione, spróbuj ponownie";
-        attributes.addFlashAttribute("nullMessage", message);
+    public String createMessageValidError(BindingResult bindingResult){
+        StringBuilder message = new StringBuilder();
+        messageAddFieldErrors(bindingResult,message);
+        messageAddObjectErrors(bindingResult,message);
+        return message.toString();
     }
 
-    public void createMessageIncorrectValue(ConstraintViolation<?> violation, RedirectAttributes attributes){
-        if(isMaxDmgCorrect(violation))
-            createMessageNegativeValue(violation, attributes);
-        else
-            createMessageTooSmallDmg(violation, attributes);
+    private void messageAddFieldErrors(BindingResult bindingResult, StringBuilder message){
+        for (FieldError error : bindingResult.getFieldErrors()) {
+            message.append(messageSource.getMessage(error, LocaleContextHolder.getLocale()) + "<br>");
+        }
     }
 
-    public void createMessageNegativeValue(ConstraintViolation<?> violation, RedirectAttributes attributes){
-        String message = "Podano wartość " + violation.getInvalidValue() + " w polu " +  violation.getPropertyPath()
-                + "<br>Pole " + violation.getMessage();
-        attributes.addFlashAttribute("incorrectMessage", message);
-    }
-
-    public void createMessageTooSmallDmg(ConstraintViolation<?> violation, RedirectAttributes attributes){
-        Unit unit = (Unit) violation.getInvalidValue();
-        String message = "Podano wartość " + unit.getMinDamage() + " w polu MinDamage"
-                + "<br>" + violation.getMessage();
-        attributes.addFlashAttribute("incorrectMessage", message);
-    }
-
-    public void createMessageTooSmallValue(RedirectAttributes attributes){
-        String message = "Podano ilość jednostek mniejszą niż 1";
-        attributes.addFlashAttribute("smallMessage", message);
+    private void messageAddObjectErrors(BindingResult bindingResult, StringBuilder message){
+        for (ObjectError error : bindingResult.getAllErrors()) {
+            if(error.getCode().equals("ValidDamageRange"))
+                message.append(error.getDefaultMessage());
+        }
     }
 }

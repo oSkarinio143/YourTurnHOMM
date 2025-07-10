@@ -2,6 +2,8 @@ package oskarinio143.heroes3.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -21,61 +23,41 @@ public class Unit {
 
     @NotNull
     @Min(1)
-    private int attack;
+    @Max(99)
+    private Integer attack;
 
     @NotNull
     @Min(1)
-    private int defense;
-
-    @Min(0)
-    private int shots;
+    @Max(99)
+    private Integer defense;
 
     @NotNull
     @Min(1)
-    private int minDamage;
+    private Integer shots;
 
     @NotNull
     @Min(1)
-    private int maxDamage;
+    @Max(99)
+    private Integer minDamage;
 
     @NotNull
     @Min(1)
-    private int hp;
-
-    private int hpLeft;
+    @Max(99)
+    private Integer maxDamage;
 
     @NotNull
     @Min(1)
-    private int speed;
+    @Max(9999)
+    private Integer hp;
+
+    private Integer hpLeft;
+
+    @NotNull
+    @Min(1)
+    @Max(30)
+    private Integer speed;
 
     private String description;
 
     private String imagePath;
-
-    public Unit(String name, int attack, int defense, int shots, int minDamage, int maxDamage, int hp, int speed, String imagePath){
-        this.name = name;
-        this.attack = attack;
-        this.defense = defense;
-        this.shots = shots;
-        this.minDamage = minDamage;
-        this.maxDamage = maxDamage;
-        this.hp = hp;
-        this.hpLeft = hp;
-        this.speed = speed;
-        this.imagePath = imagePath;
-    }
-
-    public Unit(String name, int attack, int defense, int shots, int minDamage, int maxDamage, int speed, int hp, String description, String imagePath){
-        this.name = name;
-        this.attack = attack;
-        this.defense = defense;
-        this.shots = shots;
-        this.minDamage = minDamage;
-        this.maxDamage = maxDamage;
-        this.speed = speed;
-        this.hp = hp;
-        this.hpLeft = hp;
-        this.description = description;
-        this.imagePath = imagePath;
-    }
 }

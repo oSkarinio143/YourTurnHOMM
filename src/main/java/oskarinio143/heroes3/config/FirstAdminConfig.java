@@ -10,7 +10,7 @@ import oskarinio143.heroes3.model.entity.User;
 import oskarinio143.heroes3.repository.UserRepository;
 
 @Component
-public class FirstAdminConfiguration implements ApplicationRunner {
+public class FirstAdminConfig implements ApplicationRunner {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -21,7 +21,7 @@ public class FirstAdminConfiguration implements ApplicationRunner {
     @Value("${admin.password:}")
     private String adminPassword;
 
-    public FirstAdminConfiguration(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public FirstAdminConfig(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
