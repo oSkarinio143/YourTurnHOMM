@@ -437,7 +437,7 @@
 
       <div class="stat-group">
         <label class="stat-label">Atak:</label>
-        <input type="number" class="stat-input" id="leftHeroAttack" min="0" placeholder="0" value="0">
+        <input type="number" class="stat-input" id="leftHeroAttack" min="0" placeholder="0" th:value="${leftHeroAttack}">
       </div>
 
       <div class="stat-group">
@@ -568,7 +568,7 @@
     </div>
   </div>
 
-  <div id="smallValueModal" style="
+  <div id="incorrectValueModal" style="
     display: none;
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -577,21 +577,21 @@
     justify-content: center;
 ">
     <div class="modal-box">
-      <p th:utext="${smallMessage}" style="
+      <p th:utext="${incorrectMessage}" style="
         font-size: 1.5em;
         font-weight: bold;
         margin-bottom: 20px;
     ">
         Tutaj będzie komunikat
       </p>
-      <button onclick="document.getElementById('smallValueModal').style.display='none'" class = "back-btn">
+      <button onclick="document.getElementById('incorrectValueModal').style.display='none'" class = "back-btn">
         Zamknij
       </button>
     </div>
   </div>
 
-  <script th:if="${smallMessage}">
-    document.getElementById('smallValueModal').style.display = 'flex';
+  <script th:if="${incorrectMessage}">
+    document.getElementById('incorrectValueModal').style.display = 'flex';
   </script>
 
   <script>

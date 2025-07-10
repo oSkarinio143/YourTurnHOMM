@@ -28,19 +28,19 @@ public class DuelController {
     @GetMapping
     public String prepareDuel(Model model, @ModelAttribute DuelInfo duelInfo){
         duelService.prepareUnits(model, duelInfo);
-        return "duel";
+        return Route.DUEL;
     }
 
     @PostMapping(Route.SELECT)
     public String selectUnit(Model model, @ModelAttribute DuelInfo duelInfo, @RequestParam String side){
         duelService.selectUnit(model, duelInfo, side);
-        return "select";
+        return Route.SELECT;
     }
 
     @PostMapping()
     public String loadUnit(Model model, @ModelAttribute DuelInfo duelInfo, @RequestParam String side, @RequestParam String name){
         duelService.loadUnit(model, duelInfo, side, name);
-        return "duel";
+        return Route.DUEL;
     }
 
     @PostMapping(Route.BATTLE)
@@ -50,7 +50,7 @@ public class DuelController {
                               HttpServletRequest request,
                               Model model){
         if(bindingResult.hasErrors()){
-            redirectAttributes.addFlashAttribute("smallMessage", exceptionHandlerService.createMessageValidError(bindingResult));
+            redirectAttributes.addFlashAttribute("incorrectMessage", exceptionHandlerService.createMessageValidError(bindingResult));
             exceptionHandlerService.passDataDuel(redirectAttributes, request);
             return Route.REDIRECT + Route.DUEL;
         }

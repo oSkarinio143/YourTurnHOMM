@@ -40,17 +40,18 @@ public class RefreshFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+
         String path = request.getRequestURI();
         if (PUBLIC_PATHS.contains(path))
             filterChain.doFilter(request, response);
 
         else {
-
             Cookie cookieAccess = WebUtils.getCookie(request, "accessToken");
             if(cookieAccess == null){
                 filterChain.doFilter(request,response);
                 return;
             }
+
             String tokenAccess = cookieAccess.getValue();
             if (tokenService.isTokenExpiredSafe(tokenAccess)) {
 

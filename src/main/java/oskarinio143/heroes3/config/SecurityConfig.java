@@ -10,6 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -38,6 +39,7 @@ public class SecurityConfig {
                                                     "/oskarinio143/heroes/database/delete").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(refreshFilter, BearerTokenAuthenticationFilter.class)
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .bearerTokenResolver(cookieBearerTokenResolver)
                         .jwt(jwt -> jwt

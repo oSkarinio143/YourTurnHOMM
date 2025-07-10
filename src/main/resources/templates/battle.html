@@ -413,11 +413,11 @@
       <div class="hero-stats">
         <div class="hero-stat-row">
           <span class="stat-label">Atak:</span>
-          <span class="hero-stat-value" th:text="${leftHeroAttack}">12</span>
+          <span class="hero-stat-value" th:text="${leftHeroAttack}"></span>
         </div>
         <div class="hero-stat-row">
           <span class="stat-label">Obrona:</span>
-          <span class="hero-stat-value" th:text="${leftHeroDefense}">8</span>
+          <span class="hero-stat-value" th:text="${leftHeroDefense}"></span>
         </div>
       </div>
     </div>
@@ -518,11 +518,11 @@
       <div class="hero-stats">
         <div class="hero-stat-row">
           <span class="stat-label">Atak:</span>
-          <span class="hero-stat-value" th:text="${rightHeroAttack}">6</span>
+          <span class="hero-stat-value" th:text="${rightHeroAttack}"></span>
         </div>
         <div class="hero-stat-row">
           <span class="stat-label">Obrona:</span>
-          <span class="hero-stat-value" th:text="${rightHeroDefense}">4</span>
+          <span class="hero-stat-value" th:text="${rightHeroDefense}"></span>
         </div>
       </div>
     </div>
@@ -532,6 +532,12 @@
     <form th:action="@{/oskarinio143/heroes/duel}" method="post">
       <input type="hidden" name="leftUnit"     th:value="${leftUnit.name}"     />
       <input type="hidden" name="rightUnit"    th:value="${rightUnit.name}"    />
+      <input type="hidden" name="leftQuantity"    th:value="${leftQuantity}"    />
+      <input type="hidden" name="rightQuantity"    th:value="${rightQuantity}"    />
+      <input type="hidden" name="leftHeroAttack"    th:value="${leftHeroAttack}"    />
+      <input type="hidden" name="leftHeroDefense"    th:value="${leftHeroDefense}"    />
+      <input type="hidden" name="rightHeroAttack"    th:value="${rightHeroAttack}"    />
+      <input type="hidden" name="rightHeroDefense"    th:value="${rightHeroDefense}"    />
       <input type="hidden" name="name"    th:value="${rightUnit.name}"    />
       <input type="hidden" name="side"    th:value="right"    />
       <button type="submit" class="nav-btn back-btn">

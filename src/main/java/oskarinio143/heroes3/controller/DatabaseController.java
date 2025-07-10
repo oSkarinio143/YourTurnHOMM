@@ -84,13 +84,14 @@ public class DatabaseController {
     @PostMapping(Route.MODIFY + Route.UNIT)
     public String saveModifiedUnit(@Valid @ModelAttribute Unit unit,
                                    BindingResult bindingResult,
-                                   RedirectAttributes redirectAttributes) throws IOException {
+                                   RedirectAttributes redirectAttributes){
 
         if(bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("incorrectMessage", exceptionHandlerService.createMessageValidError(bindingResult));
             redirectAttributes.addAttribute("name", unit.getName());
             return Route.REDIRECT + Route.DATABASE + Route.MODIFY + Route.UNIT;
         }
+
         databaseService.modifyUnit(unit);
         return Route.REDIRECT + Route.DATABASE + Route.MODIFY;
 

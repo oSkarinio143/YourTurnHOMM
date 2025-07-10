@@ -21,9 +21,12 @@ public class DuelService {
     public void prepareUnits(Model model, DuelInfo duelInfo){
         model.addAttribute("leftUnit", duelInfo.getLeftUnit());
         model.addAttribute("rightUnit", duelInfo.getRightUnit());
-
-//        model.addAttribute("leftQuantity", duelInfo.getLeftQuantity());
-//        model.addAttribute("rightQuantity", duelInfo.getRightQuantity());
+        model.addAttribute("leftQuantity", duelInfo.getLeftQuantity());
+        model.addAttribute("rightQuantity", duelInfo.getRightQuantity());
+        model.addAttribute("leftHeroAttack", duelInfo.getLeftHeroAttack());
+        model.addAttribute("leftHeroDefense", duelInfo.getLeftHeroDefense());
+        model.addAttribute("rightHeroAttack", duelInfo.getRightHeroAttack());
+        model.addAttribute("rightHeroDefense", duelInfo.getRightHeroDefense());
     }
 
     public void selectUnit(Model model, DuelInfo duelInfo, String side){
@@ -52,8 +55,12 @@ public class DuelService {
             model.addAttribute("rightUnit", unit);
             model.addAttribute("leftUnit", duelInfo.getLeftUnit());
         }
-
-        //model.addAttribute("leftQuantity", duelInfo.getLeftQuantity());
+        model.addAttribute("leftQuantity", duelInfo.getLeftQuantity());
+        model.addAttribute("rightQuantity", duelInfo.getRightQuantity());
+        model.addAttribute("leftHeroAttack", duelInfo.getLeftHeroAttack());
+        model.addAttribute("leftHeroDefense", duelInfo.getLeftHeroDefense());
+        model.addAttribute("rightHeroAttack", duelInfo.getRightHeroAttack());
+        model.addAttribute("rightHeroDefense", duelInfo.getRightHeroDefense());
     }
 
     public void loadBattle(Model model, DuelInfo duelInfo){
