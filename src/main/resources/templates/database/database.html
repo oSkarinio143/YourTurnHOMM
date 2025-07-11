@@ -20,7 +20,7 @@
     }
 
     body {
-      background-color: #cccccc; /* Szare tło */
+      background: linear-gradient(135deg, #ccc 0%, #1565c0 100%);
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -29,14 +29,15 @@
     }
 
     .database-container {
+      position: relative;
       width: 100%;
       max-width: 800px;
-      background-color: white;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      background: rgba(255, 255, 255, .95);
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, .2);
       padding: 40px;
       text-align: center;
-      position:relative;
+      backdrop-filter: blur(10px);
     }
 
     .header {
@@ -46,17 +47,22 @@
     }
 
     .header h1 {
-      font-size: 2.5rem;
+      font-size: 3rem;
       margin-bottom: 10px;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, .1);
     }
 
     .header::after {
       content: '';
       display: block;
-      width: 80px;
+      width: 120px;
       height: 4px;
-      background: var(--primary-blue);
-      margin: 10px auto;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      margin: 15px auto;
       border-radius: 2px;
     }
 
@@ -65,28 +71,45 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 25px;
       margin-bottom: 30px;
-      padding-bottom: 40px; /* <-- dodaj to */
+      padding-bottom: 80px;
     }
 
     .db-option {
       height: 160px;
-      background-color: var(--primary-blue);
+      background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
       color: white;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      border-radius: 12px;
+      border-radius: 15px;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 8px 20px rgba(30, 136, 229, .3);
       padding: 20px;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
     }
 
     .db-option:hover {
-      background-color: var(--dark-blue);
-      transform: translateY(-7px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(30, 136, 229, .4);
+    }
+
+    .db-option::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .2), transparent);
+      transition: left .5s;
+    }
+
+    .db-option:hover::before {
+      left: 100%;
     }
 
     .db-option i {
@@ -99,19 +122,51 @@
       font-weight: 600;
     }
 
-    .back-button {
-      display: inline-block;
-      padding: 12px 30px;
-      background-color: var(--dark-gray);
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 500;
-      transition: background 0.3s;
+    .sticky-bottom-center {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
-    .back-button:hover {
-      background-color: #555;
+    .back-link {
+      text-decoration: none;
+    }
+
+    .back-btn {
+      background: #fff;
+      color: var(--primary-blue);
+      padding: 15px 30px;
+      border: 2px solid var(--primary-blue);
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 220px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, .1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .back-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(30, 136, 229, .1), transparent);
+      transition: left .5s;
+    }
+
+    .back-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(30, 136, 229, .3);
+    }
+
+    .back-btn:hover::before {
+      left: 100%;
     }
 
     /* Responsywność */
@@ -123,36 +178,19 @@
       .db-option {
         height: 140px;
       }
-    }
 
-    .sticky-bottom-center {
-      position: absolute;
-      bottom: 20px; /* odstęp od dołu kontenera */
-      left: 50%;
-      transform: translateX(-50%);
-      color: white;
-      padding: 0px 20px;
-      border-radius: 8px;
-      font-weight: bold;
-    }
+      .database-container {
+        padding: 30px 20px;
+      }
 
-    .back-btn {
-      background-color: #6c757d;
-      color: white;
-      padding: 15px 30px;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.4s ease-in-out;
-      min-width: 180px;
-      background-size: 200% auto;
-      background-image: linear-gradient(to right, #6c757d 0%, #495057 51%, #6c757d 100%);
-    }
+      .header h1 {
+        font-size: 2.5rem;
+      }
 
-    .back-btn:hover {
-      background-position: right center; /* przesuwa gradient */
+      .back-btn {
+        min-width: 180px;
+        padding: 12px 25px;
+      }
     }
   </style>
   <!-- Ikony z Font Awesome -->
@@ -184,13 +222,14 @@
       <i class="fas fa-list"></i>
       <h2>Widok jednostek</h2>
     </a>
-    <div class="sticky-bottom-center">
+  </div>
+
+  <div class="sticky-bottom-center">
     <a th:href="@{/oskarinio143/heroes}" class="back-link">
       <button type="button" class="back-btn">
         Wróć do menu głównego
       </button>
     </a>
-    </div>
   </div>
 </div>
 </body>

@@ -37,7 +37,14 @@ public class DuelService {
         if(duelInfo.getRightUnit() != null){
             model.addAttribute("rightUnit", duelInfo.getRightUnit().getName());
         }
+        System.out.println("Selekcja " + duelInfo.getLeftHeroAttack());
         model.addAttribute("side", side);
+        model.addAttribute("leftQuantity", duelInfo.getLeftQuantity());
+        model.addAttribute("rightQuantity", duelInfo.getRightQuantity());
+        model.addAttribute("leftHeroAttack", duelInfo.getLeftHeroAttack());
+        model.addAttribute("leftHeroDefense", duelInfo.getLeftHeroDefense());
+        model.addAttribute("rightHeroAttack", duelInfo.getRightHeroAttack());
+        model.addAttribute("rightHeroDefense", duelInfo.getRightHeroDefense());
 
         //System.out.println(duelInfo.getLeftQuantity());
         //model.addAttribute("leftQuantity", duelInfo.getLeftQuantity());
@@ -46,7 +53,7 @@ public class DuelService {
 
     public void loadUnit(Model model, DuelInfo duelInfo, String side, String name){
         Unit unit = unitRepository.getReferenceById(name);
-
+        System.out.println("Ładuje jednostki");
         if(side.equals("left")){
             model.addAttribute("leftUnit", unit);
             model.addAttribute("rightUnit", duelInfo.getRightUnit());

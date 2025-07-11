@@ -74,6 +74,12 @@
         <input type="hidden" th:name="side" th:value="${side}"/>
         <input type="hidden" th:name="leftUnit" th:value="${leftUnit}"/>
         <input type="hidden" th:name="rightUnit" th:value="${rightUnit}"/>
+          <input type="hidden" name="leftQuantity"    th:value="${leftQuantity}"    />
+          <input type="hidden" name="rightQuantity"    th:value="${rightQuantity}"    />
+        <input type="hidden" th:name="leftHeroAttack" id="leftHeroAttackInput" th:value = "${leftHeroAttack}">
+        <input type="hidden" th:name="leftHeroDefense" id="leftHeroDefenseInput" th:value = "${leftHeroDefense}">
+        <input type="hidden" th:name="rightHeroAttack" id="rightHeroAttackInput" th:value = "${rightHeroAttack}">
+        <input type="hidden" th:name="rightHeroDefense" id="rightHeroDefenseInput" th:value = "${rightHeroDefense}">
 
         <button type="submit" style="
                   background-color: #007bff;
