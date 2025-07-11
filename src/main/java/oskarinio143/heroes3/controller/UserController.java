@@ -39,7 +39,7 @@ public class UserController {
 
         if(logoutType != null && logoutType.equals("auto"))
             model.addAttribute("autoLogoutMessage", "Zostałeś automatycznie wylogowany z powodu braku aktywności");
-        return "login.html";
+        return Route.PACKAGE_CONNECTION + Route.LOGIN;
     }
 
     @PostMapping(Route.LOGIN)
@@ -61,7 +61,7 @@ public class UserController {
 
     @GetMapping(Route.REGISTER)
     public String registerView(){
-        return"register.html";
+        return Route.PACKAGE_CONNECTION + Route.REGISTER;
     }
 
     @PostMapping(Route.REGISTER)
@@ -77,12 +77,6 @@ public class UserController {
         UserServiceData userServiceData = registerService.registerUser(registerForm);
         cookieHelper.setCookieTokens(userServiceData, response);
         redirectAttributes.addFlashAttribute("welcomeUserMessage", "Udało się zarejestrować użytkownika");
-        return Route.REDIRECT;
-    }
-
-    @GetMapping(Route.REFRESH)
-    public String refreshToken(){
-        System.out.println("odswieżam");
         return Route.REDIRECT;
     }
 

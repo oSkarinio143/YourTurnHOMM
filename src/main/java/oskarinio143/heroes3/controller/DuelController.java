@@ -28,19 +28,19 @@ public class DuelController {
     @GetMapping
     public String prepareDuel(Model model, @ModelAttribute DuelInfo duelInfo){
         duelService.prepareUnits(model, duelInfo);
-        return Route.DUEL;
+        return Route.PACKAGE_DUEL + Route.DUEL;
     }
 
     @PostMapping(Route.SELECT)
     public String selectUnit(Model model, @ModelAttribute DuelInfo duelInfo, @RequestParam String side){
         duelService.selectUnit(model, duelInfo, side);
-        return Route.SELECT;
+        return Route.PACKAGE_DUEL + Route.SELECT;
     }
 
     @PostMapping()
     public String loadUnit(Model model, @ModelAttribute DuelInfo duelInfo, @RequestParam String side, @RequestParam String name){
         duelService.loadUnit(model, duelInfo, side, name);
-        return Route.DUEL;
+        return Route.PACKAGE_DUEL + Route.DUEL;
     }
 
     @PostMapping(Route.BATTLE)
@@ -55,6 +55,6 @@ public class DuelController {
             return Route.REDIRECT + Route.DUEL;
         }
         duelService.loadBattle(model, duelInfo);
-        return Route.BATTLE;
+        return Route.PACKAGE_DUEL + Route.BATTLE;
     }
 }

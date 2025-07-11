@@ -28,12 +28,12 @@ public class DatabaseController {
 
     @GetMapping
     public String choseDatabaseOption(){
-        return "choseDatabaseOption";
+        return Route.PACKAGE_DATABASE + Route.DATABASE;
     }
 
     @GetMapping(Route.ADD)
     public String addUnit(){
-        return "addUnit";
+        return Route.PACKAGE_DATABASE + Route.VIEW_ADD;
     }
 
     @PostMapping(Route.ADD)
@@ -44,23 +44,23 @@ public class DatabaseController {
 
         if(bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("incorrectMessage", exceptionHandlerService.createMessageValidError(bindingResult));
-            return Route.REDIRECT + Route.ADD;
+            return Route.REDIRECT + Route.DATABASE + Route.ADD;
         }
 
         databaseService.addUnit(unit, image);
         return Route.REDIRECT + Route.DATABASE;
     }
 
-    @GetMapping(Route.VIEW)
+    @GetMapping(Route.SHOW)
     public String viewUnits(Model model){
         databaseService.viewUnits(model);
-        return "viewUnits";
+        return Route.PACKAGE_DATABASE + Route.VIEW_SHOW;
     }
 
     @GetMapping(Route.DELETE)
     public String deleteUnit(Model model){
         databaseService.viewUnits(model);
-        return "deleteUnit";
+        return Route.PACKAGE_DATABASE + Route.VIEW_DELETE;
     }
 
     @PostMapping(Route.DELETE)
@@ -72,13 +72,13 @@ public class DatabaseController {
     @GetMapping(Route.MODIFY)
     public String handleModify(Model model){
         databaseService.viewUnits(model);
-        return "modify";
+        return Route.PACKAGE_DATABASE + Route.VIEW_MODIFY;
     }
 
     @GetMapping(Route.MODIFY + Route.UNIT)
     public String handleModifyUnit(@RequestParam String name, Model model) {
         databaseService.viewSingleUnit(model, name);
-        return "modifyUnit";
+        return Route.PACKAGE_DATABASE + Route.VIEW_MODIFY_UNIT;
     }
 
     @PostMapping(Route.MODIFY + Route.UNIT)

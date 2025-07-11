@@ -12,6 +12,6 @@ public class MainController {
 
     @GetMapping()
     public String welcome(){
-        return "choseMode";
+        return Route.VIEW_MODE;
     }
 }

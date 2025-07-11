@@ -442,7 +442,7 @@
 
       <div class="stat-group">
         <label class="stat-label">Obrona:</label>
-        <input type="number" class="stat-input" id="leftHeroDefense" min="0" placeholder="0" value="0">
+        <input type="number" class="stat-input" id="leftHeroDefense" min="0" placeholder="0" th:value="${leftHeroDefense}">
       </div>
     </div>
 
@@ -530,7 +530,7 @@
 
         <div class="quantity-section">
           <label class="quantity-label">Podaj ilość:</label>
-          <input type="number" class="quantity-input" id="rightQuantity" min="0" placeholder="0" th:value="${rightQuantity != null ? rightQuantity : ''}">
+          <input type="number" class="quantity-input" id="rightQuantity" min="0" placeholder="0" th:value="${rightQuantity}">
         </div>
 
         <!-- Przycisk Rozpocznij pojedynek w prawym dolnym rogu -->
@@ -558,12 +558,12 @@
 
       <div class="stat-group">
         <label class="stat-label">Atak:</label>
-        <input type="number" class="stat-input" id="rightHeroAttack" min="0" placeholder="0" value="0">
+        <input type="number" class="stat-input" id="rightHeroAttack" min="0" placeholder="0" th:value="${rightHeroAttack}">
       </div>
 
       <div class="stat-group">
         <label class="stat-label">Obrona:</label>
-        <input type="number" class="stat-input" id="rightHeroDefense" min="0" placeholder="0" value="0">
+        <input type="number" class="stat-input" id="rightHeroDefense" min="0" placeholder="0" th:value="${rightHeroDefense}">
       </div>
     </div>
   </div>
