@@ -16,6 +16,7 @@ public class CommunicationService {
         String userUUID;
         do {
             userUUID = UUID.randomUUID().toString();
+            System.out.println("Tworze UUID " + userUUID);
         } while (emitters.containsKey(userUUID));
         return userUUID;
     }
@@ -30,11 +31,13 @@ public class CommunicationService {
 
     public void sendMessage(String userUUID, String message) {
         SseEmitter userEmitter = emitters.get(userUUID);
+        System.out.println("Wysyłam, PRZED");
+        System.out.println("UUID - " + userUUID);
         if(userEmitter != null) {
             try {
+                System.out.println("Wysyłam");
                 userEmitter.send(message);
             } catch (IOException e) {
-                System.out.println("ZLAPANE");
                 emitters.remove(userUUID);
                 userEmitter.complete();
             }

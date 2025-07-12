@@ -617,6 +617,42 @@
   </script>
 
   <script>
+    var uuid = localStorage.getItem("uuid")
+    async function getUUID() {
+      uuid = await fetch("http://localhost:8080/oskarinio143/heroes/duel/generateUUID")
+        .then(res => res.text())
+        .then(text => {
+        return text;
+      });
+    }
+
+    async function setUUID() {
+      await getUUID();
+      passUUID();
+    }
+
+    async function loadUUID(){
+      passUUID();
+    }
+
+    function passUUID(){
+      localStorage.setItem("uuid", uuid);
+      document.getElementById("userUUIDInput").value = uuid;
+    }
+
+    if(uuid == null){
+      setUUID();
+    }
+    passUUID();
+
+    document.getElementById("sendLeft").addEventListener("click", function () {
+      const value = document.getElementById("leftQuantity").value;
+
+      document.getElementsByName("leftQuantity").forEach(el => {
+        el.value = value;
+      });
+    });
+
     document.querySelector('.battle-btn').addEventListener('click', function(e) {
       if (!this.disabled) {
         document.getElementById('leftQuantityInput').value =

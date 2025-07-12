@@ -232,7 +232,6 @@ public class BattleService {
             return true;
         }
         if(roundInfo.getFasterLiveUnits() == 0){
-            System.out.println("Wchodze");
             roundInfo.setLoserUnit(roundInfo.getSlowerUnit());
             roundInfo.setWinnerUnit(roundInfo.getFasterUnit());
             return true;
