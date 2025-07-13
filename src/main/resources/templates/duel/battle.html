@@ -31,43 +31,31 @@
       margin-bottom: 30px;
     }
 
-    .unit-panel {
+    .unit-panel, .hero-panel {
       background-color: white;
       border-radius: 12px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       padding: 20px;
       text-align: center;
-      min-height: 400px;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
     }
 
     .hero-panel {
-      background-color: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       padding: 15px;
-      text-align: center;
       min-height: 250px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
     }
 
-    .left-panel {
-      border-left: 4px solid #1e88e5;
+    .unit-panel {
+      min-height: 400px;
     }
 
-    .right-panel {
-      border-right: 4px solid #e53935;
-    }
-
+    .left-panel { border-left: 4px solid #1e88e5; }
+    .right-panel { border-right: 4px solid #e53935; }
     .left-hero-panel {
       border-left: 4px solid #4caf50;
       background: linear-gradient(135deg, #f8fff8, #ffffff);
     }
-
     .right-hero-panel {
       border-right: 4px solid #ff9800;
       background: linear-gradient(135deg, #fff8f0, #ffffff);
@@ -76,7 +64,7 @@
     .unit-image {
       max-width: 100px;
       max-height: 100px;
-      margin: 0 auto 15px auto;
+      margin: 0 auto 15px;
       display: block;
     }
 
@@ -90,19 +78,13 @@
     .hero-title {
       font-size: 16px;
       font-weight: bold;
-      color: #333;
       margin-bottom: 15px;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
-    .left-hero-panel .hero-title {
-      color: #2e7d32;
-    }
-
-    .right-hero-panel .hero-title {
-      color: #ef6c00;
-    }
+    .left-hero-panel .hero-title { color: #2e7d32; }
+    .right-hero-panel .hero-title { color: #ef6c00; }
 
     .unit-count {
       font-size: 16px;
@@ -113,13 +95,11 @@
     .unit-count-number {
       font-size: 24px;
       font-weight: bold;
-      color: #1e88e5;
       margin-bottom: 15px;
+      color: #1e88e5;
     }
 
-    .right-panel .unit-count-number {
-      color: #e53935;
-    }
+    .right-panel .unit-count-number { color: #e53935; }
 
     .stats-divider {
       width: 100%;
@@ -129,60 +109,30 @@
       border-radius: 1px;
     }
 
-    .unit-stats {
+    .unit-stats, .hero-stats {
       text-align: left;
-      font-size: 13px;
       color: #555;
-      line-height: 1.6;
     }
 
-    .hero-stats {
-      text-align: left;
-      font-size: 14px;
-      color: #555;
-      line-height: 1.8;
-    }
+    .unit-stats { font-size: 13px; line-height: 1.6; }
+    .hero-stats { font-size: 14px; line-height: 1.8; }
 
-    .stat-row {
+    .stat-row, .hero-stat-row {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 6px;
       padding: 2px 0;
     }
+    .stat-row { margin-bottom: 6px; }
+    .hero-stat-row { margin-bottom: 10px; }
 
-    .hero-stat-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-      padding: 4px 0;
-    }
+    .stat-label { font-weight: 600; color: #333; }
 
-    .stat-label {
-      font-weight: 600;
-      color: #333;
-    }
+    .stat-value { font-weight: bold; color: #1e88e5; }
+    .right-panel .stat-value { color: #e53935; }
 
-    .stat-value {
-      font-weight: bold;
-      color: #1e88e5;
-    }
-
-    .right-panel .stat-value {
-      color: #e53935;
-    }
-
-    .hero-stat-value {
-      font-weight: bold;
-      font-size: 16px;
-    }
-
-    .left-hero-panel .hero-stat-value {
-      color: #2e7d32;
-    }
-
-    .right-hero-panel .hero-stat-value {
-      color: #ef6c00;
-    }
+    .hero-stat-value { font-weight: bold; font-size: 16px; }
+    .left-hero-panel .hero-stat-value { color: #2e7d32; }
+    .right-hero-panel .hero-stat-value { color: #ef6c00; }
 
     .battle-log {
       background-color: white;
@@ -217,70 +167,18 @@
       padding: 8px 12px;
       border-radius: 6px;
       font-size: 14px;
-      word-wrap: break-word;
     }
 
-    /* Nowe style na podstawie typu wiadomości */
-    .round-message {
-      background-color: #f1f1f1;
-      border-left: 3px solid #bdbdbd;
-      color: #333;
-    }
+    .round-message { background-color: #f1f1f1; border-left: 3px solid #bdbdbd; color: #333; }
+    .attackf-message { background-color: #e3f2fd; border-left: 3px solid #2196f3; color: #0d47a1; }
+    .attacks-message { background-color: #ffebee; border-left: 3px solid #f44336; color: #b71c1c; }
+    .victory-message { background: linear-gradient(135deg, #ffd700, #ffed4e); border-left: 3px solid #ff8f00; color: #e65100; font-weight: bold; box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3); }
+    .neutral-message { background-color: #fffde7; border-left: 3px solid #ffc107; color: #5d4037; }
 
-    .attackf-message {
-      background-color: #e3f2fd;
-      border-left: 3px solid #2196f3;
-      color: #0d47a1;
-    }
-
-    .attacks-message {
-      background-color: #ffebee;
-      border-left: 3px solid #f44336;
-      color: #b71c1c;
-    }
-
-    .victory-message {
-      background: linear-gradient(135deg, #ffd700, #ffed4e);
-      border-left: 3px solid #ff8f00;
-      color: #e65100;
-      font-weight: bold;
-      box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
-    }
-
-    .neutral-message {
-      background-color: #fffde7;
-      border-left: 3px solid #ffc107;
-      color: #5d4037;
-    }
-
-    .error-message {
-      background-color: #ffebee;
-      border-left: 3px solid #f44336;
-      color: #b71c1c;
-    }
-
-    .damage-number {
-      font-weight: bold;
-      font-size: 16px;
-    }
-
-    .battle-log::-webkit-scrollbar, #battle-log-content::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    .battle-log::-webkit-scrollbar-track, #battle-log-content::-webkit-scrollbar-track {
-      background-color: #f1f1f1;
-      border-radius: 4px;
-    }
-
-    .battle-log::-webkit-scrollbar-thumb, #battle-log-content::-webkit-scrollbar-thumb {
-      background-color: #c1c1c1;
-      border-radius: 4px;
-    }
-
-    .battle-log::-webkit-scrollbar-thumb:hover, #battle-log-content::-webkit-scrollbar-thumb:hover {
-      background-color: #a8a8a8;
-    }
+    #battle-log-content::-webkit-scrollbar { width: 8px; }
+    #battle-log-content::-webkit-scrollbar-track { background-color: #f1f1f1; border-radius: 4px; }
+    #battle-log-content::-webkit-scrollbar-thumb { background-color: #c1c1c1; border-radius: 4px; }
+    #battle-log-content::-webkit-scrollbar-thumb:hover { background-color: #a8a8a8; }
 
     .navigation-buttons {
       display: flex;
@@ -303,58 +201,26 @@
     .back-btn {
       background-color: #6c757d;
       color: white;
-      padding: 15px 30px;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.4s ease-in-out;
-      min-width: 180px;
       background-size: 200% auto;
       background-image: linear-gradient(to right, #6c757d 0%, #495057 51%, #6c757d 100%);
     }
-
     .back-btn:hover {
       background-position: right center;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
-    .rematch-btn {
-      background: linear-gradient(45deg, #28a745, #34ce57);
-      color: white;
-    }
-
-    .rematch-btn:hover {
-      background: linear-gradient(45deg, #218838, #28a745);
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
-    }
-
-    .rematch-btn:disabled {
-      background: #ccc !important;
-      color: #666 !important;
-      cursor: not-allowed;
-      filter: grayscale(50%);
-      box-shadow: none;
-      transition: none;
-    }
-
     .battle-btn {
       background: linear-gradient(45deg, #ff6b35, #ff8e53);
       color: white;
-      border: none;
       position: relative;
       overflow: hidden;
     }
-
     .battle-btn:hover {
       background: linear-gradient(45deg, #e55a2b, #ff7a40);
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
     }
-
     .battle-btn:before {
       content: '';
       position: absolute;
@@ -365,324 +231,222 @@
       background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
       transition: left 0.5s;
     }
-
-    .battle-btn:hover:before {
-      left: 100%;
-    }
-
+    .battle-btn:hover:before { left: 100%; }
     .battle-btn:disabled {
       background: #cccccc;
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
     }
+    .battle-btn:disabled:hover { background: #cccccc; }
+    .battle-btn:disabled:before { display: none; }
 
-    .battle-btn:disabled:hover {
-      background: #cccccc;
-      transform: none;
-      box-shadow: none;
-    }
-
-    .battle-btn:disabled:before {
-      display: none;
-    }
-
-    /* Responsive design */
     @media (max-width: 1200px) {
-      .battle-container {
-        grid-template-columns: 1fr 2fr 1fr;
-        gap: 15px;
-      }
-
-      .hero-panel {
-        display: none;
-      }
+      .battle-container { grid-template-columns: 1fr 2fr 1fr; }
+      .hero-panel { display: none; }
     }
-
   </style>
 </head>
 <body>
-<div class="main-container">
+<div class="main-container" th:object="${duelForm}">
   <h1>⚔️ Pojedynek w toku ⚔️</h1>
 
   <div class="battle-container">
-    <!-- Blok bohatera gracza (lewy) -->
     <div class="hero-panel left-hero-panel">
       <div class="hero-title">🛡️ Bohater Gracza</div>
       <div class="stats-divider"></div>
       <div class="hero-stats">
         <div class="hero-stat-row">
           <span class="stat-label">Atak:</span>
-          <span class="hero-stat-value" th:text="${leftHeroAttack}"></span>
+          <span class="hero-stat-value" th:text="*{leftHeroAttack}"></span>
         </div>
         <div class="hero-stat-row">
           <span class="stat-label">Obrona:</span>
-          <span class="hero-stat-value" th:text="${leftHeroDefense}"></span>
+          <span class="hero-stat-value" th:text="*{leftHeroDefense}"></span>
         </div>
       </div>
     </div>
 
-    <!-- Blok jednostki gracza -->
     <div class="unit-panel left-panel">
-      <img th:src="@{${leftUnit.imagePath}}" alt="Jednostka gracza" class="unit-image">
-      <div class="unit-name" th:text="${leftUnit.name}">Rogate Demony</div>
+      <img th:src="@{*{leftUnit.imagePath}}" alt="Jednostka gracza" class="unit-image"/>
+      <div class="unit-name" th:text="*{leftUnit.name}"></div>
       <div class="unit-count">Liczba:</div>
-      <div class="unit-count-number" th:text="${leftQuantity}">15</div>
-
+      <div class="unit-count-number" th:text="*{leftQuantity}"></div>
       <div class="stats-divider"></div>
-
       <div class="unit-stats">
         <div class="stat-row">
           <span class="stat-label">Atak:</span>
-          <span class="stat-value" th:text="${leftUnit.attack + '(' + (leftUnit.attack + leftHeroAttack) + ')'}">10</span>
+          <span class="stat-value" th:text="*{leftUnit.attack + ' (' + (leftUnit.attack + leftHeroAttack) + ')'}"></span>
         </div>
         <div class="stat-row">
           <span class="stat-label">Obrona:</span>
-          <span class="stat-value" th:text="${leftUnit.defense + '(' + (leftUnit.defense + leftHeroDefense) + ')'}">10</span>
+          <span class="stat-value" th:text="*{leftUnit.defense + ' (' + (leftUnit.defense + leftHeroDefense) + ')'}"></span>
         </div>
         <div class="stat-row">
           <span class="stat-label">Obrażenia:</span>
-          <span class="stat-value" th:text="${leftUnit.minDamage + ' - ' + leftUnit.maxDamage}">7-9</span>
+          <span class="stat-value" th:text="*{leftUnit.minDamage + ' - ' + leftUnit.maxDamage}"></span>
         </div>
         <div class="stat-row">
           <span class="stat-label">HP:</span>
-          <span class="stat-value" th:text="${leftUnit.hp}">35</span>
+          <span class="stat-value" th:text="*{leftUnit.hp}"></span>
         </div>
         <div class="stat-row">
           <span class="stat-label">HP pozostałe:</span>
-          <span class="stat-value" th:text="${leftUnit.hpLeft}"></span>
+          <span class="stat-value" th:text="*{leftUnit.hpLeft}"></span>
         </div>
         <div class="stat-row">
           <span class="stat-label">Szybkość:</span>
-          <span class="stat-value" th:text="${leftUnit.speed}">5</span>
+          <span class="stat-value" th:text="*{leftUnit.speed}"></span>
         </div>
-        <div class="stat-row" th:if="${leftUnit.shots != null and leftUnit.shots > 0}">
+        <div class="stat-row" th:if="*{leftUnit.shots != null and leftUnit.shots > 0}">
           <span class="stat-label">Strzały:</span>
-          <span class="stat-value" th:text="${leftUnit.shots}">24</span>
+          <span class="stat-value" th:text="*{leftUnit.shots}"></span>
         </div>
       </div>
     </div>
 
-    <!-- Kronika bitwy (środek) -->
-    <div class="battle-log" id="battle-log">
+    <div class="battle-log">
       <h3>📜 Kronika Bitwy</h3>
-      <div id="battle-log-content">
-      </div>
+      <div id="battle-log-content"></div>
     </div>
 
-    <!-- Blok jednostki przeciwnika -->
     <div class="unit-panel right-panel">
-      <img th:src="@{${rightUnit.imagePath}}" alt="Jednostka przeciwnika" class="unit-image">
-      <div class="unit-name" th:text="${rightUnit.name}">Pikinierzy</div>
+      <img th:src="@{*{rightUnit.imagePath}}" alt="Jednostka przeciwnika" class="unit-image"/>
+      <div class="unit-name" th:text="*{rightUnit.name}"></div>
       <div class="unit-count">Liczba:</div>
-      <div class="unit-count-number" th:text="${rightQuantity}">0</div>
-
+      <div class="unit-count-number" th:text="*{rightQuantity}"></div>
       <div class="stats-divider"></div>
-
       <div class="unit-stats">
         <div class="stat-row">
           <span class="stat-label">Atak:</span>
-          <span class="stat-value" th:text="${rightUnit.attack + '(' + (rightUnit.attack + rightHeroAttack) + ')'}">4</span>
+          <span class="stat-value" th:text="*{rightUnit.attack + ' (' + (rightUnit.attack + rightHeroAttack) + ')'}"></span>
         </div>
         <div class="stat-row">
           <span class="stat-label">Obrona:</span>
-          <span class="stat-value" th:text="${rightUnit.defense + '(' + (rightUnit.defense + rightHeroDefense) + ')'}">5</span>
+          <span class="stat-value" th:text="*{rightUnit.defense + ' (' + (rightUnit.defense + rightHeroDefense) + ')'}"></span>
         </div>
         <div class="stat-row">
           <span class="stat-label">Obrażenia:</span>
-          <span class="stat-value" th:text="${rightUnit.minDamage + ' - ' + rightUnit.maxDamage}">1-3</span>
+          <span class="stat-value" th:text="*{rightUnit.minDamage + ' - ' + rightUnit.maxDamage}"></span>
         </div>
         <div class="stat-row">
           <span class="stat-label">HP:</span>
-          <span class="stat-value" th:text="${rightUnit.hp}">10</span>
+          <span class="stat-value" th:text="*{rightUnit.hp}"></span>
         </div>
         <div class="stat-row">
           <span class="stat-label">HP pozostałe:</span>
-          <span class="stat-value" th:text="${rightUnit.hpLeft}">10</span>
+          <span class="stat-value" th:text="*{rightUnit.hpLeft}"></span>
         </div>
         <div class="stat-row">
           <span class="stat-label">Szybkość:</span>
-          <span class="stat-value" th:text="${rightUnit.speed}">4</span>
+          <span class="stat-value" th:text="*{rightUnit.speed}"></span>
         </div>
-        <div class="stat-row" th:if="${rightUnit.shots != null and rightUnit.shots > 0}">
+        <div class="stat-row" th:if="*{rightUnit.shots != null and rightUnit.shots > 0}">
           <span class="stat-label">Strzały:</span>
-          <span class="stat-value" th:text="${rightUnit.shots}">24</span>
+          <span class="stat-value" th:text="*{rightUnit.shots}"></span>
         </div>
       </div>
     </div>
 
-    <!-- Blok bohatera przeciwnika (prawy) -->
     <div class="hero-panel right-hero-panel">
       <div class="hero-title">⚔️ Bohater Przeciwnika</div>
       <div class="stats-divider"></div>
       <div class="hero-stats">
         <div class="hero-stat-row">
           <span class="stat-label">Atak:</span>
-          <span class="hero-stat-value" th:text="${rightHeroAttack}"></span>
+          <span class="hero-stat-value" th:text="*{rightHeroAttack}"></span>
         </div>
         <div class="hero-stat-row">
           <span class="stat-label">Obrona:</span>
-          <span class="hero-stat-value" th:text="${rightHeroDefense}"></span>
+          <span class="hero-stat-value" th:text="*{rightHeroDefense}"></span>
         </div>
       </div>
     </div>
   </div>
 
   <div class="navigation-buttons">
-    <form th:action="@{/oskarinio143/heroes/duel}" method="post">
-      <input type="hidden" name="leftUnit"     th:value="${leftUnit.name}"     />
-      <input type="hidden" name="rightUnit"    th:value="${rightUnit.name}"    />
-      <input type="hidden" name="leftQuantity"    th:value="${leftQuantity}"    />
-      <input type="hidden" name="rightQuantity"    th:value="${rightQuantity}"    />
-      <input type="hidden" name="leftHeroAttack"    th:value="${leftHeroAttack}"    />
-      <input type="hidden" name="leftHeroDefense"    th:value="${leftHeroDefense}"    />
-      <input type="hidden" name="rightHeroAttack"    th:value="${rightHeroAttack}"    />
-      <input type="hidden" name="rightHeroDefense"    th:value="${rightHeroDefense}"    />
-      <input type="hidden" name="name"    th:value="${rightUnit.name}"    />
-      <input type="hidden" name="side"    th:value="right"    />
+    <form th:action="@{/oskarinio143/heroes/duel}" method="get" th:object="${duelForm}">
+      <input type="hidden" name="leftUnit" th:value="*{leftUnit.name}" />
+      <input type="hidden" name="rightUnit" th:value="*{rightUnit.name}" />
+      <input type="hidden" name="leftQuantity" th:value="*{leftQuantity}" />
+      <input type="hidden" name="rightQuantity" th:value="*{rightQuantity}" />
+      <input type="hidden" name="leftHeroAttack" th:value="*{leftHeroAttack}" />
+      <input type="hidden" name="leftHeroDefense" th:value="*{leftHeroDefense}" />
+      <input type="hidden" name="rightHeroAttack" th:value="*{rightHeroAttack}" />
+      <input type="hidden" name="rightHeroDefense" th:value="*{rightHeroDefense}" />
+
       <button type="submit" class="nav-btn back-btn">
         Wróć do wyboru jednostek
       </button>
     </form>
-    <button id="refButton" class="nav-btn battle-btn"
-            onclick="window.location.reload();"
-            disabled>
+    <button id="refButton" class="nav-btn battle-btn" onclick="window.location.reload();" disabled>
       Rozpocznij pojedynek ponownie
     </button>
   </div>
 </div>
 
 <script th:inline="javascript">
-  const uuid = localStorage.getItem("uuid");
-  // Główna funkcja inicjalizująca
-  async function initializeBattle() {
-    // Najpierw pobierz UUID
-    const uuid = localStorage.getItem("uuid");
-
-    // Teraz inicjalizuj resztę kodu
-    initializeEventHandlers();
-    loadSavedMessages();
-    startEventSource();
-  }
-
-  function initializeEventHandlers() {
-    // 4. OBSŁUGA ODSWIEŻANIA STRONY
-    window.addEventListener('unload', () => {
-      if(eventSource){
-        eventSource.close();
-      }
-      localStorage.removeItem("battleMessages");
-      const battleLogContent = document.getElementById('battle-log-content');
-      battleLogContent.innerHTML = ''; // Wyczysc fizyczne elementy DOM
-    });
-  }
-
-  function loadSavedMessages() {
-    const battleLogContent = document.getElementById('battle-log-content');
-
-    // 1. WCZYTAJ HISTORIĘ PRZY ŁADOWANIU STRONY
-    const savedMessages = JSON.parse(localStorage.getItem('battleMessages') || '[]');
-    savedMessages.forEach(msg => {
-      const messageElement = createMessageElement(msg);
-      battleLogContent.appendChild(messageElement);
-    });
-  }
-
   let eventSource;
 
-  function startEventSource() {
-    const battleLogContent = document.getElementById('battle-log-content');
+  window.addEventListener('unload', () => {
+    if(eventSource) eventSource.close();
+    localStorage.removeItem("battleMessages");
+  });
 
-    // 3. POŁĄCZENIE SSE Z AUTOMATYCZNYM ZAPISEM
-    const savedMessages = JSON.parse(localStorage.getItem('battleMessages') || '[]');
-    const messages = [...savedMessages];
+  const battleLogContent = document.getElementById('battle-log-content');
+  const savedMessages = JSON.parse(localStorage.getItem('battleMessages') || '[]');
 
-    eventSource = new EventSource(`http://localhost:8080/oskarinio143/heroes/duel/battle/stream?userUUID=${uuid}`);
+  savedMessages.forEach(msg => {
+    battleLogContent.appendChild(createMessageElement(msg));
+  });
 
-    eventSource.onmessage = (event) => {
-      if (event.data === "CLOSE") {
-        eventSource.close();
-        return;
-      }
+  const uuid = localStorage.getItem("uuid");
+  eventSource = new EventSource(`http://localhost:8080/oskarinio143/heroes/duel/battle/stream?userUUID=${uuid}`);
 
-      messages.push(event.data);
-      localStorage.setItem('battleMessages', JSON.stringify(messages));
+  eventSource.onmessage = (event) => {
+    if (event.data === "CLOSE") {
+      eventSource.close();
+      return;
+    }
 
-      const messageElement = createMessageElement(event.data);
-      battleLogContent.appendChild(messageElement);
-      battleLogContent.scrollTop = battleLogContent.scrollHeight;
-    };
-  }
+    const messages = JSON.parse(localStorage.getItem('battleMessages') || '[]');
+    messages.push(event.data);
+    localStorage.setItem('battleMessages', JSON.stringify(messages));
 
-  // 2. FUNKCJA TWORZĄCA ELEMENTY WIADOMOŚCI
+    const messageElement = createMessageElement(event.data);
+    battleLogContent.appendChild(messageElement);
+    battleLogContent.scrollTop = battleLogContent.scrollHeight;
+  };
+
   function createMessageElement(rawData) {
     const element = document.createElement('div');
     element.classList.add('attack-message');
 
-    // Obsłuż prefixy: ROUND:, ATTACKF:, ATTACKS:, VICTORY:
-    let text = rawData;
-    let prefix = null;
+    const mappings = {
+      'ROUND:': 'round-message',
+      'ATTACKF:': 'attackf-message',
+      'ATTACKS:': 'attacks-message',
+      'VICTORY:': 'victory-message'
+    };
+
+    let prefix = 'neutral-message';
     let content = rawData;
 
-    // Sprawdź prefix
-    if (typeof rawData === 'string') {
-      if (rawData.startsWith('ROUND:')) {
-        prefix = 'round-message';
-        content = rawData.replace(/^ROUND:/, '').trim();
-      } else if (rawData.startsWith('ATTACKF:')) {
-        prefix = 'attackf-message';
-        content = rawData.replace(/^ATTACKF:/, '').trim();
-      } else if (rawData.startsWith('ATTACKS:')) {
-        prefix = 'attacks-message';
-        content = rawData.replace(/^ATTACKS:/, '').trim();
-      } else if (rawData.startsWith('VICTORY:')) {
-        prefix = 'victory-message';
-        content = rawData.replace(/^VICTORY:/, '').trim();
-        const btn = document.getElementById('refButton');
-        btn.disabled = false;
-      }
-
-      // Jeśli nie znaleziono prefixu, próbuj obsłużyć stare wiadomości JSON (z typem)
-      if (!prefix) {
-        try {
-          const data = JSON.parse(rawData);
-          // Jeśli typ, to nadaj stary styl
-          switch (data.type) {
-            case 'ROUND':
-              prefix = 'round-message';
-              break;
-            case 'ATTACKF':
-              prefix = 'attackf-message';
-              break;
-            case 'ATTACKS':
-              prefix = 'attacks-message';
-              break;
-            case 'VICTORY':
-              prefix = 'victory-message';
-              const btn = document.getElementById('refButton');
-              btn.disabled = false;
-              break;
-            default:
-              prefix = 'neutral-message';
-          }
-          content = data.message;
-        } catch (e) {
-          // Nie parsowalny JSON, nie rozpoznano prefixu – neutral
-          prefix = 'neutral-message';
-          content = rawData;
+    for (const key in mappings) {
+      if (rawData.startsWith(key)) {
+        prefix = mappings[key];
+        content = rawData.substring(key.length).trim();
+        if (key === 'VICTORY:') {
+          document.getElementById('refButton').disabled = false;
         }
+        break;
       }
     }
 
     element.classList.add(prefix);
     element.innerHTML = content;
-
     return element;
   }
-
-  // URUCHOM INICJALIZACJĘ
-  initializeBattle();
 </script>
-
 </body>
 </html>

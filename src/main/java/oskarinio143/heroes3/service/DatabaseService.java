@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import oskarinio143.heroes3.exception.DuplicateUnitException;
 import oskarinio143.heroes3.exception.TransactionSystemAddException;
-import oskarinio143.heroes3.exception.TransactionSystemModifyException;
 import oskarinio143.heroes3.model.entity.Unit;
 import oskarinio143.heroes3.repository.UnitRepository;
 
@@ -40,14 +39,12 @@ public class DatabaseService {
         }
     }
 
-    public void viewUnits(Model model){
-        List<Unit> units = unitRepository.findAll();
-        model.addAttribute("units", units);
+    public List<Unit> getAllUnits(){
+        return unitRepository.findAll();
     }
 
-    public void viewSingleUnit(Model model, String name){
-        Unit unit = unitRepository.getReferenceById(name);
-        model.addAttribute("unit", unit);
+    public Unit getSingleUnit(String name){
+        return unitRepository.getReferenceById(name);
     }
 
     @Transactional

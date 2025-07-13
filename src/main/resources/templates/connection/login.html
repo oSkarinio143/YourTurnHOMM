@@ -21,7 +21,6 @@
       overflow: hidden;
     }
 
-    /* Animowane tło z pływającymi elementami */
     body::before {
       content: '';
       position: absolute;
@@ -58,46 +57,11 @@
       border-radius: 50%;
       animation: float 15s infinite linear;
     }
-
-    .floating-element:nth-child(1) {
-      width: 80px;
-      height: 80px;
-      top: 10%;
-      left: 10%;
-      animation-delay: 0s;
-    }
-
-    .floating-element:nth-child(2) {
-      width: 120px;
-      height: 120px;
-      top: 70%;
-      left: 80%;
-      animation-delay: -5s;
-    }
-
-    .floating-element:nth-child(3) {
-      width: 60px;
-      height: 60px;
-      top: 40%;
-      left: 90%;
-      animation-delay: -10s;
-    }
-
-    .floating-element:nth-child(4) {
-      width: 100px;
-      height: 100px;
-      top: 20%;
-      left: 70%;
-      animation-delay: -3s;
-    }
-
-    .floating-element:nth-child(5) {
-      width: 90px;
-      height: 90px;
-      top: 80%;
-      left: 20%;
-      animation-delay: -8s;
-    }
+    .floating-element:nth-child(1) { width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s; }
+    .floating-element:nth-child(2) { width: 120px; height: 120px; top: 70%; left: 80%; animation-delay: -5s; }
+    .floating-element:nth-child(3) { width: 60px; height: 60px; top: 40%; left: 90%; animation-delay: -10s; }
+    .floating-element:nth-child(4) { width: 100px; height: 100px; top: 20%; left: 70%; animation-delay: -3s; }
+    .floating-element:nth-child(5) { width: 90px; height: 90px; top: 80%; left: 20%; animation-delay: -8s; }
 
     @keyframes float {
       0% { transform: translateY(0px) rotate(0deg); opacity: 0; }
@@ -121,14 +85,8 @@
     }
 
     @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.9);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+      from { opacity: 0; transform: translateY(30px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     .login-header {
@@ -177,15 +135,12 @@
       transition: all 0.3s ease;
       background: rgba(255, 255, 255, 0.8);
       backdrop-filter: blur(10px);
-      position: relative;
     }
 
     .form-input:focus {
       outline: none;
       border-color: #1e88e5;
-      box-shadow:
-      0 0 0 3px rgba(30, 136, 229, 0.1),
-      0 5px 15px rgba(30, 136, 229, 0.2);
+      box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.1), 0 5px 15px rgba(30, 136, 229, 0.2);
       transform: translateY(-2px);
       background: rgba(255, 255, 255, 0.95);
     }
@@ -258,17 +213,6 @@
       transform: translateY(0);
     }
 
-    .login-button:disabled {
-      background: #cccccc;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    .login-button:disabled::before {
-      display: none;
-    }
-
     .register-link {
       text-align: center;
       margin-top: 30px;
@@ -315,10 +259,9 @@
       font-size: 14px;
     }
 
-    /* Nowy styl modala - pojawia się pod formularzem */
     .modal-overlay {
       position: absolute;
-      top: 100%; /* Pojawia się pod formularzem */
+      top: 100%;
       left: 0;
       width: 100%;
       z-index: 1000;
@@ -337,14 +280,11 @@
       transform: translateY(0);
     }
 
-    /* Nowy kontener modala - szerszy i niższy */
     .modal-container {
       background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
       backdrop-filter: blur(20px);
       border-radius: 12px;
-      box-shadow:
-      0 20px 40px rgba(0, 0, 0, 0.25),
-      0 8px 20px rgba(220, 53, 69, 0.2);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 8px 20px rgba(220, 53, 69, 0.2);
       border: 1px solid rgba(220, 53, 69, 0.25);
       padding: 20px;
       width: 100%;
@@ -358,7 +298,6 @@
       transform: scale(1);
     }
 
-    /* Header modala */
     .modal-header {
       display: flex;
       align-items: center;
@@ -393,7 +332,6 @@
       margin: 0;
     }
 
-    /* Zawartość modala */
     .modal-content {
       text-align: center;
       margin-bottom: 15px;
@@ -407,7 +345,6 @@
       padding: 0 10px;
     }
 
-    /* Akcje modala */
     .modal-actions {
       display: flex;
       justify-content: center;
@@ -425,34 +362,18 @@
       transition: all 0.3s ease;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      position: relative;
-      overflow: hidden;
     }
-
     .modal-button-primary {
       background: linear-gradient(45deg, #dc3545, #c82333);
       color: white;
       box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
     }
-
     .modal-button-primary:hover {
       background: linear-gradient(45deg, #c82333, #bd2130);
       transform: translateY(-2px);
       box-shadow: 0 6px 15px rgba(220, 53, 69, 0.4);
     }
 
-    .modal-button-secondary {
-      background: linear-gradient(45deg, #f8f9fa, #e9ecef);
-      color: #495057;
-      border: 2px solid #dee2e6;
-    }
-
-    .modal-button-secondary:hover {
-      background: linear-gradient(45deg, #e9ecef, #dee2e6);
-      transform: translateY(-2px);
-    }
-
-    /* Przycisk zamykania */
     .modal-close {
       position: absolute;
       top: 10px;
@@ -477,7 +398,6 @@
       transform: rotate(90deg);
     }
 
-    /* Pasek postępu */
     .modal-progress {
       position: absolute;
       bottom: 0;
@@ -495,7 +415,6 @@
       to { transform: scaleX(0); }
     }
 
-    /* Animacje wejścia */
     .modal-container::before {
       content: '';
       position: absolute;
@@ -515,103 +434,55 @@
       50% { opacity: 0.6; }
     }
 
-    /* Style specjalnie dla modala wylogowania */
     .modal-overlay.logout-modal .modal-container {
       background: linear-gradient(135deg, #f0f8ff 0%, #e3f2fd 100%);
       border: 1px solid rgba(30, 136, 229, 0.25);
-      box-shadow:
-      0 20px 40px rgba(0, 0, 0, 0.15),
-      0 8px 20px rgba(30, 136, 229, 0.2);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 20px rgba(30, 136, 229, 0.2);
     }
-
     .modal-overlay.logout-modal .modal-icon {
       background: linear-gradient(45deg, #1e88e5, #1565c0);
       animation: logoutPulse 2s ease-in-out infinite;
     }
-
     @keyframes logoutPulse {
       0% { transform: scale(1); box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3); }
       50% { transform: scale(1.05); box-shadow: 0 6px 20px rgba(30, 136, 229, 0.5); }
       100% { transform: scale(1); box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3); }
     }
-
-    .modal-overlay.logout-modal .modal-title {
-      color: #1e88e5;
-    }
-
-    .modal-overlay.logout-modal .modal-message {
-      color: #1565c0;
-    }
-
+    .modal-overlay.logout-modal .modal-title { color: #1e88e5; }
+    .modal-overlay.logout-modal .modal-message { color: #1565c0; }
     .modal-overlay.logout-modal .modal-button-primary {
       background: linear-gradient(45deg, #1e88e5, #1565c0);
       box-shadow: 0 4px 10px rgba(30, 136, 229, 0.3);
     }
-
     .modal-overlay.logout-modal .modal-button-primary:hover {
       background: linear-gradient(45deg, #1565c0, #0d47a1);
       box-shadow: 0 6px 15px rgba(30, 136, 229, 0.4);
     }
-
     .modal-overlay.logout-modal .modal-close:hover {
       background: rgba(30, 136, 229, 0.1);
       color: #1e88e5;
     }
-
-    .modal-overlay.logout-modal .modal-progress {
-      background: linear-gradient(45deg, #1e88e5, #1565c0);
-    }
-
+    .modal-overlay.logout-modal .modal-progress { background: linear-gradient(45deg, #1e88e5, #1565c0); }
     .modal-overlay.logout-modal .modal-container::before {
       background: linear-gradient(45deg, #1e88e5, #1565c0, #1e88e5);
       opacity: 0.2;
     }
 
-    /* Responsywność */
     @media (max-width: 480px) {
-      .login-container {
-        padding: 30px 25px;
-        margin: 20px;
-      }
-
-      .login-title {
-        font-size: 28px;
-      }
-
-      .form-input {
-        padding: 12px 15px;
-      }
-
-      .login-button {
-        padding: 15px;
-      }
-
-      .modal-container {
-        padding: 15px;
-        max-width: 90%;
-      }
-
-      .modal-title {
-        font-size: 16px;
-      }
-
-      .modal-icon {
-        width: 35px;
-        height: 35px;
-        font-size: 16px;
-      }
-
-      .modal-actions {
-        flex-direction: column;
-      }
-
-      .modal-button {
-        width: 100%;
-      }
+      .login-container { padding: 30px 25px; margin: 20px; }
+      .login-title { font-size: 28px; }
+      .form-input { padding: 12px 15px; }
+      .login-button { padding: 15px; }
+      .modal-container { padding: 15px; max-width: 90%; }
+      .modal-title { font-size: 16px; }
+      .modal-icon { width: 35px; height: 35px; font-size: 16px; }
+      .modal-actions { flex-direction: column; }
+      .modal-button { width: 100%; }
     }
   </style>
 </head>
 <body>
+
 <div class="floating-elements">
   <div class="floating-element"></div>
   <div class="floating-element"></div>
@@ -626,216 +497,144 @@
     <p class="login-subtitle">Zaloguj się do swojego konta</p>
   </div>
 
-  <!-- Komunikaty błędów/sukcesu -->
-  <div th:if="${error}" class="error-message" th:text="${error}">
-    Nieprawidłowe dane logowania
-  </div>
-
-  <div th:if="${success}" class="success-message" th:text="${success}">
-    Konto zostało pomyślnie utworzone
-  </div>
+  <div th:if="${error}" class="error-message" th:text="${error}"></div>
+  <div th:if="${success}" class="success-message" th:text="${success}"></div>
 
   <form th:action="@{/oskarinio143/heroes/login}" method="post">
     <div class="form-group">
       <label for="username" class="form-label">Nazwa użytkownika</label>
-      <input type="text" id="username" name="username" class="form-input"
-             placeholder="Wprowadź nazwę użytkownika">
+      <input type="text" id="username" name="username" class="form-input" placeholder="Wprowadź nazwę użytkownika">
     </div>
-
     <div class="form-group">
       <label for="password" class="form-label">Hasło</label>
       <div style="position: relative;">
-        <input type="password" id="password" name="password" class="form-input"
-               placeholder="Wprowadź hasło">
-        <button type="button" class="password-toggle" onclick="togglePassword()">
-          👁️
-        </button>
+        <input type="password" id="password" name="password" class="form-input" placeholder="Wprowadź hasło">
+        <button type="button" class="password-toggle" onclick="togglePassword()">👁️</button>
       </div>
     </div>
-
-    <button type="submit" class="login-button">
-      Zaloguj się
-    </button>
+    <button type="submit" class="login-button">Zaloguj się</button>
   </form>
 
   <div class="register-link">
     Nie masz konta? <a href="/oskarinio143/heroes/register">Zarejestruj się</a>
   </div>
 
-  <!-- Modal błędów -->
+  <!-- Modal Błędów -->
   <div id="errorModal" class="modal-overlay">
     <div class="modal-container">
       <button class="modal-close" onclick="closeModal('errorModal')">×</button>
-
       <div class="modal-header">
         <div class="modal-icon">⚠️</div>
         <h2 class="modal-title">Wystąpił błąd</h2>
       </div>
-
       <div class="modal-content">
         <div id="modalMessage" th:if="${errorMessage}" th:utext="${errorMessage}"></div>
       </div>
-
       <div class="modal-actions">
-        <button class="modal-button modal-button-primary" onclick="closeModal('errorModal')">
-          Rozumiem
-        </button>
+        <button class="modal-button modal-button-primary" onclick="closeModal('errorModal')">Rozumiem</button>
       </div>
-
       <div class="modal-progress"></div>
     </div>
   </div>
-  <!-- Modal wylogowania -->
+
+  <!-- Modal Wylogowania -->
   <div id="logoutModal" class="modal-overlay logout-modal">
     <div class="modal-container">
       <button class="modal-close" onclick="closeModal('logoutModal')">×</button>
-
       <div class="modal-header">
         <div class="modal-icon">🚪</div>
         <h2 class="modal-title">Wylogowano</h2>
       </div>
-
       <div class="modal-content">
         <div id="logoutMessage" th:if="${logoutMessage}" th:utext="${logoutMessage}"></div>
       </div>
-
       <div class="modal-actions">
-        <button class="modal-button modal-button-primary" onclick="closeModal('logoutModal')">
-          OK
-        </button>
+        <button class="modal-button modal-button-primary" onclick="closeModal('logoutModal')">OK</button>
       </div>
-
       <div class="modal-progress"></div>
     </div>
   </div>
 
+  <!-- Modal Automatycznego Wylogowania -->
   <div id="autoLogoutModal" class="modal-overlay logout-modal">
     <div class="modal-container">
       <button class="modal-close" onclick="closeModal('autoLogoutModal')">×</button>
-
       <div class="modal-header">
         <div class="modal-icon">🚪</div>
         <h2 class="modal-title">Wylogowano</h2>
       </div>
-
       <div class="modal-content">
         <div id="autoLogoutMessage" th:if="${autoLogoutMessage}" th:utext="${autoLogoutMessage}"></div>
       </div>
-
       <div class="modal-actions">
-        <button class="modal-button modal-button-primary" onclick="closeModal('autoLogoutModal')">
-          OK
-        </button>
+        <button class="modal-button modal-button-primary" onclick="closeModal('autoLogoutModal')">OK</button>
       </div>
-
       <div class="modal-progress"></div>
     </div>
   </div>
+</div>
 
-<script th:if="${autoLogoutMessage}">
-  function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    modal.classList.remove('show');
-    setTimeout(() => modal.style.display = 'none', 300);
-  }
-
-  const modal = document.getElementById('autoLogoutModal');
-  modal.style.display = 'flex';
-  setTimeout(() => modal.classList.add('show'), 10);
-  setTimeout(() => closeModal('autoLogoutModal'), 5000);
-
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal('autoLogoutModal');
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('show')) closeModal('autoLogoutModal');
-  });
-</script>
-
-<script th:if="${logoutMessage}">
-  function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    modal.classList.remove('show');
-    setTimeout(() => modal.style.display = 'none', 300);
-  }
-
-  const modal = document.getElementById('logoutModal');
-  modal.style.display = 'flex';
-  setTimeout(() => modal.classList.add('show'), 10);
-  setTimeout(() => closeModal('logoutModal'), 5000);
-
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal('logoutModal');
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('show')) closeModal('logoutModal');
-  });
-</script>
-
-<script th:if="${errorMessage}">
-  function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    modal.classList.remove('show');
-    setTimeout(() => modal.style.display = 'none', 300);
-  }
-
-  const modal = document.getElementById('errorModal');
-  modal.style.display = 'flex';
-  setTimeout(() => modal.classList.add('show'), 10);
-  setTimeout(() => closeModal('errorModal'), 5000);
-
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal('errorModal');
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('show')) closeModal('errorModal');
-  });
-</script>
-
+<!-- === GŁÓWNY BLOK SKRYPTÓW (MUSI BYĆ PRZED WYWOŁANIAMI) === -->
 <script>
-  function togglePassword() {
-    const passwordInput = document.getElementById('password');
-    const toggleButton = document.querySelector('.password-toggle');
-
-    if (passwordInput.type === 'password') {
-      passwordInput.type = 'text';
-      toggleButton.textContent = '🙈';
-    } else {
-      passwordInput.type = 'password';
-      toggleButton.textContent = '👁️';
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.classList.remove('show');
+      // Poczekaj na zakończenie animacji i wtedy ukryj element
+      setTimeout(() => { modal.style.display = 'none'; }, 300);
     }
   }
 
-  // Animacja pól formularza
-  document.querySelectorAll('.form-input').forEach(input => {
-    input.addEventListener('focus', function() {
-      this.parentElement.classList.add('focused');
-    });
+  function showModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
 
-    input.addEventListener('blur', function() {
-      if (this.value === '') {
-        this.parentElement.classList.remove('focused');
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('show'), 10);
+
+    const timeoutId = setTimeout(() => closeModal(modalId), 5000);
+
+    const clickHandler = (e) => {
+      if (e.target === modal || e.target.closest('.modal-close, .modal-button')) {
+        cleanup();
       }
-    });
-  });
+    };
 
-  // Walidacja formularza
-  document.querySelector('form').addEventListener('submit', function(e) {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-  });
+    const keydownHandler = (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('show')) {
+        cleanup();
+      }
+    };
 
-  // Efekt paralaksy dla tła
+    function cleanup() {
+      clearTimeout(timeoutId);
+      closeModal(modalId);
+      modal.removeEventListener('click', clickHandler);
+      document.removeEventListener('keydown', keydownHandler);
+    }
+
+    modal.addEventListener('click', clickHandler);
+    document.addEventListener('keydown', keydownHandler);
+  }
+
+  function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const toggleButton = document.querySelector('.password-toggle');
+    const isPassword = passwordInput.type === 'password';
+    passwordInput.type = isPassword ? 'text' : 'password';
+    toggleButton.textContent = isPassword ? '🙈' : '👁️';
+  }
+
   document.addEventListener('mousemove', function(e) {
     const x = e.clientX / window.innerWidth;
     const y = e.clientY / window.innerHeight;
-
-    document.body.style.backgroundPosition =
-    `${50 + x * 5}% ${50 + y * 5}%`;
+    document.body.style.backgroundPosition = `${50 + x * 5}% ${50 + y * 5}%`;
   });
 </script>
+
+<script th:if="${errorMessage}">showModal('errorModal');</script>
+<script th:if="${logoutMessage}">showModal('logoutModal');</script>
+<script th:if="${autoLogoutMessage}">showModal('autoLogoutModal');</script>
+
 </body>
 </html>

@@ -1,7 +1,6 @@
 package oskarinio143.heroes3.model.servicedto;
 
 import lombok.*;
-import oskarinio143.heroes3.model.constant.Skill;
 
 import java.util.List;
 @NoArgsConstructor
@@ -22,7 +21,6 @@ public class BattleUnit {
     private int hpLeft;
     private int shots;
     private boolean isRange;
-    private List<Skill> skills;
 
     public BattleUnit(BattleUnitBuilder battleUnit){
         this.name = battleUnit.name;
@@ -52,7 +50,6 @@ public class BattleUnit {
         private int hpLeft;
         private int shots;
         private boolean isRange;
-        private List<Skill> skills;
 
         public BattleUnitBuilder name(String name){
             this.name = name;
@@ -111,11 +108,6 @@ public class BattleUnit {
 
         public BattleUnitBuilder isRange(boolean isRange) {
             this.isRange = isRange;
-            return this;
-        }
-
-        public BattleUnitBuilder skills(List<Skill> skills) {
-            this.skills = skills;
             return this;
         }
 

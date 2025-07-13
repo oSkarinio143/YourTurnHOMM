@@ -1,4 +1,4 @@
-package oskarinio143.heroes3.model.servicedto;
+package oskarinio143.heroes3.model.form;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -11,9 +11,9 @@ import oskarinio143.heroes3.model.entity.Unit;
 @NoArgsConstructor
 @Getter
 @Setter
-public class DuelInfo {
+public class DuelForm {
 
-    private String UserUUID;
+    private String userUUID;
 
     @NotNull
     private Unit leftUnit;
@@ -33,17 +33,17 @@ public class DuelInfo {
 
     @Min(0)
     @Max(99)
-    private int leftHeroAttack;
+    private Integer leftHeroAttack;
 
     @Min(0)
     @Max(99)
-    private int leftHeroDefense;
+    private Integer leftHeroDefense;
 
     @Min(0)
     @Max(99)
-    private int rightHeroAttack;
+    private Integer rightHeroAttack;
 
     @Min(0)
     @Max(99)
-    private int rightHeroDefense;
+    private Integer rightHeroDefense;
 }

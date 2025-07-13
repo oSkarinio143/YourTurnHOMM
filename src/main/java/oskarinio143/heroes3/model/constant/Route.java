@@ -30,6 +30,7 @@ public class Route {
     public static final String MODIFY = "/modify";
     public static final String UNIT = "/unit";
     public static final String SELECT = "/select";
+    public static final String LOAD = "/load";
     public static final String BATTLE = "/battle";
     public static final String STREAM = "/stream";
     public static final String GENERATEUUID = "/generateUUID";

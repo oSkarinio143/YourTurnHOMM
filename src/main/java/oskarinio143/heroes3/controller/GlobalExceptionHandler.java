@@ -1,26 +1,19 @@
 package oskarinio143.heroes3.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
-import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.transaction.TransactionSystemException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import oskarinio143.heroes3.exception.*;
 import oskarinio143.heroes3.model.constant.Route;
-import oskarinio143.heroes3.service.ExceptionHandlerService;
+import oskarinio143.heroes3.service.ExceptionMessageCreator;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    private final ExceptionHandlerService exceptionHandlerService;
+    private final ExceptionMessageCreator exceptionHandlerService;
 
-    public GlobalExceptionHandler(ExceptionHandlerService exceptionHandlerService) {
+    public GlobalExceptionHandler(ExceptionMessageCreator exceptionHandlerService) {
         this.exceptionHandlerService = exceptionHandlerService;
     }
 

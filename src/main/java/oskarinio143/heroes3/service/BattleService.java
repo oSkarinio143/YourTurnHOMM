@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import oskarinio143.heroes3.model.entity.Unit;
 import oskarinio143.heroes3.model.servicedto.AttackInfo;
 import oskarinio143.heroes3.model.servicedto.BattleUnit;
-import oskarinio143.heroes3.model.servicedto.DuelInfo;
+import oskarinio143.heroes3.model.form.DuelForm;
 import oskarinio143.heroes3.model.servicedto.RoundInfo;
 
 import static java.lang.Thread.sleep;
@@ -30,23 +30,35 @@ public class BattleService {
     }
 
     @Async
-    public void prepareBattle(DuelInfo duelInfo){
-        AttackInfo attackInfo = prepareAttackInfo(duelInfo);
+    public void prepareBattle(DuelForm duelForm){
+        AttackInfo attackInfo = prepareAttackInfo(duelForm);
         startBattle(attackInfo);
     }
 
-    public AttackInfo prepareAttackInfo(DuelInfo duelInfo){
-        AttackInfo attackInfo = new AttackInfo(duelInfo.getUserUUID());
+    public AttackInfo prepareAttackInfo(DuelForm duelForm){
+        AttackInfo attackInfo = new AttackInfo(duelForm.getUserUUID());
 
-        BattleUnit leftBattleUnit = prepareBattleUnit(duelInfo.getLeftUnit(), duelInfo.getLeftHeroAttack(), duelInfo.getLeftHeroDefense());
-        BattleUnit rightBattleUnit = prepareBattleUnit(duelInfo.getRightUnit(), duelInfo.getRightHeroAttack(), duelInfo.getRightHeroDefense());
+        setHerosStatsIfNull(duelForm);
+        BattleUnit leftBattleUnit = prepareBattleUnit(duelForm.getLeftUnit(), duelForm.getLeftHeroAttack(), duelForm.getLeftHeroDefense());
+        BattleUnit rightBattleUnit = prepareBattleUnit(duelForm.getRightUnit(), duelForm.getRightHeroAttack(), duelForm.getRightHeroDefense());
 
         attackInfo.setFasterUnit(findFaster(leftBattleUnit, rightBattleUnit));
         attackInfo.setSlowerUnit(findSlower(attackInfo, leftBattleUnit, rightBattleUnit));
 
-        attackInfo.setFasterQuantity(findFasterQuantity(attackInfo.getFasterUnit(), leftBattleUnit, duelInfo.getLeftQuantity(), duelInfo.getRightQuantity()));
-        attackInfo.setSlowerQuantity(findSlowerQuantity(attackInfo.getSlowerUnit(), rightBattleUnit, duelInfo.getRightQuantity(), duelInfo.getLeftQuantity()));
+        attackInfo.setFasterQuantity(findFasterQuantity(attackInfo.getFasterUnit(), leftBattleUnit, duelForm.getLeftQuantity(), duelForm.getRightQuantity()));
+        attackInfo.setSlowerQuantity(findSlowerQuantity(attackInfo.getSlowerUnit(), rightBattleUnit, duelForm.getRightQuantity(), duelForm.getLeftQuantity()));
         return attackInfo;
+    }
+
+    public void setHerosStatsIfNull(DuelForm duelForm){
+        if(duelForm.getLeftHeroAttack() == null)
+            duelForm.setLeftHeroAttack(0);
+        if(duelForm.getLeftHeroDefense() == null)
+            duelForm.setLeftHeroDefense(0);
+        if(duelForm.getRightHeroAttack() == null)
+            duelForm.setRightHeroAttack(0);
+        if(duelForm.getRightHeroDefense() == null)
+            duelForm.setRightHeroDefense(0);
     }
 
     public BattleUnit prepareBattleUnit(Unit unit, int heroAtk, int heroDef){

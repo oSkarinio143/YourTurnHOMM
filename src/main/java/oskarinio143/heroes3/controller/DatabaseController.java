@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import oskarinio143.heroes3.model.constant.Route;
 import oskarinio143.heroes3.model.entity.Unit;
 import oskarinio143.heroes3.service.DatabaseService;
-import oskarinio143.heroes3.service.ExceptionHandlerService;
+import oskarinio143.heroes3.service.ExceptionMessageCreator;
 
 import java.io.IOException;
 
@@ -19,9 +19,9 @@ import java.io.IOException;
 public class DatabaseController {
 
     private final DatabaseService databaseService;
-    private final ExceptionHandlerService exceptionHandlerService;
+    private final ExceptionMessageCreator exceptionHandlerService;
 
-    public DatabaseController(DatabaseService databaseService, ExceptionHandlerService exceptionHandlerService) {
+    public DatabaseController(DatabaseService databaseService, ExceptionMessageCreator exceptionHandlerService) {
         this.databaseService = databaseService;
         this.exceptionHandlerService = exceptionHandlerService;
     }
@@ -53,13 +53,13 @@ public class DatabaseController {
 
     @GetMapping(Route.SHOW)
     public String viewUnits(Model model){
-        databaseService.viewUnits(model);
+        model.addAttribute("units", databaseService.getAllUnits());
         return Route.PACKAGE_DATABASE + Route.VIEW_SHOW;
     }
 
     @GetMapping(Route.DELETE)
     public String deleteUnit(Model model){
-        databaseService.viewUnits(model);
+        model.addAttribute("units", databaseService.getAllUnits());
         return Route.PACKAGE_DATABASE + Route.VIEW_DELETE;
     }
 
@@ -71,13 +71,15 @@ public class DatabaseController {
 
     @GetMapping(Route.MODIFY)
     public String handleModify(Model model){
-        databaseService.viewUnits(model);
+        model.addAttribute("units", databaseService.getAllUnits());
         return Route.PACKAGE_DATABASE + Route.VIEW_MODIFY;
     }
 
     @GetMapping(Route.MODIFY + Route.UNIT)
-    public String handleModifyUnit(@RequestParam String name, Model model) {
-        databaseService.viewSingleUnit(model, name);
+    public String handleModifyUnit(@RequestParam String name,
+                                   Model model) {
+
+        model.addAttribute("unit", databaseService.getSingleUnit(name));
         return Route.PACKAGE_DATABASE + Route.VIEW_MODIFY_UNIT;
     }
 
@@ -91,9 +93,7 @@ public class DatabaseController {
             redirectAttributes.addAttribute("name", unit.getName());
             return Route.REDIRECT + Route.DATABASE + Route.MODIFY + Route.UNIT;
         }
-
         databaseService.modifyUnit(unit);
         return Route.REDIRECT + Route.DATABASE + Route.MODIFY;
-
     }
 }

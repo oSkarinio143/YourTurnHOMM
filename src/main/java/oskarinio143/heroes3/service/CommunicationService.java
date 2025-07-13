@@ -31,11 +31,8 @@ public class CommunicationService {
 
     public void sendMessage(String userUUID, String message) {
         SseEmitter userEmitter = emitters.get(userUUID);
-        System.out.println("Wysyłam, PRZED");
-        System.out.println("UUID - " + userUUID);
         if(userEmitter != null) {
             try {
-                System.out.println("Wysyłam");
                 userEmitter.send(message);
             } catch (IOException e) {
                 emitters.remove(userUUID);

@@ -2,9 +2,12 @@ package oskarinio143.heroes3.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import oskarinio143.heroes3.model.servicedto.DuelInfo;
+import oskarinio143.heroes3.model.constant.Side;
+import oskarinio143.heroes3.model.form.DuelForm;
 import oskarinio143.heroes3.model.entity.Unit;
 import oskarinio143.heroes3.repository.UnitRepository;
+
+import java.util.List;
 
 @Service
 public class DuelService {
@@ -18,61 +21,18 @@ public class DuelService {
         this.unitRepository = unitRepository;
         this.battleService = battleService;
     }
-    public void prepareUnits(Model model, DuelInfo duelInfo){
-        model.addAttribute("leftUnit", duelInfo.getLeftUnit());
-        model.addAttribute("rightUnit", duelInfo.getRightUnit());
-        model.addAttribute("leftQuantity", duelInfo.getLeftQuantity());
-        model.addAttribute("rightQuantity", duelInfo.getRightQuantity());
-        model.addAttribute("leftHeroAttack", duelInfo.getLeftHeroAttack());
-        model.addAttribute("leftHeroDefense", duelInfo.getLeftHeroDefense());
-        model.addAttribute("rightHeroAttack", duelInfo.getRightHeroAttack());
-        model.addAttribute("rightHeroDefense", duelInfo.getRightHeroDefense());
+
+    public void loadUnit(DuelForm duelForm, Side side, String tempUnitName){
+        if(side != null) {
+            Unit unit = unitRepository.getReferenceById(tempUnitName);
+            if (side == Side.LEFT)
+                duelForm.setLeftUnit(unit);
+            if (side == Side.RIGHT)
+                duelForm.setRightUnit(unit);
+        }
     }
 
-    public void selectUnit(Model model, DuelInfo duelInfo, String side){
-        databaseService.viewUnits(model);
-        if (duelInfo.getLeftUnit() != null){
-            model.addAttribute("leftUnit", duelInfo.getLeftUnit().getName());
-        }
-        if(duelInfo.getRightUnit() != null){
-            model.addAttribute("rightUnit", duelInfo.getRightUnit().getName());
-        }
-        model.addAttribute("side", side);
-        model.addAttribute("leftQuantity", duelInfo.getLeftQuantity());
-        model.addAttribute("rightQuantity", duelInfo.getRightQuantity());
-        model.addAttribute("leftHeroAttack", duelInfo.getLeftHeroAttack());
-        model.addAttribute("leftHeroDefense", duelInfo.getLeftHeroDefense());
-        model.addAttribute("rightHeroAttack", duelInfo.getRightHeroAttack());
-        model.addAttribute("rightHeroDefense", duelInfo.getRightHeroDefense());
-    }
-
-    public void loadUnit(Model model, DuelInfo duelInfo, String side, String name){
-        Unit unit = unitRepository.getReferenceById(name);
-        if(side.equals("left")){
-            model.addAttribute("leftUnit", unit);
-            model.addAttribute("rightUnit", duelInfo.getRightUnit());
-        }
-        else if (side.equals("right")) {
-            model.addAttribute("rightUnit", unit);
-            model.addAttribute("leftUnit", duelInfo.getLeftUnit());
-        }
-        model.addAttribute("leftQuantity", duelInfo.getLeftQuantity());
-        model.addAttribute("rightQuantity", duelInfo.getRightQuantity());
-        model.addAttribute("leftHeroAttack", duelInfo.getLeftHeroAttack());
-        model.addAttribute("leftHeroDefense", duelInfo.getLeftHeroDefense());
-        model.addAttribute("rightHeroAttack", duelInfo.getRightHeroAttack());
-        model.addAttribute("rightHeroDefense", duelInfo.getRightHeroDefense());
-    }
-
-    public void loadBattle(Model model, DuelInfo duelInfo){
-        model.addAttribute("leftUnit", duelInfo.getLeftUnit());
-        model.addAttribute("rightUnit", duelInfo.getRightUnit());
-        model.addAttribute("leftQuantity", duelInfo.getLeftQuantity());
-        model.addAttribute("rightQuantity", duelInfo.getRightQuantity());
-        model.addAttribute("leftHeroAttack", duelInfo.getLeftHeroAttack());
-        model.addAttribute("leftHeroDefense", duelInfo.getLeftHeroDefense());
-        model.addAttribute("rightHeroAttack", duelInfo.getRightHeroAttack());
-        model.addAttribute("rightHeroDefense", duelInfo.getRightHeroDefense());
-        battleService.prepareBattle(duelInfo);
+    public void loadBattle(DuelForm duelForm){
+        battleService.prepareBattle(duelForm);
     }
 }

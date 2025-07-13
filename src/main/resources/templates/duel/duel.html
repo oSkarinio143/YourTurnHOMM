@@ -37,11 +37,9 @@
       min-height: 500px;
       display: grid;
       grid-template-columns: 1fr 2fr 1fr;
-      grid-template-rows: 1fr;
       gap: 30px;
       align-items: start;
       flex: 1;
-      position: relative;
     }
 
     .army-section {
@@ -246,7 +244,6 @@
     .left-army {
       padding-right: 25px;
       margin-right: 10px;
-      position: relative;
     }
 
     .left-army::before {
@@ -262,7 +259,6 @@
     .right-army {
       padding-left: 25px;
       margin-left: 10px;
-      position: relative;
     }
 
     .right-army::before {
@@ -273,14 +269,6 @@
       height: 280px;
       width: 3px;
       background-color: #e53935;
-    }
-
-    .left-army .select-unit-btn {
-      background-color: #1e88e5;
-    }
-
-    .left-army .select-unit-btn:hover {
-      background-color: #1565c0;
     }
 
     .right-army .select-unit-btn {
@@ -306,7 +294,6 @@
       background-color: #e53935;
     }
 
-    /* Przyciski nawigacji w sekcjach armii */
     .army-nav-button {
       position: absolute;
       bottom: 0;
@@ -331,7 +318,6 @@
 
     .back-btn:hover {
       background-position: right center;
-      background-color: #545b62;
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
     }
@@ -339,7 +325,6 @@
     .battle-btn {
       background: linear-gradient(45deg, #ff6b35, #ff8e53);
       color: white;
-      border: none;
       position: relative;
       overflow: hidden;
     }
@@ -396,93 +381,58 @@
       max-height: 80%;
       box-sizing: border-box;
       text-align: center;
-
       border: 5px solid;
       border-image: linear-gradient(to right, #000000, #444444) 1;
-
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px; /* 20px między elementami: tekstem i przyciskiem */
-    }
-
-    .back-btn {
-      background-color: #6c757d;
-      color: white;
-      padding: 15px 30px;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.4s ease-in-out;
-      min-width: 180px;
-      background-size: 200% auto;
-      background-image: linear-gradient(to right, #6c757d 0%, #495057 51%, #6c757d 100%);
-    }
-
-    .back-btn:hover {
-      background-position: right center; /* przesuwa gradient */
+      gap: 20px;
     }
   </style>
 </head>
 <body>
 <div class="main-container">
   <h1>Panel pojedynków</h1>
-
   <div class="battle-arena">
-    <!-- Sekcja bohatera gracza -->
     <div class="hero-section left-hero">
       <div class="hero-title">Statystyki bohatera gracza</div>
-
       <div class="stat-group">
         <label class="stat-label">Atak:</label>
-        <input type="number" class="stat-input" id="leftHeroAttack" min="0" placeholder="0" th:value="${leftHeroAttack}">
+        <input type="number" class="stat-input" id="leftHeroAttack" min="0" placeholder="0" th:value="${duelForm.leftHeroAttack}">
       </div>
-
       <div class="stat-group">
         <label class="stat-label">Obrona:</label>
-        <input type="number" class="stat-input" id="leftHeroDefense" min="0" placeholder="0" th:value="${leftHeroDefense}">
+        <input type="number" class="stat-input" id="leftHeroDefense" min="0" placeholder="0" th:value="${duelForm.leftHeroDefense}">
       </div>
     </div>
 
-    <!-- Główny blok z bitwą -->
     <div class="main-battle-section">
-      <!-- Lewa armia -->
       <div class="army-section left-army">
         <div class="army-color-indicator blue-indicator"></div>
         <div class="army-title">Gracz</div>
 
         <div class="unit-selector">
-          <form th:action="@{/oskarinio143/heroes/duel/select}" method="post" id="selectLeftForm">
-            <input type="hidden" name="side" value="left">
-            <input type="hidden" name="leftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
-            <input type="hidden" name="rightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
-
-            <!-- Pola, które będą aktualizowane przez JavaScript -->
-            <input type="hidden" name="leftHeroAttack"   id="hiddenLeftHeroAttack_selectLeft">
-            <input type="hidden" name="leftHeroDefense"  id="hiddenLeftHeroDefense_selectLeft">
-            <input type="hidden" name="rightHeroAttack"  id="hiddenRightHeroAttack_selectLeft">
+          <form th:action="@{/oskarinio143/heroes/duel/select}" method="get" id="selectLeftForm">
+            <input type="hidden" name="side" value="LEFT">
+            <input type="hidden" name="leftUnit" th:value="${duelForm.leftUnit?.name ?: ''}">
+            <input type="hidden" name="rightUnit" th:value="${duelForm.rightUnit?.name ?: ''}">
+            <input type="hidden" name="leftHeroAttack" id="hiddenLeftHeroAttack_selectLeft">
+            <input type="hidden" name="leftHeroDefense" id="hiddenLeftHeroDefense_selectLeft">
+            <input type="hidden" name="rightHeroAttack" id="hiddenRightHeroAttack_selectLeft">
             <input type="hidden" name="rightHeroDefense" id="hiddenRightHeroDefense_selectLeft">
-
-            <!-- DODAJ TE DWA POLA -->
-            <input type="hidden" name="leftQuantity"     id="hiddenLeftQuantity_selectLeft">
-            <input type="hidden" name="rightQuantity"    id="hiddenRightQuantity_selectLeft">
-
-            <!-- WAŻNE: Nadajemy ID przyciskowi -->
-            <button type="submit" class="select-unit-btn" id="selectLeftButton">
-              <span th:if="${leftUnit == null}">Wybierz jednostkę</span>
-              <span th:if="${leftUnit != null}">Zmień jednostkę</span>
+            <input type="hidden" name="leftQuantity" id="hiddenLeftQuantity_selectLeft">
+            <input type="hidden" name="rightQuantity" id="hiddenRightQuantity_selectLeft">
+            <button type="submit" class="select-unit-btn">
+              <span th:text="${duelForm.leftUnit == null ? 'Wybierz jednostkę' : 'Zmień jednostkę'}"></span>
             </button>
           </form>
         </div>
 
         <div class="quantity-section">
           <label class="quantity-label">Podaj ilość:</label>
-          <input type="number" class="quantity-input" id="leftQuantity" min="0" placeholder="0" th:value="${leftQuantity}">
+          <input type="number" class="quantity-input" id="leftQuantity" min="0" placeholder="0" th:value="${duelForm.leftQuantity}">
         </div>
 
-        <!-- Przycisk Wróć do bazy danych w lewym dolnym rogu -->
         <form th:action="@{/oskarinio143/heroes}" method="get" style="position: absolute; bottom: 0; left: 0; right: 0;">
           <button type="submit" class="army-nav-button back-btn">
             Wróć do bazy danych
@@ -490,75 +440,57 @@
         </form>
       </div>
 
-      <!-- Centrum - pole bitwy -->
       <div class="battle-center">
         <div class="unit-display-container">
-
-          <!-- Lewa jednostka -->
-          <div class="unit-display left-unit" id="leftUnitDisplay">
-            <div th:if="${leftUnit != null}">
-              <img th:src="@{${leftUnit.imagePath}}"
-                   alt="Left Unit Image"
-                   style="max-width:120px; max-height:120px;"/>
-              <div class="unit-info" th:text="${leftUnit.name}"></div>
+          <div class="unit-display left-unit">
+            <div th:if="${duelForm.leftUnit != null}">
+              <img th:src="@{${duelForm.leftUnit.imagePath}}" alt="Left Unit Image" style="max-width:120px; max-height:120px;">
+              <div class="unit-info" th:text="${duelForm.leftUnit.name}"></div>
             </div>
-            <div th:unless="${leftUnit != null}" class="unit-placeholder">?</div>
+            <div th:unless="${duelForm.leftUnit != null}" class="unit-placeholder">?</div>
           </div>
 
           <div class="vs-text">VS</div>
 
-          <!-- Prawa jednostka -->
-          <div class="unit-display right-unit" id="rightUnitDisplay">
-            <div th:if="${rightUnit != null}">
-              <img th:src="@{${rightUnit.imagePath}}"
-                   alt="Right Unit Image"
-                   style="max-width:120px; max-height:120px;"/>
-              <div class="unit-info" th:text="${rightUnit.name}"></div>
+          <div class="unit-display right-unit">
+            <div th:if="${duelForm.rightUnit != null}">
+              <img th:src="@{${duelForm.rightUnit.imagePath}}" alt="Right Unit Image" style="max-width:120px; max-height:120px;">
+              <div class="unit-info" th:text="${duelForm.rightUnit.name}"></div>
             </div>
-            <div th:unless="${rightUnit != null}" class="unit-placeholder">?</div>
+            <div th:unless="${duelForm.rightUnit != null}" class="unit-placeholder">?</div>
           </div>
-
         </div>
       </div>
 
-      <!-- Prawa armia -->
       <div class="army-section right-army">
         <div class="army-color-indicator red-indicator"></div>
         <div class="army-title">Przeciwnik</div>
 
         <div class="unit-selector">
-          <form th:action="@{/oskarinio143/heroes/duel/select}" method="post" id="selectRightForm">
-            <input type="hidden" name="side" value="right">
-            <input type="hidden" name="leftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
-            <input type="hidden" name="rightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
-
-            <!-- Pola, które będą aktualizowane przez JavaScript -->
-            <input type="hidden" name="leftHeroAttack"   id="hiddenLeftHeroAttack_selectRight">
-            <input type="hidden" name="leftHeroDefense"  id="hiddenLeftHeroDefense_selectRight">
-            <input type="hidden" name="rightHeroAttack"  id="hiddenRightHeroAttack_selectRight">
+          <form th:action="@{/oskarinio143/heroes/duel/select}" method="get" id="selectRightForm">
+            <input type="hidden" name="side" value="RIGHT">
+            <input type="hidden" name="leftUnit" th:value="${duelForm.leftUnit?.name ?: ''}">
+            <input type="hidden" name="rightUnit" th:value="${duelForm.rightUnit?.name ?: ''}">
+            <input type="hidden" name="leftHeroAttack" id="hiddenLeftHeroAttack_selectRight">
+            <input type="hidden" name="leftHeroDefense" id="hiddenLeftHeroDefense_selectRight">
+            <input type="hidden" name="rightHeroAttack" id="hiddenRightHeroAttack_selectRight">
             <input type="hidden" name="rightHeroDefense" id="hiddenRightHeroDefense_selectRight">
-
-            <!-- DODAJ TE DWA POLA -->
-            <input type="hidden" name="leftQuantity"     id="hiddenLeftQuantity_selectRight">
-            <input type="hidden" name="rightQuantity"    id="hiddenRightQuantity_selectRight">
-
-            <!-- WAŻNE: Nadajemy ID przyciskowi -->
-            <button type="submit" class="select-unit-btn" id="selectRightButton">
-              <span th:if="${rightUnit == null}">Wybierz jednostkę</span>
-              <span th:if="${rightUnit != null}">Zmień jednostkę</span>
+            <input type="hidden" name="leftQuantity" id="hiddenLeftQuantity_selectRight">
+            <input type="hidden" name="rightQuantity" id="hiddenRightQuantity_selectRight">
+            <button type="submit" class="select-unit-btn">
+              <span th:text="${duelForm.rightUnit == null ? 'Wybierz jednostkę' : 'Zmień jednostkę'}"></span>
             </button>
           </form>
         </div>
 
         <div class="quantity-section">
           <label class="quantity-label">Podaj ilość:</label>
-          <input type="number" class="quantity-input" id="rightQuantity" min="0" placeholder="0" th:value="${rightQuantity}">
+          <input type="number" class="quantity-input" id="rightQuantity" min="0" placeholder="0" th:value="${duelForm.rightQuantity}">
         </div>
 
-        <!-- Przycisk Rozpocznij pojedynek w prawym dolnym rogu -->
-        <form th:action="@{/oskarinio143/heroes/duel/battle}" method="post" style="position: absolute; bottom: 0; left: 0; right: 0;">
-          <input type="hidden" name="leftUnit" th:value="${leftUnit != null ? leftUnit.name : ''}">
-          <input type="hidden" name="rightUnit" th:value="${rightUnit != null ? rightUnit.name : ''}">
+        <form th:action="@{/oskarinio143/heroes/duel/battle}" method="post" id="battleForm" style="position: absolute; bottom: 0; left: 0; right: 0;">
+          <input type="hidden" name="leftUnit" th:value="${duelForm.leftUnit?.name ?: ''}">
+          <input type="hidden" name="rightUnit" th:value="${duelForm.rightUnit?.name ?: ''}">
           <input type="hidden" name="leftQuantity" id="leftQuantityInput">
           <input type="hidden" name="rightQuantity" id="rightQuantityInput">
           <input type="hidden" name="leftHeroAttack" id="leftHeroAttackInput">
@@ -566,47 +498,30 @@
           <input type="hidden" name="rightHeroAttack" id="rightHeroAttackInput">
           <input type="hidden" name="rightHeroDefense" id="rightHeroDefenseInput">
           <input type="hidden" id="userUUIDInput" name="userUUID" value="">
-          <button type="submit" class="army-nav-button battle-btn"
-                  th:disabled="${leftUnit == null || rightUnit == null}">
+          <button type="submit" class="army-nav-button battle-btn" th:disabled="${duelForm.leftUnit == null || duelForm.rightUnit == null}">
             Rozpocznij pojedynek⚔️
           </button>
         </form>
       </div>
     </div>
 
-    <!-- Sekcja bohatera przeciwnika -->
     <div class="hero-section right-hero">
       <div class="hero-title">Statystyki bohatera przeciwnika</div>
-
       <div class="stat-group">
         <label class="stat-label">Atak:</label>
-        <input type="number" class="stat-input" id="rightHeroAttack" min="0" placeholder="0" th:value="${rightHeroAttack}">
+        <input type="number" class="stat-input" id="rightHeroAttack" min="0" placeholder="0" th:value="${duelForm.rightHeroAttack}">
       </div>
-
       <div class="stat-group">
         <label class="stat-label">Obrona:</label>
-        <input type="number" class="stat-input" id="rightHeroDefense" min="0" placeholder="0" th:value="${rightHeroDefense}">
+        <input type="number" class="stat-input" id="rightHeroDefense" min="0" placeholder="0" th:value="${duelForm.rightHeroDefense}">
       </div>
     </div>
   </div>
 
-  <div id="incorrectValueModal" style="
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    align-items: center;
-    justify-content: center;
-">
+  <div id="incorrectValueModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center;">
     <div class="modal-box">
-      <p th:utext="${incorrectMessage}" style="
-        font-size: 1.5em;
-        font-weight: bold;
-        margin-bottom: 20px;
-    ">
-        Tutaj będzie komunikat
-      </p>
-      <button onclick="document.getElementById('incorrectValueModal').style.display='none'" class = "back-btn">
+      <p th:utext="${incorrectMessage}" style="font-size: 1.5em; font-weight: bold; margin-bottom: 20px;"></p>
+      <button onclick="document.getElementById('incorrectValueModal').style.display='none'" class="back-btn">
         Zamknij
       </button>
     </div>
@@ -617,13 +532,12 @@
   </script>
 
   <script>
-    var uuid = localStorage.getItem("uuid")
+    let uuid = localStorage.getItem("uuid");
+
     async function getUUID() {
       uuid = await fetch("http://localhost:8080/oskarinio143/heroes/duel/generateUUID")
-        .then(res => res.text())
-        .then(text => {
-        return text;
-      });
+        .then(res => res.text());
+      return uuid;
     }
 
     async function setUUID() {
@@ -631,102 +545,45 @@
       passUUID();
     }
 
-    async function loadUUID(){
-      passUUID();
-    }
-
-    function passUUID(){
+    function passUUID() {
       localStorage.setItem("uuid", uuid);
       document.getElementById("userUUIDInput").value = uuid;
     }
 
-    if(uuid == null){
+    if (!uuid) {
       setUUID();
     }
     passUUID();
 
-    document.getElementById("sendLeft").addEventListener("click", function () {
-      const value = document.getElementById("leftQuantity").value;
-
-      document.getElementsByName("leftQuantity").forEach(el => {
-        el.value = value;
-      });
-    });
-
-    document.querySelector('.battle-btn').addEventListener('click', function(e) {
-      if (!this.disabled) {
-        document.getElementById('leftQuantityInput').value =
-        document.getElementById('leftQuantity').value;
-        document.getElementById('rightQuantityInput').value =
-        document.getElementById('rightQuantity').value;
-        document.getElementById('leftHeroAttackInput').value =
-        document.getElementById('leftHeroAttack').value;
-        document.getElementById('leftHeroDefenseInput').value =
-        document.getElementById('leftHeroDefense').value;
-        document.getElementById('rightHeroAttackInput').value =
-        document.getElementById('rightHeroAttack').value;
-        document.getElementById('rightHeroDefenseInput').value =
-        document.getElementById('rightHeroDefense').value;
-
-      }
-    })
-  </script>
-
-  <script>
-    // --- SKRYPT DO AKTUALIZACJI I WYSYŁANIA FORMULARZY ---
-
-    // Funkcja pomocnicza do kopiowania wartości z widocznych pól do ukrytych pól w danym formularzu
     function updateHiddenFieldsBeforeSubmit(formId) {
-      // pobieramy wartości z widocznych pól raz
-      const leftQty = document.getElementById('leftQuantity').value;
-      const rightQty = document.getElementById('rightQuantity').value;
-      const leftAttack = document.getElementById('leftHeroAttack').value;
-      const leftDefense = document.getElementById('leftHeroDefense').value;
-      const rightAttack = document.getElementById('rightHeroAttack').value;
-      const rightDefense = document.getElementById('rightHeroDefense').value;
-
-      // znajdujemy ukryte pola wewnątrz konkretnego formularza i przypisujemy im wartości
       const form = document.getElementById(formId);
-      form.querySelector('input[name="leftQuantity"]').value = leftQty;
-      form.querySelector('input[name="rightQuantity"]').value = rightQty;
-      form.querySelector('input[name="leftHeroAttack"]').value = leftAttack;
-      form.querySelector('input[name="leftHeroDefense"]').value = leftDefense;
-      form.querySelector('input[name="rightHeroAttack"]').value = rightAttack;
-      form.querySelector('input[name="rightHeroDefense"]').value = rightDefense;
+      form.querySelector('input[name="leftQuantity"]').value = document.getElementById('leftQuantity').value;
+      form.querySelector('input[name="rightQuantity"]').value = document.getElementById('rightQuantity').value;
+      form.querySelector('input[name="leftHeroAttack"]').value = document.getElementById('leftHeroAttack').value;
+      form.querySelector('input[name="leftHeroDefense"]').value = document.getElementById('leftHeroDefense').value;
+      form.querySelector('input[name="rightHeroAttack"]').value = document.getElementById('rightHeroAttack').value;
+      form.querySelector('input[name="rightHeroDefense"]').value = document.getElementById('rightHeroDefense').value;
     }
 
-    // Obsługa przycisku "Wybierz jednostkę" dla lewej armii
     document.getElementById('selectLeftForm').addEventListener('submit', function(e) {
-      // Zatrzymujemy domyślne wysłanie, żeby zaktualizować dane
       e.preventDefault();
-      // Aktualizujemy ukryte pola w tym konkretnym formularzu
       updateHiddenFieldsBeforeSubmit('selectLeftForm');
-      // Wysyłamy formularz ręcznie
       this.submit();
     });
 
-    // Obsługa przycisku "Wybierz jednostkę" dla prawej armii
     document.getElementById('selectRightForm').addEventListener('submit', function(e) {
       e.preventDefault();
       updateHiddenFieldsBeforeSubmit('selectRightForm');
       this.submit();
     });
 
-    // Obsługa przycisku "Rozpocznij pojedynek"
-    // (Twój oryginalny skrypt jest prawie dobry, ulepszmy go, żeby używał tej samej logiki)
-    // Zmieniamy formularz bitwy, żeby też miał ID
-    const battleForm = document.querySelector('form[action$="/battle"]');
-    battleForm.id = 'battleForm';
-
-    battleForm.addEventListener('submit', function(e) {
+    document.getElementById('battleForm').addEventListener('submit', function(e) {
       if (document.querySelector('.battle-btn').disabled) {
-        e.preventDefault(); // Nie wysyłaj, jeśli przycisk jest nieaktywny
+        e.preventDefault();
         return;
       }
-      // Nie musimy zapobiegać wysłaniu, po prostu zaktualizujmy dane przed
       updateHiddenFieldsBeforeSubmit('battleForm');
     });
-
   </script>
 </div>
 </body>
