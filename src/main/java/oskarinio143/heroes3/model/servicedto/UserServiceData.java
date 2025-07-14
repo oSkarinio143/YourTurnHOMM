@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import oskarinio143.heroes3.model.constant.Role;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +17,11 @@ public class UserServiceData {
     private String username;
     @NonNull
     private String password;
-    private List<String> roles = new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
     private String accessToken;
     private String refreshToken;
 
-    public void addRole(String role){
+    public void addRole(Role role){
         roles.add(role);
     }
 }

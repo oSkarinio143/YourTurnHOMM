@@ -1,6 +1,7 @@
 package oskarinio143.heroes3.service;
 
 import jakarta.transaction.Transactional;
+import lombok.Data;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import oskarinio143.heroes3.model.form.RegisterForm;
@@ -33,7 +34,7 @@ public class RegisterService {
     public UserServiceData getUserServiceData(RegisterForm registerForm){
         String hashedPassword = passwordEncoder.encode(registerForm.getPassword());
         UserServiceData userServiceData = new UserServiceData(registerForm.getUsername(), hashedPassword);
-        userServiceData.addRole(Role.ROLE_USER.name());
+        userServiceData.addRole(Role.ROLE_USER);
         return userServiceData;
     }
 

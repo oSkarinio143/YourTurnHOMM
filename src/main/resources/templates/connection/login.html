@@ -24,10 +24,7 @@
     body::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       background:
       radial-gradient(circle at 20% 80%, rgba(108, 117, 125, 0.1) 0%, transparent 50%),
       radial-gradient(circle at 80% 20%, rgba(134, 142, 150, 0.1) 0%, transparent 50%),
@@ -36,17 +33,14 @@
     }
 
     @keyframes backgroundShift {
-      0%, 100% { transform: translateX(0) translateY(0); }
-      33% { transform: translateX(-20px) translateY(10px); }
-      66% { transform: translateX(20px) translateY(-10px); }
+      0%, 100% { transform: translate(0); }
+      33% { transform: translate(-20px, 10px); }
+      66% { transform: translate(20px, -10px); }
     }
 
     .floating-elements {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       overflow: hidden;
       pointer-events: none;
     }
@@ -57,6 +51,7 @@
       border-radius: 50%;
       animation: float 15s infinite linear;
     }
+
     .floating-element:nth-child(1) { width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s; }
     .floating-element:nth-child(2) { width: 120px; height: 120px; top: 70%; left: 80%; animation-delay: -5s; }
     .floating-element:nth-child(3) { width: 60px; height: 60px; top: 40%; left: 90%; animation-delay: -10s; }
@@ -64,9 +59,8 @@
     .floating-element:nth-child(5) { width: 90px; height: 90px; top: 80%; left: 20%; animation-delay: -8s; }
 
     @keyframes float {
-      0% { transform: translateY(0px) rotate(0deg); opacity: 0; }
-      10% { opacity: 1; }
-      90% { opacity: 1; }
+      0% { transform: translateY(0) rotate(0); opacity: 0; }
+      10%, 90% { opacity: 1; }
       100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
     }
 
@@ -320,9 +314,8 @@
     }
 
     @keyframes pulse {
-      0% { transform: scale(1); }
+      0%, 100% { transform: scale(1); }
       50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
     }
 
     .modal-title {
@@ -363,11 +356,13 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
+
     .modal-button-primary {
       background: linear-gradient(45deg, #dc3545, #c82333);
       color: white;
       box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
     }
+
     .modal-button-primary:hover {
       background: linear-gradient(45deg, #c82333, #bd2130);
       transform: translateY(-2px);
@@ -418,10 +413,7 @@
     .modal-container::before {
       content: '';
       position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
+      inset: -2px;
       background: linear-gradient(45deg, #dc3545, #c82333, #dc3545);
       border-radius: 14px;
       z-index: -1;
@@ -439,29 +431,34 @@
       border: 1px solid rgba(30, 136, 229, 0.25);
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 20px rgba(30, 136, 229, 0.2);
     }
+
     .modal-overlay.logout-modal .modal-icon {
       background: linear-gradient(45deg, #1e88e5, #1565c0);
       animation: logoutPulse 2s ease-in-out infinite;
     }
+
     @keyframes logoutPulse {
-      0% { transform: scale(1); box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3); }
+      0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3); }
       50% { transform: scale(1.05); box-shadow: 0 6px 20px rgba(30, 136, 229, 0.5); }
-      100% { transform: scale(1); box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3); }
     }
+
     .modal-overlay.logout-modal .modal-title { color: #1e88e5; }
     .modal-overlay.logout-modal .modal-message { color: #1565c0; }
     .modal-overlay.logout-modal .modal-button-primary {
       background: linear-gradient(45deg, #1e88e5, #1565c0);
       box-shadow: 0 4px 10px rgba(30, 136, 229, 0.3);
     }
+
     .modal-overlay.logout-modal .modal-button-primary:hover {
       background: linear-gradient(45deg, #1565c0, #0d47a1);
       box-shadow: 0 6px 15px rgba(30, 136, 229, 0.4);
     }
+
     .modal-overlay.logout-modal .modal-close:hover {
       background: rgba(30, 136, 229, 0.1);
       color: #1e88e5;
     }
+
     .modal-overlay.logout-modal .modal-progress { background: linear-gradient(45deg, #1e88e5, #1565c0); }
     .modal-overlay.logout-modal .modal-container::before {
       background: linear-gradient(45deg, #1e88e5, #1565c0, #1e88e5);
@@ -574,13 +571,11 @@
   </div>
 </div>
 
-<!-- === GŁÓWNY BLOK SKRYPTÓW (MUSI BYĆ PRZED WYWOŁANIAMI) === -->
 <script>
   function closeModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
       modal.classList.remove('show');
-      // Poczekaj na zakończenie animacji i wtedy ukryj element
       setTimeout(() => { modal.style.display = 'none'; }, 300);
     }
   }

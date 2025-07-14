@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!-- ZMIANA 1: Dodanie przestrzeni nazw Spring Security (sec) -->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Heroes III</title>
@@ -12,6 +13,9 @@
             --dark-gray: #333;
             --logout-red: #dc3545;
             --logout-red-hover: #c82333;
+            /* Nowy kolor dla przycisku admina */
+            --admin-gold: #ffc107;
+            --admin-gold-dark: #d39e00;
         }
 
         * {
@@ -70,9 +74,10 @@
 
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Lepsze dopasowanie */
             gap: 25px;
             margin-bottom: 30px;
+            justify-content: center;
         }
 
         .menu-button, .logout-button {
@@ -99,6 +104,26 @@
         .menu-button:hover {
             transform: translateY(-8px);
             box-shadow: 0 12px 30px rgba(30, 136, 229, .4);
+        }
+
+        /* ZMIANA 3: Dodanie stylu dla przycisku admina dla wyróżnienia */
+        .admin-button {
+            background: linear-gradient(135deg, var(--admin-gold), var(--admin-gold-dark));
+            box-shadow: 0 8px 20px rgba(255, 193, 7, .3);
+        }
+
+        .admin-button:hover {
+            box-shadow: 0 12px 30px rgba(255, 193, 7, .4);
+        }
+
+        .admin-button-container {
+            grid-column: 1 / -1; /* Rozciąga kontener na całą szerokość siatki */
+            display: flex;
+            justify-content: center; /* Wyśrodkowuje przycisk w poziomie */
+        }
+
+        .admin-button-container .admin-button {
+            width: 100%;
         }
 
         .menu-button i {
@@ -153,6 +178,7 @@
         }
 
         .menu-button:hover::before,
+
         .logout-button:hover::before {
             left: 100%;
         }
@@ -334,17 +360,24 @@
     </div>
 
     <div class="grid-container">
-        <a th:href="@{heroes/database}" class="menu-button">
+        <a th:href="@{/oskarinio143/heroes/database}" class="menu-button">
             <i class="fas fa-database"></i>
             <h2>Baza danych</h2>
         </a>
 
-        <a th:href="@{heroes/duel}" class="menu-button">
+        <a th:href="@{/oskarinio143/heroes/duel}" class="menu-button">
             <i class="fa-solid fa-shield-halved"></i>
             <h2>Pojedynek</h2>
         </a>
 
-        <form th:action="@{heroes/logout}" method="post" class="logout-form">
+        <div class="admin-button-container" sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/oskarinio143/heroes/admin}" class="menu-button admin-button">
+                <i class="fa-solid fa-user-gear"></i>
+                <h2>Panel Admina</h2>
+            </a>
+        </div>
+
+        <form th:action="@{/oskarinio143/heroes/logout}" method="post" class="logout-form">
             <button type="submit" class="logout-button">
                 <i class="fas fa-sign-out-alt"></i>
                 Wyloguj

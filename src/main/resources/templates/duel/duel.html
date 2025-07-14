@@ -2,44 +2,182 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Panel pojedynków</title>
+  <title>Panel pojedynków - Heroes Database</title>
   <style>
-    body {
-      background-color: #e8eaf0;
-      font-family: Arial, sans-serif;
-      padding: 20px;
+    /* === GLOBAL STYLES & BACKGROUND (FROM LOGIN) === */
+    * {
       margin: 0;
-      min-height: 100vh;
+      padding: 0;
+      box-sizing: border-box;
     }
 
+    body {
+      background: linear-gradient(135deg, #6c757d 0%, #495057 50%, #868e96 100%);
+      font-family: 'Arial', sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden; /* Prevent horizontal scrollbar */
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+      radial-gradient(circle at 20% 80%, rgba(108, 117, 125, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(134, 142, 150, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(173, 181, 189, 0.05) 0%, transparent 50%);
+      animation: backgroundShift 20s ease-in-out infinite;
+      z-index: -2;
+    }
+
+    @keyframes backgroundShift {
+      0%, 100% { transform: translate(0); }
+      33% { transform: translate(-20px, 10px); }
+      66% { transform: translate(20px, -10px); }
+    }
+
+    .floating-elements {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .floating-element {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      animation: float 15s infinite linear;
+    }
+
+    .floating-element:nth-child(1) { width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s; }
+    .floating-element:nth-child(2) { width: 120px; height: 120px; top: 70%; left: 80%; animation-delay: -5s; }
+    .floating-element:nth-child(3) { width: 60px; height: 60px; top: 40%; left: 90%; animation-delay: -10s; }
+    .floating-element:nth-child(4) { width: 100px; height: 100px; top: 20%; left: 70%; animation-delay: -3s; }
+    .floating-element:nth-child(5) { width: 90px; height: 90px; top: 80%; left: 20%; animation-delay: -8s; }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0); opacity: 0; }
+      10%, 90% { opacity: 1; }
+      100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+    }
+
+    /* === DUEL VIEW STYLES === */
     .main-container {
       max-width: 1400px;
-      margin: 0 auto;
+      margin: 20px auto;
+      position: relative;
+      z-index: 10;
     }
 
     h1 {
       text-align: center;
-      color: #333;
-      margin-bottom: 30px;
+      font-size: 38px;
+      font-weight: bold;
+      margin-bottom: 40px;
+      color: #fff;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     }
 
     .battle-arena {
       display: flex;
       gap: 20px;
       align-items: center;
+      justify-content: center;
     }
 
     .main-battle-section {
-      background-color: white;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       padding: 40px;
       min-height: 500px;
       display: grid;
-      grid-template-columns: 1fr 2fr 1fr;
-      gap: 30px;
+      grid-template-columns: 1fr 1.5fr 1fr;
+      gap: 20px;
       align-items: start;
       flex: 1;
+    }
+
+    .hero-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 25px 20px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(15px);
+      width: 220px;
+      height: 380px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      border: 1px solid;
+      transition: all 0.3s ease;
+    }
+
+    .hero-section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-section.left-hero { border-color: rgba(30, 136, 229, 0.3); }
+    .hero-section.right-hero { border-color: rgba(229, 57, 53, 0.3); }
+
+    .hero-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .stat-group, .quantity-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .stat-label, .quantity-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-input, .quantity-input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .stat-input:focus, .quantity-input:focus {
+      outline: none;
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    .left-hero .stat-input:focus, .left-army .quantity-input:focus {
+      border-color: #1e88e5;
+      box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.1), 0 5px 15px rgba(30, 136, 229, 0.2);
+    }
+
+    .right-hero .stat-input:focus, .right-army .quantity-input:focus {
+      border-color: #e53935;
+      box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.1), 0 5px 15px rgba(229, 57, 53, 0.2);
     }
 
     .army-section {
@@ -48,135 +186,99 @@
       align-items: center;
       gap: 20px;
       position: relative;
-      min-height: 500px;
-    }
-
-    .hero-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      padding: 25px 20px;
-      border-radius: 12px;
-      background-color: #f8f9fa;
-      border: 2px solid #e9ecef;
-      width: 200px;
-      height: 350px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .hero-section.left-hero {
-      border-color: #1e88e5;
-      background-color: #e3f2fd;
-    }
-
-    .hero-section.right-hero {
-      border-color: #e53935;
-      background-color: #ffebee;
-    }
-
-    .hero-title {
-      font-size: 16px;
-      font-weight: bold;
-      color: #333;
-      text-align: center;
-      margin-bottom: 15px;
-    }
-
-    .stat-group {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .stat-label {
-      font-size: 14px;
-      font-weight: 600;
-      color: #555;
-      text-align: center;
-    }
-
-    .stat-input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      text-align: center;
-      font-size: 14px;
-      font-weight: bold;
-      box-sizing: border-box;
-    }
-
-    .stat-input:focus {
-      outline: none;
-      border-color: #1e88e5;
-      box-shadow: 0 0 5px rgba(30, 136, 229, 0.3);
-    }
-
-    .right-hero .stat-input:focus {
-      border-color: #e53935;
-      box-shadow: 0 0 5px rgba(229, 57, 53, 0.3);
+      min-height: 420px; /* Adjusted for button positioning */
     }
 
     .army-title {
-      font-size: 20px;
+      font-size: 24px;
       font-weight: bold;
       color: #333;
       margin-bottom: 10px;
     }
 
-    .unit-selector {
+    /* === BUTTON STYLES (ADAPTED FROM LOGIN) === */
+    .styled-button {
       width: 100%;
+      padding: 15px;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .styled-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .styled-button:hover {
+      transform: translateY(-2px);
+    }
+
+    .styled-button:hover::before {
+      left: 100%;
     }
 
     .select-unit-btn {
-      background-color: #1e88e5;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      width: 100%;
-      font-size: 14px;
-      transition: background 0.3s;
+      background: linear-gradient(45deg, #1e88e5, #1565c0);
     }
-
     .select-unit-btn:hover {
-      background-color: #1565c0;
+      background: linear-gradient(45deg, #1565c0, #0d47a1);
+      box-shadow: 0 8px 25px rgba(30, 136, 229, 0.4);
+    }
+    .right-army .select-unit-btn {
+      background: linear-gradient(45deg, #e53935, #c62828);
+    }
+    .right-army .select-unit-btn:hover {
+      background: linear-gradient(45deg, #c62828, #b71c1c);
+      box-shadow: 0 8px 25px rgba(229, 57, 53, 0.4);
     }
 
-    .quantity-section {
-      width: 100%;
-      margin-top: 15px;
+    .nav-button-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
     }
 
-    .quantity-label {
-      display: block;
-      font-weight: 600;
-      color: #555;
-      margin-bottom: 8px;
-      text-align: center;
+    .back-btn {
+      background: linear-gradient(45deg, #6c757d, #495057);
+    }
+    .back-btn:hover {
+      background: linear-gradient(45deg, #495057, #343a40);
+      box-shadow: 0 8px 25px rgba(108, 117, 125, 0.3);
     }
 
-    .quantity-input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      text-align: center;
-      font-size: 16px;
-      font-weight: bold;
-      box-sizing: border-box;
+    .battle-btn {
+      background: linear-gradient(45deg, #ff6b35, #f7b733);
+    }
+    .battle-btn:hover {
+      background: linear-gradient(45deg, #e55a2b, #ff8e53);
+      box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+    }
+    .battle-btn:disabled {
+      background: #b0bec5;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+    .battle-btn:disabled:hover::before {
+      display: none;
     }
 
-    .quantity-input:focus {
-      outline: none;
-      border-color: #1e88e5;
-      box-shadow: 0 0 5px rgba(30, 136, 229, 0.3);
-    }
 
     .battle-center {
       display: flex;
@@ -202,195 +304,198 @@
       justify-content: center;
       text-align: center;
       padding: 15px;
-      border: 2px dashed #ccc;
       border-radius: 12px;
-      background-color: #f8f9ff;
       min-height: 200px;
       width: 150px;
       transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.5);
+      border: 2px dashed;
     }
 
-    .unit-display.left-unit {
-      border-color: #1e88e5;
-      background-color: #e3f2fd;
-    }
-
-    .unit-display.right-unit {
-      border-color: #e53935;
-      background-color: #ffebee;
-    }
+    .unit-display.left-unit { border-color: #1e88e5; }
+    .unit-display.right-unit { border-color: #e53935; }
 
     .unit-placeholder {
       font-size: 64px;
-      color: #bbb;
-      margin-bottom: 10px;
+      font-weight: bold;
+      opacity: 0.5;
     }
 
-    .unit-display.left-unit .unit-placeholder {
-      color: #1e88e5;
-    }
-
-    .unit-display.right-unit .unit-placeholder {
-      color: #e53935;
-    }
+    .left-unit .unit-placeholder { color: #1e88e5; }
+    .right-unit .unit-placeholder { color: #e53935; }
 
     .vs-text {
       font-size: 48px;
       font-weight: bold;
-      color: #007bff;
+      color: #333;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
       margin: 0 15px;
     }
 
-    .left-army {
-      padding-right: 25px;
-      margin-right: 10px;
+    .unit-info {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-top: 10px;
     }
 
-    .left-army::before {
-      content: '';
-      position: absolute;
-      right: -15px;
-      top: 80px;
-      height: 280px;
-      width: 3px;
-      background-color: #1e88e5;
+    /* === MODAL STYLES (FROM LOGIN) === */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      display: none; /* Changed from flex to none */
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(1.1);
+      transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
     }
 
-    .right-army {
-      padding-left: 25px;
-      margin-left: 10px;
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+      transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
     }
 
-    .right-army::before {
-      content: '';
-      position: absolute;
-      left: -15px;
-      top: 80px;
-      height: 280px;
-      width: 3px;
-      background-color: #e53935;
+    .modal-container {
+      background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+      backdrop-filter: blur(20px);
+      border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 8px 20px rgba(220, 53, 69, 0.2);
+      border: 1px solid rgba(220, 53, 69, 0.25);
+      padding: 30px;
+      width: 100%;
+      max-width: 450px;
+      position: relative;
+      transform: translateY(20px);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    .right-army .select-unit-btn {
-      background-color: #e53935;
+    .modal-overlay.show .modal-container {
+      transform: translateY(0);
     }
 
-    .right-army .select-unit-btn:hover {
-      background-color: #c62828;
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      gap: 10px;
     }
 
-    .army-color-indicator {
-      width: 20px;
-      height: 20px;
+    .modal-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(45deg, #dc3545, #c82333);
       border-radius: 50%;
-      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+      animation: pulse 2s ease-in-out infinite;
     }
 
-    .blue-indicator {
-      background-color: #1e88e5;
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
     }
 
-    .red-indicator {
-      background-color: #e53935;
+    .modal-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #dc3545;
+      margin: 0;
     }
 
-    .army-nav-button {
-      position: absolute;
-      bottom: 0;
-      left: -20px;
-      right: -20px;
-      padding: 15px 20px;
+    .modal-content {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .modal-message {
+      font-size: 16px;
+      color: #495057;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: center;
+    }
+
+    .modal-button {
+      padding: 12px 30px;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-sizing: border-box;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-    .back-btn {
-      background-color: #6c757d;
+    .modal-button-primary {
+      background: linear-gradient(45deg, #dc3545, #c82333);
       color: white;
-      background-size: 200% auto;
-      background-image: linear-gradient(to right, #6c757d 0%, #495057 51%, #6c757d 100%);
+      box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
     }
 
-    .back-btn:hover {
-      background-position: right center;
+    .modal-button-primary:hover {
+      background: linear-gradient(45deg, #c82333, #bd2130);
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+      box-shadow: 0 6px 15px rgba(220, 53, 69, 0.4);
     }
 
-    .battle-btn {
-      background: linear-gradient(45deg, #ff6b35, #ff8e53);
-      color: white;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .battle-btn:hover {
-      background: linear-gradient(45deg, #e55a2b, #ff7a40);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
-    }
-
-    .battle-btn:before {
-      content: '';
+    .modal-close {
       position: absolute;
-      top: 0;
-      left: -100%;
+      top: 10px; right: 10px;
+      background: none; border: none;
+      font-size: 24px; color: #6c757d; cursor: pointer;
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(220, 53, 69, 0.1);
+      color: #dc3545;
+      transform: rotate(90deg);
+    }
+
+    .modal-progress {
+      position: absolute;
+      bottom: 0; left: 0;
+      height: 4px;
+      background: linear-gradient(45deg, #dc3545, #c82333);
+      border-radius: 0 0 12px 12px;
       width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      transition: left 0.5s;
+      transform-origin: left;
+      animation: progressShrink 5s linear forwards;
     }
 
-    .battle-btn:hover:before {
-      left: 100%;
-    }
-
-    .battle-btn:disabled {
-      background: #cccccc;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    .battle-btn:disabled:hover {
-      background: #cccccc;
-      transform: none;
-      box-shadow: none;
-    }
-
-    .battle-btn:disabled:before {
-      display: none;
-    }
-
-    .unit-info {
-      font-size: 12px;
-      color: #666;
-      margin-top: 5px;
-    }
-
-    .modal-box {
-      background: white;
-      padding: 20px;
-      width: 600px;
-      max-width: 90%;
-      max-height: 80%;
-      box-sizing: border-box;
-      text-align: center;
-      border: 5px solid;
-      border-image: linear-gradient(to right, #000000, #444444) 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
+    @keyframes progressShrink {
+      from { transform: scaleX(1); }
+      to { transform: scaleX(0); }
     }
   </style>
 </head>
 <body>
+
+<div class="floating-elements">
+  <div class="floating-element"></div>
+  <div class="floating-element"></div>
+  <div class="floating-element"></div>
+  <div class="floating-element"></div>
+  <div class="floating-element"></div>
+</div>
+
 <div class="main-container">
   <h1>Panel pojedynków</h1>
   <div class="battle-arena">
@@ -408,9 +513,7 @@
 
     <div class="main-battle-section">
       <div class="army-section left-army">
-        <div class="army-color-indicator blue-indicator"></div>
         <div class="army-title">Gracz</div>
-
         <div class="unit-selector">
           <form th:action="@{/oskarinio143/heroes/duel/select}" method="get" id="selectLeftForm">
             <input type="hidden" name="side" value="LEFT">
@@ -422,22 +525,20 @@
             <input type="hidden" name="rightHeroDefense" id="hiddenRightHeroDefense_selectLeft">
             <input type="hidden" name="leftQuantity" id="hiddenLeftQuantity_selectLeft">
             <input type="hidden" name="rightQuantity" id="hiddenRightQuantity_selectLeft">
-            <button type="submit" class="select-unit-btn">
+            <button type="submit" class="styled-button select-unit-btn">
               <span th:text="${duelForm.leftUnit == null ? 'Wybierz jednostkę' : 'Zmień jednostkę'}"></span>
             </button>
           </form>
         </div>
-
         <div class="quantity-section">
           <label class="quantity-label">Podaj ilość:</label>
-          <input type="number" class="quantity-input" id="leftQuantity" min="0" placeholder="0" th:value="${duelForm.leftQuantity}">
+          <input type="number" class="quantity-input" id="leftQuantity" min="1" placeholder="1" th:value="${duelForm.leftQuantity}">
         </div>
-
-        <form th:action="@{/oskarinio143/heroes}" method="get" style="position: absolute; bottom: 0; left: 0; right: 0;">
-          <button type="submit" class="army-nav-button back-btn">
-            Wróć do bazy danych
-          </button>
-        </form>
+        <div class="nav-button-container">
+          <form th:action="@{/oskarinio143/heroes}" method="get">
+            <button type="submit" class="styled-button back-btn">Wróć do bazy</button>
+          </form>
+        </div>
       </div>
 
       <div class="battle-center">
@@ -449,9 +550,7 @@
             </div>
             <div th:unless="${duelForm.leftUnit != null}" class="unit-placeholder">?</div>
           </div>
-
           <div class="vs-text">VS</div>
-
           <div class="unit-display right-unit">
             <div th:if="${duelForm.rightUnit != null}">
               <img th:src="@{${duelForm.rightUnit.imagePath}}" alt="Right Unit Image" style="max-width:120px; max-height:120px;">
@@ -463,9 +562,7 @@
       </div>
 
       <div class="army-section right-army">
-        <div class="army-color-indicator red-indicator"></div>
         <div class="army-title">Przeciwnik</div>
-
         <div class="unit-selector">
           <form th:action="@{/oskarinio143/heroes/duel/select}" method="get" id="selectRightForm">
             <input type="hidden" name="side" value="RIGHT">
@@ -477,31 +574,31 @@
             <input type="hidden" name="rightHeroDefense" id="hiddenRightHeroDefense_selectRight">
             <input type="hidden" name="leftQuantity" id="hiddenLeftQuantity_selectRight">
             <input type="hidden" name="rightQuantity" id="hiddenRightQuantity_selectRight">
-            <button type="submit" class="select-unit-btn">
+            <button type="submit" class="styled-button select-unit-btn">
               <span th:text="${duelForm.rightUnit == null ? 'Wybierz jednostkę' : 'Zmień jednostkę'}"></span>
             </button>
           </form>
         </div>
-
         <div class="quantity-section">
           <label class="quantity-label">Podaj ilość:</label>
-          <input type="number" class="quantity-input" id="rightQuantity" min="0" placeholder="0" th:value="${duelForm.rightQuantity}">
+          <input type="number" class="quantity-input" id="rightQuantity" min="1" placeholder="1" th:value="${duelForm.rightQuantity}">
         </div>
-
-        <form th:action="@{/oskarinio143/heroes/duel/battle}" method="post" id="battleForm" style="position: absolute; bottom: 0; left: 0; right: 0;">
-          <input type="hidden" name="leftUnit" th:value="${duelForm.leftUnit?.name ?: ''}">
-          <input type="hidden" name="rightUnit" th:value="${duelForm.rightUnit?.name ?: ''}">
-          <input type="hidden" name="leftQuantity" id="leftQuantityInput">
-          <input type="hidden" name="rightQuantity" id="rightQuantityInput">
-          <input type="hidden" name="leftHeroAttack" id="leftHeroAttackInput">
-          <input type="hidden" name="leftHeroDefense" id="leftHeroDefenseInput">
-          <input type="hidden" name="rightHeroAttack" id="rightHeroAttackInput">
-          <input type="hidden" name="rightHeroDefense" id="rightHeroDefenseInput">
-          <input type="hidden" id="userUUIDInput" name="userUUID" value="">
-          <button type="submit" class="army-nav-button battle-btn" th:disabled="${duelForm.leftUnit == null || duelForm.rightUnit == null}">
-            Rozpocznij pojedynek⚔️
-          </button>
-        </form>
+        <div class="nav-button-container">
+          <form th:action="@{/oskarinio143/heroes/duel/battle}" method="post" id="battleForm">
+            <input type="hidden" name="leftUnit" th:value="${duelForm.leftUnit?.name ?: ''}">
+            <input type="hidden" name="rightUnit" th:value="${duelForm.rightUnit?.name ?: ''}">
+            <input type="hidden" name="leftQuantity" id="leftQuantityInput">
+            <input type="hidden" name="rightQuantity" id="rightQuantityInput">
+            <input type="hidden" name="leftHeroAttack" id="leftHeroAttackInput">
+            <input type="hidden" name="leftHeroDefense" id="leftHeroDefenseInput">
+            <input type="hidden" name="rightHeroAttack" id="rightHeroAttackInput">
+            <input type="hidden" name="rightHeroDefense" id="rightHeroDefenseInput">
+            <input type="hidden" id="userUUIDInput" name="userUUID" value="">
+            <button type="submit" class="styled-button battle-btn" th:disabled="${duelForm.leftUnit == null || duelForm.rightUnit == null}">
+              Pojedynek ⚔️
+            </button>
+          </form>
+        </div>
       </div>
     </div>
 
@@ -518,73 +615,130 @@
     </div>
   </div>
 
-  <div id="incorrectValueModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center;">
-    <div class="modal-box">
-      <p th:utext="${incorrectMessage}" style="font-size: 1.5em; font-weight: bold; margin-bottom: 20px;"></p>
-      <button onclick="document.getElementById('incorrectValueModal').style.display='none'" class="back-btn">
-        Zamknij
-      </button>
+  <!-- MODAL BŁĘDU (NOWA STRUKTURA) -->
+  <div id="incorrectValueModal" class="modal-overlay">
+    <div class="modal-container">
+      <button class="modal-close" onclick="closeModal('incorrectValueModal')">×</button>
+      <div class="modal-header">
+        <div class="modal-icon">⚠️</div>
+        <h2 class="modal-title">Nieprawidłowe dane</h2>
+      </div>
+      <div class="modal-content">
+        <p class="modal-message" id="modalMessage" th:if="${incorrectMessage}" th:utext="${incorrectMessage}"></p>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-button modal-button-primary" onclick="closeModal('incorrectValueModal')">Rozumiem</button>
+      </div>
+      <div class="modal-progress"></div>
     </div>
   </div>
-
-  <script th:if="${incorrectMessage}">
-    document.getElementById('incorrectValueModal').style.display = 'flex';
-  </script>
-
-  <script>
-    let uuid = localStorage.getItem("uuid");
-
-    async function getUUID() {
-      uuid = await fetch("http://localhost:8080/oskarinio143/heroes/duel/generateUUID")
-        .then(res => res.text());
-      return uuid;
-    }
-
-    async function setUUID() {
-      await getUUID();
-      passUUID();
-    }
-
-    function passUUID() {
-      localStorage.setItem("uuid", uuid);
-      document.getElementById("userUUIDInput").value = uuid;
-    }
-
-    if (!uuid) {
-      setUUID();
-    }
-    passUUID();
-
-    function updateHiddenFieldsBeforeSubmit(formId) {
-      const form = document.getElementById(formId);
-      form.querySelector('input[name="leftQuantity"]').value = document.getElementById('leftQuantity').value;
-      form.querySelector('input[name="rightQuantity"]').value = document.getElementById('rightQuantity').value;
-      form.querySelector('input[name="leftHeroAttack"]').value = document.getElementById('leftHeroAttack').value;
-      form.querySelector('input[name="leftHeroDefense"]').value = document.getElementById('leftHeroDefense').value;
-      form.querySelector('input[name="rightHeroAttack"]').value = document.getElementById('rightHeroAttack').value;
-      form.querySelector('input[name="rightHeroDefense"]').value = document.getElementById('rightHeroDefense').value;
-    }
-
-    document.getElementById('selectLeftForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      updateHiddenFieldsBeforeSubmit('selectLeftForm');
-      this.submit();
-    });
-
-    document.getElementById('selectRightForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      updateHiddenFieldsBeforeSubmit('selectRightForm');
-      this.submit();
-    });
-
-    document.getElementById('battleForm').addEventListener('submit', function(e) {
-      if (document.querySelector('.battle-btn').disabled) {
-        e.preventDefault();
-        return;
-      }
-      updateHiddenFieldsBeforeSubmit('battleForm');
-    });
-  </script>
 </div>
+
+<script>
+  // === UUID SCRIPT (BEZ ZMIAN) ===
+  let uuid = localStorage.getItem("uuid");
+
+  async function getUUID() {
+    uuid = await fetch("http://localhost:8080/oskarinio143/heroes/duel/generateUUID")
+      .then(res => res.text());
+    return uuid;
+  }
+
+  async function setUUID() {
+    await getUUID();
+    passUUID();
+  }
+
+  function passUUID() {
+    localStorage.setItem("uuid", uuid);
+    document.getElementById("userUUIDInput").value = uuid;
+  }
+
+  if (!uuid) {
+    setUUID();
+  }
+  passUUID();
+
+  function updateHiddenFieldsBeforeSubmit(formId) {
+    const form = document.getElementById(formId);
+    form.querySelector('input[name="leftQuantity"]').value = document.getElementById('leftQuantity').value;
+    form.querySelector('input[name="rightQuantity"]').value = document.getElementById('rightQuantity').value;
+    form.querySelector('input[name="leftHeroAttack"]').value = document.getElementById('leftHeroAttack').value;
+    form.querySelector('input[name="leftHeroDefense"]').value = document.getElementById('leftHeroDefense').value;
+    form.querySelector('input[name="rightHeroAttack"]').value = document.getElementById('rightHeroAttack').value;
+    form.querySelector('input[name="rightHeroDefense"]').value = document.getElementById('rightHeroDefense').value;
+  }
+
+  document.getElementById('selectLeftForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    updateHiddenFieldsBeforeSubmit('selectLeftForm');
+    this.submit();
+  });
+
+  document.getElementById('selectRightForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    updateHiddenFieldsBeforeSubmit('selectRightForm');
+    this.submit();
+  });
+
+  document.getElementById('battleForm').addEventListener('submit', function(e) {
+    if (document.querySelector('.battle-btn').disabled) {
+      e.preventDefault();
+      return;
+    }
+    updateHiddenFieldsBeforeSubmit('battleForm');
+  });
+
+  // === NEW MODAL SCRIPT (FROM LOGIN) ===
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.classList.remove('show');
+      // Wait for animation to finish before setting display to none
+      setTimeout(() => { modal.style.display = 'none'; }, 250);
+    }
+  }
+
+  function showModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+
+    modal.style.display = 'flex';
+    // Use a small timeout to allow the display property to apply before adding the class for transition
+    setTimeout(() => modal.classList.add('show'), 10);
+
+    // Auto-close after 5 seconds
+    const timeoutId = setTimeout(() => closeModal(modalId), 5000);
+
+    const clickHandler = (e) => {
+      // Close if clicked on overlay, close button, or action button
+      if (e.target === modal || e.target.closest('.modal-close, .modal-button')) {
+        cleanup();
+      }
+    };
+
+    const keydownHandler = (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('show')) {
+        cleanup();
+      }
+    };
+
+    function cleanup() {
+      clearTimeout(timeoutId);
+      closeModal(modalId);
+      modal.removeEventListener('click', clickHandler);
+      document.removeEventListener('keydown', keydownHandler);
+    }
+
+    modal.addEventListener('click', clickHandler);
+    document.addEventListener('keydown', keydownHandler);
+  }
+</script>
+
+<!-- Show modal if message exists -->
+<script th:if="${incorrectMessage}">
+  showModal('incorrectValueModal');
+</script>
+
 </body>
 </html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nadaj uprawnienia admina</title> <!-- Zmieniono tytuł dla jasności -->
+    <style>
+        body {
+            background: #e8eaf0;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .main-container { max-width: 800px; margin: auto; }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .user-container {
+            display: flex;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #888;
+        }
+        .user-stats { flex-grow: 1; }
+        .user-stats p { margin: 4px 0; }
+        .separator {
+            border-top: 3px solid orange;
+            margin: 30px 0;
+        }
+
+        /* --- ZMODYFIKOWANE STYLE PRZYCISKU --- */
+        .grant-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: darkgoldenrod; /* ZACHOWANY ORYGINALNY KOLOR */
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px; /* Dopasowano padding do przycisku usuwania */
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15); /* Dodany cień */
+            display: flex; /* Dodane dla ikony */
+            align-items: center; /* Dodane dla ikony */
+            gap: 8px; /* Dodane dla odstępu między ikoną a tekstem */
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Dodane przejścia */
+        }
+
+        .grant-button:hover {
+            background-color: #a07609; /* Ciemniejsza wersja darkgoldenrod */
+            transform: translateY(-2px); /* Efekt podniesienia */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Mocniejszy cień */
+        }
+        /* --- KONIEC ZMODYFIKOWANYCH STYLI --- */
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            /* Dodano, aby wycentrować modal (tak jak w pliku deleteUser) */
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 30px 40px; /* Zwiększony padding */
+            border-radius: 12px;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .modal-content p {
+            font-size: 18px;
+            color: #333;
+        }
+        .modal-buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center; /* Zmienione na center dla lepszego wyglądu */
+            gap: 20px;
+        }
+        .modal-buttons button {
+            padding: 12px 25px; /* Zwiększony padding */
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+            min-width: 120px;
+            transition: all 0.3s ease;
+        }
+        .modal-buttons button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .confirm {
+            background-color: #4CAF50; /* Zmieniono kolor na zielony dla potwierdzenia */
+            color: white;
+            border-color: #4CAF50;
+        }
+        .confirm:hover {
+            background-color: #45a049;
+            border-color: #45a049;
+        }
+        .cancel {
+            background-color: #fff;
+            color: #555;
+            border-color: #ccc;
+        }
+        .cancel:hover {
+            background-color: #f0f0f0;
+            border-color: #bbb;
+        }
+        .sticky-bottom-center {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            text-align: center;
+            font-weight: bold;
+        }
+        .back-btn {
+            background: #6c757d;
+            color: #fff;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.4s;
+        }
+        .back-btn:hover {
+            background: #495057;
+        }
+    </style>
+</head>
+<body>
+<div class="main-container">
+    <h1>Nadaj uprawnienia administratora</h1>
+    <div th:each="user : ${users}">
+        <div class="user-container" th:data-username="${user.username}">
+            <div class="user-stats">
+                <p><strong>Nazwa użytkownika:</strong> <span th:text="${user.username}"/></p>
+                <p><strong>Role:</strong> <span th:text="${#strings.listJoin(user.roles, ', ')}"/></p>
+                <p><strong>Data rejestracji:</strong> <span th:text="${#dates.format(user.registrationDate, 'dd-MM-yyyy HH:mm')}"/></p>
+            </div>
+            <!-- ZMODYFIKOWANY PRZYCISK Z IKONĄ I SPANEM -->
+            <button class="grant-button" onclick="showModal(this)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.056.255.098.38.115a.7.7 0 0 0 .117 0c.125-.017.26-.059.38-.115.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.95-.3-1.896-.63-2.837-.856C9.824 1.258 8.821 1 8 1s-1.824.258-2.662.59z"/>
+                </svg>
+                <span>Nadaj admina</span> <!-- Zmieniony tekst i dodany span -->
+            </button>
+        </div>
+        <div class="separator"></div>
+    </div>
+</div>
+
+<div id="confirmModal" class="modal">
+    <div class="modal-content">
+        <p id="confirmMessage">Czy na pewno chcesz nadać uprawnienia administratorskie temu użytkownikowi?</p>
+        <div class="modal-buttons">
+            <form th:action="@{/oskarinio143/heroes/admin/grant}" method="post" style="display: contents;">
+                <input type="hidden" name="username" id="userToGrantAdmin"/> <!-- Zmieniono id dla jasności -->
+                <button type="submit" class="confirm">Tak, nadaj</button>
+            </form>
+            <button class="cancel" type="button" onclick="hideModal()">Anuluj</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showModal(button) {
+        const username = button.closest('.user-container').dataset.username;
+        document.getElementById('userToGrantAdmin').value = username; // Zmieniono id
+        document.getElementById('confirmModal').style.display = 'flex'; // Zmieniono na flex dla centrowania
+    }
+    function hideModal() {
+        document.getElementById('confirmModal').style.display = 'none';
+    }
+</script>
+
+<footer>
+    <div class="sticky-bottom-center">
+        <a th:href="@{/oskarinio143/heroes/admin}">
+            <button type="button" class="back-btn">Wróć do panelu</button>
+        </a>
+    </div>
+</footer>
+</body>
+</html>

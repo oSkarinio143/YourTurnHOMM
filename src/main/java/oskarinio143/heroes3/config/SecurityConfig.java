@@ -36,7 +36,8 @@ public class SecurityConfig {
                                                     "/oskarinio143/heroes/duel/**").hasRole("USER")
                         .requestMatchers("/oskarinio143/heroes/database/add",
                                                     "/oskarinio143/heroes/database/modify",
-                                                    "/oskarinio143/heroes/database/delete").hasRole("ADMIN")
+                                                    "/oskarinio143/heroes/database/delete",
+                                                    "/oskarinio143/heroes/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(refreshFilter, BearerTokenAuthenticationFilter.class)

@@ -35,8 +35,8 @@ public class FirstAdminConfig implements ApplicationRunner {
             User adminUser = new User();
             adminUser.setUsername(adminUsername);
             adminUser.setPassword(passwordEncoder.encode(adminPassword));
-            adminUser.addRole(Role.ROLE_USER.name());
-            adminUser.addRole(Role.ROLE_ADMIN.name());
+            adminUser.addRole(Role.ROLE_USER);
+            adminUser.addRole(Role.ROLE_ADMIN);
 
             userRepository.save(adminUser);
         }

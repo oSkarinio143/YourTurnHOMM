@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista użytkowników</title>
+    <style>
+        body {
+            background-color: #e8eaf0;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .user-container { /* Zmieniono nazwę klasy dla przejrzystości, ale można zostawić 'unit-container' */
+            display: flex;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .user-details { /* Zmieniono nazwę klasy dla przejrzystości */
+            flex-grow: 1;
+        }
+        .user-details p {
+            margin: 8px 0; /* Zwiększono margines dla lepszej czytelności */
+            font-size: 16px;
+        }
+        .separator {
+            border-top: 3px solid orange;
+            margin: 30px 0;
+        }
+
+        .sticky-bottom-center {
+            position: fixed;
+            bottom: 20px; /* odstęp od dolnej krawędzi */
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border-radius: 8px;
+            z-index: 9999;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            background-color: #6c757d;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.4s ease-in-out;
+            min-width: 180px;
+            background-size: 200% auto;
+            background-image: linear-gradient(to right, #6c757d 0%, #495057 51%, #6c757d 100%);
+        }
+
+        .back-btn:hover {
+            background-position: right center; /* przesuwa gradient */
+        }
+    </style>
+</head>
+<body>
+<div class="main-container">
+    <h1>Lista Użytkowników</h1>
+    <div th:each="user : ${users}">
+        <div class="user-container">
+            <div class="user-details">
+                <p><strong>Nazwa użytkownika:</strong> <span th:text="${user.username}"/></p>
+                <p><strong>Role:</strong> <span th:text="${#strings.listJoin(user.roles, ', ')}"/></p>
+                <p><strong>Data rejestracji:</strong> <span th:text="${#dates.format(user.registrationDate, 'dd-MM-yyyy HH:mm')}"/></p>
+            </div>
+        </div>
+        <div class="separator"></div>
+    </div>
+</div>
+</body>
+<footer>
+    <div class="sticky-bottom-center">
+        <!-- Zmień link na odpowiedni dla Twojej aplikacji, np. do panelu admina -->
+        <a th:href="@{/oskarinio143/heroes/admin}" class="back-link">
+            <button type="button" class="back-btn">
+                Wróć do panelu
+            </button>
+        </a>
+    </div>
+</footer>
+</html>

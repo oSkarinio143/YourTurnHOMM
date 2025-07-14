@@ -2,9 +2,10 @@ package oskarinio143.heroes3.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import oskarinio143.heroes3.service.UserService;
+import oskarinio143.heroes3.model.constant.Role;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -26,7 +27,10 @@ public class User {
     private String password;
 
     @NonNull
-    private List<String> roles = new ArrayList<>();
+    private Date registrationDate = new Date();
+
+    @NonNull
+    private List<Role> roles = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "refreshToken")
@@ -37,7 +41,7 @@ public class User {
         return refreshToken != null ? refreshToken.getTokenHash() : null;
     }
 
-    public void addRole(String role){
+    public void addRole(Role role){
         roles.add(role);
     }
 }

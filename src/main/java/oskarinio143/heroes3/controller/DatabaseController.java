@@ -54,13 +54,13 @@ public class DatabaseController {
     @GetMapping(Route.SHOW)
     public String viewUnits(Model model){
         model.addAttribute("units", databaseService.getAllUnits());
-        return Route.PACKAGE_DATABASE + Route.VIEW_SHOW;
+        return Route.PACKAGE_DATABASE + Route.VIEW_SHOW_UNITS;
     }
 
     @GetMapping(Route.DELETE)
     public String deleteUnit(Model model){
         model.addAttribute("units", databaseService.getAllUnits());
-        return Route.PACKAGE_DATABASE + Route.VIEW_DELETE;
+        return Route.PACKAGE_DATABASE + Route.VIEW_DELETE_UNIT;
     }
 
     @PostMapping(Route.DELETE)

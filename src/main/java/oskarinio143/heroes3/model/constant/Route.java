@@ -7,12 +7,17 @@ public class Route {
     public static final String PACKAGE_DUEL = "/duel";
     public static final String PACKAGE_DATABASE = "/database";
     public static final String PACKAGE_CONNECTION = "/connection";
+    public static final String PACKAGE_ADMIN = "/admin";
+
 
     public static final String VIEW_ADD = "/addUnit";
-    public static final String VIEW_DELETE = "/deleteUnit";
+    public static final String VIEW_DELETE_UNIT = "/deleteUnit";
     public static final String VIEW_MODIFY = "/modify";
     public static final String VIEW_MODIFY_UNIT = "/modifyUnit";
-    public static final String VIEW_SHOW = "/showUnits";
+    public static final String VIEW_SHOW_UNITS = "/showUnits";
+    public static final String VIEW_SHOW_USERS = "/showUsers";
+    public static final String VIEW_DELETE_USER = "/deleteUser";
+    public static final String VIEW_GRANT_ADMIN = "/grantAdmin";
     public static final String VIEW_MODE = "/mode";
 
 
@@ -34,5 +39,8 @@ public class Route {
     public static final String BATTLE = "/battle";
     public static final String STREAM = "/stream";
     public static final String GENERATEUUID = "/generateUUID";
+    public static final String ADMIN = "/admin";
+    public static final String GRANT = "/grant";
+
 
 }
