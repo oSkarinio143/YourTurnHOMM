@@ -4,7 +4,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import oskarinio143.heroes3.model.constant.Route;
+import oskarinio143.heroes3.model.entity.User;
 import oskarinio143.heroes3.service.AdminService;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(Route.MAIN + Route.ADMIN)
@@ -16,6 +19,12 @@ public class AdminController {
         this.adminService = adminService;
     }
 
+    @ModelAttribute("users")
+    public List<User> addUsersListModel(){
+        List<User> userList = adminService.getUserList();
+        return adminService.getUserList();
+    }
+
     @GetMapping
     public String choseAdminOption(){
         return Route.PACKAGE_ADMIN + Route.ADMIN;
@@ -23,13 +32,12 @@ public class AdminController {
 
     @GetMapping(Route.SHOW)
     public String showUsers(Model model){
-        model.addAttribute("users", adminService.getUserList());
         return Route.PACKAGE_ADMIN + Route.VIEW_SHOW_USERS;
     }
 
     @GetMapping(Route.DELETE)
     public String deleteUserView(Model model){
-        model.addAttribute("users", adminService.getUserList());
+        model.addAttribute("adminUsername", System.getenv("ADMIN_USERNAME"));
         return Route.PACKAGE_ADMIN + Route.VIEW_DELETE_USER;
     }
 
@@ -40,8 +48,7 @@ public class AdminController {
     }
 
     @GetMapping(Route.GRANT)
-    public String grantAdminView(Model model){
-        model.addAttribute("users", adminService.getUserList());
+    public String grantAdminView(){
         return Route.PACKAGE_ADMIN + Route.VIEW_GRANT_ADMIN;
     }
 

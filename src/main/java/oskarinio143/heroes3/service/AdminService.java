@@ -1,5 +1,6 @@
 package oskarinio143.heroes3.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import oskarinio143.heroes3.model.constant.Role;
 import oskarinio143.heroes3.model.entity.User;
@@ -20,14 +21,17 @@ public class AdminService {
         return userRepository.findAll();
     }
 
+   @Transactional
     public void deleteUser(String username){
         User user = userRepository.findByUsernameOrThrow(username);
-        userRepository.delete(user);
+        if(!user.getUsername().equals(System.getenv("ADMIN_USERNAME")))
+            userRepository.delete(user);
     }
 
+    @Transactional
     public void grantAdminRole(String username){
         User user = userRepository.findByUsernameOrThrow(username);
-        user.addRole(Role.ROLE_ADMIN);
-        userRepository.save(user);
+        if(!user.getRoles().contains(Role.ROLE_ADMIN))
+            user.addRole(Role.ROLE_ADMIN);
     }
 }
