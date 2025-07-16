@@ -1,6 +1,7 @@
 package oskarinio143.heroes3.service;
 
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.ObjectError;
 import oskarinio143.heroes3.exception.UsernameNotFoundException;
@@ -20,6 +21,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final TokenService tokenService;
     private final Clock clock;
+    @Value("${token.access.seconds}")
+    private long TOKEN_ACCESS_SECONDS;
+    @Value("${token.refresh.seconds}")
+    private long TOKEN_REFRESH_SECONDS;
 
     public UserService(UserRepository userRepository, TokenService tokenService, Clock clock) {
         this.userRepository = userRepository;
@@ -28,14 +33,13 @@ public class UserService {
     }
 
     public void generateAndSetTokens(UserServiceData userServiceData){
-        userServiceData.setAccessToken(tokenService.generateToken(userServiceData, 3600000 / 4));
-        userServiceData.setRefreshToken(tokenService.generateToken(userServiceData, 3600000 * 24 * 7));
+        userServiceData.setAccessToken(tokenService.generateToken(userServiceData, 1));
+        userServiceData.setRefreshToken(tokenService.generateToken(userServiceData, TOKEN_REFRESH_SECONDS));
     }
 
     public RefreshToken getRefreshToken(String refreshTokenString){
         Instant now = Instant.now(clock);
-        return new RefreshToken(refreshTokenString, now, now.plus(7, ChronoUnit.DAYS));
-
+        return new RefreshToken(refreshTokenString, now, now.plus(TOKEN_REFRESH_SECONDS, ChronoUnit.SECONDS));
     }
 
     public String prepareErrorMessage(List<ObjectError> errorsMessageList){

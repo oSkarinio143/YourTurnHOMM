@@ -2,6 +2,7 @@ package oskarinio143.heroes3.service;
 
 import jakarta.transaction.Transactional;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import oskarinio143.heroes3.model.form.RegisterForm;
@@ -21,6 +22,8 @@ public class RegisterService {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final Clock clock;
+    @Value("${token.refresh.seconds}")
+    private long TOKEN_REFRESH_SECONDS;
 
     public RegisterService(UserRepository userRepository, UserService userService, PasswordEncoder passwordEncoder, Clock clock) {
         this.userRepository = userRepository;
@@ -47,7 +50,7 @@ public class RegisterService {
     @Transactional
     public void saveData(UserServiceData userServiceData){
         Instant now = Instant.now(clock);
-        RefreshToken refreshToken = new RefreshToken(userServiceData.getRefreshToken(), now, now.plus(7, ChronoUnit.DAYS));
+        RefreshToken refreshToken = new RefreshToken(userServiceData.getRefreshToken(), now, now.plus(TOKEN_REFRESH_SECONDS, ChronoUnit.SECONDS));
         User user = new User(userServiceData.getUsername(), userServiceData.getPassword(), now);
         user.setRoles(userServiceData.getRoles());
         userService.setRefreshToken(user, refreshToken);

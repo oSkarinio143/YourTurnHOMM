@@ -3,6 +3,7 @@ package oskarinio143.heroes3.helper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
@@ -10,12 +11,21 @@ import org.springframework.web.util.WebUtils;
 import oskarinio143.heroes3.model.servicedto.UserServiceData;
 import oskarinio143.heroes3.service.TokenService;
 
+import java.time.Clock;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Component
 public class CookieHelper {
     private final TokenService tokenService;
+    @Value("${token.access.seconds}")
+    private long TOKEN_ACCESS_SECONDS;
+    @Value("${token.refresh.seconds}")
+    private long TOKEN_REFRESH_SECONDS;
 
     public CookieHelper(TokenService tokenService) {
         this.tokenService = tokenService;
@@ -31,7 +41,7 @@ public class CookieHelper {
         return ResponseCookie.from("accessToken", token)
                 .httpOnly(true)
                 .path("/")
-                .maxAge(3600000 / 4)
+                .maxAge(TOKEN_ACCESS_SECONDS)
                 .secure(true)
                 .build();
     }
@@ -40,7 +50,7 @@ public class CookieHelper {
         return ResponseCookie.from("refreshToken", token)
                 .httpOnly(true)
                 .path("/")
-                .maxAge(3600000 * 24 * 7)
+                .maxAge(TOKEN_REFRESH_SECONDS)
                 .secure(true)
                 .build();
     }
@@ -59,9 +69,9 @@ public class CookieHelper {
     }
 
     public String getUsernameFromCooke(HttpServletRequest request){
-        Cookie cookie = WebUtils.getCookie(request, "accessToken");
-        String accessToken = cookie.getValue();
-        return tokenService.extractUsername(accessToken);
+        Cookie cookie = WebUtils.getCookie(request, "refreshToken");
+        String refreshToken = cookie.getValue();
+        return tokenService.extractUsername(refreshToken);
     }
 
     public void removeAccessCookie(HttpServletResponse response){

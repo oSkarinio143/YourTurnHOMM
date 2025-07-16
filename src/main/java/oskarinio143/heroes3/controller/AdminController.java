@@ -44,7 +44,7 @@ public class AdminController {
     @PostMapping(Route.DELETE)
     public String deleteUser(@RequestParam String username){
         adminService.deleteUser(username);
-        return Route.REDIRECT + Route.ADMIN;
+        return Route.REDIRECT + Route.ADMIN + Route.DELETE;
     }
 
     @GetMapping(Route.GRANT)
@@ -55,6 +55,6 @@ public class AdminController {
     @PostMapping(Route.GRANT)
     public String grantAdminView(@RequestParam String username){
         adminService.grantAdminRole(username);
-        return Route.REDIRECT + Route.ADMIN;
+        return Route.REDIRECT + Route.ADMIN + Route.GRANT;
     }
 }

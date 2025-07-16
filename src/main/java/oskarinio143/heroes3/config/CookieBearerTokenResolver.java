@@ -2,6 +2,7 @@ package oskarinio143.heroes3.config;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.stereotype.Component;
@@ -21,11 +22,11 @@ public class CookieBearerTokenResolver implements BearerTokenResolver {
     private final String COOKIE_REFRESH_TOKEN = "refreshToken";
     private static final List<String> PUBLIC_PATHS = List.of(
             Route.MAIN + Route.REGISTER,
-            Route.MAIN + Route.LOGIN,
-            Route.MAIN + Route.REFRESH);
+            Route.MAIN + Route.LOGIN);
 
     @Override
     public String resolve(HttpServletRequest request) {
+
         Cookie cookieAccess = WebUtils.getCookie(request, COOKIE_ACCESS_TOKEN);
         String path = request.getRequestURI();
 

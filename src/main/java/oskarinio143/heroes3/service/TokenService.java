@@ -29,10 +29,10 @@ public class TokenService {
         this.clock = clock;
     }
 
-    public String generateToken(UserServiceData loginServiceData, long minutes) {
+    public String generateToken(UserServiceData loginServiceData, long seconds) {
         now = Instant.now(clock);
-        Date issuedAt = Date.from(now.plus(minutes, ChronoUnit.MINUTES));
-        Date expiration = Date.from(now);
+        Date issuedAt = Date.from(now);
+        Date expiration = Date.from(now.plus(seconds, ChronoUnit.SECONDS));
         return Jwts.builder()
                 .setSubject(loginServiceData.getUsername())
                 .claim("roles", loginServiceData.getRoles())  // możesz dodać inne dane
@@ -72,7 +72,7 @@ public class TokenService {
         boolean isTokenExpired = true;
         try{
             isTokenExpired = isTokenExpired(token);
-        }catch (ExpiredJwtException ignored){}
+        }catch (ExpiredJwtException | IllegalArgumentException ignored){}
         return isTokenExpired;
     }
 }
