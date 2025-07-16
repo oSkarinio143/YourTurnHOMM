@@ -11,12 +11,7 @@ import org.springframework.web.util.WebUtils;
 import oskarinio143.heroes3.model.servicedto.UserServiceData;
 import oskarinio143.heroes3.service.TokenService;
 
-import java.time.Clock;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -68,7 +63,7 @@ public class CookieHelper {
         response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
     }
 
-    public String getUsernameFromCooke(HttpServletRequest request){
+    public String getUsernameFromCookie(HttpServletRequest request){
         Cookie cookie = WebUtils.getCookie(request, "refreshToken");
         String refreshToken = cookie.getValue();
         return tokenService.extractUsername(refreshToken);
@@ -76,6 +71,13 @@ public class CookieHelper {
 
     public void removeAccessCookie(HttpServletResponse response){
         Cookie cookie = new Cookie("accessToken", null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+    }
+
+    public void removeRefreshCookie(HttpServletResponse response){
+        Cookie cookie = new Cookie("refreshToken", null);
         cookie.setPath("/");
         cookie.setMaxAge(0);
         response.addCookie(cookie);

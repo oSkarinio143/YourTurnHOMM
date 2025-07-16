@@ -33,12 +33,12 @@ public class UserService {
     }
 
     public void generateAndSetTokens(UserServiceData userServiceData){
-        userServiceData.setAccessToken(tokenService.generateToken(userServiceData, 1));
+        userServiceData.setAccessToken(tokenService.generateToken(userServiceData, TOKEN_ACCESS_SECONDS));
         userServiceData.setRefreshToken(tokenService.generateToken(userServiceData, TOKEN_REFRESH_SECONDS));
     }
 
     public RefreshToken getRefreshToken(String refreshTokenString){
-        Instant now = Instant.now(clock);
+        Instant now = Instant.now(this.clock);
         return new RefreshToken(refreshTokenString, now, now.plus(TOKEN_REFRESH_SECONDS, ChronoUnit.SECONDS));
     }
 

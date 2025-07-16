@@ -17,6 +17,15 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final SmartAuthenticationEntryPoint smartAuthenticationEntryPoint;
+
+    public SecurityConfig(CustomAccessDeniedHandler accessDeniedHandler, SmartAuthenticationEntryPoint smartAuthenticationEntryPoint) {
+        this.accessDeniedHandler = accessDeniedHandler;
+        this.smartAuthenticationEntryPoint = smartAuthenticationEntryPoint;
+    }
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,
                                            JwtDecoder jwtDecoder,
@@ -44,10 +53,11 @@ public class SecurityConfig {
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .bearerTokenResolver(cookieBearerTokenResolver)
                         .jwt(jwt -> jwt
-                                .decoder(jwtDecoder)))
-                .formLogin(form -> form.disable()) // wyłącz domyślne logowanie
-                .httpBasic(basic -> basic.disable()); // wyłącz Basic Auth, jeśli nie używasz
-
+                                .decoder(jwtDecoder))
+                        .authenticationEntryPoint(smartAuthenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
+                )
+                .httpBasic(basic -> basic.disable());
         return http.build();
     }
 

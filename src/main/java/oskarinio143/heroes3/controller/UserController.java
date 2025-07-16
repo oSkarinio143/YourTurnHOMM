@@ -84,8 +84,9 @@ public class UserController {
     public String logoutUser(RedirectAttributes redirectAttributes,
                              HttpServletResponse response,
                              HttpServletRequest request){
-        String username = cookieHelper.getUsernameFromCooke(request);
+        String username = cookieHelper.getUsernameFromCookie(request);
         cookieHelper.removeAccessCookie(response);
+        cookieHelper.removeRefreshCookie(response);
         userService.deleteToken(username);
         redirectAttributes.addFlashAttribute("logoutMessage", "Użytkownik został wylogowany");
         return Route.REDIRECT + Route.LOGIN;

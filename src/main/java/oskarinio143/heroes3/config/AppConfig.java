@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import java.time.Clock;
+import java.time.ZoneId;
 
 @Configuration
 public class AppConfig {
@@ -29,6 +30,6 @@ public class AppConfig {
 
     @Bean
     public Clock clock(){
-        return Clock.systemUTC();
+        return Clock.system(ZoneId.of("Europe/Warsaw"));
     }
 }

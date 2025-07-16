@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
@@ -78,9 +80,10 @@ public class RefreshFilter extends OncePerRequestFilter {
                     tokenRefresh = cookieRefresh.getValue();
 
                 if (cookieRefresh == null || tokenService.isTokenExpiredSafe(tokenRefresh)){
-                    if(cookieAccess == null && cookieRefresh == null)
+                    if(cookieAccess != null || cookieRefresh != null)
                         cookieHelper.clearCookies(response, request);
-                    response.sendRedirect(Route.MAIN + Route.LOGIN + "?logout=auto");
+//                    response.sendRedirect(Route.MAIN + Route.LOGIN + "?logout=auto");
+                    filterChain.doFilter(request, response);
                     return;
                 }
                 String username = tokenService.extractUsername(tokenRefresh);
@@ -88,7 +91,7 @@ public class RefreshFilter extends OncePerRequestFilter {
                 UserServiceData userServiceData = new UserServiceData(user.getUsername(), user.getPassword());
                 userServiceData.setRoles(user.getRoles());
 
-                String accessTokenNew = tokenService.generateToken(userServiceData, 1);
+                String accessTokenNew = tokenService.generateToken(userServiceData, TOKEN_ACCESS_SECONDS);
                 String refreshTokenNew = tokenService.generateToken(userServiceData, TOKEN_REFRESH_SECONDS);
                 userServiceData.setAccessToken(accessTokenNew);
                 userServiceData.setRefreshToken(refreshTokenNew);
@@ -98,6 +101,23 @@ public class RefreshFilter extends OncePerRequestFilter {
                 user.setRefreshToken(refreshToken);
                 userRepository.save(user);
                 cookieHelper.setCookieTokens(userServiceData, response);
+
+
+                /*
+                Uwierzytelnianie użytkownika aby po odświeżeniu tokenów dało się obsłużyć żądanie, inaczej główny filter sprawdziłby
+                cookies z request gdzie byłyby stare cookies, żądanie nie zostałoby obsłużone.
+                 */
+                var authorities = userServiceData.getRoles().stream()
+                        .map(role -> new SimpleGrantedAuthority(role.name()))
+                        .collect(Collectors.toList());
+
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        user.getUsername(),
+                        null,
+                        authorities
+                );
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
             filterChain.doFilter(request, response);
         }
