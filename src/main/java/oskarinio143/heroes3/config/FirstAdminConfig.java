@@ -9,11 +9,15 @@ import oskarinio143.heroes3.model.constant.Role;
 import oskarinio143.heroes3.model.entity.User;
 import oskarinio143.heroes3.repository.UserRepository;
 
+import java.time.Clock;
+import java.time.Instant;
+
 @Component
 public class FirstAdminConfig implements ApplicationRunner {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final Clock clock;
 
     @Value("${admin.username:}")
     private String adminUsername;
@@ -21,9 +25,10 @@ public class FirstAdminConfig implements ApplicationRunner {
     @Value("${admin.password:}")
     private String adminPassword;
 
-    public FirstAdminConfig(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public FirstAdminConfig(UserRepository userRepository, PasswordEncoder passwordEncoder, Clock clock) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.clock = clock;
     }
 
     @Override
@@ -35,6 +40,7 @@ public class FirstAdminConfig implements ApplicationRunner {
             User adminUser = new User();
             adminUser.setUsername(adminUsername);
             adminUser.setPassword(passwordEncoder.encode(adminPassword));
+            adminUser.setRegistrationDate(Instant.now(clock));
             adminUser.addRole(Role.ROLE_USER);
             adminUser.addRole(Role.ROLE_ADMIN);
 

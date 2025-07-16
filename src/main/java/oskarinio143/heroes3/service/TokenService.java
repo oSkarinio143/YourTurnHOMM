@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import oskarinio143.heroes3.model.servicedto.UserServiceData;
 
 import javax.crypto.SecretKey;
+import java.time.Clock;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
@@ -18,21 +19,25 @@ import java.util.Date;
 @Service
 public class TokenService {
     private final SecretKey secretKey;
-    private Date now;
+    private final Clock clock;
+    private Instant now;
 
-    public TokenService(@Value("${jwt.secret.base64}") String secretKeyString){
+    public TokenService(@Value("${jwt.secret.base64}") String secretKeyString, Clock clock){
         this.secretKey = Keys.hmacShaKeyFor(
                 Base64.getDecoder().decode(secretKeyString)
         );
+        this.clock = clock;
     }
 
-    public String generateToken(UserServiceData loginServiceData, long time) {
-        now = new Date();
+    public String generateToken(UserServiceData loginServiceData, long minutes) {
+        now = Instant.now(clock);
+        Date issuedAt = Date.from(now.plus(minutes, ChronoUnit.MINUTES));
+        Date expiration = Date.from(now);
         return Jwts.builder()
                 .setSubject(loginServiceData.getUsername())
                 .claim("roles", loginServiceData.getRoles())  // możesz dodać inne dane
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + time))
+                .setIssuedAt(issuedAt)
+                .setExpiration(expiration)
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -52,13 +57,15 @@ public class TokenService {
     }
 
     private boolean isTokenExpired(String token) {
+        now = Instant.now(clock);
+        Date expirationDate = Date.from(now);
         Date expiration = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .getExpiration();
-        return expiration.before(new Date());
+        return expiration.before(expirationDate);
     }
 
     public boolean isTokenExpiredSafe(String token){

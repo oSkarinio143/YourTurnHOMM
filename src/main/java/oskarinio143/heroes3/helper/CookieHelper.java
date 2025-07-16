@@ -31,6 +31,7 @@ public class CookieHelper {
         return ResponseCookie.from("accessToken", token)
                 .httpOnly(true)
                 .path("/")
+                .maxAge(3600000 / 4)
                 .secure(true)
                 .build();
     }
@@ -39,6 +40,7 @@ public class CookieHelper {
         return ResponseCookie.from("refreshToken", token)
                 .httpOnly(true)
                 .path("/")
+                .maxAge(3600000 * 24 * 7)
                 .secure(true)
                 .build();
     }

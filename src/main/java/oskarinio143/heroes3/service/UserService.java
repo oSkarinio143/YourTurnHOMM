@@ -7,9 +7,11 @@ import oskarinio143.heroes3.exception.UsernameNotFoundException;
 import oskarinio143.heroes3.model.entity.RefreshToken;
 import oskarinio143.heroes3.model.entity.User;
 import oskarinio143.heroes3.model.servicedto.UserServiceData;
-import oskarinio143.heroes3.repository.RefreshTokenRepository;
 import oskarinio143.heroes3.repository.UserRepository;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -17,13 +19,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final TokenService tokenService;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final Clock clock;
 
-
-    public UserService(UserRepository userRepository, TokenService tokenService, RefreshTokenRepository refreshTokenRepository) {
+    public UserService(UserRepository userRepository, TokenService tokenService, Clock clock) {
         this.userRepository = userRepository;
         this.tokenService = tokenService;
-        this.refreshTokenRepository = refreshTokenRepository;
+        this.clock = clock;
     }
 
     public void generateAndSetTokens(UserServiceData userServiceData){
@@ -32,7 +33,8 @@ public class UserService {
     }
 
     public RefreshToken getRefreshToken(String refreshTokenString){
-        return new RefreshToken(refreshTokenString);
+        Instant now = Instant.now(clock);
+        return new RefreshToken(refreshTokenString, now, now.plus(7, ChronoUnit.DAYS));
 
     }
 

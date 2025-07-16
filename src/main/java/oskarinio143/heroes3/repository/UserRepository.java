@@ -2,11 +2,13 @@ package oskarinio143.heroes3.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import oskarinio143.heroes3.model.entity.User;
 
-import java.util.List;
+import java.time.Instant;
+import java.util.Date;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User> {
@@ -16,4 +18,8 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 
     @Query("SELECT u FROM User u WHERE u.username = :username")
     User findByUsernameOrThrow(@Param("username") String username);
+
+    @Modifying
+    @Query("UPDATE User u SET u.refreshToken = null WHERE u.refreshToken.expirationDate < :date")
+    void removeRefreshTokenRelation(@Param("date") Instant date);
 }

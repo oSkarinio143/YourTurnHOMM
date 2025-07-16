@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import oskarinio143.heroes3.model.constant.Role;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +28,7 @@ public class User {
     private String password;
 
     @NonNull
-    private Date registrationDate = new Date();
+    private Instant registrationDate;
 
     @NonNull
     private List<Role> roles = new ArrayList<>();

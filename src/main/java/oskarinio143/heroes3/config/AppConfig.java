@@ -4,7 +4,10 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+
+import java.time.Clock;
 
 @Configuration
 public class AppConfig {
@@ -22,5 +25,10 @@ public class AppConfig {
         messageSource.setBasename("messages");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
+    }
+
+    @Bean
+    public Clock clock(){
+        return Clock.systemUTC();
     }
 }

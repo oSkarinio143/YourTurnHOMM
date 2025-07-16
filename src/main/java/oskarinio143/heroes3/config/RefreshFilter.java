@@ -1,5 +1,6 @@
 package oskarinio143.heroes3.config;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -18,6 +19,9 @@ import oskarinio143.heroes3.repository.UserRepository;
 import oskarinio143.heroes3.service.TokenService;
 
 import java.io.IOException;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +33,8 @@ public class RefreshFilter extends OncePerRequestFilter {
     private UserRepository userRepository;
     @Autowired
     private CookieHelper cookieHelper;
+    @Autowired
+    private Clock clock;
 
     private static final List<String> PUBLIC_PATHS = new ArrayList<>(List.of(
             Route.MAIN + Route.LOGIN,
@@ -42,8 +48,10 @@ public class RefreshFilter extends OncePerRequestFilter {
 
 
         String path = request.getRequestURI();
-        if (PUBLIC_PATHS.contains(path))
+        if (PUBLIC_PATHS.contains(path)){
             filterChain.doFilter(request, response);
+            return;
+        }
 
         else {
             Cookie cookieAccess = WebUtils.getCookie(request, "accessToken");
@@ -54,36 +62,34 @@ public class RefreshFilter extends OncePerRequestFilter {
 
             String tokenAccess = cookieAccess.getValue();
             if (tokenService.isTokenExpiredSafe(tokenAccess)) {
-
                 Cookie cookieRefresh = WebUtils.getCookie(request, "refreshToken");
                 if(cookieRefresh == null){
                     filterChain.doFilter(request, response);
                     return;
                 }
                 String tokenRefresh = cookieRefresh.getValue();
-                cookieHelper.clearCookies(response, request);
 
                 if (tokenService.isTokenExpiredSafe(tokenRefresh)){
                     cookieHelper.clearCookies(response, request);
                     response.sendRedirect(Route.MAIN + Route.LOGIN + "?logout=auto");
                     return;
                 }
-
                 String username = tokenService.extractUsername(tokenRefresh);
                 User user = userRepository.findByUsernameOrThrow(username);
                 UserServiceData userServiceData = new UserServiceData(user.getUsername(), user.getPassword());
                 userServiceData.setRoles(user.getRoles());
 
-                String accessTokenNew = tokenService.generateToken(userServiceData, 3600000 / 4);
-                String refreshTokenNew = tokenService.generateToken(userServiceData, 3600000 * 24 * 7);
+                String accessTokenNew = tokenService.generateToken(userServiceData, 15);
+                String refreshTokenNew = tokenService.generateToken(userServiceData, 60 * 24 * 7);
                 userServiceData.setAccessToken(accessTokenNew);
                 userServiceData.setRefreshToken(refreshTokenNew);
 
-                RefreshToken refreshToken = new RefreshToken(refreshTokenNew);
+                Instant now = Instant.now(clock);
+                RefreshToken refreshToken = new RefreshToken(refreshTokenNew, now, now.plus(7, ChronoUnit.DAYS));
                 user.setRefreshToken(refreshToken);
                 userRepository.save(user);
-
                 cookieHelper.setCookieTokens(userServiceData, response);
+                response.sendRedirect(request.getRequestURI());
             }
             filterChain.doFilter(request, response);
         }
