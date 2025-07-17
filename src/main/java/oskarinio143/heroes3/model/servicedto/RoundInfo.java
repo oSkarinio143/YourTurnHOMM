@@ -36,7 +36,7 @@ public class RoundInfo implements Cloneable{
             RoundInfo copy = (RoundInfo) super.clone();
             return copy;
         } catch (CloneNotSupportedException e) {
-            throw new AssertionError("Clone powinien być wspierany", e);
+            throw new AssertionError("Clone Exception");
         }
     }
 }

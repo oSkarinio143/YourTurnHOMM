@@ -244,8 +244,8 @@ public class BattleService {
             return true;
         }
         if(roundInfo.getFasterLiveUnits() == 0){
-            roundInfo.setLoserUnit(roundInfo.getSlowerUnit());
-            roundInfo.setWinnerUnit(roundInfo.getFasterUnit());
+            roundInfo.setWinnerUnit(roundInfo.getSlowerUnit());
+            roundInfo.setLoserUnit(roundInfo.getFasterUnit());
             return true;
         }
         return false;
