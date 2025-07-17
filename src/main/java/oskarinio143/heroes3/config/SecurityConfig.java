@@ -17,12 +17,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final CustomAccessDeniedHandler accessDeniedHandler;
-    private final SmartAuthenticationEntryPoint smartAuthenticationEntryPoint;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    public SecurityConfig(CustomAccessDeniedHandler accessDeniedHandler, SmartAuthenticationEntryPoint smartAuthenticationEntryPoint) {
-        this.accessDeniedHandler = accessDeniedHandler;
-        this.smartAuthenticationEntryPoint = smartAuthenticationEntryPoint;
+    public SecurityConfig(CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomAccessDeniedHandler customAccessDeniedHandler) {
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
+        this.customAccessDeniedHandler = customAccessDeniedHandler;
     }
 
 
@@ -54,8 +54,8 @@ public class SecurityConfig {
                         .bearerTokenResolver(cookieBearerTokenResolver)
                         .jwt(jwt -> jwt
                                 .decoder(jwtDecoder))
-                        .authenticationEntryPoint(smartAuthenticationEntryPoint)
-                        .accessDeniedHandler(accessDeniedHandler)
+                        .accessDeniedHandler(customAccessDeniedHandler)
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
                 )
                 .httpBasic(basic -> basic.disable());
         return http.build();

@@ -468,7 +468,7 @@
                 <h2 class="modal-title">Wystąpił błąd</h2>
             </div>
             <div class="modal-content">
-                <p class="modal-message" th:if="${adminErrorMessage}" th:utext="${adminErrorMessage}"></p>
+                <p class="modal-message" th:if="${adminErrorMessage}" th:text="${adminErrorMessage}"></p>
             </div>
             <div class="modal-actions">
                 <button class="modal-button modal-button-primary" onclick="closeModal('errorModal')">Rozumiem</button>

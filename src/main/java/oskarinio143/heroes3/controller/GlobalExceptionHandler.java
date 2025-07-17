@@ -8,6 +8,8 @@ import oskarinio143.heroes3.exception.*;
 import oskarinio143.heroes3.model.constant.Route;
 import oskarinio143.heroes3.service.ExceptionMessageCreator;
 
+import java.nio.file.AccessDeniedException;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -40,5 +42,4 @@ public class GlobalExceptionHandler {
         redirectAttributes.addFlashAttribute("errorMessage", "Użytkownik istnieje już w bazie danych");
         return Route.REDIRECT + Route.REGISTER;
     }
-
 }
