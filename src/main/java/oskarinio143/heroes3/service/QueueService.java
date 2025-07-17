@@ -17,15 +17,6 @@ public class QueueService {
 
     public void createQueue(RoundInfo roundInfo){
         roundInfo.setTempDelay(0);
-        System.out.println("Numer rundy - " + roundInfo.getRoundCounter());
-        System.out.println("Szybsza dmg - " + roundInfo.getFasterDmg());
-        System.out.println("Szybsza zyje - " + roundInfo.getFasterLiveUnits());
-        System.out.println("Szybsza ile jednostek zaatakowalo - " + roundInfo.getFasterLastAttackUnits());
-        System.out.println("Szybsza ile umarlo - " + roundInfo.getFasterDeathUnits());
-        System.out.println("Czy wygrany - " + roundInfo.isWinner());
-        if(roundInfo.getWinnerUnit() != null) {
-            System.out.println("Kto wygrany - " + roundInfo.getWinnerUnit().getName());
-        }
         sendRoundMess(roundInfo);
         sendAttackFasterMess(roundInfo);
         sendAttackSlowerMess(roundInfo);
