@@ -11,11 +11,13 @@ import java.util.concurrent.TimeUnit;
 public class QueueService {
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private final MessageCreatorService messageCreatorService;
+
     public QueueService(MessageCreatorService messageCreatorService) {
         this.messageCreatorService = messageCreatorService;
     }
 
     public void createQueue(RoundInfo roundInfo){
+        System.out.println("Tworze kolejke");
         roundInfo.setTempDelay(0);
         sendRoundMess(roundInfo);
         sendAttackFasterMess(roundInfo);
@@ -24,13 +26,15 @@ public class QueueService {
     }
 
     public void sendRoundMess(RoundInfo roundInfo){
-        Runnable sendRound = () -> messageCreatorService.sendRoundMess(roundInfo);
+        Runnable sendRound = () ->
+            messageCreatorService.sendRoundMess(roundInfo);
         scheduler.schedule(sendRound ,roundInfo.getMessageDelay() + roundInfo.getTempDelay(), TimeUnit.SECONDS);
     }
 
     public void sendAttackFasterMess(RoundInfo roundInfo){
         roundInfo.setTempDelay(roundInfo.getTempDelay() + 1);
-        Runnable sendFasterAttack = () -> messageCreatorService.sendAttackFasterMess(roundInfo);
+        Runnable sendFasterAttack = () ->
+            messageCreatorService.sendAttackFasterMess(roundInfo);
         scheduler.schedule(sendFasterAttack, roundInfo.getMessageDelay() + roundInfo.getTempDelay(), TimeUnit.SECONDS);
     }
 

@@ -32,6 +32,8 @@ public class DuelController {
     public String prepareDuel(Model model,
                               @ModelAttribute DuelForm duelForm){
 
+        if(duelForm.getUserUUID() != null)
+            duelService.closeEmitter(duelForm.getUserUUID());
         model.addAttribute("duelForm", duelForm);
         return Route.PACKAGE_DUEL + Route.DUEL;
     }
@@ -58,6 +60,7 @@ public class DuelController {
         return Route.PACKAGE_DUEL + Route.DUEL;
     }
 
+    //Generowanie userUUID na oddzielnym endpointcie powoduje problem z wiadomościami z poprzednich bitew, więc zdecydowałem się na takie rozwiązanie
     @PostMapping(Route.BATTLE)
     public String startBattle(@Valid @ModelAttribute DuelForm duelForm,
                               BindingResult bindingResult,
@@ -69,6 +72,7 @@ public class DuelController {
             redirectAttributes.addFlashAttribute("duelForm", duelForm);
             return Route.REDIRECT + Route.DUEL;
         }
+        duelForm.setUserUUID(duelService.getUserUUID());
         model.addAttribute("duelForm", duelForm);
         duelService.loadBattle(duelForm);
         return Route.PACKAGE_DUEL + Route.BATTLE;

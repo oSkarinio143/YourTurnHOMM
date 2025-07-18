@@ -16,7 +16,6 @@ import static java.lang.Thread.sleep;
 @Service
 public class BattleService {
 
-    private final MessageCreatorService messageCreatorService;
     private final QueueService queueService;
 
     @Value("${battle.rates.attack}")
@@ -24,8 +23,7 @@ public class BattleService {
     @Value("${battle.rates.defense}")
     private double DEF_RATE;
 
-    public BattleService(MessageCreatorService messageCreatorService, QueueService queueService) {
-        this.messageCreatorService = messageCreatorService;
+    public BattleService(QueueService queueService) {
         this.queueService = queueService;
     }
 

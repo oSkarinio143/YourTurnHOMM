@@ -633,32 +633,7 @@
     </div>
   </div>
 </div>
-
 <script>
-  // === UUID SCRIPT (BEZ ZMIAN) ===
-  let uuid = localStorage.getItem("uuid");
-
-  async function getUUID() {
-    uuid = await fetch("http://localhost:8080/oskarinio143/heroes/duel/generateUUID")
-      .then(res => res.text());
-    return uuid;
-  }
-
-  async function setUUID() {
-    await getUUID();
-    passUUID();
-  }
-
-  function passUUID() {
-    localStorage.setItem("uuid", uuid);
-    document.getElementById("userUUIDInput").value = uuid;
-  }
-
-  if (!uuid) {
-    setUUID();
-  }
-  passUUID();
-
   function updateHiddenFieldsBeforeSubmit(formId) {
     const form = document.getElementById(formId);
     form.querySelector('input[name="leftQuantity"]').value = document.getElementById('leftQuantity').value;
@@ -735,7 +710,6 @@
   }
 </script>
 
-<!-- Show modal if message exists -->
 <script th:if="${incorrectMessage}">
   showModal('incorrectValueModal');
 </script>
