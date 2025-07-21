@@ -1,8 +1,8 @@
-name: Daily Git Summary
+name: Weekly Git Summary
 
 on:
   schedule:
-    - cron: '0 20 * * *'
+    - cron: '0 18 * * 0'  # Niedziela 20:00 czasu polskiego (18:00 UTC)
   workflow_dispatch:
 
 jobs:
@@ -13,10 +13,10 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Get full diff from last 24h
+      - name: Get full diff from last week
         run: |
           git fetch origin
-          git log --since="24 hours ago" --pretty=format:"%H" > commit_hashes.txt
+          git log --since="7 days ago" --pretty=format:"%H" > commit_hashes.txt
           > diff.txt
           while read hash; do
             git show $hash --no-color --unified=0 >> diff.txt
@@ -35,7 +35,7 @@ jobs:
           echo '{
             "model": "gpt-4",
             "messages": [
-              {"role": "system", "content": "Jesteś doświadczonym architektem Java Spring. Podsumuj zmiany kodu z ostatnich 24godzin w języku polskim. Zorganizuj je według warstw aplikacji (kontrolery, serwisy, repozytoria, modele, konfiguracja, testy itd.). Uwzględnij istotne zmiany techniczne."},
+              {"role": "system", "content": "Jesteś doświadczonym architektem Java Spring. Podsumuj zmiany kodu z ostatniego tygodnia w języku polskim. Zorganizuj je według warstw aplikacji (kontrolery, serwisy, repozytoria, modele, konfiguracja, testy itd.). Uwzględnij istotne zmiany techniczne."},
               {"role": "user", "content": "'"$CONTENT"'"}
             ]
           }' > payload.json
