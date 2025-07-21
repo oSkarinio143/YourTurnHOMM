@@ -17,7 +17,6 @@ public class QueueService {
     }
 
     public void createQueue(RoundInfo roundInfo){
-        System.out.println("Tworze kolejke");
         roundInfo.setTempDelay(0);
         sendRoundMess(roundInfo);
         sendAttackFasterMess(roundInfo);

@@ -31,7 +31,6 @@ public class DatabaseService {
         }
         String imagePath = getImagePath(unit.getName(),image);
         unit.setImagePath(imagePath);
-        unit.setHpLeft(unit.getHp());
         try {
             unitRepository.save(unit);
         }catch (TransactionSystemException ex){

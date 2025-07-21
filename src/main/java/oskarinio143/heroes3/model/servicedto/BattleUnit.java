@@ -32,7 +32,7 @@ public class BattleUnit {
         this.maxDmg = battleUnit.maxDmg;
         this.speed = battleUnit.speed;
         this.hp = battleUnit.hp;
-        this.hpLeft = battleUnit.hpLeft;
+        this.hpLeft = battleUnit.hp;
         this.shots = battleUnit.shots;
         this.isRange = shots > 0;
     }
@@ -49,7 +49,6 @@ public class BattleUnit {
         private int hp;
         private int hpLeft;
         private int shots;
-        private boolean isRange;
 
         public BattleUnitBuilder name(String name){
             this.name = name;
@@ -103,11 +102,6 @@ public class BattleUnit {
 
         public BattleUnitBuilder shoots(int shots) {
             this.shots = shots;
-            return this;
-        }
-
-        public BattleUnitBuilder isRange(boolean isRange) {
-            this.isRange = isRange;
             return this;
         }
 

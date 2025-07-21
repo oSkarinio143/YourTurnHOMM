@@ -7,7 +7,9 @@ import lombok.Setter;
 import oskarinio143.heroes3.model.constant.Role;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Getter
@@ -17,7 +19,7 @@ public class UserServiceData {
     private String username;
     @NonNull
     private String password;
-    private List<Role> roles = new ArrayList<>();
+    private Set<Role> roles = new HashSet<>();
     private String accessToken;
     private String refreshToken;
 

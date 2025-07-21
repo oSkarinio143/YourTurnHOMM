@@ -213,10 +213,6 @@
       <span class="stat-value" id="hp-display" th:text="${unit.hp}"></span>
       <input type="number" class="editable-input hidden" id="hp-input" th:value="${unit.hp}">
     </div>
-    <div class="stat-row hp-section" th:if="${unit.hpLeft != null}">
-      <span class="stat-label">HP pozostałe:</span>
-      <span class="stat-value" id="hpLeft-display" th:text="${unit.hpLeft}"></span>
-    </div>
     <div class="stat-row">
       <span class="stat-label">Szybkość:</span>
       <span class="stat-value" id="speed-display" th:text="${unit.speed}"></span>

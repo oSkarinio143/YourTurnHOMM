@@ -5,20 +5,19 @@ import lombok.*;
 import oskarinio143.heroes3.model.constant.Role;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @RequiredArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
-
+@Table(name = "app_user")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @NonNull
     @Column(unique = true)
@@ -30,11 +29,14 @@ public class User {
     @NonNull
     private Instant registrationDate;
 
-    @NonNull
-    private List<Role> roles = new ArrayList<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "refreshToken")
+    @JoinColumn(name = "refresh_token_id")
     private RefreshToken refreshToken;
 
     @Transient

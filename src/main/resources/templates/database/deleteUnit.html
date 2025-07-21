@@ -117,9 +117,8 @@
                 <p><strong>Strzały:</strong> <span th:text="${unit.shots}"/></p>
                 <p><strong>Obrażenia:</strong> <span th:text="${unit.minDamage}"/> - <span th:text="${unit.maxDamage}"/></p>
                 <p><strong>HP:</strong> <span th:text="${unit.hp}"/></p>
-                <p><strong>HP pozostałe:</strong> <span th:text="${unit.hpLeft}"/></p>
                 <p><strong>Szybkość:</strong> <span th:text="${unit.speed}"/></p>
-                <p><strong>Opis:</strong> <span th:text="${unit.description}"/></p>
+                <p><strong>Opis:</strong> <span th:utext="${unit.description}"/></p>
             </div>
             <button class="remove-button" onclick="showModal(this)">Usuń</button>
         </div>

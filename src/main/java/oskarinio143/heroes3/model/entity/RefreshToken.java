@@ -12,12 +12,12 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-
+@Table(name = "refresh_token")
 public class RefreshToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @NonNull
     private String tokenHash;

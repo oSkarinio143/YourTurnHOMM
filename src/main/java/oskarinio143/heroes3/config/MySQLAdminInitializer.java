@@ -3,6 +3,7 @@ package oskarinio143.heroes3.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import oskarinio143.heroes3.model.constant.Role;
@@ -13,7 +14,8 @@ import java.time.Clock;
 import java.time.Instant;
 
 @Component
-public class FirstAdminConfig implements ApplicationRunner {
+@Profile("!h2")
+public class MySQLAdminInitializer implements ApplicationRunner {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -25,7 +27,7 @@ public class FirstAdminConfig implements ApplicationRunner {
     @Value("${admin.password:}")
     private String adminPassword;
 
-    public FirstAdminConfig(UserRepository userRepository, PasswordEncoder passwordEncoder, Clock clock) {
+    public MySQLAdminInitializer(UserRepository userRepository, PasswordEncoder passwordEncoder, Clock clock) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.clock = clock;
@@ -43,7 +45,6 @@ public class FirstAdminConfig implements ApplicationRunner {
             adminUser.setRegistrationDate(Instant.now(clock));
             adminUser.addRole(Role.ROLE_USER);
             adminUser.addRole(Role.ROLE_ADMIN);
-
             userRepository.save(adminUser);
         }
     }

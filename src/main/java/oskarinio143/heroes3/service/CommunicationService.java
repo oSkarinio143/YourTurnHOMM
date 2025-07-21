@@ -16,7 +16,6 @@ public class CommunicationService {
         String userUUID;
         do {
             userUUID = UUID.randomUUID().toString();
-            System.out.println("Tworze UUID " + userUUID);
         } while (emitters.containsKey(userUUID));
         return userUUID;
     }

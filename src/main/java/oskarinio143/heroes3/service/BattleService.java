@@ -60,7 +60,7 @@ public class BattleService {
     }
 
     public BattleUnit prepareBattleUnit(Unit unit, int heroAtk, int heroDef){
-        return new BattleUnit.BattleUnitBuilder()
+        BattleUnit battleUnit = new BattleUnit.BattleUnitBuilder()
                 .name(unit.getName())
                 .basicAtk(unit.getAttack())
                 .heroAtk(heroAtk)
@@ -71,8 +71,10 @@ public class BattleService {
                 .speed(unit.getSpeed())
                 .hp(unit.getHp())
                 .leftHp(unit.getHp())
-                .shoots(unit.getShots())
                 .build();
+        if (unit.getShots() != null)
+            battleUnit.setShots(unit.getShots());
+        return battleUnit;
     }
 
     public void startBattle(AttackInfo attackInfo){
