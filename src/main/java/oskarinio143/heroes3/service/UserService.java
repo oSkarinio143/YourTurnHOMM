@@ -14,6 +14,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -55,8 +56,8 @@ public class UserService {
 
     @Transactional
     public void deleteToken(String username){
-        User user = userRepository.findByUsernameOrThrow(username);
-        setRefreshToken(user, null);
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        userOptional.ifPresent(user -> setRefreshToken(user, null));
     }
 
     @Transactional

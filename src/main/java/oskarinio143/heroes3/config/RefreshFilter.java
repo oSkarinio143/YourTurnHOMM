@@ -1,8 +1,6 @@
 package oskarinio143.heroes3.config;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +28,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -68,7 +67,6 @@ public class RefreshFilter extends OncePerRequestFilter {
 
         else {
             Cookie cookieAccess = WebUtils.getCookie(request, "accessToken");
-
             String tokenAccess = "";
             if(cookieAccess != null)
                 tokenAccess = cookieAccess.getValue();
@@ -87,7 +85,14 @@ public class RefreshFilter extends OncePerRequestFilter {
                     return;
                 }
                 String username = tokenService.extractUsername(tokenRefresh);
-                User user = userRepository.findByUsernameOrThrow(username);
+
+                Optional<User> userOptional = userRepository.findByUsername(username);
+                if(userOptional.isEmpty()){
+                    cookieHelper.clearCookies(response, request);
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+                User user = userOptional.get();
                 UserServiceData userServiceData = new UserServiceData(user.getUsername(), user.getPassword());
                 userServiceData.setRoles(user.getRoles());
 
