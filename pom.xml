@@ -144,6 +144,7 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -156,7 +157,66 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>11.7.2</version>
+				<configuration>
+					<!-- Adres URL z poprawną składnią XML (& zamiast &) -->
+					<url>jdbc:mysql://localhost:3306/heroes3?allowPublicKeyRetrieval=true&amp;ampuseSSL=false</url>
+
+					<!-- Te linie są w porządku -->
+					<user>${env.DB_USERNAME}</user>
+					<password>${env.DB_PASSWORD}</password>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 
+	<profiles>
+
+		<profile>
+			<id>db-mysql</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.flywaydb</groupId>
+						<artifactId>flyway-maven-plugin</artifactId>
+						<configuration>
+							<url>jdbc:mysql://localhost:3306/heroes3?allowPublicKeyRetrieval=true&amp;useSSL=false</url>
+							<locations>
+								<location>classpath:db/migration/common</location>
+								<location>classpath:db/migration/mysql</location>
+							</locations>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>db-h2</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.flywaydb</groupId>
+						<artifactId>flyway-maven-plugin</artifactId>
+						<configuration>
+							<url>jdbc:h2:mem:mojadb;DB_CLOSE_DELAY=-1</url>
+							<driver>org.h2.Driver</driver>
+							<locations>
+								<location>classpath:db/migration/common</location>
+								<location>classpath:db/migration/h2</location>
+							</locations>
+						</configuration>
+					</plugin> 
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
