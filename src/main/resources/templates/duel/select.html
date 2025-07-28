@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Lista jednostek</title>
-  <style>
+  <style th:attr="nonce=${cspNonce}">
     body {
       background-color: #e8eaf0;
       font-family: Arial, sans-serif;
@@ -55,7 +55,7 @@
   <div th:each="unit : ${units}">
     <div class="unit-container" style="display: flex; justify-content: space-between; align-items: center;">
       <div>
-        <img th:src="@{${unit.imagePath}}" class="unit-image" alt="Unit Image"/>
+        <img th:src="${unit.imagePath}" class="unit-image" alt="Unit Image"/>
       </div>
       <div class="unit-stats" style="flex-grow: 1; margin-left: 20px;">
         <p><strong>Nazwa:</strong> <span th:text="${unit.name}"/></p>

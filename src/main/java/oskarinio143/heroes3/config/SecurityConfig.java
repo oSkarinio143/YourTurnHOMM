@@ -3,6 +3,7 @@ package oskarinio143.heroes3.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,6 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.HeaderWriterFilter;
+import org.springframework.security.web.header.writers.StaticHeadersWriter;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 
 @Configuration
 @EnableWebSecurity
@@ -33,20 +38,21 @@ public class SecurityConfig {
                                            RefreshFilter refreshFilter) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/oskarinio143/heroes/login",
-                                                    "/oskarinio143/heroes/register",
-                                                    "/oskarinio143/heroes/refresh").permitAll()
+                                "/oskarinio143/heroes/register",
+                                "/oskarinio143/heroes/refresh").permitAll()
                         .requestMatchers("/oskarinio143/heroes",
-                                                    "/oskarinio143/heroes/database",
-                                                    "/oskarinio143/heroes/database/view",
-                                                    "/oskarinio143/heroes/duel",
-                                                    "/oskarinio143/heroes/duel/**").hasRole("USER")
+                                "/oskarinio143/heroes/database",
+                                "/oskarinio143/heroes/database/view",
+                                "/oskarinio143/heroes/duel",
+                                "/oskarinio143/heroes/duel/**").hasRole("USER")
                         .requestMatchers("/oskarinio143/heroes/database/add",
-                                                    "/oskarinio143/heroes/database/modify",
-                                                    "/oskarinio143/heroes/database/delete",
-                                                    "/oskarinio143/heroes/admin/**").hasRole("ADMIN")
+                                "/oskarinio143/heroes/database/modify",
+                                "/oskarinio143/heroes/database/delete",
+                                "/oskarinio143/heroes/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(refreshFilter, BearerTokenAuthenticationFilter.class)
@@ -57,7 +63,32 @@ public class SecurityConfig {
                         .accessDeniedHandler(customAccessDeniedHandler)
                         .authenticationEntryPoint(customAuthenticationEntryPoint)
                 )
-                .httpBasic(basic -> basic.disable());
+                .httpBasic(basic -> basic.disable())
+                .headers(headers -> headers
+                        // 1. HSTS (Strict-Transport-Security)
+                        .httpStrictTransportSecurity(hsts -> hsts
+                                .includeSubDomains(true) // Stosuj też dla subdomen
+                                .maxAgeInSeconds(31536000) // Wymuszaj HTTPS przez rok
+                        )
+                        // 2. X-Content-Type-Options
+                        .contentTypeOptions(Customizer.withDefaults()) // Domyślnie ustawia "nosniff"
+                        // 3. X-Frame-Options
+                        .frameOptions(frameOptions -> frameOptions
+                                .deny() // lub .sameOrigin() jeśli potrzebujesz iframe z tej samej domeny
+                        )
+                        // 4. Content-Security-Policy (CSP) - potężne, ale wymaga konfiguracji
+                        .contentSecurityPolicy(csp -> csp
+                                .policyDirectives("default-src 'self'; " +
+                                        "style-src 'self' 'nonce-{nonce}';" +
+                                        "script-src 'self' 'nonce-{nonce}';" +
+                                        "img-src 'self' data:; " +
+                                        "font-src 'self' https://cdnjs.cloudflare.com; " +
+                                        "frame-ancestors 'none'; " +
+                                        "form-action 'self'; " +
+                                        "object-src 'none';")
+                        )
+                )
+                .addFilterBefore(new CspNonceFilter(), HeaderWriterFilter.class);
         return http.build();
     }
 

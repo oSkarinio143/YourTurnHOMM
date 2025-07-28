@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Karta jednostki</title>
-  <style>
+  <style th:attr="nonce=${cspNonce}">
     body {
       background: #e8eaf0;
       font-family: Arial, sans-serif;
@@ -247,13 +247,13 @@
     <button onclick="document.getElementById('nullModal').style.display='none'" class="back-btn">Zamknij</button>
   </div>
 </div>
-<script th:if="${nullMessage}">
+<script th:if="${nullMessage}" th:attr="nonce=${cspNonce}">
   document.getElementById('nullModal').style.display='flex';
 </script>
-<script th:if="${incorrectMessage}">
+<script th:if="${incorrectMessage}" th:attr="nonce=${cspNonce}">
   document.getElementById('incorrectModal').style.display='flex';
 </script>
-<script>
+<script th:attr="nonce=${cspNonce}">
   let isEditing=false;
   function toggleEdit(){
     isEditing=!isEditing;

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Nadaj uprawnienia admina</title> <!-- Zmieniono tytuł dla jasności -->
-    <style>
+    <style th:attr="nonce=${cspNonce}">
         body {
             background: #e8eaf0;
             font-family: Arial, sans-serif;
@@ -196,7 +196,7 @@
     </div>
 </div>
 
-<script>
+<script th:attr="nonce=${cspNonce}">
     function showModal(button) {
         const username = button.closest('.user-container').dataset.username;
         document.getElementById('userToGrantAdmin').value = username; // Zmieniono id

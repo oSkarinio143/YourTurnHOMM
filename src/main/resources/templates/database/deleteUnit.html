@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Usuń jednostkę</title>
-    <style>
+    <style th:attr="nonce=${cspNonce}">
         body {
             background: #e8eaf0;
             font-family: Arial, sans-serif;
@@ -139,7 +139,7 @@
     </div>
 </div>
 
-<script>
+<script th:attr="nonce=${cspNonce}">
     function showModal(button) {
         const name = button.closest('.unit-container').dataset.unitName;
         document.getElementById('unitToDelete').value = name;

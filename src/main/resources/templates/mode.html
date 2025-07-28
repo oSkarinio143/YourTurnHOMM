@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<!-- ZMIANA 1: Dodanie przestrzeni nazw Spring Security (sec) -->
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!-- Dodana przestrzeń nazw Spring Security (sec) -->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
+    <meta id="cspNonce" th:content="${cspNonce}">
     <title>Heroes III</title>
-    <style>
+    <style th:attr="nonce=${cspNonce}">
         :root {
             --primary-blue: #1e88e5;
             --dark-blue: #1565c0;
@@ -13,7 +15,6 @@
             --dark-gray: #333;
             --logout-red: #dc3545;
             --logout-red-hover: #c82333;
-            /* Nowy kolor dla przycisku admina */
             --admin-gold: #ffc107;
             --admin-gold-dark: #d39e00;
         }
@@ -74,7 +75,7 @@
 
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Lepsze dopasowanie */
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 25px;
             margin-bottom: 30px;
             justify-content: center;
@@ -106,7 +107,6 @@
             box-shadow: 0 12px 30px rgba(30, 136, 229, .4);
         }
 
-        /* ZMIANA 3: Dodanie stylu dla przycisku admina dla wyróżnienia */
         .admin-button {
             background: linear-gradient(135deg, var(--admin-gold), var(--admin-gold-dark));
             box-shadow: 0 8px 20px rgba(255, 193, 7, .3);
@@ -117,9 +117,9 @@
         }
 
         .admin-button-container {
-            grid-column: 1 / -1; /* Rozciąga kontener na całą szerokość siatki */
+            grid-column: 1 / -1;
             display: flex;
-            justify-content: center; /* Wyśrodkowuje przycisk w poziomie */
+            justify-content: center;
         }
 
         .admin-button-container .admin-button {
@@ -178,7 +178,6 @@
         }
 
         .menu-button:hover::before,
-
         .logout-button:hover::before {
             left: 100%;
         }
@@ -408,7 +407,8 @@
             .menu-button { height: 120px; }
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- POPRAWKA: Dodanie nonce do linku ze stylami, dla spójności i bezpieczeństwa -->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" th:attr="nonce=${cspNonce}">-->
 </head>
 <body>
 <div class="container">
@@ -445,7 +445,8 @@
     <div id="welcomeUserModal" class="modal-overlay">
         <div class="modal-container">
             <div class="success-particles"></div>
-            <button class="modal-close" onclick="closeModal('welcomeUserModal')">×</button>
+            <!-- POPRAWKA: Usunięto onclick, dodano id -->
+            <button id="closeWelcomeModal" class="modal-close">×</button>
             <div class="modal-header">
                 <div class="modal-icon">✓</div>
                 <h2 class="modal-title">Witamy!</h2>
@@ -454,7 +455,8 @@
                 <p class="modal-message" th:if="${welcomeUserMessage}" th:utext="${welcomeUserMessage}"></p>
             </div>
             <div class="modal-actions">
-                <button class="modal-button modal-button-primary" onclick="closeModal('welcomeUserModal')">Świetnie!</button>
+                <!-- POPRAWKA: Usunięto onclick, dodano id -->
+                <button id="confirmWelcomeModal" class="modal-button modal-button-primary">Świetnie!</button>
             </div>
             <div class="modal-progress"></div>
         </div>
@@ -462,7 +464,8 @@
 
     <div id="errorModal" class="modal-overlay error-modal">
         <div class="modal-container">
-            <button class="modal-close" onclick="closeModal('errorModal')">×</button>
+            <!-- POPRAWKA: Usunięto onclick, dodano id -->
+            <button id="closeErrorModal" class="modal-close">×</button>
             <div class="modal-header">
                 <div class="modal-icon">⚠️</div>
                 <h2 class="modal-title">Wystąpił błąd</h2>
@@ -471,13 +474,16 @@
                 <p class="modal-message" th:if="${adminErrorMessage}" th:text="${adminErrorMessage}"></p>
             </div>
             <div class="modal-actions">
-                <button class="modal-button modal-button-primary" onclick="closeModal('errorModal')">Rozumiem</button>
+                <!-- POPRAWKA: Usunięto onclick, dodano id -->
+                <button id="confirmErrorModal" class="modal-button modal-button-primary">Rozumiem</button>
             </div>
             <div class="modal-progress"></div>
         </div>
     </div>
 </div>
-<script>
+
+<!-- Główny blok skryptów z logiką -->
+<script th:attr="nonce=${cspNonce}">
     function closeModal(modalId) {
         const modal = document.getElementById(modalId);
         if (modal) {
@@ -490,23 +496,27 @@
         const modal = document.getElementById(modalId);
         if (!modal) return;
 
-        modal.style.display = 'flex';
+//        modal.style.display = 'flex';
         setTimeout(() => modal.classList.add('show'), 10);
 
+        // Automatyczne zamykanie modala po 5 sekundach
         const timeoutId = setTimeout(() => closeModal(modalId), 5000);
 
+        // Handler do zamykania modala po kliknięciu poza nim
         const clickHandler = (e) => {
-            if (e.target === modal || e.target.closest('.modal-close, .modal-button')) {
+            if (e.target === modal) { // Sprawdzamy, czy kliknięto bezpośrednio na tło
                 cleanup();
             }
         };
 
+        // Handler do zamykania modala klawiszem Escape
         const keydownHandler = (e) => {
             if (e.key === 'Escape' && modal.classList.contains('show')) {
                 cleanup();
             }
         };
 
+        // Funkcja czyszcząca, aby uniknąć wielokrotnego dodawania event listenerów
         function cleanup() {
             clearTimeout(timeoutId);
             closeModal(modalId);
@@ -517,15 +527,29 @@
         modal.addEventListener('click', clickHandler);
         document.addEventListener('keydown', keydownHandler);
     }
+
+    // POPRAWKA: Dodajemy event listenery po załadowaniu DOM
+    document.addEventListener('DOMContentLoaded', function() {
+        // Przyciski dla modala powitalnego
+        document.getElementById('closeWelcomeModal')?.addEventListener('click', () => closeModal('welcomeUserModal'));
+        document.getElementById('confirmWelcomeModal')?.addEventListener('click', () => closeModal('welcomeUserModal'));
+
+        // Przyciski dla modala błędu
+        document.getElementById('closeErrorModal')?.addEventListener('click', () => closeModal('errorModal'));
+        document.getElementById('confirmErrorModal')?.addEventListener('click', () => closeModal('errorModal'));
+    });
 </script>
 
-<script th:if="${welcomeUserMessage}">
+<!-- Skrypty warunkowo pokazujące modale -->
+<script th:if="${welcomeUserMessage}" th:attr="nonce=${cspNonce}">
     showModal('welcomeUserModal');
 </script>
 
-<script th:if="${adminErrorMessage}">
+<script th:if="${adminErrorMessage}" th:attr="nonce=${cspNonce}">
     showModal('errorModal');
 </script>
+
+
 
 </body>
 </html>

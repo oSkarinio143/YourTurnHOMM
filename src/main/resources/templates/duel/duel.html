@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Panel pojedynków - Heroes Database</title>
-  <style>
+  <style th:attr="nonce=${cspNonce}">
     /* === GLOBAL STYLES & BACKGROUND (FROM LOGIN) === */
     * {
       margin: 0;
@@ -633,7 +633,7 @@
     </div>
   </div>
 </div>
-<script>
+<script th:attr="nonce=${cspNonce}">
   function updateHiddenFieldsBeforeSubmit(formId) {
     const form = document.getElementById(formId);
     form.querySelector('input[name="leftQuantity"]').value = document.getElementById('leftQuantity').value;
@@ -710,7 +710,7 @@
   }
 </script>
 
-<script th:if="${incorrectMessage}">
+<script th:if="${incorrectMessage}" th:attr="nonce=${cspNonce}">
   showModal('incorrectValueModal');
 </script>
 

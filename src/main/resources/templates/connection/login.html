@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Logowanie - Heroes Database</title>
-  <style>
+  <style th:attr="nonce=${cspNonce}">
     * {
       margin: 0;
       padding: 0;
@@ -571,7 +571,7 @@
   </div>
 </div>
 
-<script>
+<script th:attr="nonce=${cspNonce}">
   function closeModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
@@ -627,9 +627,9 @@
   });
 </script>
 
-<script th:if="${errorMessage}">showModal('errorModal');</script>
-<script th:if="${logoutMessage}">showModal('logoutModal');</script>
-<script th:if="${autoLogoutMessage}">showModal('autoLogoutModal');</script>
+<script th:if="${errorMessage}" th:attr="nonce=${cspNonce}">showModal('errorModal');</script>
+<script th:if="${logoutMessage}" th:attr="nonce=${cspNonce}">showModal('logoutModal');</script>
+<script th:if="${autoLogoutMessage}" th:attr="nonce=${cspNonce}">showModal('autoLogoutModal');</script>
 
 </body>
 </html>

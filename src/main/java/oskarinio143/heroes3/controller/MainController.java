@@ -16,9 +16,9 @@ public class MainController {
     @GetMapping()
     public String welcome(HttpServletRequest request, Model model){
         Object errorMessage = request.getAttribute("adminErrorMessage");
-        if (errorMessage != null) {
+        if (errorMessage != null)
             model.addAttribute("adminErrorMessage", errorMessage.toString());
-        }
+
         return Route.VIEW_MODE;
     }
 }

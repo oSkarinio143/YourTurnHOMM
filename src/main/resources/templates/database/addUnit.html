@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Unit</title>
-    <style>
+    <style th:attr="nonce=${cspNonce}">
         :root {
             --primary-blue: #1e88e5;
             --dark-blue: #1565c0;
@@ -183,10 +183,10 @@
         <button onclick="document.getElementById('incorrectModal').style.display='none'" class="back-btn">Zamknij</button>
     </div>
 </div>
-<script th:if="${duplicateMessage}">
+<script th:if="${duplicateMessage}" th:attr="nonce=${cspNonce}">
     document.getElementById('duplicateModal').style.display='flex';
 </script>
-<script th:if="${incorrectMessage}">
+<script th:if="${incorrectMessage}" th:attr="nonce=${cspNonce}">
     document.getElementById('incorrectModal').style.display='flex';
 </script>
 </body>

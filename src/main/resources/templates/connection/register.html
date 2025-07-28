@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Rejestracja - Heroes Database</title>
-  <style>
+  <style th:attr="nonce=${cspNonce}">
     * {
       margin: 0;
       padding: 0;
@@ -671,7 +671,7 @@
   </div>
 </div>
 
-<script th:if="${errorMessage}">
+<script th:if="${errorMessage}" th:attr="nonce=${cspNonce}">
   function closeModal() {
     const modal = document.getElementById('errorModal');
     modal.classList.remove('show');
@@ -705,7 +705,7 @@
   });
 </script>
 
-<script>
+<script th:attr="nonce=${cspNonce}">
   function togglePassword(fieldId) {
     const passwordInput = document.getElementById(fieldId);
     const toggleButton = passwordInput.nextElementSibling;

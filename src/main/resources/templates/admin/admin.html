@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Panel Administracyjny - Heroes III</title>
-  <style>
+  <style th:attr="nonce=${cspNonce}">
     :root {
       --primary-gold: #ffc107;
       --dark-gold: #e0a800;
@@ -424,7 +424,7 @@
   </div>
 </div>
 
-<script th:if="${showAdminWelcome}">
+<script th:if="${showAdminWelcome}" th:attr="nonce=${cspNonce}">
   function closeModal() {
     const modal = document.getElementById('adminWelcomeModal');
     modal.classList.remove('show');
@@ -450,7 +450,7 @@
 </script>
 
 <!-- Skrypt zawsze aktywny dla efektów hover -->
-<script>
+<script th:attr="nonce=${cspNonce}">
   // Dodatkowe efekty wizualne
   document.querySelectorAll('.admin-button').forEach(button => {
     button.addEventListener('mouseenter', function() {

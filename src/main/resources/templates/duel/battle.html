@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Pojedynek</title>
-  <style>
+  <style th:attr="nonce=${cspNonce}">
     body {
       background-color: #e8eaf0;
       font-family: Arial, sans-serif;
@@ -379,7 +379,7 @@
 </div>
 
 
-<script th:inline="javascript">
+<script th:inline="javascript" th:attr="nonce=${cspNonce}">
   const userUUID = /*[[${duelForm.userUUID ?: 'default-uuid-if-error'}]]*/ 'fallback-value';
   let eventSource;
 
