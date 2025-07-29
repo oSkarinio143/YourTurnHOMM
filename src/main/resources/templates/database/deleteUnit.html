@@ -7,36 +7,52 @@
         body {
             background: #e8eaf0;
             font-family: Arial, sans-serif;
-            padding: 20px;
+            padding: 20px 20px 100px 20px;
             margin: 0;
             min-height: 100vh;
         }
-        .main-container { max-width: 800px; margin: auto; }
+
+        .main-container {
+            max-width: 800px;
+            margin: auto;
+        }
+
         h1 {
             text-align: center;
             color: #333;
             margin-bottom: 30px;
         }
+
         .unit-container {
             display: flex;
             background: #fff;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
             margin-bottom: 20px;
             position: relative;
         }
+
         .unit-image {
             max-width: 150px;
             max-height: 150px;
             margin-right: 20px;
+            object-fit: contain;
         }
-        .unit-stats { flex-grow: 1; }
-        .unit-stats p { margin: 4px 0; }
+
+        .unit-stats {
+            flex-grow: 1;
+        }
+
+        .unit-stats p {
+            margin: 4px 0;
+        }
+
         .separator {
             border-top: 3px solid #007bff;
             margin: 30px 0;
         }
+
         .remove-button {
             background: #e53935;
             color: #fff;
@@ -48,46 +64,73 @@
             position: absolute;
             top: 20px;
             right: 20px;
+            transition: background 0.3s;
         }
+
+        .remove-button:hover {
+            background: #c62828;
+        }
+
         .modal {
             display: none;
             position: fixed;
             z-index: 999;
             inset: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
         }
+
+        .modal.is-visible {
+            display: flex;
+        }
+
         .modal-content {
             background: #fff;
-            margin: 15% auto;
             padding: 30px;
             border-radius: 12px;
             max-width: 400px;
+            width: 90%;
             text-align: center;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
         }
+
         .modal-buttons {
             margin-top: 20px;
             display: flex;
             justify-content: space-around;
         }
+
         .modal-buttons button {
             padding: 10px 20px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
+            transition: transform 0.2s;
         }
-        .confirm { background: #e53935; color: #fff; }
-        .cancel { background: #ccc; }
+
+        .modal-buttons button:hover {
+            transform: scale(1.05);
+        }
+
+        .confirm {
+            background: #e53935;
+            color: #fff;
+        }
+
+        .cancel {
+            background: #ccc;
+        }
+
         .sticky-bottom-center {
             position: fixed;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 9999;
-            text-align: center;
-            font-weight: bold;
+            z-index: 1000;
         }
+
         .back-btn {
             background: #6c757d;
             color: #fff;
@@ -98,7 +141,10 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.4s;
+            text-decoration: none;
+            display: inline-block;
         }
+
         .back-btn:hover {
             background: #495057;
         }
@@ -109,7 +155,7 @@
     <h1>Usuń jednostkę</h1>
     <div th:each="unit : ${units}">
         <div class="unit-container" th:data-unit-name="${unit.name}">
-            <img th:src="@{${unit.imagePath}}" class="unit-image" />
+            <img th:src="@{${unit.imagePath}}" class="unit-image" alt=""/>
             <div class="unit-stats">
                 <p><strong>Nazwa:</strong> <span th:text="${unit.name}"/></p>
                 <p><strong>Atak:</strong> <span th:text="${unit.attack}"/></p>
@@ -120,7 +166,7 @@
                 <p><strong>Szybkość:</strong> <span th:text="${unit.speed}"/></p>
                 <p><strong>Opis:</strong> <span th:utext="${unit.description}"/></p>
             </div>
-            <button class="remove-button" onclick="showModal(this)">Usuń</button>
+            <button class="remove-button js-delete-trigger">Usuń</button>
         </div>
         <div class="separator"></div>
     </div>
@@ -134,28 +180,53 @@
                 <input type="hidden" name="name" id="unitToDelete"/>
                 <button type="submit" class="confirm">Tak</button>
             </form>
-            <button class="cancel" onclick="hideModal()">Anuluj</button>
+            <button type="button" class="cancel js-modal-cancel">Anuluj</button>
         </div>
     </div>
 </div>
 
-<script th:attr="nonce=${cspNonce}">
-    function showModal(button) {
-        const name = button.closest('.unit-container').dataset.unitName;
-        document.getElementById('unitToDelete').value = name;
-        document.getElementById('confirmModal').style.display = 'block';
-    }
-    function hideModal() {
-        document.getElementById('confirmModal').style.display = 'none';
-    }
-</script>
+<div class="sticky-bottom-center">
+    <a th:href="@{/oskarinio143/heroes/database}" class="back-btn">
+        Wróć do menu bazy danych
+    </a>
+</div>
 
-<footer>
-    <div class="sticky-bottom-center">
-        <a th:href="@{/oskarinio143/heroes/database}">
-            <button type="button" class="back-btn">Wróć do menu bazy danych</button>
-        </a>
-    </div>
-</footer>
+<script th:attr="nonce=${cspNonce}">
+    document.addEventListener('DOMContentLoaded', function() {
+        const confirmModal = document.getElementById('confirmModal');
+        const unitToDeleteInput = document.getElementById('unitToDelete');
+        const deleteButtons = document.querySelectorAll('.js-delete-trigger');
+        const cancelButton = document.querySelector('.js-modal-cancel');
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const unitContainer = this.closest('.unit-container');
+                const unitName = unitContainer.dataset.unitName;
+                if (unitToDeleteInput) {
+                    unitToDeleteInput.value = unitName;
+                }
+                if (confirmModal) {
+                    confirmModal.classList.add('is-visible');
+                }
+            });
+        });
+
+        if (cancelButton) {
+            cancelButton.addEventListener('click', function() {
+                if (confirmModal) {
+                    confirmModal.classList.remove('is-visible');
+                }
+            });
+        }
+
+        if (confirmModal) {
+            confirmModal.addEventListener('click', function(event) {
+                if (event.target === confirmModal) {
+                    confirmModal.classList.remove('is-visible');
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>

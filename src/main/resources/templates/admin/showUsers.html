@@ -3,27 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Lista użytkowników</title>
-    <style th:attr="nonce=${cspNonce}">
+    <style th:nonce="${cspNonce}">
         body {
             background-color: #e8eaf0;
             font-family: Arial, sans-serif;
-            padding: 20px;
+            padding: 20px 20px 100px;
             margin: 0;
             min-height: 100vh;
         }
-
         .main-container {
             max-width: 800px;
             margin: 0 auto;
         }
-
         h1 {
             text-align: center;
             color: #333;
             margin-bottom: 30px;
         }
-
-        .user-container { /* Zmieniono nazwę klasy dla przejrzystości, ale można zostawić 'unit-container' */
+        .user-container {
             display: flex;
             background-color: white;
             border-radius: 8px;
@@ -31,32 +28,28 @@
             padding: 20px;
             margin-bottom: 20px;
         }
-
-        .user-details { /* Zmieniono nazwę klasy dla przejrzystości */
+        .user-details {
             flex-grow: 1;
         }
         .user-details p {
-            margin: 8px 0; /* Zwiększono margines dla lepszej czytelności */
+            margin: 8px 0;
             font-size: 16px;
         }
         .separator {
             border-top: 3px solid orange;
             margin: 30px 0;
         }
-
         .sticky-bottom-center {
             position: fixed;
-            bottom: 20px; /* odstęp od dolnej krawędzi */
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            padding: 12px 24px;
-            border-radius: 8px;
             z-index: 9999;
-            text-align: center;
-            font-weight: bold;
         }
-
         .back-btn {
+            display: inline-block;
+            text-decoration: none;
+            text-align: center;
             background-color: #6c757d;
             color: white;
             padding: 15px 30px;
@@ -65,21 +58,20 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.4s ease-in-out;
+            transition: background-position 0.4s ease-in-out;
             min-width: 180px;
             background-size: 200% auto;
             background-image: linear-gradient(to right, #6c757d 0%, #495057 51%, #6c757d 100%);
         }
-
         .back-btn:hover {
-            background-position: right center; /* przesuwa gradient */
+            background-position: right center;
         }
     </style>
 </head>
 <body>
 <div class="main-container">
     <h1>Lista Użytkowników</h1>
-    <div th:each="user : ${users}">
+    <div th:each="user, iterStat : ${users}">
         <div class="user-container">
             <div class="user-details">
                 <p><strong>Nazwa użytkownika:</strong> <span th:text="${user.username}"/></p>
@@ -87,18 +79,13 @@
                 <p><strong>Data rejestracji:</strong> <span th:text="${#dates.format(user.registrationDate, 'dd-MM-yyyy HH:mm')}"/></p>
             </div>
         </div>
-        <div class="separator"></div>
+        <div class="separator" th:if="${!iterStat.last}"></div>
     </div>
 </div>
-</body>
-<footer>
-    <div class="sticky-bottom-center">
-        <!-- Zmień link na odpowiedni dla Twojej aplikacji, np. do panelu admina -->
-        <a th:href="@{/oskarinio143/heroes/admin}" class="back-link">
-            <button type="button" class="back-btn">
-                Wróć do panelu
-            </button>
-        </a>
-    </div>
+<footer class="sticky-bottom-center">
+    <a th:href="@{/oskarinio143/heroes/admin}" class="back-btn">
+        Wróć do panelu
+    </a>
 </footer>
+</body>
 </html>

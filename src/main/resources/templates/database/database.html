@@ -112,9 +112,10 @@
       left: 100%;
     }
 
-    .db-option i {
+    .db-option-icon {
       font-size: 2.5rem;
       margin-bottom: 15px;
+      line-height: 1;
     }
 
     .db-option h2 {
@@ -127,10 +128,6 @@
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-    }
-
-    .back-link {
-      text-decoration: none;
     }
 
     .back-btn {
@@ -147,6 +144,8 @@
       box-shadow: 0 6px 15px rgba(0, 0, 0, .1);
       position: relative;
       overflow: hidden;
+      text-decoration: none;
+      display: inline-block;
     }
 
     .back-btn::before {
@@ -169,7 +168,6 @@
       left: 100%;
     }
 
-    /* Responsywność */
     @media (max-width: 600px) {
       .grid-container {
         grid-template-columns: 1fr;
@@ -193,8 +191,6 @@
       }
     }
   </style>
-  <!-- Ikony z Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 <div class="database-container">
@@ -204,31 +200,29 @@
 
   <div class="grid-container">
     <a th:href="@{/oskarinio143/heroes/database/add}" class="db-option">
-      <i class="fas fa-plus-circle"></i>
+      <span class="db-option-icon">➕</span>
       <h2>Dodaj jednostkę</h2>
     </a>
 
     <a th:href="@{/oskarinio143/heroes/database/modify}" class="db-option">
-      <i class="fas fa-edit"></i>
+      <span class="db-option-icon">✏️</span>
       <h2>Modyfikuj jednostkę</h2>
     </a>
 
     <a th:href="@{/oskarinio143/heroes/database/delete}" class="db-option">
-      <i class="fas fa-trash-alt"></i>
+      <span class="db-option-icon">🗑️</span>
       <h2>Usuń jednostkę</h2>
     </a>
 
     <a th:href="@{/oskarinio143/heroes/database/show}" class="db-option">
-      <i class="fas fa-list"></i>
+      <span class="db-option-icon">📋</span>
       <h2>Widok jednostek</h2>
     </a>
   </div>
 
   <div class="sticky-bottom-center">
-    <a th:href="@{/oskarinio143/heroes}" class="back-link">
-      <button type="button" class="back-btn">
-        Wróć do menu głównego
-      </button>
+    <a th:href="@{/oskarinio143/heroes}" class="back-btn">
+      Wróć do menu głównego
     </a>
   </div>
 </div>

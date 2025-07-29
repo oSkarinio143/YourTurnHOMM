@@ -107,7 +107,6 @@
 
     .form-group {
       margin-bottom: 25px;
-      position: relative;
     }
 
     .form-label {
@@ -142,6 +141,10 @@
     .form-input::placeholder {
       color: #aaa;
       font-style: italic;
+    }
+
+    .password-wrapper {
+      position: relative;
     }
 
     .password-toggle {
@@ -504,132 +507,138 @@
     </div>
     <div class="form-group">
       <label for="password" class="form-label">Hasło</label>
-      <div style="position: relative;">
+      <div class="password-wrapper">
         <input type="password" id="password" name="password" class="form-input" placeholder="Wprowadź hasło">
-        <button type="button" class="password-toggle" onclick="togglePassword()">👁️</button>
+        <button type="button" class="password-toggle">👁️</button>
       </div>
     </div>
     <button type="submit" class="login-button">Zaloguj się</button>
   </form>
 
   <div class="register-link">
-    Nie masz konta? <a href="/oskarinio143/heroes/register">Zarejestruj się</a>
-  </div>
-
-  <!-- Modal Błędów -->
-  <div id="errorModal" class="modal-overlay">
-    <div class="modal-container">
-      <button class="modal-close" onclick="closeModal('errorModal')">×</button>
-      <div class="modal-header">
-        <div class="modal-icon">⚠️</div>
-        <h2 class="modal-title">Wystąpił błąd</h2>
-      </div>
-      <div class="modal-content">
-        <div id="modalMessage" th:if="${errorMessage}" th:utext="${errorMessage}"></div>
-      </div>
-      <div class="modal-actions">
-        <button class="modal-button modal-button-primary" onclick="closeModal('errorModal')">Rozumiem</button>
-      </div>
-      <div class="modal-progress"></div>
-    </div>
-  </div>
-
-  <!-- Modal Wylogowania -->
-  <div id="logoutModal" class="modal-overlay logout-modal">
-    <div class="modal-container">
-      <button class="modal-close" onclick="closeModal('logoutModal')">×</button>
-      <div class="modal-header">
-        <div class="modal-icon">🚪</div>
-        <h2 class="modal-title">Wylogowano</h2>
-      </div>
-      <div class="modal-content">
-        <div id="logoutMessage" th:if="${logoutMessage}" th:utext="${logoutMessage}"></div>
-      </div>
-      <div class="modal-actions">
-        <button class="modal-button modal-button-primary" onclick="closeModal('logoutModal')">OK</button>
-      </div>
-      <div class="modal-progress"></div>
-    </div>
-  </div>
-
-  <!-- Modal Automatycznego Wylogowania -->
-  <div id="autoLogoutModal" class="modal-overlay logout-modal">
-    <div class="modal-container">
-      <button class="modal-close" onclick="closeModal('autoLogoutModal')">×</button>
-      <div class="modal-header">
-        <div class="modal-icon">🚪</div>
-        <h2 class="modal-title">Wylogowano</h2>
-      </div>
-      <div class="modal-content">
-        <div id="autoLogoutMessage" th:if="${autoLogoutMessage}" th:utext="${autoLogoutMessage}"></div>
-      </div>
-      <div class="modal-actions">
-        <button class="modal-button modal-button-primary" onclick="closeModal('autoLogoutModal')">OK</button>
-      </div>
-      <div class="modal-progress"></div>
-    </div>
+    Nie masz konta? <a th:href="@{/oskarinio143/heroes/register}">Zarejestruj się</a>
   </div>
 </div>
 
-<script th:attr="nonce=${cspNonce}">
-  function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-      modal.classList.remove('show');
-      setTimeout(() => { modal.style.display = 'none'; }, 300);
-    }
-  }
+<div id="errorModal" class="modal-overlay">
+  <div class="modal-container">
+    <button type="button" class="modal-close">×</button>
+    <div class="modal-header">
+      <div class="modal-icon">⚠️</div>
+      <h2 class="modal-title">Wystąpił błąd</h2>
+    </div>
+    <div class="modal-content">
+      <div class="modal-message" id="modalMessage" th:if="${errorMessage}" th:utext="${errorMessage}"></div>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="modal-button modal-button-primary">Rozumiem</button>
+    </div>
+    <div class="modal-progress"></div>
+  </div>
+</div>
 
-  function showModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (!modal) return;
+<div id="logoutModal" class="modal-overlay logout-modal">
+  <div class="modal-container">
+    <button type="button" class="modal-close">×</button>
+    <div class="modal-header">
+      <div class="modal-icon">🚪</div>
+      <h2 class="modal-title">Wylogowano</h2>
+    </div>
+    <div class="modal-content">
+      <div class="modal-message" id="logoutMessage" th:if="${logoutMessage}" th:utext="${logoutMessage}"></div>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="modal-button modal-button-primary">OK</button>
+    </div>
+    <div class="modal-progress"></div>
+  </div>
+</div>
 
-    modal.style.display = 'flex';
-    setTimeout(() => modal.classList.add('show'), 10);
+<div id="autoLogoutModal" class="modal-overlay logout-modal">
+  <div class="modal-container">
+    <button type="button" class="modal-close">×</button>
+    <div class="modal-header">
+      <div class="modal-icon">🚪</div>
+      <h2 class="modal-title">Wylogowano</h2>
+    </div>
+    <div class="modal-content">
+      <div class="modal-message" id="autoLogoutMessage" th:if="${autoLogoutMessage}" th:utext="${autoLogoutMessage}"></div>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="modal-button modal-button-primary">OK</button>
+    </div>
+    <div class="modal-progress"></div>
+  </div>
+</div>
 
-    const timeoutId = setTimeout(() => closeModal(modalId), 5000);
+<script th:inline="javascript" th:attr="nonce=${cspNonce}">
+  document.addEventListener('DOMContentLoaded', () => {
 
-    const clickHandler = (e) => {
-      if (e.target === modal || e.target.closest('.modal-close, .modal-button')) {
-        cleanup();
+    const errorMessage = /*[[${errorMessage}]]*/ null;
+    const logoutMessage = /*[[${logoutMessage}]]*/ null;
+    const autoLogoutMessage = /*[[${autoLogoutMessage}]]*/ null;
+
+    const closeModal = (modalId) => {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.remove('show');
       }
     };
 
-    const keydownHandler = (e) => {
-      if (e.key === 'Escape' && modal.classList.contains('show')) {
-        cleanup();
+    const showModal = (modalId) => {
+      const modal = document.getElementById(modalId);
+      if (!modal) return;
+
+      modal.style.display = 'flex';
+      setTimeout(() => modal.classList.add('show'), 10);
+
+      const timeoutId = setTimeout(() => closeModal(modalId), 5000);
+
+      const clickHandler = (e) => {
+        if (e.target === modal || e.target.closest('.modal-close, .modal-button')) {
+          cleanup();
+        }
+      };
+
+      const keydownHandler = (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('show')) {
+          cleanup();
+        }
+      };
+
+      function cleanup() {
+        clearTimeout(timeoutId);
+        closeModal(modalId);
+        modal.removeEventListener('click', clickHandler);
+        document.removeEventListener('keydown', keydownHandler);
       }
+
+      modal.addEventListener('click', clickHandler);
+      document.addEventListener('keydown', keydownHandler);
     };
 
-    function cleanup() {
-      clearTimeout(timeoutId);
-      closeModal(modalId);
-      modal.removeEventListener('click', clickHandler);
-      document.removeEventListener('keydown', keydownHandler);
-    }
+    const togglePassword = () => {
+      const passwordInput = document.getElementById('password');
+      const toggleButton = document.querySelector('.password-toggle');
+      const isPassword = passwordInput.type === 'password';
+      passwordInput.type = isPassword ? 'text' : 'password';
+      toggleButton.textContent = isPassword ? '🙈' : '👁️';
+    };
 
-    modal.addEventListener('click', clickHandler);
-    document.addEventListener('keydown', keydownHandler);
-  }
+    document.querySelector('.password-toggle')?.addEventListener('click', togglePassword);
 
-  function togglePassword() {
-    const passwordInput = document.getElementById('password');
-    const toggleButton = document.querySelector('.password-toggle');
-    const isPassword = passwordInput.type === 'password';
-    passwordInput.type = isPassword ? 'text' : 'password';
-    toggleButton.textContent = isPassword ? '🙈' : '👁️';
-  }
+    document.addEventListener('mousemove', (e) => {
+      const x = e.clientX / window.innerWidth;
+      const y = e.clientY / window.innerHeight;
+      document.body.style.backgroundPosition = `${50 + x * 5}% ${50 + y * 5}%`;
+    });
 
-  document.addEventListener('mousemove', function(e) {
-    const x = e.clientX / window.innerWidth;
-    const y = e.clientY / window.innerHeight;
-    document.body.style.backgroundPosition = `${50 + x * 5}% ${50 + y * 5}%`;
+    if (errorMessage) showModal('errorModal');
+    if (logoutMessage) showModal('logoutModal');
+    if (autoLogoutMessage) showModal('autoLogoutModal');
+
   });
 </script>
-
-<script th:if="${errorMessage}" th:attr="nonce=${cspNonce}">showModal('errorModal');</script>
-<script th:if="${logoutMessage}" th:attr="nonce=${cspNonce}">showModal('logoutModal');</script>
-<script th:if="${autoLogoutMessage}" th:attr="nonce=${cspNonce}">showModal('autoLogoutModal');</script>
 
 </body>
 </html>

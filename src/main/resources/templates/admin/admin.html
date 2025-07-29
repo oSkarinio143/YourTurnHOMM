@@ -7,7 +7,7 @@
     :root {
       --primary-gold: #ffc107;
       --dark-gold: #e0a800;
-      --light-gold: #ffda70; /* Lekko rozjaśniony dla lepszego gradientu */
+      --light-gold: #ffda70;
       --primary-blue: #1e88e5;
       --dark-blue: #1565c0;
       --light-blue: #42a5f5;
@@ -25,7 +25,6 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    /* ZMIANA: Tło przechodzi teraz z jasnego szarego w jaśniejszy złoty */
     body {
       background: linear-gradient(135deg, var(--light-gray) 0%, var(--primary-gold) 70%, var(--light-gold) 100%);
       min-height: 100vh;
@@ -74,28 +73,6 @@
       border-radius: 2px;
     }
 
-    .admin-info {
-      background: linear-gradient(45deg, var(--admin-gold), var(--admin-gold-dark));
-      color: #fff;
-      padding: 15px 25px;
-      border-radius: 12px;
-      margin-bottom: 30px;
-      box-shadow: 0 6px 20px rgba(255, 193, 7, .3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .admin-info i {
-      font-size: 1.5rem;
-    }
-
-    .admin-info span {
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-
     .grid-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -115,7 +92,7 @@
       text-decoration: none;
       position: relative;
       overflow: hidden;
-      color: #fff;
+      color: var(--white);
       padding: 30px 20px;
       box-shadow: 0 8px 25px rgba(0, 0, 0, .2);
     }
@@ -143,9 +120,10 @@
       box-shadow: 0 15px 35px rgba(108, 117, 125, .5);
     }
 
-    .admin-button i {
+    .admin-button .icon {
       font-size: 3.5rem;
       margin-bottom: 20px;
+      line-height: 1;
     }
 
     .admin-button h2 {
@@ -196,30 +174,30 @@
       text-decoration: none;
       font-size: 1.1rem;
       font-weight: 600;
-      border: 2px solid var(--primary-gold); /* złote obramowanie */
+      border: 2px solid var(--primary-gold);
       gap: 10px;
-      background: #fff; /* białe tło */
-      color: var(--primary-gold); /* złoty tekst */
+      background: var(--white);
+      color: var(--primary-gold);
       box-shadow: 0 6px 20px rgba(255, 193, 7, .08);
     }
 
-    .back-button i {
-      color: var(--primary-gold); /* złota ikona */
+    .back-button .icon {
+      color: var(--primary-gold);
+      transition: color .3s ease;
     }
 
     .back-button:hover {
-      background: var(--primary-gold); /* złote tło po najechaniu */
-      color: #fff; /* biały tekst po najechaniu */
+      background: var(--primary-gold);
+      color: var(--white);
       border-color: var(--dark-gold);
       transform: translateY(-3px);
       box-shadow: 0 8px 25px rgba(255, 193, 7, .18);
     }
 
-    .back-button:hover i {
-      color: #fff; /* biała ikona po najechaniu */
+    .back-button:hover .icon {
+      color: var(--white);
     }
 
-    /* Modal styles */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -236,7 +214,7 @@
       align-items: center;
     }
 
-    .modal-overlay.show {
+    .modal-overlay.is-visible {
       opacity: 1;
       visibility: visible;
     }
@@ -254,7 +232,7 @@
       transition: all .3s cubic-bezier(.34, 1.56, .64, 1);
     }
 
-    .modal-overlay.show .modal-container {
+    .modal-overlay.is-visible .modal-container {
       transform: scale(1);
     }
 
@@ -274,7 +252,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
+      color: var(--white);
       font-size: 28px;
       box-shadow: 0 6px 20px rgba(255, 193, 7, .4);
     }
@@ -320,7 +298,7 @@
 
     .modal-button-primary {
       background: linear-gradient(45deg, var(--primary-gold), var(--dark-gold));
-      color: #fff;
+      color: var(--white);
       box-shadow: 0 6px 18px rgba(255, 193, 7, .4);
     }
 
@@ -330,7 +308,6 @@
       box-shadow: 0 8px 25px rgba(255, 193, 7, .5);
     }
 
-    /* Responsywność */
     @media (max-width: 768px) {
       .grid-container {
         grid-template-columns: 1fr;
@@ -342,9 +319,6 @@
       .header h1 {
         font-size: 2.5rem;
       }
-      .admin-button {
-      /* Usunięto stałą wysokość, by pozwolić na elastyczne dopasowanie */
-      }
       .back-section {
         flex-direction: row;
         justify-content: center;
@@ -352,7 +326,7 @@
     }
 
     @media (max-width: 600px) {
-      .admin-button i {
+      .admin-button .icon {
         font-size: 2.5rem;
       }
       .admin-button h2 {
@@ -363,7 +337,6 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 <div class="container">
@@ -373,19 +346,19 @@
 
   <div class="grid-container">
     <a th:href="@{admin/show}" class="admin-button users">
-      <i class="fas fa-users"></i>
+      <span class="icon">👥</span>
       <h2>Wyświetl użytkowników</h2>
       <p>Przeglądaj listę wszystkich zarejestrowanych użytkowników</p>
     </a>
 
     <a th:href="@{/oskarinio143/heroes/admin/delete}" class="admin-button delete">
-      <i class="fas fa-user-times"></i>
+      <span class="icon">👤❌</span>
       <h2>Usuń użytkownika</h2>
       <p>Usuń wybranego użytkownika z systemu</p>
     </a>
 
     <a th:href="@{/oskarinio143/heroes/admin/grant}" class="admin-button promote">
-      <i class="fas fa-user-shield"></i>
+      <span class="icon">🛡️</span>
       <h2>Nadaj uprawnienia</h2>
       <p>Przyznaj uprawnienia administratora użytkownikowi</p>
     </a>
@@ -393,17 +366,16 @@
 
   <div class="back-section">
     <a th:href="@{/oskarinio143/heroes}" class="back-button">
-      <i class="fas fa-arrow-left"></i>
+      <span class="icon">⬅️</span>
       Powrót do menu
     </a>
   </div>
 
-  <!-- Modal powitalny dla administratora -->
-  <div id="adminWelcomeModal" class="modal-overlay">
+  <div id="adminWelcomeModal" class="modal-overlay" th:if="${showAdminWelcome}">
     <div class="modal-container">
       <div class="modal-header">
         <div class="modal-icon">
-          <i class="fas fa-crown"></i>
+          <span class="icon">👑</span>
         </div>
         <h2 class="modal-title">Panel Administratora</h2>
       </div>
@@ -415,8 +387,8 @@
         </p>
       </div>
       <div class="modal-actions">
-        <button class="modal-button modal-button-primary" onclick="closeModal()">
-          <i class="fas fa-check"></i>
+        <button type="button" class="modal-button modal-button-primary js-modal-close">
+          <span>✔️</span>
           Rozpocznij pracę
         </button>
       </div>
@@ -424,42 +396,40 @@
   </div>
 </div>
 
-<script th:if="${showAdminWelcome}" th:attr="nonce=${cspNonce}">
-  function closeModal() {
-    const modal = document.getElementById('adminWelcomeModal');
-    modal.classList.remove('show');
-    setTimeout(() => modal.style.display = 'none', 300);
-  }
-
-  const modal = document.getElementById('adminWelcomeModal');
-  modal.style.display = 'flex';
-  setTimeout(() => modal.classList.add('show'), 10);
-
-  // Auto-zamknięcie po 6 sekundach
-  setTimeout(closeModal, 6000);
-
-  // Zamknięcie po kliknięciu w tło
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal();
-  });
-
-  // Zamknięcie po naciśnięciu ESC
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('show')) closeModal();
-  });
-</script>
-
-<!-- Skrypt zawsze aktywny dla efektów hover -->
 <script th:attr="nonce=${cspNonce}">
-  // Dodatkowe efekty wizualne
-  document.querySelectorAll('.admin-button').forEach(button => {
-    button.addEventListener('mouseenter', function() {
-      this.style.transform = 'translateY(-8px) scale(1.02)';
-    });
+  document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('adminWelcomeModal');
 
-    button.addEventListener('mouseleave', function() {
-      this.style.transform = 'translateY(0) scale(1)';
-    });
+    if (modal) {
+      const closeModal = () => {
+        modal.classList.remove('is-visible');
+        setTimeout(() => modal.style.display = 'none', 300);
+      };
+
+      const closeButton = modal.querySelector('.js-modal-close');
+      if (closeButton) {
+        closeButton.addEventListener('click', closeModal);
+      }
+
+      modal.style.display = 'flex';
+      setTimeout(() => modal.classList.add('is-visible'), 10);
+
+      const autoCloseTimer = setTimeout(closeModal, 6000);
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          clearTimeout(autoCloseTimer);
+          closeModal();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('is-visible')) {
+          clearTimeout(autoCloseTimer);
+          closeModal();
+        }
+      });
+    }
   });
 </script>
 </body>

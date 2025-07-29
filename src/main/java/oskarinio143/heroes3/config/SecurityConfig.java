@@ -38,7 +38,7 @@ public class SecurityConfig {
                                            RefreshFilter refreshFilter) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/oskarinio143/heroes/login",
@@ -65,23 +65,16 @@ public class SecurityConfig {
                 )
                 .httpBasic(basic -> basic.disable())
                 .headers(headers -> headers
-                        // 1. HSTS (Strict-Transport-Security)
                         .httpStrictTransportSecurity(hsts -> hsts
-                                .includeSubDomains(true) // Stosuj też dla subdomen
-                                .maxAgeInSeconds(31536000) // Wymuszaj HTTPS przez rok
+                                .maxAgeInSeconds(31536000)
                         )
-                        // 2. X-Content-Type-Options
-                        .contentTypeOptions(Customizer.withDefaults()) // Domyślnie ustawia "nosniff"
-                        // 3. X-Frame-Options
-                        .frameOptions(frameOptions -> frameOptions
-                                .deny() // lub .sameOrigin() jeśli potrzebujesz iframe z tej samej domeny
-                        )
-                        // 4. Content-Security-Policy (CSP) - potężne, ale wymaga konfiguracji
+                        .contentTypeOptions(Customizer.withDefaults())
+                        .frameOptions(frameOptions -> frameOptions.deny())
                         .contentSecurityPolicy(csp -> csp
                                 .policyDirectives("default-src 'self'; " +
                                         "style-src 'self' 'nonce-{nonce}';" +
                                         "script-src 'self' 'nonce-{nonce}';" +
-                                        "img-src 'self' data:; " +
+                                        "img-src 'self' data: https://oskarinio143.github.io; " +
                                         "font-src 'self' https://cdnjs.cloudflare.com; " +
                                         "frame-ancestors 'none'; " +
                                         "form-action 'self'; " +

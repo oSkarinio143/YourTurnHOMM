@@ -50,10 +50,8 @@ public class CspNonceFilter extends GenericFilterBean {
         @Override
         public void setHeader(String name, String value) {
             if (name.equals("Content-Security-Policy") && StringUtils.isNotBlank(value)) {
-                System.out.println("ifSET - " + nonce + "name - " + name);
                 super.setHeader(name, value.replace("{nonce}", nonce));
             } else {
-                System.out.println("elseSET - " + nonce  + "name - " + name);
                 super.setHeader(name, value);
             }
         }
@@ -61,10 +59,8 @@ public class CspNonceFilter extends GenericFilterBean {
         @Override
         public void addHeader(String name, String value) {
             if (name.equals("Content-Security-Policy") && StringUtils.isNotBlank(value)) {
-                System.out.println("ifADD - " + nonce + "name - " + name);
                 super.addHeader(name, value.replace("{nonce}", nonce));
             } else {
-                System.out.println("elseADD - " + nonce + "name - " + name);
                 super.addHeader(name, value);
             }
         }

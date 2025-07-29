@@ -30,7 +30,6 @@ public class DatabaseService {
             throw new DuplicateUnitException("Jednostka o tej nazwie jest już w bazie");
         }
         String imagePath = getImagePath(unit.getName(),image);
-        System.out.println(imagePath);
         unit.setImagePath(imagePath);
         try {
             unitRepository.save(unit);

@@ -38,6 +38,7 @@ public class CookieHelper {
                 .path("/")
                 .maxAge(TOKEN_ACCESS_SECONDS)
                 .secure(true)
+                .sameSite("Lax")
                 .build();
     }
 
@@ -47,6 +48,7 @@ public class CookieHelper {
                 .path("/")
                 .maxAge(TOKEN_REFRESH_SECONDS)
                 .secure(true)
+                .sameSite("Strict")
                 .build();
     }
 

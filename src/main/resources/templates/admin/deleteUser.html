@@ -3,53 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <title>Usuń użytkownika</title>
-    <!-- ... Twoje style CSS pozostają bez zmian ... -->
     <style th:attr="nonce=${cspNonce}">
         body {
             background: #e8eaf0;
             font-family: Arial, sans-serif;
-            padding: 20px;
+            padding: 20px 20px 100px 20px;
             margin: 0;
             min-height: 100vh;
         }
-        .main-container { max-width: 800px; margin: auto; }
+
+        .main-container {
+            max-width: 800px;
+            margin: auto;
+        }
+
         h1 {
             text-align: center;
             color: #333;
             margin-bottom: 30px;
         }
+
         .user-container {
             display: flex;
+            align-items: center;
             background: #fff;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
             margin-bottom: 20px;
             position: relative;
         }
-        .user-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 20px;
-            background: #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            color: #888;
+
+        .user-stats {
+            flex-grow: 1;
         }
-        .user-stats { flex-grow: 1; }
-        .user-stats p { margin: 4px 0; }
+
+        .user-stats p {
+            margin: 4px 0;
+        }
+
         .separator {
             border-top: 3px solid orange;
             margin: 30px 0;
         }
+
         .remove-button {
             position: absolute;
-            top: 20px;
+            top: 50%;
             right: 20px;
+            transform: translateY(-50%);
             background: #e53935;
             color: #fff;
             border: none;
@@ -57,44 +59,55 @@
             padding: 10px 15px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
             display: flex;
             align-items: center;
             gap: 8px;
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
         }
+
         .remove-button:hover {
             background-color: #c62828;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transform: translateY(-52%) scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+
         .modal {
             display: none;
             position: fixed;
             z-index: 999;
             inset: 0;
-            background: rgba(0,0,0,0.5);
-            align-items: center; /* Dodane dla lepszego centrowania */
-            justify-content: center; /* Dodane dla lepszego centrowania */
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
         }
+
+        .modal.is-visible {
+            display: flex;
+        }
+
         .modal-content {
             background: #fff;
-            padding: 30px 40px; /* Zwiększony padding */
+            padding: 30px 40px;
             border-radius: 12px;
             max-width: 400px;
+            width: 90%;
             text-align: center;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
         }
+
         .modal-content p {
             font-size: 18px;
             color: #333;
         }
+
         .modal-buttons {
             margin-top: 30px;
             display: flex;
             justify-content: center;
             gap: 20px;
         }
+
         .modal-buttons button {
             padding: 12px 25px;
             border: 2px solid transparent;
@@ -104,39 +117,44 @@
             font-size: 15px;
             min-width: 120px;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
+
         .modal-buttons button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
+
         .confirm {
             background-color: #e53935;
             color: #fff;
             border-color: #e53935;
         }
+
         .confirm:hover {
             background-color: #c62828;
             border-color: #c62828;
         }
+
         .cancel {
             background-color: #fff;
             color: #555;
             border-color: #ccc;
         }
+
         .cancel:hover {
             background-color: #f0f0f0;
             border-color: #bbb;
         }
+
         .sticky-bottom-center {
             position: fixed;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 9999;
-            text-align: center;
-            font-weight: bold;
+            z-index: 1000;
         }
+
         .back-btn {
             background: #6c757d;
             color: #fff;
@@ -147,7 +165,10 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.4s;
+            text-decoration: none;
+            display: inline-block;
         }
+
         .back-btn:hover {
             background: #495057;
         }
@@ -163,8 +184,7 @@
                 <p><strong>Role:</strong> <span th:text="${#strings.listJoin(user.roles, ', ')}"/></p>
                 <p><strong>Data rejestracji:</strong> <span th:text="${#dates.format(user.registrationDate, 'dd-MM-yyyy HH:mm')}"/></p>
             </div>
-            <!-- ZMIANA TUTAJ: Dodano atrybut th:if -->
-            <button class="remove-button" th:if="${user.username != adminUsername}" onclick="showModal(this)">
+            <button class="remove-button js-delete-trigger" th:if="${user.username != adminUsername}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m3 0a.5.5 0 0 0-1 0v8.5a.5.5 0 0 0 1 0zM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
                 </svg>
@@ -175,37 +195,61 @@
     </div>
 </div>
 
-<!-- ... Reszta kodu (modal, skrypt, stopka) pozostaje bez zmian ... -->
 <div id="confirmModal" class="modal">
     <div class="modal-content">
         <p id="confirmMessage">Czy na pewno chcesz usunąć użytkownika?</p>
         <div class="modal-buttons">
-            <form th:action="@{/oskarinio143/heroes/admin/delete}" method="post" style="display: contents;">
+            <form th:action="@{/oskarinio143/heroes/admin/delete}" method="post">
                 <input type="hidden" name="username" id="userToDelete"/>
                 <button type="submit" class="confirm">Tak</button>
             </form>
-            <button class="cancel" type="button" onclick="hideModal()">Anuluj</button>
+            <button type="button" class="cancel js-modal-cancel">Anuluj</button>
         </div>
     </div>
 </div>
 
-<script th:attr="nonce=${cspNonce}">
-    function showModal(button) {
-        const username = button.closest('.user-container').dataset.username;
-        document.getElementById('userToDelete').value = username;
-        document.getElementById('confirmModal').style.display = 'flex';
-    }
-    function hideModal() {
-        document.getElementById('confirmModal').style.display = 'none';
-    }
-</script>
+<div class="sticky-bottom-center">
+    <a th:href="@{/oskarinio143/heroes/admin}" class="back-btn">
+        Wróć do panelu
+    </a>
+</div>
 
-<footer>
-    <div class="sticky-bottom-center">
-        <a th:href="@{/oskarinio143/heroes/admin}">
-            <button type="button" class="back-btn">Wróć do panelu</button>
-        </a>
-    </div>
-</footer>
+<script th:attr="nonce=${cspNonce}">
+    document.addEventListener('DOMContentLoaded', function() {
+        const confirmModal = document.getElementById('confirmModal');
+        const userToDeleteInput = document.getElementById('userToDelete');
+        const deleteButtons = document.querySelectorAll('.js-delete-trigger');
+        const cancelButton = document.querySelector('.js-modal-cancel');
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const userContainer = this.closest('.user-container');
+                const username = userContainer.dataset.username;
+                if (userToDeleteInput) {
+                    userToDeleteInput.value = username;
+                }
+                if (confirmModal) {
+                    confirmModal.classList.add('is-visible');
+                }
+            });
+        });
+
+        if (cancelButton) {
+            cancelButton.addEventListener('click', function() {
+                if (confirmModal) {
+                    confirmModal.classList.remove('is-visible');
+                }
+            });
+        }
+
+        if (confirmModal) {
+            confirmModal.addEventListener('click', function(event) {
+                if (event.target === confirmModal) {
+                    confirmModal.classList.remove('is-visible');
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>

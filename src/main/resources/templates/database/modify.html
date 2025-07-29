@@ -66,14 +66,11 @@
         }
         .sticky-bottom-center {
             position: fixed;
-            bottom: 20px; /* odstęp od dolnej krawędzi */
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            padding: 12px 24px;
-            border-radius: 8px;
             z-index: 9999;
             text-align: center;
-            font-weight: bold;
         }
 
         .back-btn {
@@ -92,7 +89,7 @@
         }
 
         .back-btn:hover {
-            background-position: right center; /* przesuwa gradient */
+            background-position: right center;
         }
 
         .modify-button:hover {
@@ -104,13 +101,13 @@
     </style>
 </head>
 <body>
+
 <div class="main-container">
     <h1>Modyfikuj jednostkę</h1>
-    <div th:each="unit : ${units}">
+
+    <th:block th:each="unit : ${units}">
         <div class="unit-container">
-            <div>
-                <img th:src="@{${unit.imagePath}}" class="unit-image" alt="Unit Image"/>
-            </div>
+            <img th:src="@{${unit.imagePath}}" class="unit-image" alt="Unit Image"/>
             <div class="unit-stats">
                 <p><strong>Nazwa:</strong> <span th:text="${unit.name}"/></p>
                 <p><strong>Atak:</strong> <span th:text="${unit.attack}"/></p>
@@ -121,23 +118,22 @@
                 <p><strong>Szybkość:</strong> <span th:text="${unit.speed}"/></p>
                 <p><strong>Opis:</strong> <span th:utext="${unit.description}"/></p>
             </div>
-                <form th:action="@{/oskarinio143/heroes/database/modify/unit}" method="get">
-                    <input type="hidden" name="name" th:value="${unit.name}"/>
-                    <button type="submit" class="modify-button">Modyfikuj</button>
-                </form>
-
+            <form th:action="@{/oskarinio143/heroes/database/modify/unit}" method="get">
+                <input type="hidden" name="name" th:value="${unit.name}"/>
+                <button type="submit" class="modify-button">Modyfikuj</button>
+            </form>
         </div>
         <div class="separator"></div>
-    </div>
+    </th:block>
 </div>
-</body>
-<footer>
-    <div class="sticky-bottom-center">
-        <a th:href="@{/oskarinio143/heroes/database}" class="back-link">
-            <button type="button" class="back-btn">
-                Wróć do menu bazy danych
-            </button>
-        </a>
-    </div>
+
+<footer class="sticky-bottom-center">
+    <a th:href="@{/oskarinio143/heroes/database}">
+        <button type="button" class="back-btn">
+            Wróć do menu bazy danych
+        </button>
+    </a>
 </footer>
+
+</body>
 </html>

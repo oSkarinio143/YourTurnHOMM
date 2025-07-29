@@ -1,103 +1,101 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Lista jednostek</title>
-  <style th:attr="nonce=${cspNonce}">
-    body {
-      background-color: #e8eaf0;
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      margin: 0;
-      min-height: 100vh;
-    }
-
-    .main-container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    h1 {
-      text-align: center;
-      color: #333;
-      margin-bottom: 30px;
-    }
-
-    .unit-container {
-      display: flex;
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-    .unit-image {
-      max-width: 150px;
-      max-height: 150px;
-      margin-right: 20px;
-    }
-    .unit-stats {
-      flex-grow: 1;
-    }
-    .unit-stats p {
-      margin: 4px 0;
-    }
-    .separator {
-      border-top: 3px solid #007bff;
-      margin: 30px 0;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Lista jednostek</title>
+    <style th:attr="nonce=${cspNonce}">
+        body {
+            background-color: #e8eaf0;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .unit-container {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .unit-image {
+            max-width: 150px;
+            max-height: 150px;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        .unit-stats {
+            flex-grow: 1;
+        }
+        .unit-stats p {
+            margin: 4px 0;
+        }
+        .unit-container form {
+            margin-left: 20px;
+        }
+        .separator {
+            border-top: 3px solid #007bff;
+            margin: 30px 0;
+        }
+        .secure-button {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .secure-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
 <div class="main-container">
-  <h1>Wybierz jednostkę</h1>
+    <h1>Wybierz jednostkę</h1>
 
-  <div th:each="unit : ${units}">
-    <div class="unit-container" style="display: flex; justify-content: space-between; align-items: center;">
-      <div>
-        <img th:src="${unit.imagePath}" class="unit-image" alt="Unit Image"/>
-      </div>
-      <div class="unit-stats" style="flex-grow: 1; margin-left: 20px;">
-        <p><strong>Nazwa:</strong> <span th:text="${unit.name}"/></p>
-        <p><strong>Atak:</strong> <span th:text="${unit.attack}"/></p>
-        <p><strong>Obrona:</strong> <span th:text="${unit.defense}"/></p>
-        <p><strong>Strzały:</strong> <span th:text="${unit.shots}"/></p>
-        <p><strong>Obrażenia:</strong> <span th:text="${unit.minDamage}"/> - <span th:text="${unit.maxDamage}"/></p>
-        <p><strong>HP:</strong> <span th:text="${unit.hp}"/></p>
-        <p><strong>Szybkość:</strong> <span th:text="${unit.speed}"/></p>
-        <p><strong>Opis:</strong> <span th:utext="${unit.description}"/></p>
-      </div>
-      <form th:action="@{/oskarinio143/heroes/duel}" method="post" style="margin-left: 20px;">
-<!--Przekazanie jednostek oraz zmiany jednostki-->
-        <input type="hidden" th:name="tempUnitName" th:value="${unit.name}"/>
-        <input type="hidden" th:name="side" th:value="${side}"/>
-        <input type="hidden" th:name="leftUnit" th:value="${duelForm.leftUnit != null ? duelForm.leftUnit.name : ''}"/>
-        <input type="hidden" th:name="rightUnit" th:value="${duelForm.rightUnit != null ? duelForm.rightUnit.name : ''}"/>
-        <input type="hidden" th:name="leftQuantity"    th:value="${duelForm.leftQuantity}"/>
-        <input type="hidden" th:name="rightQuantity"    th:value="${duelForm.rightQuantity}"/>
-        <input type="hidden" th:name="leftHeroAttack" id="leftHeroAttackInput" th:value = "${duelForm.leftHeroAttack}">
-        <input type="hidden" th:name="leftHeroDefense" id="leftHeroDefenseInput" th:value = "${duelForm.leftHeroDefense}">
-        <input type="hidden" th:name="rightHeroAttack" id="rightHeroAttackInput" th:value = "${duelForm.rightHeroAttack}">
-        <input type="hidden" th:name="rightHeroDefense" id="rightHeroDefenseInput" th:value = "${duelForm.rightHeroDefense}">
-
-        <button type="submit" style="
-                  background-color: #007bff;
-                  border: none;
-                  color: white;
-                  padding: 10px 20px;
-                  font-size: 16px;
-                  border-radius: 5px;
-                  cursor: pointer;
-                  transition: background-color 0.3s ease;
-              "
-                onmouseover="this.style.backgroundColor='#0056b3'"
-                onmouseout="this.style.backgroundColor='#007bff'">
-          Wybierz
-        </button>
-      </form>
-    </div>
-    <div class="separator"></div>
-  </div>
+    <th:block th:each="unit : ${units}">
+        <div class="unit-container">
+            <img th:src="${unit.imagePath}" class="unit-image" alt="Unit Image"/>
+            <div class="unit-stats">
+                <p><strong>Nazwa:</strong> <span th:text="${unit.name}"/></p>
+                <p><strong>Atak:</strong> <span th:text="${unit.attack}"/></p>
+                <p><strong>Obrona:</strong> <span th:text="${unit.defense}"/></p>
+                <p><strong>Strzały:</strong> <span th:text="${unit.shots}"/></p>
+                <p><strong>Obrażenia:</strong> <span th:text="${unit.minDamage}"/> - <span th:text="${unit.maxDamage}"/></p>
+                <p><strong>HP:</strong> <span th:text="${unit.hp}"/></p>
+                <p><strong>Szybkość:</strong> <span th:text="${unit.speed}"/></p>
+                <p><strong>Opis:</strong> <span th:utext="${unit.description}"/></p>
+            </div>
+            <form th:action="@{/oskarinio143/heroes/duel}" method="post">
+                <input type="hidden" name="tempUnitName" th:value="${unit.name}"/>
+                <input type="hidden" name="side" th:value="${side}"/>
+                <input type="hidden" name="leftUnit" th:value="${duelForm.leftUnit?.name}"/>
+                <input type="hidden" name="rightUnit" th:value="${duelForm.rightUnit?.name}"/>
+                <input type="hidden" name="leftQuantity" th:value="${duelForm.leftQuantity}"/>
+                <input type="hidden" name="rightQuantity" th:value="${duelForm.rightQuantity}"/>
+                <input type="hidden" name="leftHeroAttack" th:value="${duelForm.leftHeroAttack}"/>
+                <input type="hidden" name="leftHeroDefense" th:value="${duelForm.leftHeroDefense}"/>
+                <input type="hidden" name="rightHeroAttack" th:value="${duelForm.rightHeroAttack}"/>
+                <input type="hidden" name="rightHeroDefense" th:value="${duelForm.rightHeroDefense}"/>
+                <button type="submit" class="secure-button">Wybierz</button>
+            </form>
+        </div>
+        <div class="separator"></div>
+    </th:block>
 </div>
 </body>
 </html>

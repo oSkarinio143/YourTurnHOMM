@@ -10,6 +10,8 @@
             --light-gray: #f5f5f5;
             --medium-gray: #e0e0e0;
             --dark-gray: #333;
+            --secondary-gray: #6c757d;
+            --dark-secondary-gray: #495057;
         }
         * {
             margin: 0;
@@ -47,6 +49,9 @@
             display: flex;
             flex-direction: column;
         }
+        .form-group.grid-span-2 {
+            grid-column: span 2;
+        }
         label {
             font-weight: 600;
             margin-bottom: 6px;
@@ -55,6 +60,7 @@
             padding: 10px;
             border: 1px solid var(--medium-gray);
             border-radius: 8px;
+            font-size: 1rem;
         }
         textarea {
             resize: vertical;
@@ -76,6 +82,7 @@
             cursor: pointer;
             font-weight: 600;
             transition: background .3s;
+            font-size: 1rem;
         }
         .submit-button:hover {
             background: var(--dark-blue);
@@ -86,7 +93,7 @@
             font-weight: 500;
         }
         .back-btn {
-            background: #6c757d;
+            background: var(--secondary-gray);
             color: white;
             padding: 15px 30px;
             border: none;
@@ -94,20 +101,30 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background .4s ease-in-out;
+            transition: background-position .4s ease-in-out;
             min-width: 180px;
             background-size: 200% auto;
-            background-image: linear-gradient(to right, #6c757d 0%, #495057 51%, #6c757d 100%);
+            background-image: linear-gradient(to right, var(--secondary-gray) 0%, var(--dark-secondary-gray) 51%, var(--secondary-gray) 100%);
         }
         .back-btn:hover {
             background-position: right center;
         }
+        .modal-overlay {
+            display: flex; /* Zmienione z 'none' na 'flex' */
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 1; /* Domyślnie widoczne, bo będą renderowane warunkowo */
+            transition: opacity 0.3s ease-in-out;
+        }
         .modal-box {
             background: white;
-            padding: 20px;
+            padding: 30px;
             width: 600px;
             max-width: 90%;
-            max-height: 80%;
             box-sizing: border-box;
             text-align: center;
             border: 5px solid;
@@ -116,6 +133,15 @@
             flex-direction: column;
             align-items: center;
             gap: 20px;
+            border-radius: 10px;
+            transform: scale(1);
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal-message {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--dark-gray);
         }
     </style>
 </head>
@@ -123,17 +149,18 @@
 <div class="form-container">
     <h1>Add New Unit</h1>
     <form th:action="@{/oskarinio143/heroes/database/add}" method="post" enctype="multipart/form-data">
+        <!-- Pola formularza bez zmian -->
         <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" id="name" name="name">
+            <input type="text" id="name" name="name" required>
         </div>
         <div class="form-group">
             <label for="attack">Attack</label>
-            <input type="number" id="attack" name="attack">
+            <input type="number" id="attack" name="attack" required>
         </div>
         <div class="form-group">
             <label for="defense">Defense</label>
-            <input type="number" id="defense" name="defense">
+            <input type="number" id="defense" name="defense" required>
         </div>
         <div class="form-group">
             <label for="shots">Shots</label>
@@ -141,27 +168,27 @@
         </div>
         <div class="form-group">
             <label for="minDamage">Min Damage</label>
-            <input type="number" id="minDamage" name="minDamage">
+            <input type="number" id="minDamage" name="minDamage" required>
         </div>
         <div class="form-group">
             <label for="maxDamage">Max Damage</label>
-            <input type="number" id="maxDamage" name="maxDamage">
+            <input type="number" id="maxDamage" name="maxDamage" required>
         </div>
         <div class="form-group">
             <label for="speed">Speed</label>
-            <input type="number" id="speed" name="speed">
+            <input type="number" id="speed" name="speed" required>
         </div>
         <div class="form-group">
             <label for="hp">Health Points</label>
-            <input type="number" id="hp" name="hp">
+            <input type="number" id="hp" name="hp" required>
         </div>
-        <div class="form-group" style="grid-column:span 2">
+        <div class="form-group grid-span-2">
             <label for="description">Description</label>
             <textarea id="description" name="description"></textarea>
         </div>
-        <div class="form-group" style="grid-column:span 2">
+        <div class="form-group grid-span-2">
             <label for="image">Image</label>
-            <input type="file" id="image" name="image" accept="image/*">
+            <input type="file" id="image" name="image" accept="image/*" required>
         </div>
         <div class="form-actions">
             <a th:href="@{/oskarinio143/heroes/database}" class="back-link">
@@ -171,23 +198,34 @@
         </div>
     </form>
 </div>
-<div id="duplicateModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center">
+
+<div id="duplicateModal" class="modal-overlay" th:if="${!#strings.isEmpty(duplicateMessage)}">
     <div class="modal-box">
-        <p th:text="${duplicateMessage}" style="font-size:1.5em;font-weight:bold;margin-bottom:20px">Tutaj będzie komunikat</p>
-        <button onclick="document.getElementById('duplicateModal').style.display='none'" class="back-btn">Zamknij</button>
+        <p th:text="${duplicateMessage}" class="modal-message"></p>
+        <button type="button" class="back-btn js-modal-close">Zamknij</button>
     </div>
 </div>
-<div id="incorrectModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center">
+
+<div id="incorrectModal" class="modal-overlay" th:if="${!#strings.isEmpty(incorrectMessage)}">
     <div class="modal-box">
-        <p th:utext="${incorrectMessage}" style="font-size:1.5em;font-weight:bold;margin-bottom:20px">Tutaj będzie komunikat</p>
-        <button onclick="document.getElementById('incorrectModal').style.display='none'" class="back-btn">Zamknij</button>
+        <p th:utext="${incorrectMessage}" class="modal-message"></p>
+        <button type="button" class="back-btn js-modal-close">Zamknij</button>
     </div>
 </div>
-<script th:if="${duplicateMessage}" th:attr="nonce=${cspNonce}">
-    document.getElementById('duplicateModal').style.display='flex';
-</script>
-<script th:if="${incorrectMessage}" th:attr="nonce=${cspNonce}">
-    document.getElementById('incorrectModal').style.display='flex';
+
+<script th:attr="nonce=${cspNonce}">
+    document.addEventListener('DOMContentLoaded', function() {
+        const closeButtons = document.querySelectorAll('.js-modal-close');
+
+        closeButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                const modal = button.closest('.modal-overlay');
+                if (modal) {
+                    modal.remove();
+                }
+            });
+        });
+    });
 </script>
 </body>
 </html>
