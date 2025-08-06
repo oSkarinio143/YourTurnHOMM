@@ -1,6 +1,6 @@
 YourTurnHOMM - Projekt do symulowania pojedynków wykorzystujący mechaniki oraz jednostki z gry Heroes of might & magic 3.
 
-Projekt oparty o Java + Spring + Thymeleaf. Widoki w większości wygenerowany jest przez AI z moimi drobnymi poprawkami.
+Projekt oparty o Java + Spring + Thymeleaf. Backend pisałem sam, widoki w większości wygenerowany jest przez AI z moimi drobnymi poprawkami.
 
 Uruchamianie:
 1. w cmd przechodzę do wybranego folderu
