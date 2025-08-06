@@ -2,336 +2,528 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <meta id="cspNonce" th:content="${cspNonce}">
   <title>Karta jednostki</title>
-  <style th:nonce="${cspNonce}">
-    body {
-      background: #e8eaf0;
-      font-family: Arial, sans-serif;
-      padding: 20px;
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" th:attr="nonce=${cspNonce}">
+  <style th:attr="nonce=${cspNonce}">
+    :root {
+      --primary-blue: #1e88e5;
+      --dark-blue: #1565c0;
+      --light-gray: #f5f5f5;
+      --medium-gray: #e0e0e0;
+      --dark-gray: #333;
+      --success-green: #28a745;
+      --success-green-dark: #218838;
+      --error-red: #dc3545;
+      --error-red-dark: #c82333;
+    }
+    * {
       margin: 0;
-      min-height: 100vh;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
       display: flex;
       justify-content: center;
       align-items: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #ccc 0%, #1565c0 100%);
     }
-    .card-container {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.15);
-      padding: 30px;
-      max-width: 400px;
+    .container {
       width: 100%;
+      max-width: 800px;
+      padding: 40px;
+      background: rgba(255, 255, 255, .95);
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, .2);
+      backdrop-filter: blur(10px);
+    }
+    .header {
+      position: relative;
+      margin-bottom: 30px;
       text-align: center;
     }
-    .unit-image {
+    .header h1 {
+      margin-bottom: 5px;
+      font-size: 2.5rem;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, .1);
+    }
+    .header .unit-name-header {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--dark-gray);
+    }
+    .unit-card-layout {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 40px;
+      align-items: flex-start;
+    }
+    .unit-image-wrapper {
       width: 200px;
       height: 200px;
-      object-fit: cover;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      border: 3px solid #007bff;
+      padding: 10px;
+      background: var(--light-gray);
+      border: 1px solid var(--medium-gray);
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    .unit-name {
-      font-size: 24px;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 20px;
-      text-align: center;
+    .unit-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
-    .stats-container {
-      text-align: left;
-    }
-    .stat-row {
+    .unit-details {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 0;
-      border-bottom: 1px solid #e0e0e0;
+      flex-direction: column;
+      gap: 20px;
     }
-    .stat-row:last-child {
-      border-bottom: none;
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 12px;
+      align-items: center;
     }
     .stat-label {
       font-weight: 600;
       color: #555;
-      flex: 1;
     }
     .stat-value {
-      font-weight: bold;
-      color: #333;
-      text-align: right;
-    }
-    .description-section {
-      margin-top: 20px;
-      padding-top: 15px;
-      border-top: 2px solid #007bff;
-    }
-    .description-label {
-      font-weight: 600;
-      color: #555;
-      margin-bottom: 8px;
-    }
-    .description-text {
-      color: #666;
-      line-height: 1.4;
-      font-style: italic;
+      font-weight: 500;
+      color: var(--dark-gray);
     }
     .damage-range {
-      color: #e53935;
       font-weight: bold;
+      color: var(--error-red);
     }
-    .hp-section {
-      background: #f8f9fa;
-      border-radius: 8px;
+    .description-section .description-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #555;
+    }
+    .description-text {
+      font-style: italic;
+      line-height: 1.5;
+      color: #666;
+    }
+    .editable-input, .editable-textarea {
       padding: 8px;
-      margin: 5px 0;
+      font-size: 0.95rem;
+      border: 1px solid var(--medium-gray);
+      border-radius: 6px;
+      transition: border-color .3s, box-shadow .3s;
     }
-    .button-container {
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-      margin-top: 25px;
-      padding-top: 20px;
-      border-top: 1px solid #e0e0e0;
-    }
-    .btn {
-      padding: 12px 24px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-      transition: all .3s;
-      flex: 1;
-      text-decoration: none;
-      text-align: center;
-      display: inline-block;
-    }
-    .back-btn {
-      background: #6c757d;
-      color: white;
-      padding: 15px 30px;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background .4s ease-in-out;
-      min-width: 180px;
-      background-size: 200% auto;
-      background-image: linear-gradient(to right,#6c757d 0%,#495057 51%,#6c757d 100%);
-    }
-    .back-btn:hover {
-      background-position: right center;
-    }
-    .btn-edit {
-      background: #1e88e5;
-      color: white;
-    }
-    .btn-edit:hover {
-      background: #1565c0;
-    }
-    .btn-save {
-      background: #4caf50;
-      color: white;
-      width: 100%;
-    }
-    .btn-save:hover {
-      background: #45a049;
+    .editable-input:focus, .editable-textarea:focus {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(30, 136, 229, .2);
+      outline: none;
     }
     .editable-input {
-      border: 1px solid #007bff;
-      background: #f8f9ff;
-      padding: 4px 8px;
-      border-radius: 4px;
       width: 80px;
       text-align: right;
-      font-weight: bold;
     }
     #damage-inputs .editable-input {
       width: 60px;
     }
     .editable-textarea {
-      border: 1px solid #007bff;
-      background: #f8f9ff;
-      padding: 8px;
-      border-radius: 4px;
       width: 100%;
+      min-height: 80px;
       resize: vertical;
-      min-height: 60px;
-      font-style: italic;
     }
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,.5);
+    .button-container {
       display: flex;
+      gap: 15px;
+      justify-content: space-between;
+      margin-top: 25px;
+      padding-top: 25px;
+      border-top: 1px solid var(--medium-gray);
+    }
+    .btn {
+      display: inline-flex;
+      gap: 8px;
       align-items: center;
       justify-content: center;
+      padding: 12px 20px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all .3s ease;
     }
-    .modal-box {
-      background: white;
-      padding: 20px;
-      width: 600px;
-      max-width: 90%;
-      max-height: 80%;
-      box-sizing: border-box;
-      text-align: center;
-      border: 5px solid;
-      border-image: linear-gradient(to right,#000,#444) 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
+    .btn:hover {
+      transform: translateY(-2px);
     }
-    .modal-message {
-      font-size: 1.5em;
-      font-weight: bold;
-      margin-bottom: 20px;
+    .btn-back {
+      flex-grow: 1;
+      color: #6c757d;
+      background: #fff;
+      border: 1px solid var(--medium-gray);
+    }
+    .btn-back:hover {
+      background: var(--light-gray);
+      box-shadow: 0 4px 10px rgba(0,0,0,.05);
+    }
+    .btn-edit {
+      flex-grow: 1;
+      color: white;
+      background: var(--primary-blue);
+    }
+    .btn-edit:hover {
+      background: var(--dark-blue);
+      box-shadow: 0 4px 12px rgba(30, 136, 229, 0.3);
+    }
+    .btn-save {
+      width: 100%;
+      color: white;
+      background: var(--success-green);
+    }
+    .btn-save:hover {
+      background: var(--success-green-dark);
+      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    }
+    #saveForm {
+      flex-grow: 1;
     }
     .hidden {
       display: none;
     }
-    #saveForm {
-      flex: 1;
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 1001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all .3s ease;
+    }
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-container {
+      position: relative;
+      width: 90%;
+      max-width: 450px;
+      padding: 25px 30px;
+      background: linear-gradient(135deg, #fff, #f8f9fa);
+      border: 1px solid rgba(220, 53, 69, .3);
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.2);
+      transform: scale(.95) translateY(20px);
+      transition: all .3s cubic-bezier(.34, 1.56, .64, 1);
+    }
+    .modal-overlay.show .modal-container {
+      transform: scale(1) translateY(0);
+    }
+    .modal-header {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .modal-icon {
+      display: flex;
+      width: 50px;
+      height: 50px;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: #fff;
+      background: linear-gradient(45deg, var(--error-red), var(--error-red-dark));
+      border-radius: 50%;
+    }
+    .modal-title {
+      margin: 0;
+      font-size: 22px;
+      font-weight: bold;
+      color: #721c24;
+    }
+    .modal-content {
+      margin-bottom: 25px;
+      text-align: center;
+    }
+    .modal-message {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.6;
+      color: #495057;
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: center;
+    }
+    .modal-button {
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(45deg, var(--error-red), var(--error-red-dark));
+      border: none;
+      border-radius: 8px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .3s ease;
+    }
+    .modal-button:hover {
+      background: linear-gradient(45deg, var(--error-red-dark), #bd2130);
+      transform: translateY(-2px);
+    }
+    .modal-close {
+      position: absolute;
+      top: 15px; right: 15px;
+      display: flex;
+      width: 35px;
+      height: 35px;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: #6c757d;
+      background: none;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all .3s ease;
+    }
+    .modal-close:hover {
+      background: rgba(220, 53, 69, .1);
+      color: var(--error-red);
+      transform: rotate(90deg);
+    }
+    .modal-progress {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--error-red), var(--error-red-dark));
+      border-radius: 0 0 12px 12px;
+      transform-origin: left;
+      animation: progressShrink 5s linear forwards;
+    }
+    @keyframes progressShrink {
+      to { transform: scaleX(0); }
+    }
+    @media (max-width: 768px) {
+      .unit-card-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .unit-image-wrapper {
+        margin: 0 auto;
+      }
+      .header h1 {
+        font-size: 2rem;
+      }
     }
   </style>
 </head>
 <body>
-<div class="card-container">
-  <img th:src="@{${unit.imagePath}}" class="unit-image" alt="Unit Image">
-  <div class="unit-name" th:text="${unit.name}"></div>
-  <div class="stats-container">
-    <div class="stat-row">
-      <span class="stat-label">Atak:</span>
-      <span class="stat-value" id="attack-display" th:text="${unit.attack}"></span>
-      <input type="number" class="editable-input hidden" id="attack-input" th:value="${unit.attack}">
+
+<div class="container">
+  <div class="header">
+    <h1>Karta jednostki</h1>
+    <div class="unit-name-header" th:text="${unit.name}"></div>
+  </div>
+
+  <div class="unit-card-layout">
+    <div class="unit-image-wrapper">
+      <img th:src="@{${unit.imagePath}}" class="unit-image" alt="Unit Image">
     </div>
-    <div class="stat-row">
-      <span class="stat-label">Obrona:</span>
-      <span class="stat-value" id="defense-display" th:text="${unit.defense}"></span>
-      <input type="number" class="editable-input hidden" id="defense-input" th:value="${unit.defense}">
-    </div>
-    <div class="stat-row" th:if="${unit.shots != null}">
-      <span class="stat-label">Strzały:</span>
-      <span class="stat-value" id="shots-display" th:text="${unit.shots}"></span>
-      <input type="number" class="editable-input hidden" id="shots-input" th:value="${unit.shots}" name="shots">
-    </div>
-    <div class="stat-row">
-      <span class="stat-label">Obrażenia:</span>
-      <span class="stat-value damage-range">
-                <span id="minDamage-display" th:text="${unit.minDamage}"></span> - <span id="maxDamage-display" th:text="${unit.maxDamage}"></span>
-            </span>
-      <div class="hidden" id="damage-inputs">
-        <input type="number" class="editable-input" id="minDamage-input" th:value="${unit.minDamage}">
-        -
-        <input type="number" class="editable-input" id="maxDamage-input" th:value="${unit.maxDamage}">
+
+    <div class="unit-details">
+      <div class="stats-grid">
+        <span class="stat-label">Atak:</span>
+        <div>
+          <span class="stat-value" id="attack-display" th:text="${unit.attack}"></span>
+          <input type="number" class="editable-input hidden" id="attack-input" th:value="${unit.attack}">
+        </div>
+
+        <span class="stat-label">Obrona:</span>
+        <div>
+          <span class="stat-value" id="defense-display" th:text="${unit.defense}"></span>
+          <input type="number" class="editable-input hidden" id="defense-input" th:value="${unit.defense}">
+        </div>
+
+        <th:block th:if="${unit.shots != null}">
+          <span class="stat-label">Strzały:</span>
+          <div>
+            <span class="stat-value" id="shots-display" th:text="${unit.shots}"></span>
+            <input type="number" class="editable-input hidden" id="shots-input" th:value="${unit.shots}">
+          </div>
+        </th:block>
+
+        <span class="stat-label">Obrażenia:</span>
+        <div>
+                    <span class="stat-value damage-range" id="damage-display">
+                        <span th:text="${unit.minDamage}"></span> - <span th:text="${unit.maxDamage}"></span>
+                    </span>
+          <div class="hidden" id="damage-inputs">
+            <input type="number" class="editable-input" id="minDamage-input" th:value="${unit.minDamage}">
+            -
+            <input type="number" class="editable-input" id="maxDamage-input" th:value="${unit.maxDamage}">
+          </div>
+        </div>
+
+        <span class="stat-label">HP:</span>
+        <div>
+          <span class="stat-value" id="hp-display" th:text="${unit.hp}"></span>
+          <input type="number" class="editable-input hidden" id="hp-input" th:value="${unit.hp}">
+        </div>
+
+        <span class="stat-label">Szybkość:</span>
+        <div>
+          <span class="stat-value" id="speed-display" th:text="${unit.speed}"></span>
+          <input type="number" class="editable-input hidden" id="speed-input" th:value="${unit.speed}">
+        </div>
+      </div>
+
+      <div class="description-section" th:if="${unit.description != null and !#strings.isEmpty(unit.description)}">
+        <div class="description-label">Opis:</div>
+        <div class="description-text" id="description-display" th:text="${unit.description}"></div>
+        <textarea class="editable-textarea hidden" id="description-input" th:text="${unit.description}"></textarea>
       </div>
     </div>
-    <div class="stat-row hp-section">
-      <span class="stat-label">HP:</span>
-      <span class="stat-value" id="hp-display" th:text="${unit.hp}"></span>
-      <input type="number" class="editable-input hidden" id="hp-input" th:value="${unit.hp}">
-    </div>
-    <div class="stat-row">
-      <span class="stat-label">Szybkość:</span>
-      <span class="stat-value" id="speed-display" th:text="${unit.speed}"></span>
-      <input type="number" class="editable-input hidden" id="speed-input" th:value="${unit.speed}">
-    </div>
   </div>
-  <div class="description-section" th:if="${unit.description != null and !#strings.isEmpty(unit.description)}">
-    <div class="description-label">Opis:</div>
-    <div class="description-text" id="description-display" th:text="${unit.description}"></div>
-    <textarea class="editable-textarea hidden" id="description-input" th:text="${unit.description}"></textarea>
-  </div>
+
   <div class="button-container">
-    <a th:href="@{/oskarinio143/heroes/database/modify}">
-      <button class="btn back-btn">Wróć do wyboru</button>
+    <a th:href="@{/oskarinio143/YourTurnHOMM/database/modify}" class="btn btn-back">
+      <i class="fas fa-arrow-left"></i> Wróć
     </a>
-    <button class="btn btn-edit" id="editBtn">Edytuj</button>
-    <form class="hidden" id="saveForm" th:action="@{/oskarinio143/heroes/database/modify/unit}" method="post">
+    <button type="button" class="btn btn-edit" id="editBtn">
+      <i class="fas fa-pencil-alt"></i> Edytuj
+    </button>
+    <form class="hidden" id="saveForm" th:action="@{/oskarinio143/YourTurnHOMM/database/modify/unit}" method="post">
       <input type="hidden" name="name" th:value="${unit.name}">
-      <button type="submit" class="btn btn-save">Zapisz</button>
+      <button type="submit" class="btn btn-save">
+        <i class="fas fa-save"></i> Zapisz
+      </button>
     </form>
   </div>
 </div>
 
-<div id="incorrectModal" class="modal-overlay hidden">
-  <div class="modal-box">
-    <p th:utext="${incorrectMessage}" class="modal-message">Tutaj będzie komunikat</p>
-    <button id="closeIncorrectModalBtn" class="back-btn">Zamknij</button>
+<div id="errorModal" class="modal-overlay">
+  <div class="modal-container">
+    <button type="button" id="closeErrorModal" class="modal-close">×</button>
+    <div class="modal-header">
+      <div class="modal-icon">⚠️</div>
+      <h2 class="modal-title">Wystąpił błąd</h2>
+    </div>
+    <div class="modal-content">
+      <p class="modal-message" th:utext="${incorrectMessage ?: nullMessage}"></p>
+    </div>
+    <div class="modal-actions">
+      <button type="button" id="confirmErrorModal" class="modal-button">Rozumiem</button>
+    </div>
+    <div class="modal-progress"></div>
   </div>
 </div>
 
-<div id="nullModal" class="modal-overlay hidden">
-  <div class="modal-box">
-    <p th:utext="${nullMessage}" class="modal-message">Tutaj będzie komunikat</p>
-    <button id="closeNullModalBtn" class="back-btn">Zamknij</button>
-  </div>
-</div>
+<script th:attr="nonce=${cspNonce}">
+  document.addEventListener('DOMContentLoaded', () => {
+    const elements = {
+      editBtn: document.getElementById('editBtn'),
+      saveForm: document.getElementById('saveForm'),
+      errorModal: document.getElementById('errorModal'),
+      closeErrorModalBtn: document.getElementById('closeErrorModal'),
+      confirmErrorModalBtn: document.getElementById('confirmErrorModal'),
+      fields: ['attack', 'defense', 'shots', 'hp', 'speed', 'description'],
+      damageDisplay: document.getElementById('damage-display'),
+      damageInputs: document.getElementById('damage-inputs'),
+    };
 
-<script th:nonce="${cspNonce}" th:inline="javascript">
-  /*<![CDATA[*/
-  let isEditing = false;
+    let isEditing = false;
+    let modalTimeout;
 
-  function toggleEdit() {
-    isEditing = !isEditing;
-    const editBtn = document.getElementById('editBtn');
-    const saveForm = document.getElementById('saveForm');
+    const toggleEdit = () => {
+      isEditing = !isEditing;
+      elements.editBtn.classList.toggle('hidden', isEditing);
+      elements.saveForm.classList.toggle('hidden', !isEditing);
 
-    editBtn.classList.toggle('hidden', isEditing);
-    saveForm.classList.toggle('hidden', !isEditing);
+      elements.fields.forEach(field => {
+        const displayEl = document.getElementById(`${field}-display`);
+        const inputEl = document.getElementById(`${field}-input`);
+        if (displayEl) displayEl.classList.toggle('hidden', isEditing);
+        if (inputEl) inputEl.classList.toggle('hidden', !isEditing);
+      });
 
-    const displays = document.querySelectorAll('[id$="-display"]');
-    const inputs = document.querySelectorAll('[id$="-input"],[id$="-inputs"]');
+      elements.damageDisplay.classList.toggle('hidden', isEditing);
+      elements.damageInputs.classList.toggle('hidden', !isEditing);
+    };
 
-    displays.forEach(display => display.classList.toggle('hidden', isEditing));
-    inputs.forEach(input => input.classList.toggle('hidden', !isEditing));
-  }
-
-  function prepareFormData() {
-    const form = document.getElementById('saveForm');
-    const fields = ['attack', 'defense', 'shots', 'minDamage', 'maxDamage', 'hp', 'speed', 'description'];
-
-    fields.forEach(field => {
-      const input = document.getElementById(field + '-input');
-      if (input) {
-        let existingField = form.querySelector(`input[name="${field}"]`);
-        if (!existingField) {
-          const hiddenInput = document.createElement('input');
-          hiddenInput.type = 'hidden';
-          hiddenInput.name = field;
-          form.appendChild(hiddenInput);
-          existingField = hiddenInput;
+    const prepareFormData = () => {
+      const allFields = [...elements.fields, 'minDamage', 'maxDamage'];
+      allFields.forEach(field => {
+        const input = document.getElementById(`${field}-input`);
+        if (input) {
+          let hiddenInput = elements.saveForm.querySelector(`[name="${field}"]`);
+          if (!hiddenInput) {
+            hiddenInput = document.createElement(input.tagName === 'TEXTAREA' ? 'textarea' : 'input');
+            if (hiddenInput.tagName === 'INPUT') hiddenInput.type = 'hidden';
+            hiddenInput.name = field;
+            elements.saveForm.appendChild(hiddenInput);
+          }
+          hiddenInput.value = input.value;
+          if (hiddenInput.tagName === 'TEXTAREA') hiddenInput.style.display = 'none';
         }
-        existingField.value = input.value;
+      });
+    };
+
+    const showModal = () => {
+      if (!elements.errorModal) return;
+      elements.errorModal.classList.add('show');
+      modalTimeout = setTimeout(closeModal, 5000);
+    };
+
+    const closeModal = () => {
+      if (!elements.errorModal) return;
+      elements.errorModal.classList.remove('show');
+      clearTimeout(modalTimeout);
+    };
+
+    elements.editBtn.addEventListener('click', toggleEdit);
+    elements.saveForm.addEventListener('submit', prepareFormData);
+    elements.closeErrorModalBtn.addEventListener('click', closeModal);
+    elements.confirmErrorModalBtn.addEventListener('click', closeModal);
+    elements.errorModal.addEventListener('click', (e) => {
+      if (e.target === elements.errorModal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && elements.errorModal.classList.contains('show')) {
+        closeModal();
       }
     });
-  }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('editBtn').addEventListener('click', toggleEdit);
-    document.getElementById('saveForm').addEventListener('submit', prepareFormData);
-
-    const incorrectModal = document.getElementById('incorrectModal');
-    const nullModal = document.getElementById('nullModal');
-
-    document.getElementById('closeIncorrectModalBtn').addEventListener('click', () => incorrectModal.classList.add('hidden'));
-    document.getElementById('closeNullModalBtn').addEventListener('click', () => nullModal.classList.add('hidden'));
-
-    const incorrectMessage = /*[[${incorrectMessage}]]*/ null;
-    if (incorrectMessage) {
-      incorrectModal.classList.remove('hidden');
-    }
-
-    const nullMessage = /*[[${nullMessage}]]*/ null;
-    if (nullMessage) {
-      nullModal.classList.remove('hidden');
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('incorrectMessage') || urlParams.has('nullMessage')) {
+      showModal();
     }
   });
 </script>
+
+<script th:if="${!#strings.isEmpty(incorrectMessage) or !#strings.isEmpty(nullMessage)}" th:attr="nonce=${cspNonce}">
+  document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('errorModal');
+    if (modal) {
+      modal.classList.add('show');
+      setTimeout(() => {
+        modal.classList.remove('show');
+      }, 5000);
+    }
+  });
+</script>
+
 </body>
 </html>

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Panel Administracyjny - Heroes III</title>
+  <title>Panel Administracyjny</title>
   <style th:attr="nonce=${cspNonce}">
     :root {
       --primary-gold: #ffc107;
@@ -351,13 +351,13 @@
       <p>Przeglądaj listę wszystkich zarejestrowanych użytkowników</p>
     </a>
 
-    <a th:href="@{/oskarinio143/heroes/admin/delete}" class="admin-button delete">
+    <a th:href="@{/oskarinio143/YourTurnHOMM/admin/delete}" class="admin-button delete">
       <span class="icon">👤❌</span>
       <h2>Usuń użytkownika</h2>
       <p>Usuń wybranego użytkownika z systemu</p>
     </a>
 
-    <a th:href="@{/oskarinio143/heroes/admin/grant}" class="admin-button promote">
+    <a th:href="@{/oskarinio143/YourTurnHOMM/admin/grant}" class="admin-button promote">
       <span class="icon">🛡️</span>
       <h2>Nadaj uprawnienia</h2>
       <p>Przyznaj uprawnienia administratora użytkownikowi</p>
@@ -365,7 +365,7 @@
   </div>
 
   <div class="back-section">
-    <a th:href="@{/oskarinio143/heroes}" class="back-button">
+    <a th:href="@{/oskarinio143/YourTurnHOMM}" class="back-button">
       <span class="icon">⬅️</span>
       Powrót do menu
     </a>

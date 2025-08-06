@@ -176,7 +176,7 @@
     <div class="modal-content">
         <p id="confirmMessage">Czy na pewno chcesz usunąć jednostkę?</p>
         <div class="modal-buttons">
-            <form th:action="@{/oskarinio143/heroes/database/delete}" method="post">
+            <form th:action="@{/oskarinio143/YourTurnHOMM/database/delete}" method="post">
                 <input type="hidden" name="name" id="unitToDelete"/>
                 <button type="submit" class="confirm">Tak</button>
             </form>
@@ -186,7 +186,7 @@
 </div>
 
 <div class="sticky-bottom-center">
-    <a th:href="@{/oskarinio143/heroes/database}" class="back-btn">
+    <a th:href="@{/oskarinio143/YourTurnHOMM/database}" class="back-btn">
         Wróć do menu bazy danych
     </a>
 </div>

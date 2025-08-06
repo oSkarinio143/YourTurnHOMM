@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<!-- Dodana przestrzeń nazw Spring Security (sec) -->
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta id="cspNonce" th:content="${cspNonce}">
-    <title>Heroes III</title>
+    <title>YourTurnHOMM</title>
     <style th:attr="nonce=${cspNonce}">
         :root {
             --primary-blue: #1e88e5;
@@ -407,34 +406,32 @@
             .menu-button { height: 120px; }
         }
     </style>
-    <!-- POPRAWKA: Dodanie nonce do linku ze stylami, dla spójności i bezpieczeństwa -->
-<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" th:attr="nonce=${cspNonce}">-->
 </head>
 <body>
 <div class="container">
     <div class="header">
-        <h1>Heroes III</h1>
+        <h1>YourTurnHOMM</h1>
     </div>
 
     <div class="grid-container">
-        <a th:href="@{/oskarinio143/heroes/database}" class="menu-button">
+        <a th:href="@{/oskarinio143/YourTurnHOMM/database}" class="menu-button">
             <i class="fas fa-database"></i>
             <h2>Baza danych</h2>
         </a>
 
-        <a th:href="@{/oskarinio143/heroes/duel}" class="menu-button">
+        <a th:href="@{/oskarinio143/YourTurnHOMM/duel}" class="menu-button">
             <i class="fa-solid fa-shield-halved"></i>
             <h2>Pojedynek</h2>
         </a>
 
         <div class="admin-button-container" sec:authorize="hasRole('ADMIN')">
-            <a th:href="@{/oskarinio143/heroes/admin}" class="menu-button admin-button">
+            <a th:href="@{/oskarinio143/YourTurnHOMM/admin}" class="menu-button admin-button">
                 <i class="fa-solid fa-user-gear"></i>
                 <h2>Panel Admina</h2>
             </a>
         </div>
 
-        <form th:action="@{/oskarinio143/heroes/logout}" method="post" class="logout-form">
+        <form th:action="@{/oskarinio143/YourTurnHOMM/logout}" method="post" class="logout-form">
             <button type="submit" class="logout-button">
                 <i class="fas fa-sign-out-alt"></i>
                 Wyloguj
@@ -445,7 +442,6 @@
     <div id="welcomeUserModal" class="modal-overlay">
         <div class="modal-container">
             <div class="success-particles"></div>
-            <!-- POPRAWKA: Usunięto onclick, dodano id -->
             <button id="closeWelcomeModal" class="modal-close">×</button>
             <div class="modal-header">
                 <div class="modal-icon">✓</div>
@@ -455,7 +451,6 @@
                 <p class="modal-message" th:if="${welcomeUserMessage}" th:utext="${welcomeUserMessage}"></p>
             </div>
             <div class="modal-actions">
-                <!-- POPRAWKA: Usunięto onclick, dodano id -->
                 <button id="confirmWelcomeModal" class="modal-button modal-button-primary">Świetnie!</button>
             </div>
             <div class="modal-progress"></div>
@@ -464,7 +459,6 @@
 
     <div id="errorModal" class="modal-overlay error-modal">
         <div class="modal-container">
-            <!-- POPRAWKA: Usunięto onclick, dodano id -->
             <button id="closeErrorModal" class="modal-close">×</button>
             <div class="modal-header">
                 <div class="modal-icon">⚠️</div>
@@ -474,7 +468,6 @@
                 <p class="modal-message" th:if="${adminErrorMessage}" th:text="${adminErrorMessage}"></p>
             </div>
             <div class="modal-actions">
-                <!-- POPRAWKA: Usunięto onclick, dodano id -->
                 <button id="confirmErrorModal" class="modal-button modal-button-primary">Rozumiem</button>
             </div>
             <div class="modal-progress"></div>
@@ -482,7 +475,6 @@
     </div>
 </div>
 
-<!-- Główny blok skryptów z logiką -->
 <script th:attr="nonce=${cspNonce}">
     function closeModal(modalId) {
         const modal = document.getElementById(modalId);
@@ -496,27 +488,21 @@
         const modal = document.getElementById(modalId);
         if (!modal) return;
 
-//        modal.style.display = 'flex';
         setTimeout(() => modal.classList.add('show'), 10);
 
-        // Automatyczne zamykanie modala po 5 sekundach
         const timeoutId = setTimeout(() => closeModal(modalId), 5000);
-
-        // Handler do zamykania modala po kliknięciu poza nim
         const clickHandler = (e) => {
-            if (e.target === modal) { // Sprawdzamy, czy kliknięto bezpośrednio na tło
+            if (e.target === modal) {
                 cleanup();
             }
         };
 
-        // Handler do zamykania modala klawiszem Escape
         const keydownHandler = (e) => {
             if (e.key === 'Escape' && modal.classList.contains('show')) {
                 cleanup();
             }
         };
 
-        // Funkcja czyszcząca, aby uniknąć wielokrotnego dodawania event listenerów
         function cleanup() {
             clearTimeout(timeoutId);
             closeModal(modalId);
@@ -528,19 +514,14 @@
         document.addEventListener('keydown', keydownHandler);
     }
 
-    // POPRAWKA: Dodajemy event listenery po załadowaniu DOM
     document.addEventListener('DOMContentLoaded', function() {
-        // Przyciski dla modala powitalnego
         document.getElementById('closeWelcomeModal')?.addEventListener('click', () => closeModal('welcomeUserModal'));
         document.getElementById('confirmWelcomeModal')?.addEventListener('click', () => closeModal('welcomeUserModal'));
-
-        // Przyciski dla modala błędu
         document.getElementById('closeErrorModal')?.addEventListener('click', () => closeModal('errorModal'));
         document.getElementById('confirmErrorModal')?.addEventListener('click', () => closeModal('errorModal'));
     });
 </script>
 
-<!-- Skrypty warunkowo pokazujące modale -->
 <script th:if="${welcomeUserMessage}" th:attr="nonce=${cspNonce}">
     showModal('welcomeUserModal');
 </script>

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Panel pojedynków - Heroes Database</title>
+  <title>Panel pojedynków - YourTurnHOMM</title>
   <style th:nonce="${cspNonce}">
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -208,7 +208,7 @@
       <div class="army-section left-army">
         <div class="army-title">Gracz</div>
         <div class="unit-selector">
-          <form th:action="@{/oskarinio143/heroes/duel/select}" method="get" id="selectLeftForm">
+          <form th:action="@{/oskarinio143/YourTurnHOMM/duel/select}" method="get" id="selectLeftForm">
             <input type="hidden" name="side" value="LEFT">
             <input type="hidden" name="leftUnit" th:value="${duelForm.leftUnit?.name}">
             <input type="hidden" name="rightUnit" th:value="${duelForm.rightUnit?.name}">
@@ -228,7 +228,7 @@
           <input type="number" class="quantity-input" id="leftQuantity" min="1" placeholder="1" th:value="${duelForm.leftQuantity}">
         </div>
         <div class="nav-button-container">
-          <a th:href="@{/oskarinio143/heroes}" class="styled-button back-btn">Wróć do bazy</a>
+          <a th:href="@{/oskarinio143/YourTurnHOMM}" class="styled-button back-btn">Wróć do bazy</a>
         </div>
       </div>
 
@@ -255,7 +255,7 @@
       <div class="army-section right-army">
         <div class="army-title">Przeciwnik</div>
         <div class="unit-selector">
-          <form th:action="@{/oskarinio143/heroes/duel/select}" method="get" id="selectRightForm">
+          <form th:action="@{/oskarinio143/YourTurnHOMM/duel/select}" method="get" id="selectRightForm">
             <input type="hidden" name="side" value="RIGHT">
             <input type="hidden" name="leftUnit" th:value="${duelForm.leftUnit?.name}">
             <input type="hidden" name="rightUnit" th:value="${duelForm.rightUnit?.name}">
@@ -275,7 +275,7 @@
           <input type="number" class="quantity-input" id="rightQuantity" min="1" placeholder="1" th:value="${duelForm.rightQuantity}">
         </div>
         <div class="nav-button-container">
-          <form th:action="@{/oskarinio143/heroes/duel/battle}" method="post" id="battleForm">
+          <form th:action="@{/oskarinio143/YourTurnHOMM/duel/battle}" method="post" id="battleForm">
             <input type="hidden" name="leftUnit" th:value="${duelForm.leftUnit?.name}">
             <input type="hidden" name="rightUnit" th:value="${duelForm.rightUnit?.name}">
             <input type="hidden" name="leftQuantity">

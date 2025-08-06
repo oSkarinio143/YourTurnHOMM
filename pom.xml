@@ -6,12 +6,12 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.5.0</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
-	<groupId>oskarinio143.heroes3</groupId>
-	<artifactId>heroes3-core</artifactId>
+	<groupId>oskarinio143.YourTurnHOMM</groupId>
+	<artifactId>YourTurnHOMM-core</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>heroes3</name>
+	<name>YourTurnHOMM</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
@@ -94,7 +94,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<scope>runtime</scope> <!-- runtime, bo jest potrzebna tylko przy uruchomieniu -->
+			<scope>runtime</scope>
 		</dependency>
 
 
@@ -107,7 +107,7 @@
 
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt-jackson</artifactId>  <!-- albo jjwt-gson -->
+			<artifactId>jjwt-jackson</artifactId>
 			<version>0.11.5</version>
 			<scope>runtime</scope>
 		</dependency>
@@ -176,10 +176,7 @@
 				<artifactId>flyway-maven-plugin</artifactId>
 				<version>11.7.2</version>
 				<configuration>
-					<!-- Adres URL z poprawną składnią XML (& zamiast &) -->
-					<url>jdbc:mysql://localhost:3306/heroes3?allowPublicKeyRetrieval=true&amp;ampuseSSL=false</url>
-
-					<!-- Te linie są w porządku -->
+					<url>jdbc:mysql://localhost:3306/YourTurnHOMM?allowPublicKeyRetrieval=true&amp;ampuseSSL=false</url>
 					<user>${DB_USERNAME}</user>
 					<password>${DB_PASSWORD}</password>
 				</configuration>
@@ -201,7 +198,7 @@
 						<groupId>org.flywaydb</groupId>
 						<artifactId>flyway-maven-plugin</artifactId>
 						<configuration>
-							<url>jdbc:mysql://localhost:3306/heroes3?allowPublicKeyRetrieval=true&amp;useSSL=false</url>
+							<url>jdbc:mysql://localhost:3306/YourTurnHOMM?allowPublicKeyRetrieval=true&amp;useSSL=false</url>
 							<locations>
 								<location>classpath:db/migration/common</location>
 								<location>classpath:db/migration/mysql</location>
@@ -220,7 +217,7 @@
 						<groupId>org.flywaydb</groupId>
 						<artifactId>flyway-maven-plugin</artifactId>
 						<configuration>
-							<url>jdbc:h2:mem:mojadb;DB_CLOSE_DELAY=-1</url>
+							<url>jdbc:h2:mem:yourturnhommh2;DB_CLOSE_DELAY=-1</url>
 							<driver>org.h2.Driver</driver>
 							<locations>
 								<location>classpath:db/migration/common</location>

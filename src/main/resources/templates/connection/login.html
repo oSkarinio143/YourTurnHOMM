@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Logowanie - Heroes Database</title>
+  <title>Logowanie - YourTurnHOMM</title>
   <style th:attr="nonce=${cspNonce}">
     * {
       margin: 0;
@@ -256,30 +256,22 @@
       font-size: 14px;
     }
 
+    /* --- POPRAWIONE STYLE DLA POWIADOMIEŃ (TOASTÓW) --- */
     .modal-overlay {
-      position: absolute;
-      top: 100%;
+      position: fixed;
+      bottom: 20px;
       left: 0;
-      width: 100%;
+      right: 0;
       z-index: 1000;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(20px);
-      transition: all 0.3s ease;
-      margin-top: 15px;
       display: flex;
       justify-content: center;
-    }
-
-    .modal-overlay.show {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
+      align-items: flex-end; /* wyrównuje do dołu */
+      visibility: hidden;
+      pointer-events: none; /* Kluczowe: pozwala klikać "przez" kontener */
     }
 
     .modal-container {
       background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-      backdrop-filter: blur(20px);
       border-radius: 12px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 8px 20px rgba(220, 53, 69, 0.2);
       border: 1px solid rgba(220, 53, 69, 0.25);
@@ -287,13 +279,21 @@
       width: 100%;
       max-width: 500px;
       position: relative;
-      transform: scale(0.95);
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: auto; /* Kluczowe: przywraca interakcje dla samego powiadomienia */
+      opacity: 0;
+      transform: translateY(100px); /* Zaczyna pod ekranem */
+      transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+    }
+
+    .modal-overlay.show {
+      visibility: visible;
     }
 
     .modal-overlay.show .modal-container {
-      transform: scale(1);
+      opacity: 1;
+      transform: translateY(0); /* Wsuwa się na pozycję */
     }
+    /* --- KONIEC POPRAWIONYCH STYLI --- */
 
     .modal-header {
       display: flex;
@@ -493,14 +493,14 @@
 
 <div class="login-container">
   <div class="login-header">
-    <h1 class="login-title">⚔️ Heroes Database</h1>
+    <h1 class="login-title">⚔️ YourTurnHOMM</h1>
     <p class="login-subtitle">Zaloguj się do swojego konta</p>
   </div>
 
   <div th:if="${error}" class="error-message" th:text="${error}"></div>
   <div th:if="${success}" class="success-message" th:text="${success}"></div>
 
-  <form th:action="@{/oskarinio143/heroes/login}" method="post">
+  <form th:action="@{/oskarinio143/YourTurnHOMM/login}" method="post">
     <div class="form-group">
       <label for="username" class="form-label">Nazwa użytkownika</label>
       <input type="text" id="username" name="username" class="form-input" placeholder="Wprowadź nazwę użytkownika">
@@ -516,7 +516,7 @@
   </form>
 
   <div class="register-link">
-    Nie masz konta? <a th:href="@{/oskarinio143/heroes/register}">Zarejestruj się</a>
+    Nie masz konta? <a th:href="@{/oskarinio143/YourTurnHOMM/register}">Zarejestruj się</a>
   </div>
 </div>
 
@@ -578,8 +578,7 @@
     const logoutMessage = /*[[${logoutMessage}]]*/ null;
     const autoLogoutMessage = /*[[${autoLogoutMessage}]]*/ null;
 
-    const closeModal = (modalId) => {
-      const modal = document.getElementById(modalId);
+    const closeModal = (modal) => {
       if (modal) {
         modal.classList.remove('show');
       }
@@ -589,32 +588,24 @@
       const modal = document.getElementById(modalId);
       if (!modal) return;
 
-      modal.style.display = 'flex';
-      setTimeout(() => modal.classList.add('show'), 10);
+      modal.classList.add('show');
 
-      const timeoutId = setTimeout(() => closeModal(modalId), 5000);
-
-      const clickHandler = (e) => {
-        if (e.target === modal || e.target.closest('.modal-close, .modal-button')) {
-          cleanup();
-        }
-      };
-
-      const keydownHandler = (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('show')) {
-          cleanup();
-        }
-      };
-
-      function cleanup() {
+      const closeAndCleanup = () => {
         clearTimeout(timeoutId);
-        closeModal(modalId);
+        closeModal(modal);
         modal.removeEventListener('click', clickHandler);
-        document.removeEventListener('keydown', keydownHandler);
-      }
+      };
+
+      const timeoutId = setTimeout(closeAndCleanup, 5000);
+
+      // Zamyka powiadomienie tylko po kliknięciu na przycisk 'x' lub przycisk akcji
+      const clickHandler = (e) => {
+        if (e.target.closest('.modal-close, .modal-button')) {
+          closeAndCleanup();
+        }
+      };
 
       modal.addEventListener('click', clickHandler);
-      document.addEventListener('keydown', keydownHandler);
     };
 
     const togglePassword = () => {

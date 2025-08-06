@@ -357,7 +357,7 @@
   </div>
 
   <div class="navigation-buttons">
-    <form th:action="@{/oskarinio143/heroes/duel}" method="get" th:object="${duelForm}">
+    <form th:action="@{/oskarinio143/YourTurnHOMM/duel}" method="get" th:object="${duelForm}">
       <input type="hidden" name="leftUnit" th:value="*{leftUnit.name}" />
       <input type="hidden" name="rightUnit" th:value="*{rightUnit.name}" />
       <input type="hidden" name="leftQuantity" th:value="*{leftQuantity}" />
@@ -399,9 +399,8 @@
     const battleLogContent = document.getElementById('battle-log-content');
     const backButton = document.getElementById('BackButtonUserUUID');
     const refButton = document.getElementById('refButton');
-    let eventSource; // Zmienna do przechowywania połączenia
+    let eventSource;
 
-    // Funkcja do zamykania połączenia przy opuszczaniu strony
     const cleanup = () => {
       if (eventSource) {
         eventSource.close();
@@ -414,17 +413,16 @@
       localStorage.removeItem("battleMessages");
       battleLogContent.innerHTML = '';
 
-      eventSource = new EventSource(`http://localhost:8080/oskarinio143/heroes/duel/battle/stream?userUUID=${userUUID}`);
+      eventSource = new EventSource(`http://localhost:8080/oskarinio143/YourTurnHOMM/duel/battle/stream?userUUID=${userUUID}`);
 
       eventSource.onmessage = (event) => {
         if (event.data === "CLOSE") {
           console.log("Otrzymano sygnał CLOSE od serwera.");
           refButton.disabled = false;
-          cleanup(); // Zamknij połączenie
+          cleanup();
           return;
         }
 
-        // Twoja logika przetwarzania wiadomości (bez zmian)
         const messages = JSON.parse(localStorage.getItem('battleMessages') || '[]');
         messages.push(event.data);
         localStorage.setItem('battleMessages', JSON.stringify(messages));
@@ -435,7 +433,7 @@
 
       eventSource.onerror = (err) => {
         console.error("Błąd EventSource:", err);
-        cleanup(); // Zamknij przy błędzie
+        cleanup();
       };
 
     } catch (error) {

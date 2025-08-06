@@ -118,7 +118,7 @@
                 <p><strong>Szybkość:</strong> <span th:text="${unit.speed}"/></p>
                 <p><strong>Opis:</strong> <span th:utext="${unit.description}"/></p>
             </div>
-            <form th:action="@{/oskarinio143/heroes/database/modify/unit}" method="get">
+            <form th:action="@{/oskarinio143/YourTurnHOMM/database/modify/unit}" method="get">
                 <input type="hidden" name="name" th:value="${unit.name}"/>
                 <button type="submit" class="modify-button">Modyfikuj</button>
             </form>
@@ -128,7 +128,7 @@
 </div>
 
 <footer class="sticky-bottom-center">
-    <a th:href="@{/oskarinio143/heroes/database}">
+    <a th:href="@{/oskarinio143/YourTurnHOMM/database}">
         <button type="button" class="back-btn">
             Wróć do menu bazy danych
         </button>

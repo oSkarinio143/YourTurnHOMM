@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Rejestracja - Heroes Database</title>
+  <title>Rejestracja - YourTurnHOMM</title>
   <style th:nonce="${cspNonce}">
     * {
       margin: 0;
@@ -437,14 +437,14 @@
 
 <div class="register-container">
   <div class="register-header">
-    <h1 class="register-title">⚔️ Heroes Database</h1>
+    <h1 class="register-title">⚔️ YourTurnHOMM</h1>
     <p class="register-subtitle">Utwórz nowe konto</p>
   </div>
 
   <div th:if="${error}" class="error-message" th:text="${error}"></div>
   <div th:if="${success}" class="success-message" th:text="${success}"></div>
 
-  <form th:action="@{/oskarinio143/heroes/register}" method="post">
+  <form th:action="@{/oskarinio143/YourTurnHOMM/register}" method="post">
     <div class="form-group">
       <label for="username" class="form-label">Nazwa użytkownika</label>
       <input type="text" id="username" name="username" class="form-input" placeholder="Wprowadź nazwę użytkownika" required>
@@ -472,7 +472,7 @@
   </form>
 
   <div class="login-link">
-    Masz już konto? <a th:href="@{/oskarinio143/heroes/login}">Zaloguj się</a>
+    Masz już konto? <a th:href="@{/oskarinio143/YourTurnHOMM/login}">Zaloguj się</a>
   </div>
 
   <div id="errorModal" class="modal-overlay">
