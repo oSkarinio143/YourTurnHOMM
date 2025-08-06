@@ -14,7 +14,7 @@ Hasło - 1234
 
 
 Funckje
-1. Bazę danych:
+1. Baza danych:
     - Dodawanie jednostek
     - Wyświetlanie jednostek
     - Modyfikowanie jednostek
@@ -36,14 +36,14 @@ Techniczne:
         - H2: Profil H2, szybkie uruchamianie, wszystko ustawione w [application.properties](http://application.properties) widoczne dla każdego użytkownika
     - Wykorzystanie GitHub Pages do wyświetalnia grafik jednostek
 2. Pojedynek:
-    - Dane wyvbrane przez użytkownika między żadaniami są cały czas przekazywane w obiekcie aby były dostępne
+    - Dane wybrane przez użytkownika między zadaniami są cały czas przekazywane w obiekcie aby były dostępne
     - Logika pojedynku:
         - Atak: jeden punkt więcej od przeciwnika zwiększa obrażenia o 5% (maks 300%)
         - Obrona: jeden punkt więcej od przeciwnika zmniejsza otrzymywane obrażenia o 2.5% (maks 70%)
         - Szybkość: szybsza jednostka atakuje pierwsza. Równa szybkość = losowanie
         - Strzały: jednostki dystansowe działają tak samo jak walczące w zwarciu. Tak naprawdę nic to nie zmienia
         - Opis: umiejętności specjalne nie mają żadnego działania.
-    - Pojedynek toczy się tworząc kolejkę zdarzeń (wiadomości) która wyświetlana jest w odstępach czasowych
+    - Pojedynek toczy się tworząc kolejkę (wiadomości) które wyświetlane są w odstępach czasowych 
     - Wielowątkowość: pojedynek idzie dalej i nie musi czekać na wyświetlenie wiadomości
     - Każdy pojedynek ma swój unikalny SSEmitter do streamowania wiadomości.
 3. Sieciowe:
