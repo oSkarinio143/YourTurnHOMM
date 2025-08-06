@@ -9,6 +9,7 @@ Uruchamianie:
 4. mvn spring-boot:run -Dspring-boot.run.profiles=h2
 
 Użytkownik - adminUser
+
 Hasło - 1234
 
 
