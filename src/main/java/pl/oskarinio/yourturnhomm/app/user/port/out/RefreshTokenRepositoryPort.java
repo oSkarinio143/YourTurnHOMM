@@ -9,8 +9,5 @@ import pl.oskarinio.yourturnhomm.domain.model.entity.RefreshTokenEntity;
 import java.time.Instant;
 
 public interface RefreshTokenRepositoryPort extends JpaRepository<RefreshTokenEntity, Integer> {
-
-    @Modifying
-    @Query("DELETE FROM RefreshToken t WHERE t.expirationDate < :date")
-    void deleteExpiredToken(@Param("date") Instant date);
+    void deleteExpiredToken(Instant date);
 }
