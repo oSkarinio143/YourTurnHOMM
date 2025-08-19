@@ -1,0 +1,30 @@
+package pl.oskarinio.yourturnhomm.app.rest.service;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import pl.oskarinio.yourturnhomm.domain.service.rest.MySQLAdminInitializer;
+import pl.oskarinio.yourturnhomm.app.user.port.out.UserRepositoryPort;
+
+import java.time.Clock;
+
+@Component
+@Profile("!h2")
+public class MySQLAdminInitializerAdapter implements CommandLineRunner {
+    private final MySQLAdminInitializer mySQLAdminInitializer;
+
+    public MySQLAdminInitializerAdapter(UserRepositoryPort userRepository,
+                                        PasswordEncoder passwordEncoder,
+                                        Clock clock,
+                                        @Value("${app.security.admin-username:}") String adminUsername,
+                                        @Value("${app.security.admin-password:}") String adminPassword) {
+        this.mySQLAdminInitializer = new MySQLAdminInitializer(userRepository, passwordEncoder, clock, adminUsername, adminPassword);
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        mySQLAdminInitializer.initializeProfile();
+    }
+}

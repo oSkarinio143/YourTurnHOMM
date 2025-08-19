@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import pl.oskarinio.yourturnhomm.security.validation.damagerange.ValidDamageRange;
+import pl.oskarinio.yourturnhomm.infrastructure.security.validation.damagerange.ValidDamageRange;
 
 @Entity
 @ValidDamageRange

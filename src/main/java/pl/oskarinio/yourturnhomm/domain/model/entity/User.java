@@ -2,7 +2,7 @@ package pl.oskarinio.yourturnhomm.domain.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import pl.oskarinio.yourturnhomm.domain.user.model.Role;
+import pl.oskarinio.yourturnhomm.domain.model.user.Role;
 
 import java.time.Instant;
 import java.util.*;
@@ -37,7 +37,7 @@ public class User {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "refresh_token_id")
-    private RefreshToken refreshToken;
+    private RefreshTokenEntity refreshToken;
 
     @Transient
     public String getTokenHash() {
