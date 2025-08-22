@@ -1,7 +1,7 @@
 package pl.oskarinio.yourturnhomm.app.database.port.in;
 
 import org.springframework.web.multipart.MultipartFile;
-import pl.oskarinio.yourturnhomm.domain.model.entity.Unit;
+import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 
 import java.io.IOException;
 import java.util.List;

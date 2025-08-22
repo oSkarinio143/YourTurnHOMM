@@ -10,8 +10,7 @@ import pl.oskarinio.yourturnhomm.app.battle.port.in.DuelUseCase;
 import pl.oskarinio.yourturnhomm.app.database.port.in.DatabaseUseCase;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Side;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.DuelForm;
-import pl.oskarinio.yourturnhomm.domain.service.database.DatabaseService;
+import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.form.DuelForm;
 import pl.oskarinio.yourturnhomm.domain.service.rest.ExceptionMessageCreator;
 
 @Controller

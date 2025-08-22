@@ -12,8 +12,8 @@ import pl.oskarinio.yourturnhomm.app.rest.service.CookieHelperAdapter;
 import pl.oskarinio.yourturnhomm.app.user.port.in.LoginUseCase;
 import pl.oskarinio.yourturnhomm.app.user.port.in.RegisterUseCase;
 import pl.oskarinio.yourturnhomm.app.user.port.in.UserUseCase;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.LoginForm;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.RegisterForm;
+import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.form.LoginForm;
+import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.form.RegisterForm;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 
@@ -52,7 +52,6 @@ public class UserController {
             redirectAttributes.addFlashAttribute("errorMessage", userUseCase.prepareErrorMessage(bindingResult.getAllErrors()));
             return Route.REDIRECT + Route.LOGIN;
         }
-
         UserServiceData userServiceData = loginUseCase.loginUser(loginForm);
         cookieHelperAdapter.setCookieTokens(userServiceData, response);
         redirectAttributes.addFlashAttribute("welcomeUserMessage","Udało się poprawnie zalogować użytkownika");
@@ -69,7 +68,6 @@ public class UserController {
                            BindingResult bindingResult,
                            RedirectAttributes redirectAttributes,
                            HttpServletResponse response){
-
         if(bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errorMessage", userUseCase.prepareErrorMessage(bindingResult.getAllErrors()));
             return Route.REDIRECT + Route.REGISTER;

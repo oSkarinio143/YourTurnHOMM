@@ -1,15 +1,15 @@
-package pl.oskarinio.yourturnhomm.domain.model.entity;
+package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
 
+@Entity
 @RequiredArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
 @Table(name = "refresh_token")
 public class RefreshTokenEntity {
 
@@ -19,9 +19,6 @@ public class RefreshTokenEntity {
 
     @NonNull
     private String tokenHash;
-
-    @OneToOne(mappedBy = "refreshToken")
-    private User user;
 
     @NonNull
     @Column(nullable = false)

@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.oskarinio.yourturnhomm.app.database.port.in.DatabaseUseCase;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
-import pl.oskarinio.yourturnhomm.domain.model.entity.Unit;
+import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 import pl.oskarinio.yourturnhomm.domain.service.rest.ExceptionMessageCreator;
 
 import java.io.IOException;

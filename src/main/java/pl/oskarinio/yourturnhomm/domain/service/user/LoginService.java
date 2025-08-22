@@ -3,9 +3,9 @@ package pl.oskarinio.yourturnhomm.domain.service.user;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.oskarinio.yourturnhomm.app.user.port.in.UserUseCase;
 import pl.oskarinio.yourturnhomm.infrastructure.security.exception.UsernameNotMatchingPassword;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.LoginForm;
-import pl.oskarinio.yourturnhomm.domain.model.entity.RefreshTokenEntity;
-import pl.oskarinio.yourturnhomm.domain.model.entity.User;
+import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.form.LoginForm;
+import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
+import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 
 public class LoginService {
@@ -22,7 +22,7 @@ public class LoginService {
         User user = getUser(loginForm);
         UserServiceData userServiceData = getUserServiceData(user);
         userUseCase.generateAndSetTokens(userServiceData);
-        RefreshTokenEntity refreshToken = userUseCase.getRefreshToken(userServiceData.getRefreshToken());
+        RefreshToken refreshToken = userUseCase.getRefreshToken(userServiceData.getRefreshToken());
         userUseCase.setRefreshToken(user, refreshToken);
         return userServiceData;
     }

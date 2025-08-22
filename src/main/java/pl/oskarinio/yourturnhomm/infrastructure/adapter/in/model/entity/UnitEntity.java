@@ -1,7 +1,8 @@
-package pl.oskarinio.yourturnhomm.domain.model.entity;
+package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +16,8 @@ import pl.oskarinio.yourturnhomm.infrastructure.security.validation.damagerange.
 @AllArgsConstructor
 @Getter
 @Setter
-public class Unit {
+@Table(name = "unit_entity")
+public class UnitEntity {
 
     @Id
     @NonNull

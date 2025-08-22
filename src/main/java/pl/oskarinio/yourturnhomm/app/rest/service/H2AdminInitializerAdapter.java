@@ -5,19 +5,22 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import pl.oskarinio.yourturnhomm.domain.service.rest.H2AdminInitializer;
 import pl.oskarinio.yourturnhomm.app.user.port.out.UserRepositoryPort;
+import pl.oskarinio.yourturnhomm.domain.service.rest.H2AdminInitializer;
+
+import java.time.Clock;
 
 @Component
 @Profile("h2")
 public class H2AdminInitializerAdapter implements CommandLineRunner {
     private final H2AdminInitializer h2AdminInitializer;
 
-    public H2AdminInitializerAdapter(UserRepositoryPort userRepository,
+    public H2AdminInitializerAdapter(UserRepositoryPort userRepositoryPort,
                                      PasswordEncoder passwordEncoder,
+                                     Clock clock,
                                      @Value("${app.security.admin-username:}") String adminUsername,
                                      @Value("${app.security.admin-password:}") String adminPassword) {
-        this.h2AdminInitializer = new H2AdminInitializer(userRepository, passwordEncoder, adminUsername, adminPassword);
+        this.h2AdminInitializer = new H2AdminInitializer(userRepositoryPort, passwordEncoder, clock, adminUsername, adminPassword);
     }
 
     @Override

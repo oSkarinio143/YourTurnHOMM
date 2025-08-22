@@ -1,15 +1,15 @@
 package pl.oskarinio.yourturnhomm.domain.service.database;
 
 import org.springframework.boot.CommandLineRunner;
-import pl.oskarinio.yourturnhomm.domain.model.entity.Unit;
-import pl.oskarinio.yourturnhomm.app.database.port.out.UnitRepository;
+import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
+import pl.oskarinio.yourturnhomm.app.battle.port.out.UnitRepositoryPort;
 
 public class DatabaseSeeder implements CommandLineRunner {
 
-    private final UnitRepository unitRepository;
+    private final UnitRepositoryPort unitRepositoryPort;
 
-    public DatabaseSeeder(UnitRepository unitRepository) {
-        this.unitRepository = unitRepository;
+    public DatabaseSeeder(UnitRepositoryPort unitRepositoryPort) {
+        this.unitRepositoryPort = unitRepositoryPort;
     }
 
     @Override
@@ -18,7 +18,7 @@ public class DatabaseSeeder implements CommandLineRunner {
     }
 
     public void seedUnits(){
-        if(unitRepository.count() == 0) {
+        if(unitRepositoryPort.count() == 0) {
             saveSingleUnit("Pikinier",       4, 5, 1, 3,   10, 4, "odporny na szarżę",                            "https://oskarinio143.github.io/Heroes3assets/images/pikinier.png");
             saveSingleUnit("Halabardnik",    6, 5, 2, 3,   10, 5, "odporny na szarżę",                            "https://oskarinio143.github.io/Heroes3assets/images/halabardnik.png");
             saveSingleUnit("Lucznik",        6, 3,12, 2, 3,   10, 4, "",                                             "https://oskarinio143.github.io/Heroes3assets/images/lucznik.png");
@@ -46,7 +46,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                                String desc,
                                String imgPath){
         Unit newUnit = new Unit(name, atk, def, minDmg, maxDmg, hp, speed, desc, imgPath);
-        unitRepository.save(newUnit);
+        unitRepositoryPort.save(newUnit);
     }
 
     private void saveSingleUnit(String name,
@@ -60,6 +60,6 @@ public class DatabaseSeeder implements CommandLineRunner {
                                String desc,
                                String imgPath){
         Unit newUnit = new Unit(name, atk, def, shots, minDmg, maxDmg, hp, speed, desc, imgPath);
-        unitRepository.save(newUnit);
+        unitRepositoryPort.save(newUnit);
     }
 }

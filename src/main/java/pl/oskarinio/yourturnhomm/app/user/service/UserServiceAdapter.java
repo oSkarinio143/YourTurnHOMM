@@ -6,11 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.ObjectError;
 import pl.oskarinio.yourturnhomm.app.user.port.in.TokenUseCase;
 import pl.oskarinio.yourturnhomm.app.user.port.in.UserUseCase;
+import pl.oskarinio.yourturnhomm.app.user.port.out.UserRepositoryPort;
 import pl.oskarinio.yourturnhomm.domain.service.user.UserService;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
-import pl.oskarinio.yourturnhomm.domain.model.entity.RefreshTokenEntity;
-import pl.oskarinio.yourturnhomm.domain.model.entity.User;
-import pl.oskarinio.yourturnhomm.app.user.port.out.UserRepositoryPort;
+import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
+import pl.oskarinio.yourturnhomm.domain.model.user.User;
 
 import java.time.Clock;
 import java.util.List;
@@ -19,12 +19,12 @@ import java.util.List;
 public class UserServiceAdapter implements UserUseCase {
     private final UserService userService;
 
-    public UserServiceAdapter(UserRepositoryPort userRepository,
+    public UserServiceAdapter(UserRepositoryPort userRepositoryPort,
                               TokenUseCase tokenUseCase,
                               Clock clock,
                               @Value("${token.access.seconds}") long accessSeconds,
                               @Value("${token.refresh.seconds}") long tokenSeconds){
-        this.userService = new UserService(userRepository, tokenUseCase, clock, accessSeconds, tokenSeconds);
+        this.userService = new UserService(userRepositoryPort, tokenUseCase, clock, accessSeconds, tokenSeconds);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class UserServiceAdapter implements UserUseCase {
     }
 
     @Override
-    public RefreshTokenEntity getRefreshToken(String refreshTokenString) {
+    public RefreshToken getRefreshToken(String refreshTokenString) {
         return userService.getRefreshToken(refreshTokenString);
     }
 
@@ -55,7 +55,7 @@ public class UserServiceAdapter implements UserUseCase {
 
     @Transactional
     @Override
-    public void setRefreshToken(User user, RefreshTokenEntity refreshToken) {
+    public void setRefreshToken(User user, RefreshToken refreshToken) {
         userService.setRefreshToken(user,refreshToken);
     }
 }

@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model;
+package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.form;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

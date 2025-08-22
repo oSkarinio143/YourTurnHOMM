@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.domain.model.entity;
+package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,7 +13,7 @@ import java.util.*;
 @Setter
 @Getter
 @Table(name = "app_user")
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

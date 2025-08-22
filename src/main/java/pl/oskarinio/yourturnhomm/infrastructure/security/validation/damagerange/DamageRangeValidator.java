@@ -2,12 +2,12 @@ package pl.oskarinio.yourturnhomm.infrastructure.security.validation.damagerange
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import pl.oskarinio.yourturnhomm.domain.model.entity.Unit;
+import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.entity.UnitEntity;
 
-public class DamageRangeValidator implements ConstraintValidator<ValidDamageRange, Unit> {
+public class DamageRangeValidator implements ConstraintValidator<ValidDamageRange, UnitEntity> {
 
     @Override
-    public boolean isValid(Unit unit, ConstraintValidatorContext context) {
-        return unit.getMaxDamage() >= unit.getMinDamage();
+    public boolean isValid(UnitEntity unitEntity, ConstraintValidatorContext constraintValidatorContext) {
+        return unitEntity.getMaxDamage() >= unitEntity.getMinDamage();
     }
 }

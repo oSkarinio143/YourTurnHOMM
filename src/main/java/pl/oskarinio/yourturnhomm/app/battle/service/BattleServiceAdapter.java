@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import pl.oskarinio.yourturnhomm.domain.service.battle.BattleService;
 import pl.oskarinio.yourturnhomm.app.battle.port.in.BattleUseCase;
 import pl.oskarinio.yourturnhomm.app.battle.port.in.QueueUseCase;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.DuelForm;
+import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.form.DuelForm;
 
 @Service
 @EnableAsync

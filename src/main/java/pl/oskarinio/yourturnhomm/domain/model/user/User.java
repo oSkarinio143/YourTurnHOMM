@@ -1,24 +1,25 @@
 package pl.oskarinio.yourturnhomm.domain.model.user;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
-@RequiredArgsConstructor
 @Getter
 @Setter
-public class UserServiceData {
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class User {
+    private Long id;
     @NonNull
     private String username;
     @NonNull
     private String password;
+    @NonNull
+    private Instant registrationDate;
     private Set<Role> roles = new HashSet<>();
-    private String accessToken;
-    private String refreshToken;
+    private RefreshToken refreshToken;
 
     public void addRole(Role role){
         roles.add(role);

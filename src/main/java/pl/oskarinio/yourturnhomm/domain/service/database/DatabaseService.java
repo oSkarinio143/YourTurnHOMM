@@ -3,10 +3,10 @@ package pl.oskarinio.yourturnhomm.domain.service.database;
 import jakarta.transaction.Transactional;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.multipart.MultipartFile;
+import pl.oskarinio.yourturnhomm.app.battle.port.out.UnitRepositoryPort;
 import pl.oskarinio.yourturnhomm.infrastructure.security.exception.DuplicateUnitException;
 import pl.oskarinio.yourturnhomm.infrastructure.security.exception.TransactionSystemAddException;
-import pl.oskarinio.yourturnhomm.domain.model.entity.Unit;
-import pl.oskarinio.yourturnhomm.app.database.port.out.UnitRepository;
+import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,42 +16,42 @@ import java.util.List;
 
 public class DatabaseService {
 
-    private final UnitRepository unitRepository;
+    private final UnitRepositoryPort unitRepositoryPort;
 
-    public DatabaseService(UnitRepository unitRepository) {
-        this.unitRepository = unitRepository;
+    public DatabaseService(UnitRepositoryPort unitRepositoryPort) {
+        this.unitRepositoryPort = unitRepositoryPort;
     }
 
     public void addUnit(Unit unit, MultipartFile image) throws IOException {
-        if(unitRepository.existsById(unit.getName())) {
+        if(unitRepositoryPort.existsById(unit.getName())) {
             throw new DuplicateUnitException("Jednostka o tej nazwie jest już w bazie");
         }
         String imagePath = getImagePath(unit.getName(),image);
         unit.setImagePath(imagePath);
         try {
-            unitRepository.save(unit);
+            unitRepositoryPort.save(unit);
         }catch (TransactionSystemException ex){
             throw new TransactionSystemAddException("", ex.getCause());
         }
     }
 
     public List<Unit> getAllUnits(){
-        return unitRepository.findAll();
+        return unitRepositoryPort.findAll();
     }
 
     public Unit getSingleUnit(String name){
-        return unitRepository.getReferenceById(name);
+        return unitRepositoryPort.getReferenceById(name);
     }
 
     @Transactional
     public void removeUnit(String name){
-        Unit unit = unitRepository.getReferenceById(name);
-        unitRepository.delete(unit);
+        Unit unit = unitRepositoryPort.getReferenceById(name);
+        unitRepositoryPort.delete(unit);
     }
 
     @Transactional
     public void modifyUnit(Unit unit){
-        Unit oldUnit = unitRepository.getReferenceById(unit.getName());
+        Unit oldUnit = unitRepositoryPort.getReferenceById(unit.getName());
         oldUnit.setAttack(unit.getAttack());
         oldUnit.setDefense(unit.getDefense());
         oldUnit.setShots(unit.getShots());
@@ -60,7 +60,7 @@ public class DatabaseService {
         oldUnit.setHp(unit.getHp());
         oldUnit.setSpeed(unit.getSpeed());
         oldUnit.setDescription(unit.getDescription());
-        unitRepository.save(oldUnit);
+        unitRepositoryPort.save(oldUnit);
     }
 
     private String getImagePath(String name, MultipartFile image) throws IOException {

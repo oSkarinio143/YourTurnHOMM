@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model;
+package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.form;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.oskarinio.yourturnhomm.domain.model.entity.Unit;
+import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 
 @NoArgsConstructor
 @Getter

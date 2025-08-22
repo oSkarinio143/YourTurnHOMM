@@ -16,11 +16,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 import pl.oskarinio.yourturnhomm.app.rest.service.CookieHelperAdapter;
 import pl.oskarinio.yourturnhomm.app.user.port.in.TokenUseCase;
-import pl.oskarinio.yourturnhomm.domain.model.Route;
-import pl.oskarinio.yourturnhomm.domain.model.entity.RefreshTokenEntity;
-import pl.oskarinio.yourturnhomm.domain.model.entity.User;
-import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 import pl.oskarinio.yourturnhomm.app.user.port.out.UserRepositoryPort;
+import pl.oskarinio.yourturnhomm.domain.model.Route;
+import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
+import pl.oskarinio.yourturnhomm.domain.model.user.User;
+import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 
 import java.io.IOException;
 import java.time.Clock;
@@ -36,7 +36,7 @@ public class RefreshFilter extends OncePerRequestFilter {
     @Autowired
     private TokenUseCase tokenUseCase;
     @Autowired
-    private UserRepositoryPort userRepository;
+    private UserRepositoryPort userRepositoryPort;
     @Autowired
     private CookieHelperAdapter cookieHelperAdapter;
     @Autowired
@@ -85,7 +85,7 @@ public class RefreshFilter extends OncePerRequestFilter {
                 }
                 String username = tokenUseCase.extractUsername(tokenRefresh);
 
-                Optional<User> userOptional = userRepository.findByUsername(username);
+                Optional<User> userOptional = userRepositoryPort.findByUsername(username);
                 if(userOptional.isEmpty()){
                     cookieHelperAdapter.clearCookies(response, request);
                     filterChain.doFilter(request, response);
@@ -101,9 +101,9 @@ public class RefreshFilter extends OncePerRequestFilter {
                 userServiceData.setRefreshToken(refreshTokenNew);
 
                 Instant now = Instant.now(clock);
-                RefreshTokenEntity refreshToken = new RefreshTokenEntity(refreshTokenNew, now, now.plus(TOKEN_REFRESH_SECONDS, ChronoUnit.SECONDS));
+                RefreshToken refreshToken = new RefreshToken(refreshTokenNew, now, now.plus(TOKEN_REFRESH_SECONDS, ChronoUnit.SECONDS));
                 user.setRefreshToken(refreshToken);
-                userRepository.save(user);
+                userRepositoryPort.save(user);
                 cookieHelperAdapter.setCookieTokens(userServiceData, response);
 
                 /*
