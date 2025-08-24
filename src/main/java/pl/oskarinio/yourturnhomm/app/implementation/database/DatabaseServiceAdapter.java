@@ -2,7 +2,8 @@ package pl.oskarinio.yourturnhomm.app.implementation.database;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import pl.oskarinio.yourturnhomm.app.battle.port.out.UnitRepositoryPort;
+import pl.oskarinio.yourturnhomm.app.port.in.database.DatabaseUseCase;
+import pl.oskarinio.yourturnhomm.app.port.out.repository.UnitRepositoryPort;
 import pl.oskarinio.yourturnhomm.domain.service.database.DatabaseService;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 
@@ -10,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
-public class DatabaseServiceAdapter implements pl.oskarinio.yourturnhomm.app.database.port.in.DatabaseUseCase {
+public class DatabaseServiceAdapter implements DatabaseUseCase {
     private final DatabaseService databaseService;
 
     public DatabaseServiceAdapter(UnitRepositoryPort unitRepositoryPort) {

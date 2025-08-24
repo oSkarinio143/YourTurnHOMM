@@ -1,12 +1,12 @@
-package pl.oskarinio.yourturnhomm.app.implementation.rest;
+package pl.oskarinio.yourturnhomm.infrastructure.adapter.out;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import pl.oskarinio.yourturnhomm.app.port.out.UserRepositoryPort;
-import pl.oskarinio.yourturnhomm.domain.service.rest.MySQLAdminInitializer;
+import pl.oskarinio.yourturnhomm.app.port.out.repository.UserRepositoryPort;
+import pl.oskarinio.yourturnhomm.domain.rest.MySQLAdminInitializer;
 
 import java.time.Clock;
 

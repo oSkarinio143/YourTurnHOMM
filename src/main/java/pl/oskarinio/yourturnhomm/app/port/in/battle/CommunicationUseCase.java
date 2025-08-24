@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.app.battle.port.in;
+package pl.oskarinio.yourturnhomm.app.port.in.battle;
 
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 

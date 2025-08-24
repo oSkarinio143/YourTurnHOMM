@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.app.port.out;
+package pl.oskarinio.yourturnhomm.app.port.out.repository;
 
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 

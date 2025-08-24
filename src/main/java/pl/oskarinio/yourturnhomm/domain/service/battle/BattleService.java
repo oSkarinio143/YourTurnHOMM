@@ -1,10 +1,10 @@
 package pl.oskarinio.yourturnhomm.domain.service.battle;
 
-import pl.oskarinio.yourturnhomm.app.battle.port.in.QueueUseCase;
+import pl.oskarinio.yourturnhomm.app.port.in.battle.QueueUseCase;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 import pl.oskarinio.yourturnhomm.domain.model.battle.AttackInfo;
 import pl.oskarinio.yourturnhomm.domain.model.battle.BattleUnit;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.form.DuelForm;
+import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.DuelForm;
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
 
 public class BattleService {

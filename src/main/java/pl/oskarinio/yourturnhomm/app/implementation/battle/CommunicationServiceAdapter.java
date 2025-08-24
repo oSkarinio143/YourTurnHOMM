@@ -3,7 +3,7 @@ package pl.oskarinio.yourturnhomm.app.implementation.battle;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import pl.oskarinio.yourturnhomm.domain.service.battle.CommunicationService;
-import pl.oskarinio.yourturnhomm.app.battle.port.in.CommunicationUseCase;
+import pl.oskarinio.yourturnhomm.app.port.in.battle.CommunicationUseCase;
 
 @Service
 public class CommunicationServiceAdapter implements CommunicationUseCase {

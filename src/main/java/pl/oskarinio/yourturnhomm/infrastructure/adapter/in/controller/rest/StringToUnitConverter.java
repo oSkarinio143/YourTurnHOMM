@@ -2,7 +2,7 @@ package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.controller.rest;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-import pl.oskarinio.yourturnhomm.app.database.port.in.DatabaseUseCase;
+import pl.oskarinio.yourturnhomm.app.port.in.database.DatabaseUseCase;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 
 @Component

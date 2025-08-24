@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.domain.service.rest;
+package pl.oskarinio.yourturnhomm.domain.rest;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

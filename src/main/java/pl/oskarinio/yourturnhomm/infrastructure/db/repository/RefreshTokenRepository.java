@@ -1,10 +1,10 @@
-package pl.oskarinio.yourturnhomm.infrastructure.adapter.out.repository;
+package pl.oskarinio.yourturnhomm.infrastructure.db.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.entity.RefreshTokenEntity;
+import pl.oskarinio.yourturnhomm.infrastructure.db.entity.RefreshTokenEntity;
 
 import java.time.Instant;
 

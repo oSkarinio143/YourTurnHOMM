@@ -1,7 +1,7 @@
-package pl.oskarinio.yourturnhomm.infrastructure.adapter.out.mapper;
+package pl.oskarinio.yourturnhomm.infrastructure.db.mapper;
 
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.entity.UserEntity;
+import pl.oskarinio.yourturnhomm.infrastructure.db.entity.UserEntity;
 
 public class UserMapper {
     public static User toDomain(UserEntity userEntity){

@@ -1,11 +1,11 @@
-package pl.oskarinio.yourturnhomm.app.implementation.rest;
+package pl.oskarinio.yourturnhomm.infrastructure.adapter.out;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import pl.oskarinio.yourturnhomm.app.port.in.rest.CookieHelperUseCase;
-import pl.oskarinio.yourturnhomm.domain.service.rest.CookieHelper;
+import pl.oskarinio.yourturnhomm.app.port.out.CookieHelperUseCase;
+import pl.oskarinio.yourturnhomm.domain.rest.CookieHelper;
 import pl.oskarinio.yourturnhomm.app.port.in.user.TokenUseCase;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 

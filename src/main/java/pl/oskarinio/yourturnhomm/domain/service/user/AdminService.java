@@ -1,6 +1,6 @@
 package pl.oskarinio.yourturnhomm.domain.service.user;
 
-import pl.oskarinio.yourturnhomm.app.user.port.out.UserRepositoryPort;
+import pl.oskarinio.yourturnhomm.app.port.out.repository.UserRepositoryPort;
 import pl.oskarinio.yourturnhomm.domain.model.user.Role;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.infrastructure.security.exception.UsernameNotFoundException;

@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.form;
+package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

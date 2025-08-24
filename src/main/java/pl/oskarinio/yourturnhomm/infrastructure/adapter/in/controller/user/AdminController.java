@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pl.oskarinio.yourturnhomm.app.rest.port.in.CookieHelperUseCase;
-import pl.oskarinio.yourturnhomm.app.user.port.in.AdminUseCase;
+import pl.oskarinio.yourturnhomm.app.port.out.CookieHelperUseCase;
+import pl.oskarinio.yourturnhomm.app.port.in.user.AdminUseCase;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 

@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.app.port.in.rest;
+package pl.oskarinio.yourturnhomm.app.port.out;
 
 import org.springframework.validation.BindingResult;
 

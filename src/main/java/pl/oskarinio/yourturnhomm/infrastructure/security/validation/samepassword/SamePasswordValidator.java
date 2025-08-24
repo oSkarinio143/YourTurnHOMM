@@ -2,7 +2,7 @@ package pl.oskarinio.yourturnhomm.infrastructure.security.validation.samepasswor
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.form.RegisterForm;
+import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.RegisterForm;
 
 public class SamePasswordValidator implements ConstraintValidator<ValidSamePassword, RegisterForm> {
     @Override

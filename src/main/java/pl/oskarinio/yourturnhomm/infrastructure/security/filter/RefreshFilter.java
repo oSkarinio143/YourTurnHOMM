@@ -14,9 +14,9 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
-import pl.oskarinio.yourturnhomm.app.rest.service.CookieHelperAdapter;
-import pl.oskarinio.yourturnhomm.app.user.port.in.TokenUseCase;
-import pl.oskarinio.yourturnhomm.app.user.port.out.UserRepositoryPort;
+import pl.oskarinio.yourturnhomm.infrastructure.adapter.out.CookieHelperAdapter;
+import pl.oskarinio.yourturnhomm.app.port.in.user.TokenUseCase;
+import pl.oskarinio.yourturnhomm.app.port.out.repository.UserRepositoryPort;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;

@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.domain.service.rest;
+package pl.oskarinio.yourturnhomm.domain.rest;
 
 import pl.oskarinio.yourturnhomm.app.port.out.repository.RefreshTokenRepositoryPort;
 

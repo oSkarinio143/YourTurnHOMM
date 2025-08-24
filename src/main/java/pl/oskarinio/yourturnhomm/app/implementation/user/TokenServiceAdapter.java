@@ -2,7 +2,7 @@ package pl.oskarinio.yourturnhomm.app.implementation.user;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import pl.oskarinio.yourturnhomm.app.user.port.in.TokenUseCase;
+import pl.oskarinio.yourturnhomm.app.port.in.user.TokenUseCase;
 import pl.oskarinio.yourturnhomm.domain.service.user.TokenService;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 

@@ -3,7 +3,7 @@ package pl.oskarinio.yourturnhomm.domain.service.database;
 import jakarta.transaction.Transactional;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.multipart.MultipartFile;
-import pl.oskarinio.yourturnhomm.app.battle.port.out.UnitRepositoryPort;
+import pl.oskarinio.yourturnhomm.app.port.out.repository.UnitRepositoryPort;
 import pl.oskarinio.yourturnhomm.infrastructure.security.exception.DuplicateUnitException;
 import pl.oskarinio.yourturnhomm.infrastructure.security.exception.TransactionSystemAddException;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;

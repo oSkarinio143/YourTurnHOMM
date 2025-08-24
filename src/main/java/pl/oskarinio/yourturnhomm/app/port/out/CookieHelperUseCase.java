@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.app.port.in.rest;
+package pl.oskarinio.yourturnhomm.app.port.out;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

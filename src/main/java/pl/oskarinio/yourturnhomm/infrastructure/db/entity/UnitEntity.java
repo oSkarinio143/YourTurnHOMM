@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.entity;
+package pl.oskarinio.yourturnhomm.infrastructure.db.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

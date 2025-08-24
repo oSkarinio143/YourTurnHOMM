@@ -7,10 +7,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.oskarinio.yourturnhomm.app.database.port.in.DatabaseUseCase;
+import pl.oskarinio.yourturnhomm.app.port.in.database.DatabaseUseCase;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
-import pl.oskarinio.yourturnhomm.domain.service.rest.ExceptionMessageCreator;
+import pl.oskarinio.yourturnhomm.domain.rest.ExceptionMessageCreator;
 
 import java.io.IOException;
 

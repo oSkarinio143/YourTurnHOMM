@@ -1,12 +1,12 @@
-package pl.oskarinio.yourturnhomm.app.implementation.rest;
+package pl.oskarinio.yourturnhomm.infrastructure.adapter.out;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import pl.oskarinio.yourturnhomm.app.port.in.rest.TokenDeleterUseCase;
-import pl.oskarinio.yourturnhomm.app.port.out.RefreshTokenRepositoryPort;
-import pl.oskarinio.yourturnhomm.domain.service.rest.TokenDeleter;
+import pl.oskarinio.yourturnhomm.app.port.out.TokenDeleterUseCase;
+import pl.oskarinio.yourturnhomm.app.port.out.repository.RefreshTokenRepositoryPort;
+import pl.oskarinio.yourturnhomm.domain.rest.TokenDeleter;
 
 import java.time.Clock;
 

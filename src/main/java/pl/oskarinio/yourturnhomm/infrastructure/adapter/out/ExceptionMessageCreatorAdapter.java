@@ -1,10 +1,10 @@
-package pl.oskarinio.yourturnhomm.app.implementation.rest;
+package pl.oskarinio.yourturnhomm.infrastructure.adapter.out;
 
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-import pl.oskarinio.yourturnhomm.app.port.in.rest.ExceptionMessageCreatorUseCase;
-import pl.oskarinio.yourturnhomm.domain.service.rest.ExceptionMessageCreator;
+import pl.oskarinio.yourturnhomm.app.port.out.ExceptionMessageCreatorUseCase;
+import pl.oskarinio.yourturnhomm.domain.rest.ExceptionMessageCreator;
 
 @Service
 public class ExceptionMessageCreatorAdapter implements ExceptionMessageCreatorUseCase {

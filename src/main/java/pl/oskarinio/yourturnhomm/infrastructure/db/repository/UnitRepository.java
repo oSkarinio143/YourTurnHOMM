@@ -1,6 +1,6 @@
-package pl.oskarinio.yourturnhomm.infrastructure.adapter.out.repository;
+package pl.oskarinio.yourturnhomm.infrastructure.db.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.entity.UnitEntity;
+import pl.oskarinio.yourturnhomm.infrastructure.db.entity.UnitEntity;
 
 public interface UnitRepository extends JpaRepository<UnitEntity, String> { }
