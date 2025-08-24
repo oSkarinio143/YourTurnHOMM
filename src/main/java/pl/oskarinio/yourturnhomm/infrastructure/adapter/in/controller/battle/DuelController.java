@@ -6,12 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.oskarinio.yourturnhomm.app.battle.port.in.DuelUseCase;
-import pl.oskarinio.yourturnhomm.app.database.port.in.DatabaseUseCase;
+import pl.oskarinio.yourturnhomm.app.port.in.battle.DuelUseCase;
+import pl.oskarinio.yourturnhomm.app.port.in.database.DatabaseUseCase;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Side;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.form.DuelForm;
-import pl.oskarinio.yourturnhomm.domain.service.rest.ExceptionMessageCreator;
+import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.DuelForm;
+import pl.oskarinio.yourturnhomm.domain.rest.ExceptionMessageCreator;
 
 @Controller
 @RequestMapping(Route.MAIN + Route.DUEL)

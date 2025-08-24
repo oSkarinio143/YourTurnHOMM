@@ -3,7 +3,7 @@ package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.controller.battle;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import pl.oskarinio.yourturnhomm.app.battle.port.in.CommunicationUseCase;
+import pl.oskarinio.yourturnhomm.app.port.in.battle.CommunicationUseCase;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 
 @RestController
