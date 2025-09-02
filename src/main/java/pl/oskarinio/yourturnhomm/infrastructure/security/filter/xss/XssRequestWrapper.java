@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequestWrapper;
 import org.owasp.html.PolicyFactory;
 import org.owasp.html.Sanitizers;
 
-public class XssRequestWrapper extends HttpServletRequestWrapper {
+class XssRequestWrapper extends HttpServletRequestWrapper {
     private static final PolicyFactory POLICY = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
 
     public XssRequestWrapper(HttpServletRequest request) {

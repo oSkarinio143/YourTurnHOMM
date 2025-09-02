@@ -31,7 +31,31 @@
 		<DB_USERNAME>placeholder_user</DB_USERNAME>
 		<DB_PASSWORD>placeholder_pass</DB_PASSWORD>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.micrometer</groupId>
+				<artifactId>micrometer-tracing-bom</artifactId>
+				<version>1.3.2</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-tracing-bridge-brave</artifactId>
+			<version>${micrometer-tracing.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -176,7 +200,7 @@
 				<artifactId>flyway-maven-plugin</artifactId>
 				<version>11.7.2</version>
 				<configuration>
-					<url>jdbc:mysql://localhost:3306/YourTurnHOMM?allowPublicKeyRetrieval=true&amp;ampuseSSL=false</url>
+					<url>jdbc:mysql://mysql-db:3306/YourTurnHOMM?allowPublicKeyRetrieval=true&amp;ampuseSSL=false</url>
 					<user>${DB_USERNAME}</user>
 					<password>${DB_PASSWORD}</password>
 				</configuration>
@@ -198,7 +222,7 @@
 						<groupId>org.flywaydb</groupId>
 						<artifactId>flyway-maven-plugin</artifactId>
 						<configuration>
-							<url>jdbc:mysql://localhost:3306/YourTurnHOMM?allowPublicKeyRetrieval=true&amp;useSSL=false</url>
+							<url>jdbc:mysql://mysql-db:3306/YourTurnHOMM?allowPublicKeyRetrieval=true&amp;useSSL=false</url>
 							<locations>
 								<location>classpath:db/migration/common</location>
 								<location>classpath:db/migration/mysql</location>

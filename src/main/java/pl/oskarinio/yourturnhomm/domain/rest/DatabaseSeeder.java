@@ -1,20 +1,14 @@
-package pl.oskarinio.yourturnhomm.domain.service.database;
+package pl.oskarinio.yourturnhomm.domain.rest;
 
-import org.springframework.boot.CommandLineRunner;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 import pl.oskarinio.yourturnhomm.app.port.out.repository.UnitRepositoryPort;
 
-public class DatabaseSeeder implements CommandLineRunner {
+public class DatabaseSeeder{
 
     private final UnitRepositoryPort unitRepositoryPort;
 
     public DatabaseSeeder(UnitRepositoryPort unitRepositoryPort) {
         this.unitRepositoryPort = unitRepositoryPort;
-    }
-
-    @Override
-    public void run(String... args) throws Exception {
-        seedUnits();
     }
 
     public void seedUnits(){

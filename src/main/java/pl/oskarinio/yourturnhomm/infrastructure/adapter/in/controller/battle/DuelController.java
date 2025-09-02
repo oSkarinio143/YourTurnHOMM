@@ -14,9 +14,9 @@ import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.DuelForm;
 import pl.oskarinio.yourturnhomm.domain.rest.ExceptionMessageCreator;
 
 @Controller
-@RequestMapping(Route.MAIN + Route.DUEL)
+@RequestMapping(Route.MAIN + Route.USER + Route.DUEL)
 @CrossOrigin(origins = "*")
-public class DuelController {
+class DuelController {
 
     private final ExceptionMessageCreator ExceptionMessageCreator;
     private final DuelUseCase duelUseCase;

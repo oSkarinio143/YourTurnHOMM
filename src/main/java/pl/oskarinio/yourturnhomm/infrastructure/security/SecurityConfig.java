@@ -21,9 +21,11 @@ import pl.oskarinio.yourturnhomm.infrastructure.security.filter.RefreshFilter;
 import pl.oskarinio.yourturnhomm.infrastructure.security.filter.bearertoken.CustomAccessDeniedHandler;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 
+import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
+
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+class SecurityConfig {
 
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
@@ -46,14 +48,8 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers(Route.MAIN + Route.LOGIN,
                                 Route.MAIN + Route.REGISTER).permitAll()
-                        .requestMatchers(Route.MAIN,
-                                Route.MAIN + Route.DATABASE,
-                                Route.MAIN + Route.DATABASE + Route.VIEW_SHOW_UNITS,
-                                Route.MAIN + Route.DUEL + "/**").hasRole("USER")
-                        .requestMatchers(Route.MAIN + Route.DATABASE + Route.ADD,
-                                Route.MAIN + Route.DATABASE + Route.MODIFY,
-                                Route.MAIN + Route.DATABASE + Route.DELETE,
-                                Route.MAIN + Route.ADMIN + "/**").hasRole("ADMIN")
+                        .requestMatchers(Route.MAIN + Route.USER + "/**").hasRole("USER")
+                        .requestMatchers(Route.MAIN + Route.ADMIN + "/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(refreshFilter, BearerTokenAuthenticationFilter.class)

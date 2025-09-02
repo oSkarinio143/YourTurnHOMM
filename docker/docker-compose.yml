@@ -1,0 +1,67 @@
+services:
+  app-mysql:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    restart: unless-stopped
+    profiles: [ "mysql" ]
+    container_name: app-mysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_URL=${DB_URL}
+      - JWT_SECRET_BASE64=${SECRET_KEY}
+      - APP_SECURITY_ADMIN_USERNAME=${ADMIN_USERNAME}
+      - APP_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    depends_on:
+      - mysql-db
+    ports:
+      - "8080:8080"
+    networks:
+      - yourturn-network
+
+  app-h2:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    restart: unless-stopped
+    profiles: [ "h2" ]
+    container_name: app-h2
+    environment:
+      - SPRING_PROFILES_ACTIVE=h2
+    ports:
+      - "8088:8080"
+    networks:
+      - yourturn-network
+
+  mysql-db:
+    image: mysql:8.0
+    profiles: ["mysql"]
+    container_name: yourturn-mysql
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - yourturn-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+
+networks:
+  yourturn-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    driver: local
+  h2_data:
+    driver: local

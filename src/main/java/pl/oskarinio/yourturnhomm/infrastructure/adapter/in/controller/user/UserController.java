@@ -19,7 +19,7 @@ import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 
 @RequestMapping(Route.MAIN)
 @Controller
-public class UserController {
+class UserController {
 
     private final UserUseCase userUseCase;
     private final RegisterUseCase registerUseCase;

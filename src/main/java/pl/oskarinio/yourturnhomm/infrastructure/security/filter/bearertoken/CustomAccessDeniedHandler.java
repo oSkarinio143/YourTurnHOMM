@@ -14,7 +14,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        System.out.println("access Denied");
         request.setAttribute("adminErrorMessage", "Nie posiadasz uprawnień administratorskich");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.sendRedirect(Route.MAIN);

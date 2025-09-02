@@ -22,20 +22,20 @@ public class QueueService {
         sendWinnerMess(roundInfo);
     }
 
-    public void sendRoundMess(RoundInfo roundInfo){
+    private void sendRoundMess(RoundInfo roundInfo){
         Runnable sendRound = () ->
             messageCreatorUseCase.sendRoundMess(roundInfo);
         scheduler.schedule(sendRound ,roundInfo.getMessageDelay() + roundInfo.getTempDelay(), TimeUnit.SECONDS);
     }
 
-    public void sendAttackFasterMess(RoundInfo roundInfo){
+    private void sendAttackFasterMess(RoundInfo roundInfo){
         roundInfo.setTempDelay(roundInfo.getTempDelay() + 1);
         Runnable sendFasterAttack = () ->
             messageCreatorUseCase.sendAttackFasterMess(roundInfo);
         scheduler.schedule(sendFasterAttack, roundInfo.getMessageDelay() + roundInfo.getTempDelay(), TimeUnit.SECONDS);
     }
 
-    public void sendAttackSlowerMess(RoundInfo roundInfo){
+    private void sendAttackSlowerMess(RoundInfo roundInfo){
         if(roundInfo.getSlowerLiveUnits() > 0){
             roundInfo.setTempDelay(roundInfo.getTempDelay() + 1);
             Runnable sendSlowerAttack = () -> messageCreatorUseCase.sendAttackSlowerMess(roundInfo);
@@ -43,7 +43,7 @@ public class QueueService {
         }
     }
 
-    public void sendWinnerMess(RoundInfo roundInfo){
+    private void sendWinnerMess(RoundInfo roundInfo){
         if(roundInfo.getWinnerUnit() != null){
             roundInfo.setTempDelay(roundInfo.getTempDelay() + 1);
             Runnable sendWinner = () -> messageCreatorUseCase.sendWinnerMess(roundInfo);

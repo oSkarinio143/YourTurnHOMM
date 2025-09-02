@@ -16,7 +16,7 @@ import pl.oskarinio.yourturnhomm.infrastructure.security.validation.damagerange.
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name = "unit_entity")
+@Table(name = "unit")
 public class UnitEntity {
 
     @Id

@@ -3,10 +3,10 @@ package pl.oskarinio.yourturnhomm.app.implementation.database;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import pl.oskarinio.yourturnhomm.app.port.out.repository.UnitRepositoryPort;
-import pl.oskarinio.yourturnhomm.domain.service.database.DatabaseSeeder;
+import pl.oskarinio.yourturnhomm.domain.rest.DatabaseSeeder;
 
 @Component
-public class DatabaseSeederAdapter implements CommandLineRunner {
+class DatabaseSeederAdapter implements CommandLineRunner {
     private final DatabaseSeeder databaseSeeder;
 
     public DatabaseSeederAdapter(UnitRepositoryPort unitRepositoryPort) {

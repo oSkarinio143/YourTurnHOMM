@@ -15,8 +15,8 @@ import pl.oskarinio.yourturnhomm.domain.rest.ExceptionMessageCreator;
 import java.io.IOException;
 
 @Controller
-@RequestMapping(Route.MAIN + Route.DATABASE)
-public class DatabaseController {
+@RequestMapping(Route.MAIN)
+class DatabaseController {
 
     private final DatabaseUseCase databaseUseCase;
     private final ExceptionMessageCreator exceptionHandlerService;
@@ -26,17 +26,17 @@ public class DatabaseController {
         this.exceptionHandlerService = exceptionHandlerService;
     }
 
-    @GetMapping
+    @GetMapping(Route.USER + Route.DATABASE)
     public String choseDatabaseOption(){
         return Route.PACKAGE_DATABASE + Route.DATABASE;
     }
 
-    @GetMapping(Route.ADD)
+    @GetMapping(Route.ADMIN + Route.DATABASE + Route.ADD)
     public String addUnit(){
         return Route.PACKAGE_DATABASE + Route.VIEW_ADD;
     }
 
-    @PostMapping(Route.ADD)
+    @PostMapping(Route.ADMIN + Route.DATABASE + Route.ADD)
     public String handleAddUnit(@Valid @ModelAttribute Unit unit,
                                 BindingResult bindingResult,
                                 RedirectAttributes redirectAttributes,
@@ -44,38 +44,38 @@ public class DatabaseController {
 
         if(bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("incorrectMessage", exceptionHandlerService.createMessageValidError(bindingResult));
-            return Route.REDIRECT + Route.DATABASE + Route.ADD;
+            return Route.REDIRECT + Route.ADMIN + Route.DATABASE + Route.ADD;
         }
 
         databaseUseCase.addUnit(unit, image);
-        return Route.REDIRECT + Route.DATABASE;
+        return Route.REDIRECT + Route.USER + Route.DATABASE;
     }
 
-    @GetMapping(Route.SHOW)
+    @GetMapping(Route.USER + Route.DATABASE + Route.SHOW)
     public String viewUnits(Model model){
         model.addAttribute("units", databaseUseCase.getAllUnits());
         return Route.PACKAGE_DATABASE + Route.VIEW_SHOW_UNITS;
     }
 
-    @GetMapping(Route.DELETE)
+    @GetMapping(Route.ADMIN + Route.DATABASE + Route.DELETE)
     public String deleteUnit(Model model){
         model.addAttribute("units", databaseUseCase.getAllUnits());
         return Route.PACKAGE_DATABASE + Route.VIEW_DELETE_UNIT;
     }
 
-    @PostMapping(Route.DELETE)
+    @PostMapping(Route.ADMIN + Route.DATABASE + Route.DELETE)
     public String handleDeleteUnit(@RequestParam String name) {
         databaseUseCase.removeUnit(name);
-        return Route.REDIRECT + Route.DATABASE;
+        return Route.REDIRECT + Route.USER + Route.DATABASE;
     }
 
-    @GetMapping(Route.MODIFY)
+    @GetMapping(Route.ADMIN + Route.DATABASE + Route.MODIFY)
     public String handleModify(Model model){
         model.addAttribute("units", databaseUseCase.getAllUnits());
         return Route.PACKAGE_DATABASE + Route.VIEW_MODIFY;
     }
 
-    @GetMapping(Route.MODIFY + Route.UNIT)
+    @GetMapping(Route.ADMIN + Route.DATABASE + Route.MODIFY + Route.UNIT)
     public String handleModifyUnit(@RequestParam String name,
                                    Model model) {
 
@@ -83,7 +83,7 @@ public class DatabaseController {
         return Route.PACKAGE_DATABASE + Route.VIEW_MODIFY_UNIT;
     }
 
-    @PostMapping(Route.MODIFY + Route.UNIT)
+    @PostMapping(Route.ADMIN + Route.DATABASE + Route.MODIFY + Route.UNIT)
     public String saveModifiedUnit(@Valid @ModelAttribute Unit unit,
                                    BindingResult bindingResult,
                                    RedirectAttributes redirectAttributes){
@@ -91,9 +91,9 @@ public class DatabaseController {
         if(bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("incorrectMessage", exceptionHandlerService.createMessageValidError(bindingResult));
             redirectAttributes.addAttribute("name", unit.getName());
-            return Route.REDIRECT + Route.DATABASE + Route.MODIFY + Route.UNIT;
+            return Route.REDIRECT + Route.ADMIN + Route.DATABASE + Route.MODIFY + Route.UNIT;
         }
         databaseUseCase.modifyUnit(unit);
-        return Route.REDIRECT + Route.DATABASE + Route.MODIFY;
+        return Route.REDIRECT + Route.ADMIN + Route.DATABASE + Route.MODIFY;
     }
 }

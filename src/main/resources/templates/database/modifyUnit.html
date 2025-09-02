@@ -399,13 +399,13 @@
   </div>
 
   <div class="button-container">
-    <a th:href="@{/oskarinio143/YourTurnHOMM/database/modify}" class="btn btn-back">
+    <a th:href="@{/oskarinio143/YourTurnHOMM/admin/database/modify}" class="btn btn-back">
       <i class="fas fa-arrow-left"></i> Wróć
     </a>
     <button type="button" class="btn btn-edit" id="editBtn">
       <i class="fas fa-pencil-alt"></i> Edytuj
     </button>
-    <form class="hidden" id="saveForm" th:action="@{/oskarinio143/YourTurnHOMM/database/modify/unit}" method="post">
+    <form class="hidden" id="saveForm" th:action="@{/oskarinio143/YourTurnHOMM/admin/database/modify/unit}" method="post">
       <input type="hidden" name="name" th:value="${unit.name}">
       <button type="submit" class="btn btn-save">
         <i class="fas fa-save"></i> Zapisz

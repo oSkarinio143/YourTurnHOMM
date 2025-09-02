@@ -19,8 +19,6 @@ public class CommunicationService {
 
     public SseEmitter createEmitter(String userUUID){
         SseEmitter emitter = new SseEmitter(3600000L);
-        emitter.onCompletion(() -> System.out.println("SSE zakończone"));
-        emitter.onTimeout(() -> System.out.println("SSE timeout"));
         emitters.put(userUUID, emitter);
         return emitter;
     }
@@ -31,8 +29,8 @@ public class CommunicationService {
             try {
                 userEmitter.send(message);
             } catch (IOException e) {
+                userEmitter.completeWithError(e);
                 emitters.remove(userUUID);
-                userEmitter.complete();
             }
         }
     }

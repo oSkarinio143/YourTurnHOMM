@@ -34,24 +34,24 @@ public class MessageCreatorService {
         communicationUseCase.closeConnection(roundInfo.getUserUUID());
     }
 
-    public void createMessageAttackFasterKill(RoundInfo roundInfo){
+    private void createMessageAttackFasterKill(RoundInfo roundInfo){
         communicationUseCase.sendMessage(roundInfo.getUserUUID(), "ATTACKF:Jednostka " + roundInfo.getFasterLastAttackUnits() + "x"
                 + roundInfo.getFasterUnit().getName() + " atakuje pierwsza, zadajac " + roundInfo.getFasterDmg()
                 + ".<br>Pokonuje " + roundInfo.getSlowerDeathUnits() + "x" + roundInfo.getSlowerUnit().getName());
     }
 
-    public void createMessageAttackFasterBasic(RoundInfo roundInfo){
+    private void createMessageAttackFasterBasic(RoundInfo roundInfo){
         communicationUseCase.sendMessage(roundInfo.getUserUUID(), "ATTACKF:Jednostka " + roundInfo.getFasterLastAttackUnits() + "x"
                 + roundInfo.getFasterUnit().getName() + " atakuje pierwsza, zadajac " + roundInfo.getFasterDmg() + ".");
     }
 
-    public void createMessageAttackSlowerKill(RoundInfo roundInfo){
+    private void createMessageAttackSlowerKill(RoundInfo roundInfo){
         communicationUseCase.sendMessage(roundInfo.getUserUUID(), "ATTACKS:Jednostka " + roundInfo.getSlowerLiveUnits() + "x"
                 + roundInfo.getSlowerUnit().getName() + " atakuje druga, zadajac " + roundInfo.getSlowerDmg()
                 + ".<br>Pokonuje " + roundInfo.getFasterDeathUnits() + "x" + roundInfo.getFasterUnit().getName());
     }
 
-    public void createMessageAttackSlowerBasic(RoundInfo roundInfo){
+    private void createMessageAttackSlowerBasic(RoundInfo roundInfo){
         communicationUseCase.sendMessage(roundInfo.getUserUUID(), "ATTACKS:Jednostka " + roundInfo.getSlowerLiveUnits() + "x"
                 + roundInfo.getSlowerUnit().getName() + " atakuje druga, zadajac " + roundInfo.getSlowerDmg() + ".");
     }

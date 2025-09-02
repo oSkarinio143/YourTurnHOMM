@@ -3,7 +3,7 @@ package pl.oskarinio.yourturnhomm.infrastructure.db.mapper;
 import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
 import pl.oskarinio.yourturnhomm.infrastructure.db.entity.RefreshTokenEntity;
 
-public class RefreshTokenMapper {
+class RefreshTokenMapper {
     public static RefreshToken toDomain(RefreshTokenEntity refreshTokenEntity){
         RefreshToken refreshToken = new RefreshToken(refreshTokenEntity.getTokenHash(),
                 refreshTokenEntity.getCreationDate(),

@@ -29,7 +29,6 @@ public class UnitRepositoryAdapter implements UnitRepositoryPort {
 
     @Override
     public void save(Unit unit) {
-        System.out.println(unit.getShots());
         unitRepository.save(UnitMapper.toEntity(unit));
     }
 
@@ -41,8 +40,6 @@ public class UnitRepositoryAdapter implements UnitRepositoryPort {
     @Override
     public List<Unit> findAll() {
         List<UnitEntity> unitEntities = unitRepository.findAll();
-//        unitEntities.forEach(v ->
-//                System.out.println(v.getShots()));
         return unitEntities.stream().map(UnitMapper::toDomain).toList();
     }
 

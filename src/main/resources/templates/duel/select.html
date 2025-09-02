@@ -80,7 +80,7 @@
                 <p><strong>Szybkość:</strong> <span th:text="${unit.speed}"/></p>
                 <p><strong>Opis:</strong> <span th:utext="${unit.description}"/></p>
             </div>
-            <form th:action="@{/oskarinio143/YourTurnHOMM/duel}" method="post">
+            <form th:action="@{/oskarinio143/YourTurnHOMM/user/duel}" method="post">
                 <input type="hidden" name="tempUnitName" th:value="${unit.name}"/>
                 <input type="hidden" name="side" th:value="${side}"/>
                 <input type="hidden" name="leftUnit" th:value="${duelForm.leftUnit?.name}"/>

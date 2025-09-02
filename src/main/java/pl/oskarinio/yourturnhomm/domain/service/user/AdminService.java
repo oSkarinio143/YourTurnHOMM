@@ -43,7 +43,6 @@ public class AdminService {
         if(userOpt.isPresent()){
             User user = userOpt.get();
             if(!user.getRoles().contains(Role.ROLE_ADMIN)) {
-                System.out.println("adminNadany");
                 user.addRole(Role.ROLE_ADMIN);
             }
             userRepositoryPort.save(user);

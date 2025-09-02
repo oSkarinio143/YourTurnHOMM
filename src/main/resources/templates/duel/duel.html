@@ -208,7 +208,7 @@
       <div class="army-section left-army">
         <div class="army-title">Gracz</div>
         <div class="unit-selector">
-          <form th:action="@{/oskarinio143/YourTurnHOMM/duel/select}" method="get" id="selectLeftForm">
+          <form th:action="@{/oskarinio143/YourTurnHOMM/user/duel/select}" method="get" id="selectLeftForm">
             <input type="hidden" name="side" value="LEFT">
             <input type="hidden" name="leftUnit" th:value="${duelForm.leftUnit?.name}">
             <input type="hidden" name="rightUnit" th:value="${duelForm.rightUnit?.name}">
@@ -255,7 +255,7 @@
       <div class="army-section right-army">
         <div class="army-title">Przeciwnik</div>
         <div class="unit-selector">
-          <form th:action="@{/oskarinio143/YourTurnHOMM/duel/select}" method="get" id="selectRightForm">
+          <form th:action="@{/oskarinio143/YourTurnHOMM/user/duel/select}" method="get" id="selectRightForm">
             <input type="hidden" name="side" value="RIGHT">
             <input type="hidden" name="leftUnit" th:value="${duelForm.leftUnit?.name}">
             <input type="hidden" name="rightUnit" th:value="${duelForm.rightUnit?.name}">
@@ -275,7 +275,7 @@
           <input type="number" class="quantity-input" id="rightQuantity" min="1" placeholder="1" th:value="${duelForm.rightQuantity}">
         </div>
         <div class="nav-button-container">
-          <form th:action="@{/oskarinio143/YourTurnHOMM/duel/battle}" method="post" id="battleForm">
+          <form th:action="@{/oskarinio143/YourTurnHOMM/user/duel/battle}" method="post" id="battleForm">
             <input type="hidden" name="leftUnit" th:value="${duelForm.leftUnit?.name}">
             <input type="hidden" name="rightUnit" th:value="${duelForm.rightUnit?.name}">
             <input type="hidden" name="leftQuantity">

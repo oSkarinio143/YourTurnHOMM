@@ -21,7 +21,7 @@ public class BattleUnit {
     private int shots;
     private boolean isRange;
 
-    public BattleUnit(BattleUnitBuilder battleUnit){
+    private BattleUnit(BattleUnitBuilder battleUnit){
         this.name = battleUnit.name;
         this.basicAtk = battleUnit.basicAtk;
         this.heroAtk = battleUnit.heroAtk;

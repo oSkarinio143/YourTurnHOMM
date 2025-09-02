@@ -1,5 +1,6 @@
 package pl.oskarinio.yourturnhomm.infrastructure.db.mapper;
 
+import org.hibernate.Hibernate;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.infrastructure.db.entity.UserEntity;
 
@@ -8,8 +9,9 @@ public class UserMapper {
         User user = new User(userEntity.getUsername(), userEntity.getPassword(), userEntity.getRegistrationDate());
         user.setId(userEntity.getId());
         user.setRoles(userEntity.getRoles());
-        if(userEntity.getRefreshToken() != null)
+        if(Hibernate.isInitialized(userEntity.getRefreshToken()) && userEntity.getRefreshToken() != null) {
             user.setRefreshToken(RefreshTokenMapper.toDomain(userEntity.getRefreshToken()));
+        }
         return user;
     }
 

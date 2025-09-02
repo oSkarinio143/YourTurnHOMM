@@ -12,7 +12,7 @@ import java.time.Clock;
 
 @Component
 @Profile("!h2")
-public class MySQLAdminInitializerAdapter implements CommandLineRunner {
+class MySQLAdminInitializerAdapter implements CommandLineRunner {
     private final MySQLAdminInitializer mySQLAdminInitializer;
 
     public MySQLAdminInitializerAdapter(UserRepositoryPort userRepositoryPort,

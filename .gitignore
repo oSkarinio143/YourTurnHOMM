@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+#Env
+docker/.env
+docker/.env-h2v
+
+#Log
+*.log
+app-log.txt

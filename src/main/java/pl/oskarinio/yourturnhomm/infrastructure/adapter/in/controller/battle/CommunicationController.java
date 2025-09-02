@@ -9,7 +9,7 @@ import pl.oskarinio.yourturnhomm.domain.model.Route;
 @RestController
 @RequestMapping(Route.MAIN + Route.DUEL)
 @CrossOrigin(origins = "*")
-public class CommunicationController {
+class CommunicationController {
     private final CommunicationUseCase communicationUseCase;
 
     public CommunicationController(CommunicationUseCase communicationUseCase) {

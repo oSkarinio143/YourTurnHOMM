@@ -10,12 +10,12 @@ import pl.oskarinio.yourturnhomm.infrastructure.security.exception.UsernameNotMa
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 
 @ControllerAdvice
-public class GlobalExceptionHandler {
+class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateUnitException.class)
     public String handleDuplicateUnitException(DuplicateUnitException exception, RedirectAttributes attributes){
         attributes.addFlashAttribute("duplicateMessage", exception.getMessage());
-        return Route.REDIRECT + Route.DATABASE + Route.ADD;
+        return Route.REDIRECT + Route.ADMIN + Route.DATABASE + Route.ADD;
     }
 
     @ExceptionHandler (UsernameNotFoundException.class)

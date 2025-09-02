@@ -9,7 +9,7 @@ import java.io.IOException;
 
 @Component
 @Order(1)
-public class XssFilter implements Filter {
+class XssFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

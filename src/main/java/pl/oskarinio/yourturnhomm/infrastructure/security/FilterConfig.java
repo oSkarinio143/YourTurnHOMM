@@ -13,7 +13,7 @@ import javax.crypto.SecretKey;
 import java.util.Base64;
 
 @Configuration
-public class FilterConfig {
+class FilterConfig {
 
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter(){

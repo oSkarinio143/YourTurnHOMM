@@ -6,7 +6,7 @@ import pl.oskarinio.yourturnhomm.app.port.in.database.DatabaseUseCase;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 
 @Component
-public class StringToUnitConverter implements Converter<String, Unit> {
+class StringToUnitConverter implements Converter<String, Unit> {
 
     private final DatabaseUseCase databaseUseCase;
 

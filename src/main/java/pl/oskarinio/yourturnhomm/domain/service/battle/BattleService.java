@@ -6,9 +6,9 @@ import pl.oskarinio.yourturnhomm.domain.model.battle.AttackInfo;
 import pl.oskarinio.yourturnhomm.domain.model.battle.BattleUnit;
 import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.DuelForm;
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
+import pl.oskarinio.yourturnhomm.infrastructure.logger.AppLogger;
 
 public class BattleService {
-
     private final QueueUseCase queueUseCase;
 
     private double ATK_RATE;
@@ -25,7 +25,7 @@ public class BattleService {
         startBattle(attackInfo);
     }
 
-    public AttackInfo prepareAttackInfo(DuelForm duelForm){
+    private AttackInfo prepareAttackInfo(DuelForm duelForm){
         AttackInfo attackInfo = new AttackInfo(duelForm.getUserUUID());
 
         setHerosStatsIfNull(duelForm);
@@ -40,7 +40,7 @@ public class BattleService {
         return attackInfo;
     }
 
-    public void setHerosStatsIfNull(DuelForm duelForm){
+    private void setHerosStatsIfNull(DuelForm duelForm){
         if(duelForm.getLeftHeroAttack() == null)
             duelForm.setLeftHeroAttack(0);
         if(duelForm.getLeftHeroDefense() == null)
@@ -51,7 +51,7 @@ public class BattleService {
             duelForm.setRightHeroDefense(0);
     }
 
-    public BattleUnit prepareBattleUnit(Unit unit, int heroAtk, int heroDef){
+    private BattleUnit prepareBattleUnit(Unit unit, int heroAtk, int heroDef){
         BattleUnit battleUnit = new BattleUnit.BattleUnitBuilder()
                 .name(unit.getName())
                 .basicAtk(unit.getAttack())
@@ -69,7 +69,7 @@ public class BattleService {
         return battleUnit;
     }
 
-    public void startBattle(AttackInfo attackInfo){
+    private void startBattle(AttackInfo attackInfo){
         RoundInfo roundInfo = new RoundInfo(attackInfo.getUserUUID(), 1, 2);
         while (attackInfo.getFasterQuantity() != 0 && attackInfo.getSlowerQuantity() != 0){
             startRound(roundInfo, attackInfo);
@@ -78,41 +78,41 @@ public class BattleService {
         }
     }
 
-    public void startRound(RoundInfo roundInfo, AttackInfo attackInfo){
+    private void startRound(RoundInfo roundInfo, AttackInfo attackInfo){
         startAttackFaster(roundInfo, attackInfo);
         startAttackSlower(roundInfo, attackInfo);
         isWinner(roundInfo);
     }
 
-    public void sendRoundMessages(RoundInfo roundInfo){
+    private void sendRoundMessages(RoundInfo roundInfo){
         RoundInfo snapshotRoundInfo = roundInfo.clone();
         queueUseCase.createQueue(snapshotRoundInfo);
     }
 
-    public void setNextRoundInfo(RoundInfo roundInfo){
+    private void setNextRoundInfo(RoundInfo roundInfo){
         roundInfo.setRoundCounter(roundInfo.getRoundCounter() + 1);
         roundInfo.setMessageDelay(roundInfo.getMessageDelay() + 4);
     }
 
-    public void startAttackFaster(RoundInfo roundInfo, AttackInfo attackInfo){
+    private void startAttackFaster(RoundInfo roundInfo, AttackInfo attackInfo){
         setRoundInfoAttack(attackInfo, attackInfo.getFasterUnit(), attackInfo.getSlowerUnit(), attackInfo.getFasterQuantity());
         attackInfo.setSlowerQuantity(countLiveUnitsAfterAttack(attackInfo, attackInfo.getFasterQuantity(), attackInfo.getSlowerQuantity()));
         setRoundInfoFaster(roundInfo, attackInfo);
     }
 
-    public void startAttackSlower(RoundInfo roundInfo, AttackInfo attackInfo){
+    private void startAttackSlower(RoundInfo roundInfo, AttackInfo attackInfo){
         setRoundInfoAttack(attackInfo, attackInfo.getSlowerUnit(), attackInfo.getFasterUnit(), attackInfo.getSlowerQuantity());
         attackInfo.setFasterQuantity(countLiveUnitsAfterAttack(attackInfo, attackInfo.getSlowerQuantity(), attackInfo.getFasterQuantity()));
         setRoundInfoSlower(roundInfo, attackInfo);
     }
 
-    public void setRoundInfoAttack(AttackInfo attackInfo, BattleUnit atkUnit, BattleUnit defUnit, int attackingQuantity){
+    private void setRoundInfoAttack(AttackInfo attackInfo, BattleUnit atkUnit, BattleUnit defUnit, int attackingQuantity){
         attackInfo.setAtkUnit(atkUnit);
         attackInfo.setDefUnit(defUnit);
         attackInfo.setAttackingUnits(attackingQuantity);
     }
 
-    public void setRoundInfoFaster(RoundInfo roundInfo, AttackInfo attackInfo){
+    private void setRoundInfoFaster(RoundInfo roundInfo, AttackInfo attackInfo){
         roundInfo.setFasterDmg(attackInfo.getAtkDmg());
         roundInfo.setFasterLiveUnits(attackInfo.getAttackingUnits());
         roundInfo.setSlowerDeathUnits(attackInfo.getDeathUnits());
@@ -120,7 +120,7 @@ public class BattleService {
         roundInfo.setFasterLastAttackUnits(roundInfo.getFasterLiveUnits());
     }
 
-    public void setRoundInfoSlower(RoundInfo roundInfo, AttackInfo attackInfo){
+    private void setRoundInfoSlower(RoundInfo roundInfo, AttackInfo attackInfo){
         roundInfo.setSlowerDmg(attackInfo.getAtkDmg());
         roundInfo.setSlowerLiveUnits(attackInfo.getAttackingUnits());
         roundInfo.setFasterDeathUnits(attackInfo.getDeathUnits());
@@ -128,7 +128,7 @@ public class BattleService {
         roundInfo.setFasterLiveUnits(roundInfo.getFasterLiveUnits() - roundInfo.getFasterDeathUnits());
     }
 
-    public BattleUnit findFaster(BattleUnit leftUnit, BattleUnit rightUnit){
+    private BattleUnit findFaster(BattleUnit leftUnit, BattleUnit rightUnit){
         if(leftUnit.getSpeed() > rightUnit.getSpeed())
             return  leftUnit;
         if(leftUnit.getSpeed() == rightUnit.getSpeed()){
@@ -139,32 +139,32 @@ public class BattleService {
         return rightUnit;
     }
 
-    public BattleUnit findSlower(AttackInfo attackInfo, BattleUnit leftUnit, BattleUnit rightUnit){
+    private BattleUnit findSlower(AttackInfo attackInfo, BattleUnit leftUnit, BattleUnit rightUnit){
         if(attackInfo.getFasterUnit() == leftUnit){
             return rightUnit;
         }
         return leftUnit;
     }
 
-    public int findFasterQuantity(BattleUnit fasterUnit, BattleUnit leftUnit, int leftQuantity, int rightQuantity){
+    private int findFasterQuantity(BattleUnit fasterUnit, BattleUnit leftUnit, int leftQuantity, int rightQuantity){
         if(fasterUnit == leftUnit)
             return leftQuantity;
         return rightQuantity;
     }
 
-    public int findSlowerQuantity(BattleUnit slowerUnit, BattleUnit leftUnit, int leftQuantity, int rightQuantity){
+    private int findSlowerQuantity(BattleUnit slowerUnit, BattleUnit leftUnit, int leftQuantity, int rightQuantity){
         if(slowerUnit == leftUnit)
             return leftQuantity;
         return rightQuantity;
     }
 
-    public int countLiveUnitsAfterAttack(AttackInfo attackInfo, int attackingQuantity, int defendingQuantity){
+    private int countLiveUnitsAfterAttack(AttackInfo attackInfo, int attackingQuantity, int defendingQuantity){
         int attackingDmg = generateDmg(attackInfo.getAtkUnit(), attackInfo.getDefUnit(), attackingQuantity);
         setDmg(attackInfo, attackingDmg);
         return countLiveUnits(attackInfo, attackingDmg, defendingQuantity);
     }
 
-    public int countLiveUnits(AttackInfo attackInfo, int dmg, int enemyQuantity){
+    private int countLiveUnits(AttackInfo attackInfo, int dmg, int enemyQuantity){
         int deathUnits;
         int leftHp = attackInfo.getDefUnit().getHpLeft();
         if(leftHp - dmg > 0)
@@ -181,7 +181,7 @@ public class BattleService {
 
     }
 
-    public void setHpLeft(BattleUnit unit, int dmg, int deathUnits, int enemyQuantity){
+    private void setHpLeft(BattleUnit unit, int dmg, int deathUnits, int enemyQuantity){
         if(enemyQuantity - deathUnits < 1)
             unit.setHpLeft(0);
         else if(deathUnits == 0)
@@ -190,18 +190,18 @@ public class BattleService {
             unit.setHpLeft(unit.getHpLeft() - (dmg - unit.getHp() * deathUnits));
     }
 
-    public void setDmg(AttackInfo roundInfo, int dmg){
+    private void setDmg(AttackInfo roundInfo, int dmg){
         roundInfo.setAtkDmg(dmg);
     }
 
-    public int generateDmg(BattleUnit battleUnit, BattleUnit enemyUnit, int quantity){
+    private int generateDmg(BattleUnit battleUnit, BattleUnit enemyUnit, int quantity){
         int basicDmg = drawDmg(battleUnit, quantity);
         double unitAtk = countBonusAtkRate(battleUnit, enemyUnit);
         double enemyUnitDef = countBonusDefRate(battleUnit, enemyUnit);
         return  (int) (basicDmg * unitAtk * enemyUnitDef);
     }
 
-    public int drawDmg(BattleUnit battleUnit, int quantity){
+    private int drawDmg(BattleUnit battleUnit, int quantity){
         int minDmg = battleUnit.getMinDmg();
         int maxDmg = battleUnit.getMaxDmg();
         int sumDmg = 0;
@@ -212,23 +212,23 @@ public class BattleService {
         return sumDmg;
     }
 
-    public int drawSingDmg(int minDmg, int maxDmg){
+    private int drawSingDmg(int minDmg, int maxDmg){
         return (int) (Math.random() * (maxDmg - minDmg + 1) + minDmg);
     }
 
-    public double countBonusAtkRate(BattleUnit unit, BattleUnit enemyUnit){
+    private double countBonusAtkRate(BattleUnit unit, BattleUnit enemyUnit){
         //Różnica statystyk ataku i obrony jednostek zwiększa atak za każdy punkt o 5%
         double unitAtk = 1 + (ATK_RATE * ((unit.getBasicAtk() + unit.getHeroAtk()) - (enemyUnit.getBasicDef() + enemyUnit.getHeroDef())));
         return Math.max(1, Math.min(unitAtk, 4));
     }
 
-    public double countBonusDefRate(BattleUnit unit, BattleUnit enemyUnit){
+    private double countBonusDefRate(BattleUnit unit, BattleUnit enemyUnit){
         //Różnica statystyk ataku i obrony jednostek zwiększa obronę za każdy punkt o 2.5%
         double enemyDef = 1 - (DEF_RATE * ((unit.getBasicDef() + unit.getHeroDef()) - (enemyUnit.getBasicAtk() + enemyUnit.getHeroAtk())));
         return Math.min(1, Math.max(enemyDef, 0.7));
     }
 
-    public boolean isWinner(RoundInfo roundInfo){
+    private boolean isWinner(RoundInfo roundInfo){
         if(roundInfo.getSlowerLiveUnits() == 0) {
             roundInfo.setWinnerUnit(roundInfo.getFasterUnit());
             roundInfo.setLoserUnit(roundInfo.getSlowerUnit());

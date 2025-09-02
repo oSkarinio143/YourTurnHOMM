@@ -8,6 +8,7 @@ import pl.oskarinio.yourturnhomm.domain.service.battle.BattleService;
 import pl.oskarinio.yourturnhomm.app.port.in.battle.BattleUseCase;
 import pl.oskarinio.yourturnhomm.app.port.in.battle.QueueUseCase;
 import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.DuelForm;
+import pl.oskarinio.yourturnhomm.infrastructure.logger.AppLogger;
 
 @Service
 @EnableAsync
@@ -17,7 +18,8 @@ public class BattleServiceAdapter implements BattleUseCase {
 
     public BattleServiceAdapter(QueueUseCase queueUseCase,
                                 @Value("${battle.rates.attack}") double atkRate,
-                                @Value("${battle.rates.defense}") double defRate
+                                @Value("${battle.rates.defense}") double defRate,
+                                AppLogger appLogger
     ){
         this.battleService = new BattleService(queueUseCase, atkRate, defRate);
     }

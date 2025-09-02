@@ -35,10 +35,10 @@ public class CspNonceFilter extends GenericFilterBean {
         chain.doFilter(request, new CSPNonceResponseWrapper(response, nonce));
     }
 
-    public static class CSPNonceResponseWrapper extends HttpServletResponseWrapper {
+    static class CSPNonceResponseWrapper extends HttpServletResponseWrapper {
         private String nonce;
 
-        public CSPNonceResponseWrapper(HttpServletResponse response, String nonce) {
+        CSPNonceResponseWrapper(HttpServletResponse response, String nonce) {
             super(response);
             this.nonce = nonce;
         }
