@@ -26,9 +26,12 @@ public class CookieBearerTokenResolver implements BearerTokenResolver {
             return null;
         }
 
-        if (cookieAccess != null) {
+        if (cookieAccess != null && !cookieAccess.getValue().isEmpty()) {
             return cookieAccess.getValue();
         }
+
+        if(request.getAttribute("accessToken") != null)
+            return request.getAttribute("accessToken").toString();
         return null;
     }
 }

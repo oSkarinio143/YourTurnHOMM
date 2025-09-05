@@ -17,7 +17,7 @@ services:
     depends_on:
       - mysql-db
     ports:
-      - "8080:8080"
+      - "8084:8080"
     networks:
       - yourturn-network
 
@@ -55,6 +55,50 @@ services:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       timeout: 20s
       retries: 10
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - ELASTIC_PASSWORD=1234
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+    networks:
+      - yourturn-network
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.10.2
+    container_name: logstash
+    volumes:
+      - ./logstash-pipeline:/usr/share/logstash/pipeline
+    ports:
+      - "5044:5044"
+    depends_on:
+      - elasticsearch
+    networks:
+      - yourturn-network
+
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.10.2
+    container_name: kibana
+    environment:
+      ELASTICSEARCH_HOSTS: https://elasticsearch:9200
+      elasticsearch.username: kibana_system
+      elasticsearch.password: 1234
+      ELASTICSEARCH_SSL_VERIFICATIONMODE: none
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - yourturn-network
+#    volumes:
+#      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
 
 networks:
   yourturn-network:

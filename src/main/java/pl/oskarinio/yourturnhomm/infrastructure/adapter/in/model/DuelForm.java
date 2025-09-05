@@ -22,12 +22,12 @@ public class DuelForm {
     private Unit rightUnit;
 
     @Min(1)
-    @Max(99)
+    @Max(9999)
     @NotNull
     private Integer leftQuantity;
 
     @Min(1)
-    @Max(99)
+    @Max(9999)
     @NotNull
     private Integer rightQuantity;
 

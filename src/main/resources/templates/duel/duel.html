@@ -326,83 +326,69 @@
 <script th:nonce="${cspNonce}" th:inline="javascript">
   /*<![CDATA[*/
   document.addEventListener('DOMContentLoaded', () => {
-    const incorrectMessage = /*[[${incorrectMessage}]]*/ null;
+    // --- Główna konfiguracja ---
+    const incorrectMessageFromServer = /*[[${incorrectMessage}]]*/ null;
+    const modal = document.getElementById('incorrectValueModal');
 
+    // --- Obsługa formularzy (bez zmian) ---
     const forms = {
       selectLeft: document.getElementById('selectLeftForm'),
       selectRight: document.getElementById('selectRightForm'),
       battle: document.getElementById('battleForm')
     };
-
     const visibleInputs = {
-      leftQuantity: document.getElementById('leftQuantity'),
-      rightQuantity: document.getElementById('rightQuantity'),
-      leftHeroAttack: document.getElementById('leftHeroAttack'),
-      leftHeroDefense: document.getElementById('leftHeroDefense'),
-      rightHeroAttack: document.getElementById('rightHeroAttack'),
-      rightHeroDefense: document.getElementById('rightHeroDefense')
+      leftQuantity: document.getElementById('leftQuantity'), rightQuantity: document.getElementById('rightQuantity'),
+      leftHeroAttack: document.getElementById('leftHeroAttack'), leftHeroDefense: document.getElementById('leftHeroDefense'),
+      rightHeroAttack: document.getElementById('rightHeroAttack'), rightHeroDefense: document.getElementById('rightHeroDefense')
     };
-
-    const battleButton = document.getElementById('battleButton');
-
     function syncVisibleInputsToForm(form) {
       if (!form) return;
       for (const key in visibleInputs) {
         const hiddenInput = form.querySelector(`input[name="${key}"]`);
         if (hiddenInput) {
-          hiddenInput.value = visibleInputs[key].value || 0;
+          hiddenInput.value = visibleInputs[key].value || (key.includes('Quantity') ? 1 : 0);
         }
       }
     }
-
     Object.values(forms).forEach(form => {
-      if (form) {
-        form.addEventListener('submit', (e) => {
-          if (form.id === 'battleForm' && battleButton.disabled) {
-            e.preventDefault();
-            return;
-          }
-          syncVisibleInputsToForm(form);
-        });
-      }
+      if (form) form.addEventListener('submit', () => syncVisibleInputsToForm(form));
     });
 
-    const modal = document.getElementById('incorrectValueModal');
     if (modal) {
-      const closeModal = () => {
-        modal.classList.remove('show');
-        setTimeout(() => { modal.style.display = 'none'; }, 250);
-      };
-
       const showModal = () => {
         modal.style.display = 'flex';
-        setTimeout(() => modal.classList.add('show'), 10);
-        const timeoutId = setTimeout(closeModal, 5000);
+        requestAnimationFrame(() => {
+          modal.classList.add('show');
+        });
 
-        const cleanup = () => {
-          clearTimeout(timeoutId);
-          closeModal();
-          modal.removeEventListener('click', clickHandler);
-          document.removeEventListener('keydown', keydownHandler);
+        const autoCloseTimeout = setTimeout(hideModal, 5000);
+        const handleCloseEvent = (event) => {
+          if (event.type === 'keydown' && event.key !== 'Escape') return;
+          if (event.type === 'click' && !event.target.closest('.modal-close, .modal-button') && event.target !== modal) return;
+
+          hideModal();
         };
 
-        const clickHandler = (e) => {
-          if (e.target === modal || e.target.closest('.modal-close, .modal-button')) {
-            cleanup();
-          }
+        const cleanupListeners = () => {
+          clearTimeout(autoCloseTimeout);
+          modal.removeEventListener('click', handleCloseEvent);
+          document.removeEventListener('keydown', handleCloseEvent);
         };
 
-        const keydownHandler = (e) => {
-          if (e.key === 'Escape' && modal.classList.contains('show')) {
-            cleanup();
-          }
-        };
+        function hideModal() {
+          modal.classList.remove('show');
+          setTimeout(() => {
+            modal.style.display = 'none';
+          }, 250);
+          cleanupListeners();
+        }
 
-        modal.addEventListener('click', clickHandler);
-        document.addEventListener('keydown', keydownHandler);
+        modal.addEventListener('click', handleCloseEvent);
+        document.addEventListener('keydown', handleCloseEvent);
       };
 
-      if (incorrectMessage) {
+      console.log("Wartość 'incorrectMessage' z serwera:", incorrectMessageFromServer);
+      if (incorrectMessageFromServer) {
         showModal();
       }
     }

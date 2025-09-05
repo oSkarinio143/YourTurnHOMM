@@ -3,6 +3,7 @@ package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.controller.user;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +18,7 @@ import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.RegisterForm;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 
+@Slf4j
 @RequestMapping(Route.MAIN)
 @Controller
 class UserController {
@@ -37,6 +39,7 @@ class UserController {
     public String loginView(Model model,
                             @RequestParam(name = "logout", required = false) String logoutType){
 
+        log.info("Uzytkownik probuje sie zalogowac");
         if(logoutType != null && logoutType.equals("auto"))
             model.addAttribute("autoLogoutMessage", "Zostałeś automatycznie wylogowany z powodu braku aktywności");
         return Route.PACKAGE_CONNECTION + Route.LOGIN;

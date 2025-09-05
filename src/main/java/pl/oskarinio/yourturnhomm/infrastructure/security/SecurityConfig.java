@@ -13,15 +13,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.header.HeaderWriterFilter;
+import pl.oskarinio.yourturnhomm.infrastructure.config.filter.LoggingFilter;
 import pl.oskarinio.yourturnhomm.infrastructure.security.filter.CspNonceFilter;
 import pl.oskarinio.yourturnhomm.infrastructure.security.filter.bearertoken.CookieBearerTokenResolver;
 import pl.oskarinio.yourturnhomm.infrastructure.security.filter.bearertoken.CustomAuthenticationEntryPoint;
-import pl.oskarinio.yourturnhomm.infrastructure.security.filter.RefreshFilter;
+import pl.oskarinio.yourturnhomm.infrastructure.config.filter.RefreshFilter;
 import pl.oskarinio.yourturnhomm.infrastructure.security.filter.bearertoken.CustomAccessDeniedHandler;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
-
-import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
 @EnableWebSecurity
@@ -52,7 +52,6 @@ class SecurityConfig {
                         .requestMatchers(Route.MAIN + Route.ADMIN + "/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(refreshFilter, BearerTokenAuthenticationFilter.class)
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .bearerTokenResolver(cookieBearerTokenResolver)
                         .jwt(jwt -> jwt
@@ -78,6 +77,7 @@ class SecurityConfig {
                                         "object-src 'none';")
                         )
                 )
+                .addFilterBefore(refreshFilter, BearerTokenAuthenticationFilter.class)
                 .addFilterBefore(new CspNonceFilter(), HeaderWriterFilter.class);
         return http.build();
     }

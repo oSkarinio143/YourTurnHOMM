@@ -1,26 +1,23 @@
 package pl.oskarinio.yourturnhomm.app.implementation.battle;
 
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import pl.oskarinio.yourturnhomm.domain.service.battle.BattleService;
 import pl.oskarinio.yourturnhomm.app.port.in.battle.BattleUseCase;
 import pl.oskarinio.yourturnhomm.app.port.in.battle.QueueUseCase;
 import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.DuelForm;
-import pl.oskarinio.yourturnhomm.infrastructure.logger.AppLogger;
 
 @Service
-@EnableAsync
 public class BattleServiceAdapter implements BattleUseCase {
 
     private final BattleService battleService;
 
     public BattleServiceAdapter(QueueUseCase queueUseCase,
                                 @Value("${battle.rates.attack}") double atkRate,
-                                @Value("${battle.rates.defense}") double defRate,
-                                AppLogger appLogger
-    ){
+                                @Value("${battle.rates.defense}") double defRate){
         this.battleService = new BattleService(queueUseCase, atkRate, defRate);
     }
 

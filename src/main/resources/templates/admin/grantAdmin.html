@@ -55,13 +55,16 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
         .modal {
-            display: none;
+            display: none; /* Domyślnie ukryty */
             position: fixed;
             z-index: 999;
             inset: 0;
             background: rgba(0,0,0,0.5);
             align-items: center;
             justify-content: center;
+        }
+        .modal.is-visible {
+            display: flex;
         }
         .modal-content {
             background: #fff;
@@ -81,6 +84,13 @@
             justify-content: center;
             gap: 20px;
         }
+
+        /* --- NOWA KLASA --- */
+        /* Zastępuje styl inline 'style="display: contents;"' z formularza */
+        .form-display-contents {
+            display: contents;
+        }
+
         .modal-buttons button {
             padding: 12px 25px;
             border: 2px solid transparent;
@@ -147,7 +157,7 @@
                 <p><strong>Role:</strong> <span th:text="${#strings.listJoin(user.roles, ', ')}"/></p>
                 <p><strong>Data rejestracji:</strong> <span th:text="${#dates.format(user.registrationDate, 'dd-MM-yyyy HH:mm')}"/></p>
             </div>
-            <button class="grant-button" th:if="${not #lists.contains(user.roles, ROLE_ADMIN)}">
+            <button class="grant-button" th:if="${not #lists.contains(user.roles, 'ROLE_ADMIN')}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.056.255.098.38.115a.7.7 0 0 0 .117 0c.125-.017.26-.059.38-.115.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.95-.3-1.896-.63-2.837-.856C9.824 1.258 8.821 1 8 1s-1.824.258-2.662.59z"/>
                 </svg>
@@ -162,7 +172,8 @@
     <div class="modal-content">
         <p>Czy na pewno chcesz nadać uprawnienia administratorskie temu użytkownikowi?</p>
         <div class="modal-buttons">
-            <form th:action="@{/oskarinio143/YourTurnHOMM/admin/grant}" method="post" style="display: contents;">
+            <!-- ZMIANA: Usunięto atrybut 'style' i dodano 'class' -->
+            <form th:action="@{/oskarinio143/YourTurnHOMM/admin/grant}" method="post" class="form-display-contents">
                 <input type="hidden" name="username" id="userToGrantAdmin"/>
                 <button type="submit" class="confirm">Tak, nadaj</button>
             </form>
@@ -186,21 +197,27 @@
         const grantButtons = document.querySelectorAll('.grant-button');
         const cancelButton = confirmModal.querySelector('.cancel');
 
+        function showModal(username) {
+            userToGrantInput.value = username;
+            confirmModal.classList.add('is-visible');
+        }
+
+        function hideModal() {
+            confirmModal.classList.remove('is-visible');
+        }
+
         grantButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const username = button.closest('.user-container').dataset.username;
-                userToGrantInput.value = username;
-                confirmModal.style.display = 'flex';
+                showModal(username);
             });
         });
 
-        cancelButton.addEventListener('click', () => {
-            confirmModal.style.display = 'none';
-        });
+        cancelButton.addEventListener('click', hideModal);
 
         confirmModal.addEventListener('click', (e) => {
             if (e.target === confirmModal) {
-                confirmModal.style.display = 'none';
+                hideModal();
             }
         });
     });

@@ -69,7 +69,7 @@ class DuelController {
         if(bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("incorrectMessage", ExceptionMessageCreator.createMessageValidError(bindingResult));
             redirectAttributes.addFlashAttribute("duelForm", duelForm);
-            return Route.REDIRECT + Route.DUEL;
+            return Route.REDIRECT + Route.USER + Route.DUEL;
         }
         duelForm.setUserUUID(duelUseCase.getUserUUID());
         model.addAttribute("duelForm", duelForm);
