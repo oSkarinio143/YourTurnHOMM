@@ -6,8 +6,24 @@
         </encoder>
     </appender>
 
+    <!-- ===================================================================== -->
+    <!-- Appender nr 2: NOWY! Wysyłanie logów do Logstasha przez sieć TCP       -->
+    <!-- ===================================================================== -->
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <!-- Adres Logstasha. Używamy zmiennej środowiskowej z wartością domyślną. -->
+        <!-- Dla IntelliJ będzie to 'localhost', dla Dockera 'logstash'. -->
+        <destination>${LOGSTASH_HOST:-localhost}:5044</destination>
+
+        <!-- To jest serce magii: ten enkoder zamieni każdy log na obiekt JSON. -->
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <!-- Możemy dodać niestandardowe pola, które pojawią się w każdym logu -->
+            <customFields>{"app_name":"YourTurnHOMM"}</customFields>
+        </encoder>
+    </appender>
+
     <root level="info">
         <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="LOGSTASH"/>
     </root>
     <logger name="pl.oskarinio.yourturnhomm" level="debug"/>
 </configuration>
