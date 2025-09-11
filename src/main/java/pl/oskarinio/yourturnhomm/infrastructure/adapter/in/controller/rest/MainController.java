@@ -14,7 +14,7 @@ import pl.oskarinio.yourturnhomm.domain.model.Route;
 class MainController {
     @GetMapping()
     public String welcome(HttpServletRequest request, Model model){
-        log.info("Uzytkownik przeszedl do menu glownego");
+        log.info("Uzytkownik w menu glownym");
         Object errorMessage = request.getAttribute("adminErrorMessage");
         if (errorMessage != null)
             model.addAttribute("adminErrorMessage", errorMessage.toString());

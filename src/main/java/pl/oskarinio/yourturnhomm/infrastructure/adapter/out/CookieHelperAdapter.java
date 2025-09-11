@@ -4,10 +4,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import pl.oskarinio.yourturnhomm.app.port.out.CookieHelperUseCase;
-import pl.oskarinio.yourturnhomm.domain.rest.CookieHelper;
-import pl.oskarinio.yourturnhomm.app.port.in.user.TokenUseCase;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.CookieHelper;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.CookieHelperUseCase;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.TokenUseCase;
 
 @Component
 public class CookieHelperAdapter implements CookieHelperUseCase {

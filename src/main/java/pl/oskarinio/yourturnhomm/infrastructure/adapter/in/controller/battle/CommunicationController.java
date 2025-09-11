@@ -1,12 +1,11 @@
 package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.controller.battle;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import pl.oskarinio.yourturnhomm.app.port.in.battle.CommunicationUseCase;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.CommunicationUseCase;
 
 @RestController
 @RequestMapping(Route.MAIN + Route.DUEL)
@@ -21,6 +20,7 @@ class CommunicationController {
 
     @GetMapping(Route.GENERATEUUID)
     public String generateUUID(){
+        log.debug("Tworze userUUID");
         return communicationUseCase.createUserUUID();
     }
 

@@ -5,8 +5,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import pl.oskarinio.yourturnhomm.app.port.out.repository.UserRepositoryPort;
-import pl.oskarinio.yourturnhomm.domain.rest.MySQLAdminInitializer;
+import pl.oskarinio.yourturnhomm.domain.port.out.repository.UserRepositoryPort;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.MySQLAdminInitializer;
 
 import java.time.Clock;
 

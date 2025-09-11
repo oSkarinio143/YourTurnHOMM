@@ -4,9 +4,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import pl.oskarinio.yourturnhomm.app.port.out.TokenDeleterUseCase;
-import pl.oskarinio.yourturnhomm.app.port.out.repository.RefreshTokenRepositoryPort;
-import pl.oskarinio.yourturnhomm.domain.rest.TokenDeleter;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.RefreshTokenRepositoryPort;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.TokenDeleter;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.TokenDeleterUseCase;
 
 import java.time.Clock;
 

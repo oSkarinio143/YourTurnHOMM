@@ -2,20 +2,20 @@ package pl.oskarinio.yourturnhomm.app.implementation.database;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import pl.oskarinio.yourturnhomm.app.port.in.database.DatabaseUseCase;
-import pl.oskarinio.yourturnhomm.app.port.out.repository.UnitRepositoryPort;
-import pl.oskarinio.yourturnhomm.domain.service.database.DatabaseService;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
+import pl.oskarinio.yourturnhomm.domain.port.in.unit.UnitManagerPort;
+import pl.oskarinio.yourturnhomm.domain.port.out.repository.UnitRepositoryPort;
+import pl.oskarinio.yourturnhomm.domain.service.unit.UnitManager;
 
 import java.io.IOException;
 import java.util.List;
 
 @Service
-public class DatabaseServiceAdapter implements DatabaseUseCase {
-    private final DatabaseService databaseService;
+public class DatabaseServiceAdapter implements UnitManagerPort {
+    private final UnitManager databaseService;
 
     public DatabaseServiceAdapter(UnitRepositoryPort unitRepositoryPort) {
-        this.databaseService = new DatabaseService(unitRepositoryPort);
+        this.databaseService = new UnitManager(unitRepositoryPort);
     }
     @Override
     public void addUnit(Unit unit, MultipartFile image) throws IOException {

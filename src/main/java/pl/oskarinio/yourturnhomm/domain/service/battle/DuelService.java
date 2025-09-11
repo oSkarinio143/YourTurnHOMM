@@ -1,11 +1,11 @@
 package pl.oskarinio.yourturnhomm.domain.service.battle;
 
-import pl.oskarinio.yourturnhomm.app.port.in.battle.BattleUseCase;
-import pl.oskarinio.yourturnhomm.app.port.in.battle.CommunicationUseCase;
-import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
-import pl.oskarinio.yourturnhomm.app.port.out.repository.UnitRepositoryPort;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Side;
+import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
+import pl.oskarinio.yourturnhomm.domain.port.in.battle.BattleUseCase;
+import pl.oskarinio.yourturnhomm.domain.port.out.repository.UnitRepositoryPort;
 import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.DuelForm;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.CommunicationUseCase;
 
 public class DuelService {
     private final UnitRepositoryPort unitRepositoryPort;

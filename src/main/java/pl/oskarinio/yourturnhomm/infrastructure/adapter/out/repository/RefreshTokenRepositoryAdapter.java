@@ -1,8 +1,8 @@
 package pl.oskarinio.yourturnhomm.infrastructure.adapter.out.repository;
 
 import org.springframework.stereotype.Component;
-import pl.oskarinio.yourturnhomm.app.port.out.repository.RefreshTokenRepositoryPort;
 import pl.oskarinio.yourturnhomm.infrastructure.db.repository.RefreshTokenRepository;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.RefreshTokenRepositoryPort;
 
 import java.time.Instant;
 

@@ -1,7 +1,7 @@
 package pl.oskarinio.yourturnhomm.domain.service.battle;
 
-import pl.oskarinio.yourturnhomm.app.port.in.battle.CommunicationUseCase;
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.CommunicationUseCase;
 
 public class MessageCreatorService {
     private final CommunicationUseCase communicationUseCase;

@@ -1,7 +1,7 @@
 package pl.oskarinio.yourturnhomm.infrastructure.db.mapper;
 
-import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
 import pl.oskarinio.yourturnhomm.infrastructure.db.entity.RefreshTokenEntity;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.RefreshToken;
 
 class RefreshTokenMapper {
     public static RefreshToken toDomain(RefreshTokenEntity refreshTokenEntity){

@@ -1,28 +1,30 @@
 package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.controller.user;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pl.oskarinio.yourturnhomm.app.port.out.CookieHelperUseCase;
-import pl.oskarinio.yourturnhomm.app.port.in.user.AdminUseCase;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
+import pl.oskarinio.yourturnhomm.domain.port.in.user.AdminPort;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.CookieHelperUseCase;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping(Route.MAIN + Route.ADMIN)
 class AdminController {
 
-    private final AdminUseCase adminUseCase;
+    private final AdminPort adminUseCase;
     private final CookieHelperUseCase cookieHelperUseCase;
 
     @Value("${app.security.admin-username:}")
     private String adminUsername;
 
-    public AdminController(AdminUseCase adminUseCase, CookieHelperUseCase cookieHelperUseCase) {
+    public AdminController(AdminPort adminUseCase, CookieHelperUseCase cookieHelperUseCase) {
         this.adminUseCase = adminUseCase;
         this.cookieHelperUseCase = cookieHelperUseCase;
     }
@@ -35,16 +37,19 @@ class AdminController {
 
     @GetMapping
     public String choseAdminOption(){
+        log.info("Admin w panelu admina");
         return Route.PACKAGE_ADMIN + Route.ADMIN;
     }
 
     @GetMapping(Route.SHOW)
     public String showUsers(Model model){
+        log.info("Admin wyswietla liste uzytkownikow");
         return Route.PACKAGE_ADMIN + Route.VIEW_SHOW_USERS;
     }
 
     @GetMapping(Route.DELETE)
     public String deleteUserView(Model model, HttpServletRequest request){
+        log.info("Admin wybier uzytkownika do usuniecia");
         model.addAttribute("adminUsername", adminUsername);
         model.addAttribute("thisUsername", cookieHelperUseCase.getUsernameFromCookie(request));
         return Route.PACKAGE_ADMIN + Route.VIEW_DELETE_USER;
@@ -53,17 +58,20 @@ class AdminController {
     @PostMapping(Route.DELETE)
     public String deleteUser(@RequestParam String username){
         adminUseCase.deleteUser(username);
+        log.info("Admin usunal uzytkownika");
         return Route.REDIRECT + Route.ADMIN + Route.DELETE;
     }
 
     @GetMapping(Route.GRANT)
-    public String grantAdminView(){
+    public String grantAdmin(){
+        log.info("Admin wybiera uzytkownika do nadania uprawnien administracyjnych");
         return Route.PACKAGE_ADMIN + Route.VIEW_GRANT_ADMIN;
     }
 
     @PostMapping(Route.GRANT)
-    public String grantAdminView(@RequestParam String username){
+    public String grantAdmin(@RequestParam String username){
         adminUseCase.grantAdminRole(username);
+        log.info("Admin nadal uzytkownikowi uprawnienia administracyjne");
         return Route.REDIRECT + Route.ADMIN + Route.GRANT;
     }
 }

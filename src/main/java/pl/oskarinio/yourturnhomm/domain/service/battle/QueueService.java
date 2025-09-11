@@ -1,7 +1,8 @@
 package pl.oskarinio.yourturnhomm.domain.service.battle;
 
-import pl.oskarinio.yourturnhomm.app.port.in.battle.MessageCreatorUseCase;
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
+import pl.oskarinio.yourturnhomm.domain.port.in.battle.MessageCreatorUseCase;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;

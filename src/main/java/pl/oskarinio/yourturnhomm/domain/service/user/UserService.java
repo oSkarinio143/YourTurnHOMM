@@ -1,12 +1,12 @@
 package pl.oskarinio.yourturnhomm.domain.service.user;
 
 import org.springframework.validation.ObjectError;
-import pl.oskarinio.yourturnhomm.app.port.in.user.TokenUseCase;
-import pl.oskarinio.yourturnhomm.app.port.out.repository.UserRepositoryPort;
-import pl.oskarinio.yourturnhomm.infrastructure.security.exception.UsernameNotFoundException;
-import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
+import pl.oskarinio.yourturnhomm.domain.exception.UsernameNotFoundException;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
+import pl.oskarinio.yourturnhomm.domain.port.out.repository.UserRepositoryPort;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.RefreshToken;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.TokenUseCase;
 
 import java.time.Clock;
 import java.time.Instant;

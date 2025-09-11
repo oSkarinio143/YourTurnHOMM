@@ -1,29 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<configuration debug="true">
+
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <append>false</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [userId=%X{userId:-anon}, traceId=%X{traceId:-brak}] - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <!-- ===================================================================== -->
-    <!-- Appender nr 2: NOWY! Wysyłanie logów do Logstasha przez sieć TCP       -->
-    <!-- ===================================================================== -->
-    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <!-- Adres Logstasha. Używamy zmiennej środowiskowej z wartością domyślną. -->
-        <!-- Dla IntelliJ będzie to 'localhost', dla Dockera 'logstash'. -->
-        <destination>${LOGSTASH_HOST:-localhost}:5044</destination>
-
-        <!-- To jest serce magii: ten enkoder zamieni każdy log na obiekt JSON. -->
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-            <!-- Możemy dodać niestandardowe pola, które pojawią się w każdym logu -->
-            <customFields>{"app_name":"YourTurnHOMM"}</customFields>
+    <appender name="TECHNICAL" class="ch.qos.logback.core.FileAppender">
+        <file>logs/technical.log</file>
+        <append>false</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [userId=%X{userId:-anon}, traceId=%X{traceId:-brak}] - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <root level="info">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="LOGSTASH"/>
+    <appender name="BUSINESS" class="ch.qos.logback.core.FileAppender">
+        <file>logs/business.log</file>
+        <append>false</append>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="pl.oskarinio.yourturnhomm.infrastructure.config.LogBusinessFilter">
+            </evaluator>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} [traceId=%X{traceId:-brak}] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ERROR" class="ch.qos.logback.core.FileAppender">
+        <file>logs/error.log</file>
+        <append>false</append>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="pl.oskarinio.yourturnhomm.infrastructure.config.LogExceptionFilter">
+            </evaluator>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} [traceId=%X{traceId:-brak}] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="TRACE">
+        <appender-ref ref = "ERROR" additivity = "false"/>
+        <appender-ref ref = "CONSOLE"/>
+        <appender-ref ref = "TECHNICAL"/>
     </root>
-    <logger name="pl.oskarinio.yourturnhomm" level="debug"/>
+
+    <logger name = "pl.oskarinio.yourturnhomm" level = "TRACE" additivity = "false">
+        <appender-ref ref = "BUSINESS"/>
+    </logger>
+
 </configuration>

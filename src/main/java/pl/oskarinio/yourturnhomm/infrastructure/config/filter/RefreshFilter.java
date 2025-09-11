@@ -7,20 +7,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.out.CookieHelperAdapter;
-import pl.oskarinio.yourturnhomm.app.port.in.user.TokenUseCase;
-import pl.oskarinio.yourturnhomm.app.port.out.repository.UserRepositoryPort;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
-import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
+import pl.oskarinio.yourturnhomm.domain.port.out.repository.UserRepositoryPort;
+import pl.oskarinio.yourturnhomm.infrastructure.adapter.out.CookieHelperAdapter;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.RefreshToken;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.TokenUseCase;
 
 import java.io.IOException;
 import java.time.Clock;
@@ -29,7 +25,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Component
 public class RefreshFilter extends OncePerRequestFilter {
@@ -48,7 +43,8 @@ public class RefreshFilter extends OncePerRequestFilter {
 
     private static final List<String> PUBLIC_PATHS = new ArrayList<>(List.of(
             Route.MAIN + Route.LOGIN,
-            Route.MAIN + Route.REGISTER));
+            Route.MAIN + Route.REGISTER,
+            Route.FAVICON));
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

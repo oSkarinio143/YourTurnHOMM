@@ -7,19 +7,21 @@ services:
     profiles: [ "mysql" ]
     container_name: app-mysql
     environment:
-      - SPRING_PROFILES_ACTIVE=
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_URL=${DB_URL}
       - JWT_SECRET_BASE64=${SECRET_KEY}
       - APP_SECURITY_ADMIN_USERNAME=${ADMIN_USERNAME}
       - APP_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - JAVA_OPTS=-Dlogback.debug=true
     depends_on:
       - mysql-db
     ports:
       - "8084:8080"
     networks:
       - yourturn-network
+    volumes:
+      - ./logs:/app/logs
 
   app-h2:
     build:
@@ -64,10 +66,6 @@ services:
         - discovery.type=single-node
         - xpack.security.enabled=false
         - xpack.security.http.ssl.enabled=false
-#      - discovery.type=single-node
-#      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-#      - xpack.security.enabled=true
-#      - discovery.type=single-node
     ports:
       - "9200:9200"
     networks:
@@ -76,8 +74,10 @@ services:
   logstash:
     image: docker.elastic.co/logstash/logstash:8.10.2
     container_name: logstash
+    command: logstash -f /usr/share/logstash/pipeline/yourturn.conf --log.level debug
     volumes:
       - ./logstash-pipeline:/usr/share/logstash/pipeline
+      - ./logs:/logs:ro
     ports:
       - "5044:5044"
     depends_on:
@@ -91,15 +91,12 @@ services:
     environment:
        ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
        ELASTICSEARCH_PASSWORD: "pass1234"
-#      ELASTICSEARCH_SSL_VERIFICATIONMODE: none
     ports:
       - "5601:5601"
     depends_on:
       - elasticsearch
     networks:
       - yourturn-network
-#    volumes:
-#      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
 
 networks:
   yourturn-network:

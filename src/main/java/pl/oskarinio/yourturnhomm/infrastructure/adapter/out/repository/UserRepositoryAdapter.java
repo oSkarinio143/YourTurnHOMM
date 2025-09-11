@@ -1,11 +1,11 @@
 package pl.oskarinio.yourturnhomm.infrastructure.adapter.out.repository;
 
 import org.springframework.stereotype.Component;
-import pl.oskarinio.yourturnhomm.app.port.out.repository.UserRepositoryPort;
+import pl.oskarinio.yourturnhomm.domain.model.user.User;
+import pl.oskarinio.yourturnhomm.domain.port.out.repository.UserRepositoryPort;
 import pl.oskarinio.yourturnhomm.infrastructure.db.entity.UserEntity;
 import pl.oskarinio.yourturnhomm.infrastructure.db.mapper.UserMapper;
 import pl.oskarinio.yourturnhomm.infrastructure.db.repository.UserRepository;
-import pl.oskarinio.yourturnhomm.domain.model.user.User;
 
 import java.time.Instant;
 import java.util.List;

@@ -1,29 +1,34 @@
 package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.controller.battle;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.oskarinio.yourturnhomm.app.port.in.battle.DuelUseCase;
-import pl.oskarinio.yourturnhomm.app.port.in.database.DatabaseUseCase;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Side;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.DuelForm;
+import pl.oskarinio.yourturnhomm.domain.port.in.battle.DuelUseCase;
+import pl.oskarinio.yourturnhomm.domain.port.in.unit.UnitManagerPort;
 import pl.oskarinio.yourturnhomm.domain.rest.ExceptionMessageCreator;
+import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.DuelForm;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.CommunicationUseCase;
 
+@Slf4j
 @Controller
 @RequestMapping(Route.MAIN + Route.USER + Route.DUEL)
 @CrossOrigin(origins = "*")
 class DuelController {
 
-    private final ExceptionMessageCreator ExceptionMessageCreator;
+    private final ExceptionMessageCreator exceptionMessageCreator;
+    private final CommunicationUseCase communicationUseCase;
     private final DuelUseCase duelUseCase;
-    private final DatabaseUseCase databaseUseCase;
+    private final UnitManagerPort databaseUseCase;
 
-    public DuelController(ExceptionMessageCreator ExceptionMessageCreator, DuelUseCase duelUseCase, DatabaseUseCase databaseUseCase) {
-        this.ExceptionMessageCreator = ExceptionMessageCreator;
+    public DuelController(ExceptionMessageCreator exceptionMessageCreator, CommunicationUseCase communicationUseCase, DuelUseCase duelUseCase, UnitManagerPort databaseUseCase) {
+        this.exceptionMessageCreator = exceptionMessageCreator;
+        this.communicationUseCase = communicationUseCase;
         this.duelUseCase = duelUseCase;
         this.databaseUseCase = databaseUseCase;
     }
@@ -32,8 +37,9 @@ class DuelController {
     public String prepareDuel(Model model,
                               @ModelAttribute DuelForm duelForm){
 
+        log.info("Uzytkownik przygotowuje pojedynek");
         if(duelForm.getUserUUID() != null)
-            duelUseCase.closeEmitter(duelForm.getUserUUID());
+            communicationUseCase.closeConnection(duelForm.getUserUUID());
         model.addAttribute("duelForm", duelForm);
         return Route.PACKAGE_DUEL + Route.DUEL;
     }
@@ -43,6 +49,7 @@ class DuelController {
                              @ModelAttribute DuelForm duelForm,
                              @RequestParam Side side){
 
+        log.info("Uzytkownik wybiera jednostke");
         model.addAttribute("units", databaseUseCase.getAllUnits());
         model.addAttribute("duelForm", duelForm);
         model.addAttribute("side", side.toString());
@@ -57,6 +64,7 @@ class DuelController {
 
         duelUseCase.loadUnit(duelForm, side, tempUnitName);
         model.addAttribute("duelForm", duelForm);
+        log.debug("Jednostka zaladowana");
         return Route.PACKAGE_DUEL + Route.DUEL;
     }
 
@@ -67,13 +75,15 @@ class DuelController {
                               Model model){
 
         if(bindingResult.hasErrors()){
-            redirectAttributes.addFlashAttribute("incorrectMessage", ExceptionMessageCreator.createMessageValidError(bindingResult));
+            log.warn("Nie udalo sie rozpoczac pojedynku - wprowadzono zle dane");
+            redirectAttributes.addFlashAttribute("incorrectMessage", exceptionMessageCreator.createMessageValidError(bindingResult));
             redirectAttributes.addFlashAttribute("duelForm", duelForm);
             return Route.REDIRECT + Route.USER + Route.DUEL;
         }
-        duelForm.setUserUUID(duelUseCase.getUserUUID());
+        duelForm.setUserUUID(communicationUseCase.createUserUUID());
         model.addAttribute("duelForm", duelForm);
         duelUseCase.loadBattle(duelForm);
+        log.info("Uzytkownik rozpoczyna pojedynek");
         return Route.PACKAGE_DUEL + Route.BATTLE;
     }
 }

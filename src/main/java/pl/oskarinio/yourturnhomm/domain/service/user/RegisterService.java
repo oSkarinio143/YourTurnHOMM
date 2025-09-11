@@ -1,13 +1,13 @@
 package pl.oskarinio.yourturnhomm.domain.service.user;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
-import pl.oskarinio.yourturnhomm.app.port.in.user.UserUseCase;
-import pl.oskarinio.yourturnhomm.app.port.out.repository.UserRepositoryPort;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.RegisterForm;
 import pl.oskarinio.yourturnhomm.domain.model.user.Role;
-import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
+import pl.oskarinio.yourturnhomm.domain.port.in.user.UserUseCase;
+import pl.oskarinio.yourturnhomm.domain.port.out.repository.UserRepositoryPort;
+import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.RegisterForm;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.RefreshToken;
 
 import java.time.Clock;
 import java.time.Instant;

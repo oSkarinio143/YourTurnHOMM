@@ -1,13 +1,13 @@
 package pl.oskarinio.yourturnhomm.app.implementation.battle;
 
 import org.springframework.stereotype.Service;
-import pl.oskarinio.yourturnhomm.app.port.in.battle.BattleUseCase;
-import pl.oskarinio.yourturnhomm.app.port.in.battle.CommunicationUseCase;
-import pl.oskarinio.yourturnhomm.app.port.out.repository.UnitRepositoryPort;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.DuelForm;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Side;
+import pl.oskarinio.yourturnhomm.domain.port.in.battle.BattleUseCase;
+import pl.oskarinio.yourturnhomm.domain.port.in.battle.DuelUseCase;
+import pl.oskarinio.yourturnhomm.domain.port.out.repository.UnitRepositoryPort;
 import pl.oskarinio.yourturnhomm.domain.service.battle.DuelService;
-import pl.oskarinio.yourturnhomm.app.port.in.battle.DuelUseCase;
+import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.DuelForm;
+import pl.oskarinio.yourturnhomm.infrastructure.temp.CommunicationUseCase;
 
 @Service
 public class DuelServiceAdapter implements DuelUseCase {
@@ -28,15 +28,5 @@ public class DuelServiceAdapter implements DuelUseCase {
     @Override
     public void loadBattle(DuelForm duelForm) {
         duelService.loadBattle(duelForm);
-    }
-
-    @Override
-    public String getUserUUID() {
-        return duelService.getUserUUID();
-    }
-
-    @Override
-    public void closeEmitter(String userUUID) {
-        duelService.closeEmitter(userUUID);
     }
 }

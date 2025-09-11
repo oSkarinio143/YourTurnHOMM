@@ -45,7 +45,7 @@ class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
                         .requestMatchers(Route.MAIN + Route.LOGIN,
                                 Route.MAIN + Route.REGISTER).permitAll()
                         .requestMatchers(Route.MAIN + Route.USER + "/**").hasRole("USER")
