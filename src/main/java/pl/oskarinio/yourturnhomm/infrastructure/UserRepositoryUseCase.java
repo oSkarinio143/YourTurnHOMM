@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.db.repository;
+package pl.oskarinio.yourturnhomm.domain.usecase.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -10,7 +10,7 @@ import pl.oskarinio.yourturnhomm.infrastructure.db.entity.UserEntity;
 import java.time.Instant;
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<UserEntity, Integer>, JpaSpecificationExecutor<UserEntity> {
+public interface UserRepositoryUseCase extends JpaRepository<UserEntity, Integer>, JpaSpecificationExecutor<UserEntity> {
     Optional<UserEntity> findByUsername(@Param("username") String username);
 
     @Modifying

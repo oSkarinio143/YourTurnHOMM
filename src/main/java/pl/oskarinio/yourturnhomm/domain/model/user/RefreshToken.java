@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.adapter.out;
+package pl.oskarinio.yourturnhomm.infrastructure.db.model;
 
 import lombok.Getter;
 import lombok.Setter;

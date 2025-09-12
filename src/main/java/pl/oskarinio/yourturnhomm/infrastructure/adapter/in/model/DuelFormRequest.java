@@ -11,7 +11,7 @@ import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 @NoArgsConstructor
 @Getter
 @Setter
-public class DuelForm {
+public class DuelFormValidation {
 
     private String userUUID;
 

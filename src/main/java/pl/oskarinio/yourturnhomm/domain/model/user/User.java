@@ -1,7 +1,6 @@
 package pl.oskarinio.yourturnhomm.domain.model.user;
 
 import lombok.*;
-import pl.oskarinio.yourturnhomm.infrastructure.temp.RefreshToken;
 
 import java.time.Instant;
 import java.util.HashSet;

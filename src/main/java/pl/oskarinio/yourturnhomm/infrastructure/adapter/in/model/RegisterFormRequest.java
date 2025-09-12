@@ -9,7 +9,7 @@ import pl.oskarinio.yourturnhomm.infrastructure.security.validation.samepassword
 @Getter
 @Setter
 @ValidSamePassword
-public class RegisterForm {
+public class RegisterFormValidation {
 
     @NotBlank(message = "Nazwa użytkownika jest wymagana, nie może pozostać pusta")
     @Size(min = 4, max = 16, message = "Nazwa użytkownika musi mieć od 4 do 16 znaków")
