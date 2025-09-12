@@ -7,11 +7,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class QueueService {
+public class QueueUseCase {
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private final MessageCreator messageCreator;
 
-    public QueueService(MessageCreator messageCreator) {
+    public QueueUseCase(MessageCreator messageCreator) {
         this.messageCreator = messageCreator;
     }
 

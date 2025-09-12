@@ -3,17 +3,17 @@ package pl.oskarinio.yourturnhomm.domain.usecase.user;
 import pl.oskarinio.yourturnhomm.domain.model.exception.UsernameNotFoundException;
 import pl.oskarinio.yourturnhomm.domain.model.user.Role;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
-import pl.oskarinio.yourturnhomm.domain.port.UserRepository;
+import pl.oskarinio.yourturnhomm.domain.port.repository.UserRepository;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class AdminService {
+public class AdminUseCase {
     private final UserRepository userRepository;
     private final List<String> activeProfiles;
 
-    public AdminService(UserRepository userRepository, String[] activeProfiles) {
+    public AdminUseCase(UserRepository userRepository, String[] activeProfiles) {
         this.userRepository = userRepository;
         this.activeProfiles = Arrays.asList(activeProfiles);
     }

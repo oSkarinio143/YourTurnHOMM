@@ -8,10 +8,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pl.oskarinio.yourturnhomm.app.technical.communication.ExceptionMessageCreatorService;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
-import pl.oskarinio.yourturnhomm.domain.port.in.unit.UnitManagerPort;
-import pl.oskarinio.yourturnhomm.domain.rest.ExceptionMessageCreator;
+import pl.oskarinio.yourturnhomm.domain.port.unit.UnitManagement;
 
 import java.io.IOException;
 
@@ -20,10 +20,10 @@ import java.io.IOException;
 @RequestMapping(Route.MAIN)
 class UnitController {
 
-    private final UnitManagerPort databaseUseCase;
-    private final ExceptionMessageCreator exceptionHandlerService;
+    private final UnitManagement databaseUseCase;
+    private final ExceptionMessageCreatorService exceptionHandlerService;
 
-    public UnitController(UnitManagerPort databaseUseCase, ExceptionMessageCreator exceptionHandlerService) {
+    public UnitController(UnitManagement databaseUseCase, ExceptionMessageCreatorService exceptionHandlerService) {
         this.databaseUseCase = databaseUseCase;
         this.exceptionHandlerService = exceptionHandlerService;
     }

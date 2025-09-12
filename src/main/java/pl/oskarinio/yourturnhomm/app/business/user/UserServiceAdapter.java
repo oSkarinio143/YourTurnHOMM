@@ -1,21 +1,21 @@
-package pl.oskarinio.yourturnhomm.app.implementation.user;
+package pl.oskarinio.yourturnhomm.app.business.user;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.ObjectError;
+import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
-import pl.oskarinio.yourturnhomm.domain.port.UserRepository;
-import pl.oskarinio.yourturnhomm.domain.port.user.User;
+import pl.oskarinio.yourturnhomm.domain.port.repository.UserRepository;
+import pl.oskarinio.yourturnhomm.domain.port.user.UserManagement;
 import pl.oskarinio.yourturnhomm.domain.usecase.user.UserUseCase;
-import pl.oskarinio.yourturnhomm.infrastructure.temp.RefreshToken;
-import pl.oskarinio.yourturnhomm.infrastructure.temp.Token;
+import pl.oskarinio.yourturnhomm.infrastructure.port.communication.Token;
 
 import java.time.Clock;
 import java.util.List;
 
 @Service
-public class UserServiceAdapter implements User {
+public class UserServiceAdapter implements UserManagement {
     private final UserUseCase userUseCase;
 
     public UserServiceAdapter(UserRepository userRepository,

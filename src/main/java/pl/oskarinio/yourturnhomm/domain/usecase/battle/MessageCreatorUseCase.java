@@ -1,17 +1,17 @@
 package pl.oskarinio.yourturnhomm.domain.usecase.battle;
 
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
-import pl.oskarinio.yourturnhomm.infrastructure.temp.CommunicationUseCase;
+import pl.oskarinio.yourturnhomm.infrastructure.port.communication.Communication;
 
-public class MessageCreatorService {
-    private final CommunicationUseCase communicationUseCase;
+public class MessageCreatorUseCase {
+    private final Communication communication;
 
-    public MessageCreatorService(CommunicationUseCase communicationUseCase) {
-        this.communicationUseCase = communicationUseCase;
+    public MessageCreatorUseCase(Communication communication) {
+        this.communication = communication;
     }
 
     public void sendRoundMess(RoundInfo roundInfo) {
-        communicationUseCase.sendMessage(roundInfo.getUserUUID(), "ROUND:Runda " + roundInfo.getRoundCounter());
+        communication.sendMessage(roundInfo.getUserUUID(), "ROUND:Runda " + roundInfo.getRoundCounter());
     }
 
     public void sendAttackFasterMess(RoundInfo roundInfo) {
@@ -29,30 +29,30 @@ public class MessageCreatorService {
     }
 
     public void sendWinnerMess(RoundInfo roundInfo) {
-        communicationUseCase.sendMessage(roundInfo.getUserUUID(), "VICTORY:" + roundInfo.getLoserUnit().getName() + " gina. "
+        communication.sendMessage(roundInfo.getUserUUID(), "VICTORY:" + roundInfo.getLoserUnit().getName() + " gina. "
                 + roundInfo.getWinnerUnit().getName() + " wygrywaja pojedynek");
-        communicationUseCase.closeConnection(roundInfo.getUserUUID());
+        communication.closeConnection(roundInfo.getUserUUID());
     }
 
     private void createMessageAttackFasterKill(RoundInfo roundInfo){
-        communicationUseCase.sendMessage(roundInfo.getUserUUID(), "ATTACKF:Jednostka " + roundInfo.getFasterLastAttackUnits() + "x"
+        communication.sendMessage(roundInfo.getUserUUID(), "ATTACKF:Jednostka " + roundInfo.getFasterLastAttackUnits() + "x"
                 + roundInfo.getFasterUnit().getName() + " atakuje pierwsza, zadajac " + roundInfo.getFasterDmg()
                 + ".<br>Pokonuje " + roundInfo.getSlowerDeathUnits() + "x" + roundInfo.getSlowerUnit().getName());
     }
 
     private void createMessageAttackFasterBasic(RoundInfo roundInfo){
-        communicationUseCase.sendMessage(roundInfo.getUserUUID(), "ATTACKF:Jednostka " + roundInfo.getFasterLastAttackUnits() + "x"
+        communication.sendMessage(roundInfo.getUserUUID(), "ATTACKF:Jednostka " + roundInfo.getFasterLastAttackUnits() + "x"
                 + roundInfo.getFasterUnit().getName() + " atakuje pierwsza, zadajac " + roundInfo.getFasterDmg() + ".");
     }
 
     private void createMessageAttackSlowerKill(RoundInfo roundInfo){
-        communicationUseCase.sendMessage(roundInfo.getUserUUID(), "ATTACKS:Jednostka " + roundInfo.getSlowerLiveUnits() + "x"
+        communication.sendMessage(roundInfo.getUserUUID(), "ATTACKS:Jednostka " + roundInfo.getSlowerLiveUnits() + "x"
                 + roundInfo.getSlowerUnit().getName() + " atakuje druga, zadajac " + roundInfo.getSlowerDmg()
                 + ".<br>Pokonuje " + roundInfo.getFasterDeathUnits() + "x" + roundInfo.getFasterUnit().getName());
     }
 
     private void createMessageAttackSlowerBasic(RoundInfo roundInfo){
-        communicationUseCase.sendMessage(roundInfo.getUserUUID(), "ATTACKS:Jednostka " + roundInfo.getSlowerLiveUnits() + "x"
+        communication.sendMessage(roundInfo.getUserUUID(), "ATTACKS:Jednostka " + roundInfo.getSlowerLiveUnits() + "x"
                 + roundInfo.getSlowerUnit().getName() + " atakuje druga, zadajac " + roundInfo.getSlowerDmg() + ".");
     }
 }

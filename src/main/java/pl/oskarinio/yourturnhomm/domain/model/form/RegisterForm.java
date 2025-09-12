@@ -1,4 +1,14 @@
 package pl.oskarinio.yourturnhomm.domain.model.form;
 
-public class RegisterFormn {
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class RegisterForm {
+
+    private String username;
+    private String password;
+    private String confirmPassword;
+
 }

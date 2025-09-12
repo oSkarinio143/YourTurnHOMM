@@ -1,10 +1,10 @@
-package pl.oskarinio.yourturnhomm.app.technical.cookie;
+package pl.oskarinio.yourturnhomm.app.technical.communication;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
-import pl.oskarinio.yourturnhomm.infrastructure.port.cookie.Token;
-import pl.oskarinio.yourturnhomm.infrastructure.usecase.cookie.TokenUseCase;
+import pl.oskarinio.yourturnhomm.infrastructure.port.communication.Token;
+import pl.oskarinio.yourturnhomm.infrastructure.usecase.communication.TokenUseCase;
 
 import java.time.Clock;
 

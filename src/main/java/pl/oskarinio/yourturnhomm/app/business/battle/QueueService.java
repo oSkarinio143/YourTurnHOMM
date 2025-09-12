@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.app.implementation.battle;
+package pl.oskarinio.yourturnhomm.app.business.battle;
 
 import org.springframework.stereotype.Service;
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;

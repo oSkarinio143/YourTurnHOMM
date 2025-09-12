@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.domain.exception;
+package pl.oskarinio.yourturnhomm.domain.model.exception;
 
 public class DuplicateUnitException extends RuntimeException {
     public DuplicateUnitException(String message) {

@@ -9,30 +9,33 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pl.oskarinio.yourturnhomm.app.technical.communication.CookieHelperService;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
-import pl.oskarinio.yourturnhomm.domain.port.in.user.LoginUseCase;
-import pl.oskarinio.yourturnhomm.domain.port.in.user.RegisterUseCase;
-import pl.oskarinio.yourturnhomm.domain.port.in.user.UserUseCase;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.LoginForm;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.RegisterForm;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.out.CookieHelperAdapter;
+import pl.oskarinio.yourturnhomm.domain.port.user.Login;
+import pl.oskarinio.yourturnhomm.domain.port.user.Register;
+import pl.oskarinio.yourturnhomm.domain.port.user.UserManagement;
+import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.LoginFormRequest;
+import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.RegisterFormRequest;
+import pl.oskarinio.yourturnhomm.infrastructure.db.mapper.MapStruct;
 
 @Slf4j
 @RequestMapping(Route.MAIN)
 @Controller
 class UserController {
 
-    private final UserUseCase userUseCase;
-    private final RegisterUseCase registerUseCase;
-    private final LoginUseCase loginUseCase;
-    private final CookieHelperAdapter cookieHelperAdapter;
+    private final UserManagement userManagement;
+    private final Register register;
+    private final Login login;
+    private final CookieHelperService cookieHelperService;
+    private final MapStruct mapper;
 
-    public UserController(UserUseCase userUseCase, RegisterUseCase registerUseCase, LoginUseCase loginUseCase, CookieHelperAdapter cookieHelperAdapter) {
-        this.userUseCase = userUseCase;
-        this.registerUseCase = registerUseCase;
-        this.loginUseCase = loginUseCase;
-        this.cookieHelperAdapter = cookieHelperAdapter;
+    public UserController(UserManagement userManagement, Register register, Login login, CookieHelperService cookieHelperService, MapStruct mapper) {
+        this.userManagement = userManagement;
+        this.register = register;
+        this.login = login;
+        this.cookieHelperService = cookieHelperService;
+        this.mapper = mapper;
     }
 
     @GetMapping(Route.LOGIN)
@@ -47,7 +50,7 @@ class UserController {
     }
 
     @PostMapping(Route.LOGIN)
-    public String login(@Valid @ModelAttribute LoginForm loginForm,
+    public String login(@Valid @ModelAttribute LoginFormRequest loginFormRequest,
                         BindingResult bindingResult,
                         RedirectAttributes redirectAttributes,
                         HttpServletResponse response) {
@@ -55,11 +58,11 @@ class UserController {
         log.info("Uzytkownik probuje sie zalogowac");
         if (bindingResult.hasErrors()){
             log.warn("Logowanie nie udane");
-            redirectAttributes.addFlashAttribute("errorMessage", userUseCase.prepareErrorMessage(bindingResult.getAllErrors()));
+            redirectAttributes.addFlashAttribute("errorMessage", userManagement.prepareErrorMessage(bindingResult.getAllErrors()));
             return Route.REDIRECT + Route.LOGIN;
         }
-        UserServiceData userServiceData = loginUseCase.loginUser(loginForm);
-        cookieHelperAdapter.setCookieTokens(userServiceData, response);
+        UserServiceData userServiceData = login.loginUser(mapper.toLoginForm(loginFormRequest));
+        cookieHelperService.setCookieTokens(userServiceData, response);
         redirectAttributes.addFlashAttribute("welcomeUserMessage","Udało się poprawnie zalogować użytkownika");
         log.info("Uzytkownik zostal zalogowany");
         return Route.REDIRECT;
@@ -72,7 +75,7 @@ class UserController {
     }
 
     @PostMapping(Route.REGISTER)
-    public String register(@Valid @ModelAttribute RegisterForm registerForm,
+    public String register(@Valid @ModelAttribute RegisterFormRequest registerFormRequest,
                            BindingResult bindingResult,
                            RedirectAttributes redirectAttributes,
                            HttpServletResponse response){
@@ -80,11 +83,11 @@ class UserController {
         log.info("Uzytkownik probuje sie zarejestrowac");
         if(bindingResult.hasErrors()) {
             log.warn("Rejestracja nie udana");
-            redirectAttributes.addFlashAttribute("errorMessage", userUseCase.prepareErrorMessage(bindingResult.getAllErrors()));
+            redirectAttributes.addFlashAttribute("errorMessage", userManagement.prepareErrorMessage(bindingResult.getAllErrors()));
             return Route.REDIRECT + Route.REGISTER;
         }
-        UserServiceData userServiceData = registerUseCase.registerUser(registerForm);
-        cookieHelperAdapter.setCookieTokens(userServiceData, response);
+        UserServiceData userServiceData = register.registerUser(mapper.toRegisterForm(registerFormRequest));
+        cookieHelperService.setCookieTokens(userServiceData, response);
         redirectAttributes.addFlashAttribute("welcomeUserMessage", "Udało się zarejestrować użytkownika");
         log.info("Uzytkownik zostal zarejestrowany");
         return Route.REDIRECT;
@@ -94,10 +97,10 @@ class UserController {
     public String logoutUser(RedirectAttributes redirectAttributes,
                              HttpServletResponse response,
                              HttpServletRequest request){
-        String username = cookieHelperAdapter.getUsernameFromCookie(request);
-        cookieHelperAdapter.removeAccessCookie(response);
-        cookieHelperAdapter.removeRefreshCookie(response);
-        userUseCase.deleteToken(username);
+        String username = cookieHelperService.getUsernameFromCookie(request);
+        cookieHelperService.removeAccessCookie(response);
+        cookieHelperService.removeRefreshCookie(response);
+        userManagement.deleteToken(username);
         redirectAttributes.addFlashAttribute("logoutMessage", "Użytkownik został wylogowany");
         log.info("Uzytkownik zostal wylogowany");
         return Route.REDIRECT + Route.LOGIN;

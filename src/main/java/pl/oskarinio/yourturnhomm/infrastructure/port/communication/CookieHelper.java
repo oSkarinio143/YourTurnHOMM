@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.port.cookie;
+package pl.oskarinio.yourturnhomm.infrastructure.port.communication;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

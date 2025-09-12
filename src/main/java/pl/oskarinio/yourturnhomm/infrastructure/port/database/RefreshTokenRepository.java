@@ -1,7 +1,7 @@
-package pl.oskarinio.yourturnhomm.infrastructure.port;
+package pl.oskarinio.yourturnhomm.infrastructure.port.database;
 
 import java.time.Instant;
 
-public interface RefreshTokenRepositoryPort {
+public interface RefreshTokenRepository {
     void deleteExpiredToken(Instant date);
 }

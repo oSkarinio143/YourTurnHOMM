@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.config;
+package pl.oskarinio.yourturnhomm.infrastructure.config.log;
 
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.boolex.EvaluationException;

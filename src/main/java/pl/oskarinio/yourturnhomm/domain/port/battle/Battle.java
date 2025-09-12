@@ -1,7 +1,7 @@
-package pl.oskarinio.yourturnhomm.domain.port.in.battle;
+package pl.oskarinio.yourturnhomm.domain.port.battle;
 
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.DuelForm;
+import pl.oskarinio.yourturnhomm.domain.model.form.DuelForm;
 
-public interface BattleUseCase {
+public interface Battle {
     void prepareBattle(DuelForm duelForm);
 }

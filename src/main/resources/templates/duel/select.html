@@ -80,17 +80,17 @@
                 <p><strong>Szybkość:</strong> <span th:text="${unit.speed}"/></p>
                 <p><strong>Opis:</strong> <span th:utext="${unit.description}"/></p>
             </div>
-            <form th:action="@{/oskarinio143/YourTurnHOMM/user/duel}" method="post">
+            <form th:action="@{/oskarinio143/YourTurnHOMM/userManagement/duel}" method="post">
                 <input type="hidden" name="tempUnitName" th:value="${unit.name}"/>
                 <input type="hidden" name="side" th:value="${side}"/>
-                <input type="hidden" name="leftUnit" th:value="${duelForm.leftUnit?.name}"/>
-                <input type="hidden" name="rightUnit" th:value="${duelForm.rightUnit?.name}"/>
-                <input type="hidden" name="leftQuantity" th:value="${duelForm.leftQuantity}"/>
-                <input type="hidden" name="rightQuantity" th:value="${duelForm.rightQuantity}"/>
-                <input type="hidden" name="leftHeroAttack" th:value="${duelForm.leftHeroAttack}"/>
-                <input type="hidden" name="leftHeroDefense" th:value="${duelForm.leftHeroDefense}"/>
-                <input type="hidden" name="rightHeroAttack" th:value="${duelForm.rightHeroAttack}"/>
-                <input type="hidden" name="rightHeroDefense" th:value="${duelForm.rightHeroDefense}"/>
+                <input type="hidden" name="leftUnit" th:value="${duelFormRequest.leftUnit?.name}"/>
+                <input type="hidden" name="rightUnit" th:value="${duelFormRequest.rightUnit?.name}"/>
+                <input type="hidden" name="leftQuantity" th:value="${duelFormRequest.leftQuantity}"/>
+                <input type="hidden" name="rightQuantity" th:value="${duelFormRequest.rightQuantity}"/>
+                <input type="hidden" name="leftHeroAttack" th:value="${duelFormRequest.leftHeroAttack}"/>
+                <input type="hidden" name="leftHeroDefense" th:value="${duelFormRequest.leftHeroDefense}"/>
+                <input type="hidden" name="rightHeroAttack" th:value="${duelFormRequest.rightHeroAttack}"/>
+                <input type="hidden" name="rightHeroDefense" th:value="${duelFormRequest.rightHeroDefense}"/>
                 <button type="submit" class="secure-button">Wybierz</button>
             </form>
         </div>

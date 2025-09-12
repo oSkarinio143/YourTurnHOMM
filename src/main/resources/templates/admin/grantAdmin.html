@@ -17,7 +17,7 @@
             color: #333;
             margin-bottom: 30px;
         }
-        .user-container {
+        .userManagement-container {
             display: flex;
             background: #fff;
             border-radius: 8px;
@@ -26,8 +26,8 @@
             margin-bottom: 20px;
             position: relative;
         }
-        .user-stats { flex-grow: 1; }
-        .user-stats p { margin: 4px 0; }
+        .userManagement-stats { flex-grow: 1; }
+        .userManagement-stats p { margin: 4px 0; }
         .separator {
             border-top: 3px solid orange;
             margin: 30px 0;
@@ -150,14 +150,14 @@
 
 <div class="main-container">
     <h1>Nadaj uprawnienia administratora</h1>
-    <th:block th:each="user : ${users}">
-        <div class="user-container" th:data-username="${user.username}">
-            <div class="user-stats">
-                <p><strong>Nazwa użytkownika:</strong> <span th:text="${user.username}"/></p>
-                <p><strong>Role:</strong> <span th:text="${#strings.listJoin(user.roles, ', ')}"/></p>
-                <p><strong>Data rejestracji:</strong> <span th:text="${#dates.format(user.registrationDate, 'dd-MM-yyyy HH:mm')}"/></p>
+    <th:block th:each="userManagement : ${users}">
+        <div class="userManagement-container" th:data-username="${userManagement.username}">
+            <div class="userManagement-stats">
+                <p><strong>Nazwa użytkownika:</strong> <span th:text="${userManagement.username}"/></p>
+                <p><strong>Role:</strong> <span th:text="${#strings.listJoin(userManagement.roles, ', ')}"/></p>
+                <p><strong>Data rejestracji:</strong> <span th:text="${#dates.format(userManagement.registrationDate, 'dd-MM-yyyy HH:mm')}"/></p>
             </div>
-            <button class="grant-button" th:if="${not #lists.contains(user.roles, 'ROLE_ADMIN')}">
+            <button class="grant-button" th:if="${not #lists.contains(userManagement.roles, 'ROLE_ADMIN')}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.056.255.098.38.115a.7.7 0 0 0 .117 0c.125-.017.26-.059.38-.115.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.95-.3-1.896-.63-2.837-.856C9.824 1.258 8.821 1 8 1s-1.824.258-2.662.59z"/>
                 </svg>
@@ -208,7 +208,7 @@
 
         grantButtons.forEach(button => {
             button.addEventListener('click', () => {
-                const username = button.closest('.user-container').dataset.username;
+                const username = button.closest('.userManagement-container').dataset.username;
                 showModal(username);
             });
         });

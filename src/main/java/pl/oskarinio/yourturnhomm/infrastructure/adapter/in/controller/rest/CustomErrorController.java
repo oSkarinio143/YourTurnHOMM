@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.config;
+package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.controller.rest;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,27 +11,17 @@ import pl.oskarinio.yourturnhomm.domain.model.Route;
 @Controller
 public class CustomErrorController implements ErrorController {
 
-    /**
-     * Ta metoda przechwytuje wszystkie błędy przekierowane przez Spring Boot na ścieżkę /error.
-     */
     @RequestMapping("/error")
     public String handleError(HttpServletRequest request) {
-        // Pobieramy kod statusu HTTP z atrybutów żądania
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 
         if (status != null) {
             Integer statusCode = Integer.valueOf(status.toString());
 
-            // Sprawdzamy, czy błąd to 404 Not Found
-            if (statusCode == HttpStatus.NOT_FOUND.value()) {
-                // Jeśli tak, przekierowujemy użytkownika na stronę główną
+            if (statusCode == HttpStatus.NOT_FOUND.value())
                 return Route.REDIRECT;
-            }
         }
 
-        // Dla wszystkich innych błędów (np. 500, 403), możesz
-        // zwrócić widok standardowej strony błędu lub również przekierować.
-        // Tutaj dla prostoty też przekierowujemy na stronę główną.
         return Route.REDIRECT;
     }
 }

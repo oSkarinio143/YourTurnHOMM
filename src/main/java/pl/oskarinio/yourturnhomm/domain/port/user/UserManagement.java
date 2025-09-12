@@ -6,7 +6,7 @@ import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 
 import java.util.List;
 
-public interface User {
+public interface UserManagement {
     void generateAndSetTokens(UserServiceData userServiceData);
     RefreshToken getRefreshToken(String refreshTokenString);
     String prepareErrorMessage(List<ObjectError> errorsMessageList);

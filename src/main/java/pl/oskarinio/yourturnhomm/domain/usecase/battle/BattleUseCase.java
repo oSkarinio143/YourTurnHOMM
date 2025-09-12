@@ -5,17 +5,17 @@ import pl.oskarinio.yourturnhomm.domain.model.battle.AttackInfo;
 import pl.oskarinio.yourturnhomm.domain.model.battle.BattleUnit;
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
+import pl.oskarinio.yourturnhomm.domain.model.form.DuelForm;
 import pl.oskarinio.yourturnhomm.domain.port.battle.Queue;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.DuelForm;
 
 @Slf4j
-public class BattleService {
+public class BattleUseCase {
     private final Queue queue;
 
     private double ATK_RATE;
     private double DEF_RATE;
 
-    public BattleService(Queue queue, double atkRate, double defRate) {
+    public BattleUseCase(Queue queue, double atkRate, double defRate) {
         this.queue = queue;
         this.ATK_RATE = atkRate;
         this.DEF_RATE = defRate;
@@ -54,15 +54,15 @@ public class BattleService {
         return attackInfo;
     }
 
-    private void setHerosStatsIfNull(DuelForm duelForm){
-        if(duelForm.getLeftHeroAttack() == null)
-            duelForm.setLeftHeroAttack(0);
-        if(duelForm.getLeftHeroDefense() == null)
-            duelForm.setLeftHeroDefense(0);
-        if(duelForm.getRightHeroAttack() == null)
-            duelForm.setRightHeroAttack(0);
-        if(duelForm.getRightHeroDefense() == null)
-            duelForm.setRightHeroDefense(0);
+    private void setHerosStatsIfNull(DuelForm duelFormValidation){
+        if(duelFormValidation.getLeftHeroAttack() == null)
+            duelFormValidation.setLeftHeroAttack(0);
+        if(duelFormValidation.getLeftHeroDefense() == null)
+            duelFormValidation.setLeftHeroDefense(0);
+        if(duelFormValidation.getRightHeroAttack() == null)
+            duelFormValidation.setRightHeroAttack(0);
+        if(duelFormValidation.getRightHeroDefense() == null)
+            duelFormValidation.setRightHeroDefense(0);
     }
 
     private BattleUnit prepareBattleUnit(Unit unit, int heroAtk, int heroDef){

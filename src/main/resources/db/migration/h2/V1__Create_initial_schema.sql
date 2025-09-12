@@ -30,8 +30,6 @@ CREATE TABLE app_user (
 CREATE TABLE user_roles (
     user_id BIGINT NOT NULL,
     role VARCHAR(255) NOT NULL,
-    -- Klucz podstawowy zapobiegający duplikatom (ten sam user nie może mieć tej samej roli dwa razy)
     PRIMARY KEY (user_id, role),
-    -- Klucz obcy wskazujący na użytkownika
     CONSTRAINT fk_user_roles_user FOREIGN KEY (user_id) REFERENCES app_user(id) ON DELETE CASCADE
 );

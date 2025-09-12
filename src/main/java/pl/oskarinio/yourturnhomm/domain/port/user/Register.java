@@ -1,8 +1,8 @@
 package pl.oskarinio.yourturnhomm.domain.port.user;
 
+import pl.oskarinio.yourturnhomm.domain.model.form.RegisterForm;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.RegisterForm;
 
-public interface RegisterUseCase {
+public interface Register {
     UserServiceData registerUser(RegisterForm registerForm);
 }

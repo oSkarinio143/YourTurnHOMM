@@ -196,11 +196,11 @@
       <div class="hero-title">Statystyki bohatera gracza</div>
       <div class="stat-group">
         <label class="stat-label">Atak:</label>
-        <input type="number" class="stat-input" id="leftHeroAttack" min="0" placeholder="0" th:value="${duelForm.leftHeroAttack}">
+        <input type="number" class="stat-input" id="leftHeroAttack" min="0" placeholder="0" th:value="${duelFormRequest.leftHeroAttack}">
       </div>
       <div class="stat-group">
         <label class="stat-label">Obrona:</label>
-        <input type="number" class="stat-input" id="leftHeroDefense" min="0" placeholder="0" th:value="${duelForm.leftHeroDefense}">
+        <input type="number" class="stat-input" id="leftHeroDefense" min="0" placeholder="0" th:value="${duelFormRequest.leftHeroDefense}">
       </div>
     </div>
 
@@ -208,10 +208,10 @@
       <div class="army-section left-army">
         <div class="army-title">Gracz</div>
         <div class="unit-selector">
-          <form th:action="@{/oskarinio143/YourTurnHOMM/user/duel/select}" method="get" id="selectLeftForm">
+          <form th:action="@{/oskarinio143/YourTurnHOMM/userManagement/duel/select}" method="get" id="selectLeftForm">
             <input type="hidden" name="side" value="LEFT">
-            <input type="hidden" name="leftUnit" th:value="${duelForm.leftUnit?.name}">
-            <input type="hidden" name="rightUnit" th:value="${duelForm.rightUnit?.name}">
+            <input type="hidden" name="leftUnit" th:value="${duelFormRequest.leftUnit?.name}">
+            <input type="hidden" name="rightUnit" th:value="${duelFormRequest.rightUnit?.name}">
             <input type="hidden" name="leftHeroAttack">
             <input type="hidden" name="leftHeroDefense">
             <input type="hidden" name="rightHeroAttack">
@@ -219,13 +219,13 @@
             <input type="hidden" name="leftQuantity">
             <input type="hidden" name="rightQuantity">
             <button type="submit" class="styled-button select-unit-btn">
-              <span th:text="${duelForm.leftUnit == null ? 'Wybierz jednostkę' : 'Zmień jednostkę'}"></span>
+              <span th:text="${duelFormRequest.leftUnit == null ? 'Wybierz jednostkę' : 'Zmień jednostkę'}"></span>
             </button>
           </form>
         </div>
         <div class="quantity-section">
           <label class="quantity-label">Podaj ilość:</label>
-          <input type="number" class="quantity-input" id="leftQuantity" min="1" placeholder="1" th:value="${duelForm.leftQuantity}">
+          <input type="number" class="quantity-input" id="leftQuantity" min="1" placeholder="1" th:value="${duelFormRequest.leftQuantity}">
         </div>
         <div class="nav-button-container">
           <a th:href="@{/oskarinio143/YourTurnHOMM}" class="styled-button back-btn">Wróć do bazy</a>
@@ -235,19 +235,19 @@
       <div class="battle-center">
         <div class="unit-display-container">
           <div class="unit-display left-unit">
-            <div th:if="${duelForm.leftUnit}">
-              <img th:src="@{${duelForm.leftUnit.imagePath}}" alt="Left Unit Image" class="unitImg">
-              <div class="unit-info" th:text="${duelForm.leftUnit.name}"></div>
+            <div th:if="${duelFormRequest.leftUnit}">
+              <img th:src="@{${duelFormRequest.leftUnit.imagePath}}" alt="Left Unit Image" class="unitImg">
+              <div class="unit-info" th:text="${duelFormRequest.leftUnit.name}"></div>
             </div>
-            <div th:unless="${duelForm.leftUnit}" class="unit-placeholder">?</div>
+            <div th:unless="${duelFormRequest.leftUnit}" class="unit-placeholder">?</div>
           </div>
           <div class="vs-text">VS</div>
           <div class="unit-display right-unit">
-            <div th:if="${duelForm.rightUnit}">
-              <img th:src="@{${duelForm.rightUnit.imagePath}}" alt="Right Unit Image" class="unitImg">
-              <div class="unit-info" th:text="${duelForm.rightUnit.name}"></div>
+            <div th:if="${duelFormRequest.rightUnit}">
+              <img th:src="@{${duelFormRequest.rightUnit.imagePath}}" alt="Right Unit Image" class="unitImg">
+              <div class="unit-info" th:text="${duelFormRequest.rightUnit.name}"></div>
             </div>
-            <div th:unless="${duelForm.rightUnit}" class="unit-placeholder">?</div>
+            <div th:unless="${duelFormRequest.rightUnit}" class="unit-placeholder">?</div>
           </div>
         </div>
       </div>
@@ -255,10 +255,10 @@
       <div class="army-section right-army">
         <div class="army-title">Przeciwnik</div>
         <div class="unit-selector">
-          <form th:action="@{/oskarinio143/YourTurnHOMM/user/duel/select}" method="get" id="selectRightForm">
+          <form th:action="@{/oskarinio143/YourTurnHOMM/userManagement/duel/select}" method="get" id="selectRightForm">
             <input type="hidden" name="side" value="RIGHT">
-            <input type="hidden" name="leftUnit" th:value="${duelForm.leftUnit?.name}">
-            <input type="hidden" name="rightUnit" th:value="${duelForm.rightUnit?.name}">
+            <input type="hidden" name="leftUnit" th:value="${duelFormRequest.leftUnit?.name}">
+            <input type="hidden" name="rightUnit" th:value="${duelFormRequest.rightUnit?.name}">
             <input type="hidden" name="leftHeroAttack">
             <input type="hidden" name="leftHeroDefense">
             <input type="hidden" name="rightHeroAttack">
@@ -266,25 +266,25 @@
             <input type="hidden" name="leftQuantity">
             <input type="hidden" name="rightQuantity">
             <button type="submit" class="styled-button select-unit-btn">
-              <span th:text="${duelForm.rightUnit == null ? 'Wybierz jednostkę' : 'Zmień jednostkę'}"></span>
+              <span th:text="${duelFormRequest.rightUnit == null ? 'Wybierz jednostkę' : 'Zmień jednostkę'}"></span>
             </button>
           </form>
         </div>
         <div class="quantity-section">
           <label class="quantity-label">Podaj ilość:</label>
-          <input type="number" class="quantity-input" id="rightQuantity" min="1" placeholder="1" th:value="${duelForm.rightQuantity}">
+          <input type="number" class="quantity-input" id="rightQuantity" min="1" placeholder="1" th:value="${duelFormRequest.rightQuantity}">
         </div>
         <div class="nav-button-container">
-          <form th:action="@{/oskarinio143/YourTurnHOMM/user/duel/battle}" method="post" id="battleForm">
-            <input type="hidden" name="leftUnit" th:value="${duelForm.leftUnit?.name}">
-            <input type="hidden" name="rightUnit" th:value="${duelForm.rightUnit?.name}">
+          <form th:action="@{/oskarinio143/YourTurnHOMM/userManagement/duel/battle}" method="post" id="battleForm">
+            <input type="hidden" name="leftUnit" th:value="${duelFormRequest.leftUnit?.name}">
+            <input type="hidden" name="rightUnit" th:value="${duelFormRequest.rightUnit?.name}">
             <input type="hidden" name="leftQuantity">
             <input type="hidden" name="rightQuantity">
             <input type="hidden" name="leftHeroAttack">
             <input type="hidden" name="leftHeroDefense">
             <input type="hidden" name="rightHeroAttack">
             <input type="hidden" name="rightHeroDefense">
-            <button type="submit" class="styled-button battle-btn" id="battleButton" th:disabled="${duelForm.leftUnit == null || duelForm.rightUnit == null}">
+            <button type="submit" class="styled-button battle-btn" id="battleButton" th:disabled="${duelFormRequest.leftUnit == null || duelFormRequest.rightUnit == null}">
               Pojedynek ⚔️
             </button>
           </form>
@@ -296,11 +296,11 @@
       <div class="hero-title">Statystyki bohatera przeciwnika</div>
       <div class="stat-group">
         <label class="stat-label">Atak:</label>
-        <input type="number" class="stat-input" id="rightHeroAttack" min="0" placeholder="0" th:value="${duelForm.rightHeroAttack}">
+        <input type="number" class="stat-input" id="rightHeroAttack" min="0" placeholder="0" th:value="${duelFormRequest.rightHeroAttack}">
       </div>
       <div class="stat-group">
         <label class="stat-label">Obrona:</label>
-        <input type="number" class="stat-input" id="rightHeroDefense" min="0" placeholder="0" th:value="${duelForm.rightHeroDefense}">
+        <input type="number" class="stat-input" id="rightHeroDefense" min="0" placeholder="0" th:value="${duelFormRequest.rightHeroDefense}">
       </div>
     </div>
   </div>

@@ -1,12 +1,11 @@
 package pl.oskarinio.yourturnhomm.domain.usecase.unit;
 
 import jakarta.transaction.Transactional;
-import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.multipart.MultipartFile;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 import pl.oskarinio.yourturnhomm.domain.model.exception.DuplicateUnitException;
 import pl.oskarinio.yourturnhomm.domain.model.exception.TransactionSystemAddException;
-import pl.oskarinio.yourturnhomm.domain.port.UnitRepository;
+import pl.oskarinio.yourturnhomm.domain.port.repository.UnitRepository;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,11 +13,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class UnitManagementService {
+public class UnitManagementUseCase {
 
     private final UnitRepository unitRepository;
 
-    public UnitManagementService(UnitRepository unitRepository) {
+    public UnitManagementUseCase(UnitRepository unitRepository) {
         this.unitRepository = unitRepository;
     }
 
@@ -30,7 +29,7 @@ public class UnitManagementService {
         unit.setImagePath(imagePath);
         try {
             unitRepository.save(unit);
-        } catch (TransactionSystemException ex) {
+        } catch (RuntimeException ex) {
             throw new TransactionSystemAddException("", ex.getCause());
         }
     }

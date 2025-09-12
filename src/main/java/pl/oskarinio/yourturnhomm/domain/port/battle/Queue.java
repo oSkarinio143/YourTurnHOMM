@@ -1,7 +1,7 @@
-package pl.oskarinio.yourturnhomm.domain.port.in.battle;
+package pl.oskarinio.yourturnhomm.domain.port.battle;
 
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
 
-public interface QueueUseCase {
+public interface Queue {
     void createQueue(RoundInfo roundInfo);
 }

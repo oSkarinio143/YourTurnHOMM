@@ -1,9 +1,9 @@
-package pl.oskarinio.yourturnhomm.infrastructure.adapter.out.repository;
+package pl.oskarinio.yourturnhomm.infrastructure.adapter.out;
 
 import org.springframework.stereotype.Component;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 import pl.oskarinio.yourturnhomm.domain.port.repository.UnitRepository;
-import pl.oskarinio.yourturnhomm.domain.usecase.repository.UnitRepositoryUseCase;
+import pl.oskarinio.yourturnhomm.infrastructure.UnitRepositoryUseCase;
 import pl.oskarinio.yourturnhomm.infrastructure.db.entity.UnitEntity;
 import pl.oskarinio.yourturnhomm.infrastructure.db.mapper.UnitMapper;
 

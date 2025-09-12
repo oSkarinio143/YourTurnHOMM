@@ -1,18 +1,18 @@
-package pl.oskarinio.yourturnhomm.infrastructure.usecase;
+package pl.oskarinio.yourturnhomm.infrastructure.usecase.database;
 
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
-import pl.oskarinio.yourturnhomm.domain.port.repository.UnitRepositoryPort;
+import pl.oskarinio.yourturnhomm.domain.port.repository.UnitRepository;
 
 public class DatabaseSeederUseCase {
 
-    private final UnitRepositoryPort unitRepositoryPort;
+    private final UnitRepository unitRepository;
 
-    public DatabaseSeederUseCase(UnitRepositoryPort unitRepositoryPort) {
-        this.unitRepositoryPort = unitRepositoryPort;
+    public DatabaseSeederUseCase(UnitRepository unitRepository) {
+        this.unitRepository = unitRepository;
     }
 
     public void seedUnits(){
-        if(unitRepositoryPort.count() == 0) {
+        if(unitRepository.count() == 0) {
             saveSingleUnit("Pikinier",       4, 5, 1, 3,   10, 4, "odporny na szarżę",                            "https://oskarinio143.github.io/Heroes3assets/images/pikinier.png");
             saveSingleUnit("Halabardnik",    6, 5, 2, 3,   10, 5, "odporny na szarżę",                            "https://oskarinio143.github.io/Heroes3assets/images/halabardnik.png");
             saveSingleUnit("Lucznik",        6, 3,12, 2, 3,   10, 4, "",                                             "https://oskarinio143.github.io/Heroes3assets/images/lucznik.png");
@@ -40,7 +40,7 @@ public class DatabaseSeederUseCase {
                                String desc,
                                String imgPath){
         Unit newUnit = new Unit(name, atk, def, minDmg, maxDmg, hp, speed, desc, imgPath);
-        unitRepositoryPort.save(newUnit);
+        unitRepository.save(newUnit);
     }
 
     private void saveSingleUnit(String name,
@@ -54,6 +54,6 @@ public class DatabaseSeederUseCase {
                                String desc,
                                String imgPath){
         Unit newUnit = new Unit(name, atk, def, shots, minDmg, maxDmg, hp, speed, desc, imgPath);
-        unitRepositoryPort.save(newUnit);
+        unitRepository.save(newUnit);
     }
 }

@@ -1,9 +1,10 @@
 package pl.oskarinio.yourturnhomm.domain.model.battle;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
-
 @Getter
 @Setter
 

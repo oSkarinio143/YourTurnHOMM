@@ -1,8 +1,6 @@
-package pl.oskarinio.yourturnhomm.domain.exception;
+package pl.oskarinio.yourturnhomm.domain.model.exception;
 
-import org.springframework.transaction.TransactionSystemException;
-
-public class TransactionSystemAddException extends TransactionSystemException {
+public class TransactionSystemAddException extends RuntimeException {
     public TransactionSystemAddException(String msg, Throwable cause) {
         super(msg, cause);
     }

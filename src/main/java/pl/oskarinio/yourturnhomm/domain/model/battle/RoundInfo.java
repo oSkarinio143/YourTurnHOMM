@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @RequiredArgsConstructor
+
 public class RoundInfo implements Cloneable{
 
     @NonNull

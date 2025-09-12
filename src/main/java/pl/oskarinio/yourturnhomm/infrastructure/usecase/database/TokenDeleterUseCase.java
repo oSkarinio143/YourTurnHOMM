@@ -1,21 +1,21 @@
-package pl.oskarinio.yourturnhomm.infrastructure.usecase.cookie;
+package pl.oskarinio.yourturnhomm.infrastructure.usecase.database;
 
-import pl.oskarinio.yourturnhomm.infrastructure.port.RefreshTokenRepositoryPort;
+import pl.oskarinio.yourturnhomm.infrastructure.port.database.RefreshTokenRepository;
 
 import java.time.Clock;
 import java.time.Instant;
 
 
 public class TokenDeleterUseCase {
-    private final RefreshTokenRepositoryPort refreshTokenRepositoryPort;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final Clock clock;
 
-    public TokenDeleterUseCase(RefreshTokenRepositoryPort refreshTokenRepositoryPort, Clock clock) {
-        this.refreshTokenRepositoryPort = refreshTokenRepositoryPort;
+    public TokenDeleterUseCase(RefreshTokenRepository refreshTokenRepository, Clock clock) {
+        this.refreshTokenRepository = refreshTokenRepository;
         this.clock = clock;
     }
 
     public void cleanExpiredTokens() {
-        refreshTokenRepositoryPort.deleteExpiredToken(Instant.now(clock));
+        refreshTokenRepository.deleteExpiredToken(Instant.now(clock));
     }
 }

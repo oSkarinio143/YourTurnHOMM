@@ -1,8 +1,7 @@
-package pl.oskarinio.yourturnhomm.infrastructure.db.model;
+package pl.oskarinio.yourturnhomm.domain.model.user;
 
 import lombok.Getter;
 import lombok.Setter;
-import pl.oskarinio.yourturnhomm.domain.model.user.User;
 
 import java.time.Instant;
 

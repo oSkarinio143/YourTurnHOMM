@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepositoryPort {
+public interface UserRepository {
     Optional<User> findByUsername(String username);
     void removeRefreshTokenRelation(Instant date);
     Long count();

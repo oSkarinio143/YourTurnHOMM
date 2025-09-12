@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.usecase.cookie;
+package pl.oskarinio.yourturnhomm.infrastructure.usecase.communication;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -7,7 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.web.util.WebUtils;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
-import pl.oskarinio.yourturnhomm.infrastructure.port.cookie.Token;
+import pl.oskarinio.yourturnhomm.infrastructure.port.communication.Token;
 
 import java.util.Arrays;
 import java.util.List;

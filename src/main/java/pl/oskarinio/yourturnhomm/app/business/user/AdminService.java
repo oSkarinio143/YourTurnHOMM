@@ -1,9 +1,9 @@
-package pl.oskarinio.yourturnhomm.app.implementation.user;
+package pl.oskarinio.yourturnhomm.app.business.user;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
-import pl.oskarinio.yourturnhomm.domain.port.UserRepository;
+import pl.oskarinio.yourturnhomm.domain.port.repository.UserRepository;
 import pl.oskarinio.yourturnhomm.domain.port.user.Admin;
 import pl.oskarinio.yourturnhomm.domain.usecase.user.AdminUseCase;
 

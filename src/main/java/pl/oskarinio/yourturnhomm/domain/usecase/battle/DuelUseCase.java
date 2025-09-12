@@ -2,20 +2,20 @@ package pl.oskarinio.yourturnhomm.domain.usecase.battle;
 
 import pl.oskarinio.yourturnhomm.domain.model.battle.Side;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
-import pl.oskarinio.yourturnhomm.domain.port.UnitRepository;
+import pl.oskarinio.yourturnhomm.domain.model.form.DuelForm;
 import pl.oskarinio.yourturnhomm.domain.port.battle.Battle;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.DuelForm;
-import pl.oskarinio.yourturnhomm.infrastructure.temp.CommunicationUseCase;
+import pl.oskarinio.yourturnhomm.domain.port.repository.UnitRepository;
+import pl.oskarinio.yourturnhomm.infrastructure.port.communication.Communication;
 
-public class DuelService {
+public class DuelUseCase {
     private final UnitRepository unitRepository;
     private final Battle battle;
-    private final CommunicationUseCase communicationUseCase;
+    private final Communication communication;
 
-    public DuelService(UnitRepository unitRepository, Battle battle, CommunicationUseCase communicationUseCase) {
+    public DuelUseCase(UnitRepository unitRepository, Battle battle, Communication communication) {
         this.unitRepository = unitRepository;
         this.battle = battle;
-        this.communicationUseCase = communicationUseCase;
+        this.communication = communication;
     }
 
     public void loadUnit(DuelForm duelForm, Side side, String tempUnitName){
@@ -32,10 +32,10 @@ public class DuelService {
     }
 
     public String getUserUUID(){
-        return communicationUseCase.createUserUUID();
+        return communication.createUserUUID();
     }
 
     public void closeEmitter(String userUUID){
-        communicationUseCase.closeConnection(userUUID);
+        communication.closeConnection(userUUID);
     }
 }

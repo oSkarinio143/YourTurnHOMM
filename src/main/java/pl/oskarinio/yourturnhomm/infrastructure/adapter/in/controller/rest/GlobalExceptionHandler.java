@@ -5,10 +5,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.oskarinio.yourturnhomm.domain.exception.DuplicateUnitException;
-import pl.oskarinio.yourturnhomm.domain.exception.UsernameNotFoundException;
-import pl.oskarinio.yourturnhomm.domain.exception.UsernameNotMatchingPassword;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
+import pl.oskarinio.yourturnhomm.domain.model.exception.DuplicateUnitException;
+import pl.oskarinio.yourturnhomm.domain.model.exception.UsernameNotFoundException;
+import pl.oskarinio.yourturnhomm.domain.model.exception.UsernameNotMatchingPassword;
 
 @Slf4j
 @ControllerAdvice

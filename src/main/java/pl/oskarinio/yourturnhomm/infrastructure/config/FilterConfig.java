@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.security;
+package pl.oskarinio.yourturnhomm.infrastructure.config;
 
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;

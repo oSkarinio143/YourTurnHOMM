@@ -1,27 +1,27 @@
-package pl.oskarinio.yourturnhomm.infrastructure.temp;
+package pl.oskarinio.yourturnhomm.app.technical.database;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.oskarinio.yourturnhomm.domain.model.user.Role;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
-import pl.oskarinio.yourturnhomm.domain.port.repository.UserRepositoryPort;
+import pl.oskarinio.yourturnhomm.domain.port.repository.UserRepository;
 
 import java.time.Clock;
 import java.time.Instant;
 
 public class H2AdminInitializer {
 
-    private final UserRepositoryPort userRepositoryPort;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final Clock clock;
     private String adminUsername;
     private String adminPassword;
 
-    public H2AdminInitializer(UserRepositoryPort userRepositoryPort,
+    public H2AdminInitializer(UserRepository userRepository,
                               PasswordEncoder passwordEncoder,
                               Clock clock,
                               String adminUsername,
                               String adminPassword) {
-        this.userRepositoryPort = userRepositoryPort;
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.clock = clock;
         this.adminUsername = adminUsername;
@@ -29,14 +29,14 @@ public class H2AdminInitializer {
     }
 
     public void initializeProfile() {
-        if (userRepositoryPort.count() == 0) {
+        if (userRepository.count() == 0) {
             User adminUser = new User();
             adminUser.setUsername(adminUsername);
             adminUser.setPassword(passwordEncoder.encode(adminPassword));
             adminUser.setRegistrationDate(Instant.now());
             adminUser.addRole(Role.ROLE_USER);
             adminUser.addRole(Role.ROLE_ADMIN);
-            userRepositoryPort.save(adminUser);
+            userRepository.save(adminUser);
         }
     }
 }

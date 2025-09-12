@@ -8,8 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
-import pl.oskarinio.yourturnhomm.domain.port.in.user.AdminPort;
-import pl.oskarinio.yourturnhomm.infrastructure.temp.CookieHelperUseCase;
+import pl.oskarinio.yourturnhomm.domain.port.user.Admin;
+import pl.oskarinio.yourturnhomm.infrastructure.port.communication.CookieHelper;
 
 import java.util.List;
 
@@ -18,21 +18,21 @@ import java.util.List;
 @RequestMapping(Route.MAIN + Route.ADMIN)
 class AdminController {
 
-    private final AdminPort adminUseCase;
-    private final CookieHelperUseCase cookieHelperUseCase;
+    private final Admin admin;
+    private final CookieHelper cookieHelper;
 
     @Value("${app.security.admin-username:}")
     private String adminUsername;
 
-    public AdminController(AdminPort adminUseCase, CookieHelperUseCase cookieHelperUseCase) {
-        this.adminUseCase = adminUseCase;
-        this.cookieHelperUseCase = cookieHelperUseCase;
+    public AdminController(Admin admin, CookieHelper cookieHelper) {
+        this.admin = admin;
+        this.cookieHelper = cookieHelper;
     }
 
     @ModelAttribute("users")
     public List<User> addUsersListModel(){
-        List<User> userList = adminUseCase.getUserList();
-        return adminUseCase.getUserList();
+        List<User> userList = admin.getUserList();
+        return admin.getUserList();
     }
 
     @GetMapping
@@ -51,13 +51,13 @@ class AdminController {
     public String deleteUserView(Model model, HttpServletRequest request){
         log.info("Admin wybier uzytkownika do usuniecia");
         model.addAttribute("adminUsername", adminUsername);
-        model.addAttribute("thisUsername", cookieHelperUseCase.getUsernameFromCookie(request));
+        model.addAttribute("thisUsername", cookieHelper.getUsernameFromCookie(request));
         return Route.PACKAGE_ADMIN + Route.VIEW_DELETE_USER;
     }
 
     @PostMapping(Route.DELETE)
     public String deleteUser(@RequestParam String username){
-        adminUseCase.deleteUser(username);
+        admin.deleteUser(username);
         log.info("Admin usunal uzytkownika");
         return Route.REDIRECT + Route.ADMIN + Route.DELETE;
     }
@@ -70,7 +70,7 @@ class AdminController {
 
     @PostMapping(Route.GRANT)
     public String grantAdmin(@RequestParam String username){
-        adminUseCase.grantAdminRole(username);
+        admin.grantAdminRole(username);
         log.info("Admin nadal uzytkownikowi uprawnienia administracyjne");
         return Route.REDIRECT + Route.ADMIN + Route.GRANT;
     }

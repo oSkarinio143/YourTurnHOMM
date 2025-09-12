@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.port.cookie;
+package pl.oskarinio.yourturnhomm.infrastructure.port.communication;
 
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 

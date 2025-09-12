@@ -6,7 +6,7 @@ import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 import java.io.IOException;
 import java.util.List;
 
-public interface UnitManagementUseCase {
+public interface UnitManagement {
     void addUnit(Unit unit, MultipartFile image) throws IOException;
     List<Unit> getAllUnits();
     Unit getSingleUnit(String name);

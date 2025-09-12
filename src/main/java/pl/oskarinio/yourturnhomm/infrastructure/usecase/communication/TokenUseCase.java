@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.usecase.cookie;
+package pl.oskarinio.yourturnhomm.infrastructure.usecase.communication;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

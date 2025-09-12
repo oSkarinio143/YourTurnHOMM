@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.temp;
+package pl.oskarinio.yourturnhomm.infrastructure.usecase.communication;
 
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 

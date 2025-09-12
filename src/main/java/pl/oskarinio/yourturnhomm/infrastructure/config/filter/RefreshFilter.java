@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
+import pl.oskarinio.yourturnhomm.app.technical.communication.CookieHelperService;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
+import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
-import pl.oskarinio.yourturnhomm.domain.port.out.repository.UserRepositoryPort;
-import pl.oskarinio.yourturnhomm.infrastructure.adapter.out.CookieHelperAdapter;
-import pl.oskarinio.yourturnhomm.infrastructure.temp.RefreshToken;
-import pl.oskarinio.yourturnhomm.infrastructure.temp.TokenUseCase;
+import pl.oskarinio.yourturnhomm.domain.port.repository.UserRepository;
+import pl.oskarinio.yourturnhomm.infrastructure.port.communication.Token;
 
 import java.io.IOException;
 import java.time.Clock;
@@ -29,11 +29,11 @@ import java.util.Optional;
 @Component
 public class RefreshFilter extends OncePerRequestFilter {
     @Autowired
-    private TokenUseCase tokenUseCase;
+    private Token token;
     @Autowired
-    private UserRepositoryPort userRepositoryPort;
+    private UserRepository userRepository;
     @Autowired
-    private CookieHelperAdapter cookieHelperAdapter;
+    private CookieHelperService cookieHelperService;
     @Autowired
     private Clock clock;
     @Value("${token.access.seconds}")
@@ -66,8 +66,8 @@ public class RefreshFilter extends OncePerRequestFilter {
         if(continueIfRefreshBad(cookieRefresh, cookieAccess, tokenRefresh, response, request, filterChain))
             return;
 
-        String username = tokenUseCase.extractUsername(tokenRefresh);
-        Optional<User> userOptional = userRepositoryPort.findByUsername(username);
+        String username = token.extractUsername(tokenRefresh);
+        Optional<User> userOptional = userRepository.findByUsername(username);
 
         if(continueIfUserBad(userOptional, request, response, filterChain))
             return;
@@ -95,7 +95,7 @@ public class RefreshFilter extends OncePerRequestFilter {
                                              HttpServletRequest request,
                                              HttpServletResponse response,
                                              FilterChain filterChain) throws ServletException, IOException {
-        if (cookieAccess != null && !tokenUseCase.isTokenExpiredSafe(tokenAccess)) {
+        if (cookieAccess != null && !token.isTokenExpiredSafe(tokenAccess)) {
             filterChain.doFilter(request, response);
             return true;
         }
@@ -120,8 +120,8 @@ public class RefreshFilter extends OncePerRequestFilter {
                                          HttpServletResponse response,
                                          HttpServletRequest request,
                                          FilterChain filterChain) throws ServletException, IOException {
-        if (cookieRefresh == null || tokenUseCase.isTokenExpiredSafe(tokenRefresh)) {
-            cookieHelperAdapter.clearCookies(response, request);
+        if (cookieRefresh == null || token.isTokenExpiredSafe(tokenRefresh)) {
+            cookieHelperService.clearCookies(response, request);
             filterChain.doFilter(request, response);
             return true;
         }
@@ -133,7 +133,7 @@ public class RefreshFilter extends OncePerRequestFilter {
                                       HttpServletResponse response,
                                       FilterChain filterChain) throws ServletException, IOException {
         if (userOptional.isEmpty()) {
-            cookieHelperAdapter.clearCookies(response, request);
+            cookieHelperService.clearCookies(response, request);
             filterChain.doFilter(request, response);
             return true;
         }
@@ -150,7 +150,7 @@ public class RefreshFilter extends OncePerRequestFilter {
         Instant now = Instant.now(clock);
         RefreshToken refreshToken = new RefreshToken(refreshTokenNew, now, now.plus(TOKEN_REFRESH_SECONDS, ChronoUnit.SECONDS));
         user.setRefreshToken(refreshToken);
-        userRepositoryPort.save(user);
+        userRepository.save(user);
     }
 
     private void setUserTokens(UserServiceData userServiceData,
@@ -158,12 +158,12 @@ public class RefreshFilter extends OncePerRequestFilter {
                                HttpServletResponse response,
                                HttpServletRequest request){
 
-        String accessTokenNew = tokenUseCase.generateToken(userServiceData, TOKEN_ACCESS_SECONDS);
-        String refreshTokenNew = tokenUseCase.generateToken(userServiceData, TOKEN_REFRESH_SECONDS);
+        String accessTokenNew = token.generateToken(userServiceData, TOKEN_ACCESS_SECONDS);
+        String refreshTokenNew = token.generateToken(userServiceData, TOKEN_REFRESH_SECONDS);
         userServiceData.setAccessToken(accessTokenNew);
         userServiceData.setRefreshToken(refreshTokenNew);
         saveRefreshToken(refreshTokenNew, user);
-        cookieHelperAdapter.setCookieTokens(userServiceData, response);
+        cookieHelperService.setCookieTokens(userServiceData, response);
         request.setAttribute("accessToken", accessTokenNew);
     }
 }

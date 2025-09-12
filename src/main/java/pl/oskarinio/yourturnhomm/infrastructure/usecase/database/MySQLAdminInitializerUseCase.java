@@ -1,26 +1,26 @@
-package pl.oskarinio.yourturnhomm.infrastructure.adapter.out;
+package pl.oskarinio.yourturnhomm.infrastructure.usecase.database;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import pl.oskarinio.yourturnhomm.domain.port.repository.UserRepositoryPort;
-import pl.oskarinio.yourturnhomm.infrastructure.temp.MySQLAdminInitializer;
+import pl.oskarinio.yourturnhomm.app.technical.database.MySQLAdminInitializer;
+import pl.oskarinio.yourturnhomm.domain.port.repository.UserRepository;
 
 import java.time.Clock;
 
 @Component
 @Profile("!h2")
-class MySQLAdminInitializerService implements CommandLineRunner {
+class MySQLAdminInitializerUseCase implements CommandLineRunner {
     private final MySQLAdminInitializer mySQLAdminInitializer;
 
-    public MySQLAdminInitializerService(UserRepositoryPort userRepositoryPort,
+    public MySQLAdminInitializerUseCase(UserRepository userRepository,
                                         PasswordEncoder passwordEncoder,
                                         Clock clock,
                                         @Value("${app.security.admin-username:}") String adminUsername,
                                         @Value("${app.security.admin-password:}") String adminPassword) {
-        this.mySQLAdminInitializer = new MySQLAdminInitializer(userRepositoryPort, passwordEncoder, clock, adminUsername, adminPassword);
+        this.mySQLAdminInitializer = new MySQLAdminInitializer(userRepository, passwordEncoder, clock, adminUsername, adminPassword);
     }
 
     @Override

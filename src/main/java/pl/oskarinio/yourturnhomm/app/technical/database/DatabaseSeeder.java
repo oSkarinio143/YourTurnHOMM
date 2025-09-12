@@ -1,16 +1,16 @@
-package pl.oskarinio.yourturnhomm.app.technical;
+package pl.oskarinio.yourturnhomm.app.technical.database;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import pl.oskarinio.yourturnhomm.domain.port.repository.UnitRepositoryPort;
-import pl.oskarinio.yourturnhomm.infrastructure.usecase.DatabaseSeederUseCase;
+import pl.oskarinio.yourturnhomm.domain.port.repository.UnitRepository;
+import pl.oskarinio.yourturnhomm.infrastructure.usecase.database.DatabaseSeederUseCase;
 
 @Component
 class DatabaseSeeder implements CommandLineRunner {
     private final DatabaseSeederUseCase databaseSeederUseCase;
 
-    public DatabaseSeeder(UnitRepositoryPort unitRepositoryPort) {
-        this.databaseSeederUseCase = new DatabaseSeederUseCase(unitRepositoryPort);
+    public DatabaseSeeder(UnitRepository unitRepository) {
+        this.databaseSeederUseCase = new DatabaseSeederUseCase(unitRepository);
     }
 
     @Override

@@ -30,7 +30,7 @@
         <file>logs/business.log</file>
         <append>false</append>
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator class="pl.oskarinio.yourturnhomm.infrastructure.config.LogBusinessFilter">
+            <evaluator class="pl.oskarinio.yourturnhomm.infrastructure.config.log.LogBusinessFilter">
             </evaluator>
             <OnMatch>ACCEPT</OnMatch>
             <OnMismatch>DENY</OnMismatch>
@@ -44,7 +44,7 @@
         <file>logs/error.log</file>
         <append>false</append>
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator class="pl.oskarinio.yourturnhomm.infrastructure.config.LogExceptionFilter">
+            <evaluator class="pl.oskarinio.yourturnhomm.infrastructure.config.log.LogExceptionFilter">
             </evaluator>
             <OnMatch>ACCEPT</OnMatch>
             <OnMismatch>DENY</OnMismatch>

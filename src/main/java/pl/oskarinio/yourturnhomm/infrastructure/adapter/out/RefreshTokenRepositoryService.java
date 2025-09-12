@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.adapter.out.repository;
+package pl.oskarinio.yourturnhomm.infrastructure.adapter.out;
 
 import org.springframework.stereotype.Component;
 import pl.oskarinio.yourturnhomm.infrastructure.usecase.database.RefreshTokenRepository;

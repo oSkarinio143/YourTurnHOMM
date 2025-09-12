@@ -4,7 +4,7 @@ import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 
 import java.util.List;
 
-public interface UnitRepositoryPort {
+public interface UnitRepository {
     Unit getReferenceById(String id);
     long count();
     void save(Unit unit);
