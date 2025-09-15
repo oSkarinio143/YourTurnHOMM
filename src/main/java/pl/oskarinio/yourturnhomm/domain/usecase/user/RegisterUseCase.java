@@ -1,11 +1,11 @@
 package pl.oskarinio.yourturnhomm.domain.usecase.user;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.oskarinio.yourturnhomm.domain.model.form.RegisterForm;
 import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
 import pl.oskarinio.yourturnhomm.domain.model.user.Role;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
+import pl.oskarinio.yourturnhomm.domain.port.out.PasswordEncoder;
 import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
 import pl.oskarinio.yourturnhomm.domain.port.user.UserManagement;
 

@@ -2,10 +2,10 @@ package pl.oskarinio.yourturnhomm.app.business.user;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.oskarinio.yourturnhomm.domain.model.form.RegisterForm;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
+import pl.oskarinio.yourturnhomm.domain.port.out.PasswordEncoder;
 import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
 import pl.oskarinio.yourturnhomm.domain.port.user.Register;
 import pl.oskarinio.yourturnhomm.domain.port.user.UserManagement;
