@@ -5,8 +5,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
+import pl.oskarinio.yourturnhomm.domain.port.out.Token;
 import pl.oskarinio.yourturnhomm.infrastructure.port.communication.CookieHelper;
-import pl.oskarinio.yourturnhomm.infrastructure.port.communication.Token;
 import pl.oskarinio.yourturnhomm.infrastructure.usecase.communication.CookieHelperUseCase;
 
 @Component

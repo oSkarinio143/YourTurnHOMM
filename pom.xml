@@ -41,6 +41,15 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>3.5.0</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
@@ -188,16 +197,48 @@
 
 	<build>
 		<plugins>
+
+<!--			<plugin>-->
+<!--				<groupId>org.apache.maven.plugins</groupId>-->
+<!--				<artifactId>maven-compiler-plugin</artifactId>-->
+<!--				<configuration>-->
+<!--					<annotationProcessorPaths>-->
+<!--						<path>-->
+<!--							<groupId>org.projectlombok</groupId>-->
+<!--							<artifactId>lombok</artifactId>-->
+<!--						</path>-->
+<!--					</annotationProcessorPaths>-->
+<!--				</configuration>-->
+<!--			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<annotationProcessorPaths>
+						<!-- Lombok musi być PIERWSZY - już masz, zostaw -->
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
+							<version>1.18.30</version> <!-- dodaj wersję -->
+						</path>
+						<!-- MapStruct processor - DODAJ TO -->
+						<path>
+							<groupId>org.mapstruct</groupId>
+							<artifactId>mapstruct-processor</artifactId>
+							<version>1.5.5.Final</version>
+						</path>
+						<!-- Binding między Lombok a MapStruct - DODAJ TO -->
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok-mapstruct-binding</artifactId>
+							<version>0.2.0</version>
 						</path>
 					</annotationProcessorPaths>
+					<!-- Opcjonalne parametry dla MapStruct -->
+					<compilerArgs>
+						<compilerArg>-Amapstruct.defaultComponentModel=spring</compilerArg>
+						<compilerArg>-Amapstruct.unmappedTargetPolicy=IGNORE</compilerArg>
+					</compilerArgs>
 				</configuration>
 			</plugin>
 

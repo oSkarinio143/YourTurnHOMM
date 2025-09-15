@@ -1,7 +1,7 @@
 package pl.oskarinio.yourturnhomm.infrastructure.usecase.database;
 
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
-import pl.oskarinio.yourturnhomm.domain.port.repository.UnitRepository;
+import pl.oskarinio.yourturnhomm.domain.port.out.UnitRepository;
 
 public class DatabaseSeederUseCase {
 

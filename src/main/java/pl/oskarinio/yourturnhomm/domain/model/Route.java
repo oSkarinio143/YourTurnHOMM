@@ -23,7 +23,7 @@ public class Route {
 
     public static final String REDIRECT = "redirect:/oskarinio143/YourTurnHOMM";
     public static final String MAIN = "/oskarinio143/YourTurnHOMM";
-    public static final String FAVICON = "/fabvicon.ico";
+    public static final String FAVICON = "/favicon.ico";
     public static final String USER = "/user";
     public static final String ADMIN = "/admin";
     public static final String REGISTER = "/register";

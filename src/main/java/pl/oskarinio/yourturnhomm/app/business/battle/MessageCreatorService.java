@@ -1,17 +1,17 @@
-package pl.oskarinio.yourturnhomm.app.technical.communication;
+package pl.oskarinio.yourturnhomm.app.business.battle;
 
 import org.springframework.stereotype.Service;
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
-import pl.oskarinio.yourturnhomm.infrastructure.port.communication.Communication;
-import pl.oskarinio.yourturnhomm.infrastructure.port.communication.MessageCreator;
-import pl.oskarinio.yourturnhomm.infrastructure.usecase.communication.MessageCreatorUseCase;
+import pl.oskarinio.yourturnhomm.domain.port.battle.MessageCreator;
+import pl.oskarinio.yourturnhomm.domain.port.out.MessageSender;
+import pl.oskarinio.yourturnhomm.domain.usecase.battle.MessageCreatorUseCase;
 
 @Service
 public class MessageCreatorService implements MessageCreator {
     private final MessageCreatorUseCase messageCreatorUseCase;
 
-    public MessageCreatorService(Communication communication) {
-        this.messageCreatorUseCase = new MessageCreatorUseCase(communication);
+    public MessageCreatorService(MessageSender messageSender) {
+        this.messageCreatorUseCase = new MessageCreatorUseCase(messageSender);
     }
 
     @Override

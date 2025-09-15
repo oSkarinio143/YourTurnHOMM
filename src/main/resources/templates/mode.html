@@ -414,19 +414,19 @@
     </div>
 
     <div class="grid-container">
-        <a th:href="@{/oskarinio143/YourTurnHOMM/userManagement/database}" class="menu-button">
+        <a th:href="@{/oskarinio143/YourTurnHOMM/user/database}" class="menu-button">
             <i class="fas fa-database"></i>
             <h2>Baza danych</h2>
         </a>
 
-        <a th:href="@{/oskarinio143/YourTurnHOMM/userManagement/duel}" class="menu-button">
+        <a th:href="@{/oskarinio143/YourTurnHOMM/user/duel}" class="menu-button">
             <i class="fa-solid fa-shield-halved"></i>
             <h2>Pojedynek</h2>
         </a>
 
         <div class="admin-button-container" sec:authorize="hasRole('ADMIN')">
             <a th:href="@{/oskarinio143/YourTurnHOMM/admin}" class="menu-button admin-button">
-                <i class="fa-solid fa-userManagement-gear"></i>
+                <i class="fa-solid fa-user-gear"></i>
                 <h2>Panel Admina</h2>
             </a>
         </div>

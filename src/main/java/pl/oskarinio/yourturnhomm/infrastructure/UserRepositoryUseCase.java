@@ -1,5 +1,6 @@
 package pl.oskarinio.yourturnhomm.infrastructure;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,6 +15,7 @@ public interface UserRepositoryUseCase extends JpaRepository<UserEntity, Integer
     Optional<UserEntity> findByUsername(@Param("username") String username);
 
     @Modifying
-    @Query("UPDATE UserEntity u SET u.refreshToken = null WHERE u.refreshToken.expirationDate < :date")
-    void removeRefreshTokenRelation(@Param("date") Instant date);
+    @Transactional
+    @Query("UPDATE UserEntity u SET u.refreshToken = null WHERE u.refreshToken.expirationDate < :expirationDate")
+    void removeRefreshTokenRelation(@Param("expirationDate") Instant expirationDate);
 }

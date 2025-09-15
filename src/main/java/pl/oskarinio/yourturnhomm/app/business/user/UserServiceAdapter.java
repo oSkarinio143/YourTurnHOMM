@@ -3,13 +3,13 @@ package pl.oskarinio.yourturnhomm.app.business.user;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.ObjectError;
 import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
+import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
-import pl.oskarinio.yourturnhomm.domain.port.repository.UserRepository;
+import pl.oskarinio.yourturnhomm.domain.port.out.Token;
+import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
 import pl.oskarinio.yourturnhomm.domain.port.user.UserManagement;
 import pl.oskarinio.yourturnhomm.domain.usecase.user.UserUseCase;
-import pl.oskarinio.yourturnhomm.infrastructure.port.communication.Token;
 
 import java.time.Clock;
 import java.util.List;
@@ -37,12 +37,12 @@ public class UserServiceAdapter implements UserManagement {
     }
 
     @Override
-    public String prepareErrorMessage(List<ObjectError> errorsMessageList) {
+    public String prepareErrorMessage(List<String> errorsMessageList) {
         return userUseCase.prepareErrorMessage(errorsMessageList);
     }
 
     @Override
-    public pl.oskarinio.yourturnhomm.domain.model.user.User getUserByUsernameOrThrow(String username) {
+    public User getUserByUsernameOrThrow(String username) {
         return userUseCase.getUserByUsernameOrThrow(username);
     }
 
@@ -54,7 +54,7 @@ public class UserServiceAdapter implements UserManagement {
 
     @Transactional
     @Override
-    public void setRefreshToken(pl.oskarinio.yourturnhomm.domain.model.user.User user, RefreshToken refreshToken) {
+    public void setRefreshToken(User user, RefreshToken refreshToken) {
         userUseCase.setRefreshToken(user,refreshToken);
     }
 }

@@ -10,7 +10,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.oskarinio.yourturnhomm.app.technical.communication.ExceptionMessageCreatorService;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Side;
+import pl.oskarinio.yourturnhomm.domain.model.form.DuelForm;
 import pl.oskarinio.yourturnhomm.domain.port.battle.Duel;
+import pl.oskarinio.yourturnhomm.domain.port.out.MessageSender;
 import pl.oskarinio.yourturnhomm.domain.port.unit.UnitManagement;
 import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.DuelFormRequest;
 import pl.oskarinio.yourturnhomm.infrastructure.db.mapper.MapStruct;
@@ -24,13 +26,15 @@ class DuelController {
 
     private final ExceptionMessageCreatorService exceptionMessageCreatorService;
     private final Communication communication;
+    private final MessageSender messageSender;
     private final Duel duel;
     private final UnitManagement databaseUseCase;
     private final MapStruct mapper;
 
-    public DuelController(ExceptionMessageCreatorService exceptionMessageCreatorService, Communication communication, Duel duel, UnitManagement databaseUseCase, MapStruct mapper) {
+    public DuelController(ExceptionMessageCreatorService exceptionMessageCreatorService, Communication communication, MessageSender messageSender, Duel duel, UnitManagement databaseUseCase, MapStruct mapper) {
         this.exceptionMessageCreatorService = exceptionMessageCreatorService;
         this.communication = communication;
+        this.messageSender = messageSender;
         this.duel = duel;
         this.databaseUseCase = databaseUseCase;
         this.mapper = mapper;
@@ -42,7 +46,7 @@ class DuelController {
 
         log.info("Uzytkownik przygotowuje pojedynek");
         if(duelFormRequest.getUserUUID() != null)
-            communication.closeConnection(duelFormRequest.getUserUUID());
+            messageSender.closeConnection(duelFormRequest.getUserUUID());
         model.addAttribute("duelForm", duelFormRequest);
         return Route.PACKAGE_DUEL + Route.DUEL;
     }
@@ -65,8 +69,9 @@ class DuelController {
                            @RequestParam(required = false) Side side,
                            @RequestParam(required = false) String tempUnitName){
 
-        duel.loadUnit(mapper.toDuelForm(duelFormRequest), side, tempUnitName);
-        model.addAttribute("duelForm", duelFormRequest);
+        DuelForm duelForm = mapper.toDuelForm(duelFormRequest);
+        duel.loadUnit(duelForm, side, tempUnitName);
+        model.addAttribute("duelForm", duelForm);
         log.debug("Jednostka zaladowana");
         return Route.PACKAGE_DUEL + Route.DUEL;
     }

@@ -20,7 +20,7 @@
             color: #333;
             margin-bottom: 30px;
         }
-        .userManagement-container {
+        .user-container {
             display: flex;
             background-color: white;
             border-radius: 8px;
@@ -28,10 +28,10 @@
             padding: 20px;
             margin-bottom: 20px;
         }
-        .userManagement-details {
+        .user-details {
             flex-grow: 1;
         }
-        .userManagement-details p {
+        .user-details p {
             margin: 8px 0;
             font-size: 16px;
         }
@@ -71,12 +71,12 @@
 <body>
 <div class="main-container">
     <h1>Lista Użytkowników</h1>
-    <div th:each="userManagement, iterStat : ${users}">
-        <div class="userManagement-container">
-            <div class="userManagement-details">
-                <p><strong>Nazwa użytkownika:</strong> <span th:text="${userManagement.username}"/></p>
-                <p><strong>Role:</strong> <span th:text="${#strings.listJoin(userManagement.roles, ', ')}"/></p>
-                <p><strong>Data rejestracji:</strong> <span th:text="${#dates.format(userManagement.registrationDate, 'dd-MM-yyyy HH:mm')}"/></p>
+    <div th:each="user, iterStat : ${users}">
+        <div class="user-container">
+            <div class="user-details">
+                <p><strong>Nazwa użytkownika:</strong> <span th:text="${user.username}"/></p>
+                <p><strong>Role:</strong> <span th:text="${#strings.listJoin(user.roles, ', ')}"/></p>
+                <p><strong>Data rejestracji:</strong> <span th:text="${#dates.format(user.registrationDate, 'dd-MM-yyyy HH:mm')}"/></p>
             </div>
         </div>
         <div class="separator" th:if="${!iterStat.last}"></div>

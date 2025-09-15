@@ -2,7 +2,7 @@ package pl.oskarinio.yourturnhomm.app.technical.database;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import pl.oskarinio.yourturnhomm.domain.port.repository.UnitRepository;
+import pl.oskarinio.yourturnhomm.domain.port.out.UnitRepository;
 import pl.oskarinio.yourturnhomm.infrastructure.usecase.database.DatabaseSeederUseCase;
 
 @Component

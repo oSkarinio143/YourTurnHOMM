@@ -216,7 +216,7 @@
   </style>
 </head>
 <body>
-<div class="main-container" th:object="${duelFormRequest}">
+<div class="main-container" th:object="${duelForm}">
   <h1>⚔️ Pojedynek w toku ⚔️</h1>
 
   <div class="battle-container">
@@ -322,7 +322,7 @@
   </div>
 
   <div class="navigation-buttons">
-    <form th:action="@{/oskarinio143/YourTurnHOMM/userManagement/duel}" method="get" th:object="${duelFormRequest}">
+    <form th:action="@{/oskarinio143/YourTurnHOMM/user/duel}" method="get" th:object="${duelForm}">
       <input type="hidden" name="leftUnit" th:value="*{leftUnit.name}" />
       <input type="hidden" name="rightUnit" th:value="*{rightUnit.name}" />
       <input type="hidden" name="leftQuantity" th:value="*{leftQuantity}" />
@@ -348,7 +348,7 @@
 
 <script th:nonce="${cspNonce}" th:inline="javascript">
   document.addEventListener('DOMContentLoaded', () => {
-    const userUUID = /*[[${duelFormRequest.userUUID ?: 'default-uuid-if-error'}]]*/ 'fallback-value';
+    const userUUID = /*[[${duelForm.userUUID ?: 'default-uuid-if-error'}]]*/ 'fallback-value';
     let eventSource;
 
     const battleLogContent = document.getElementById('battle-log-content');

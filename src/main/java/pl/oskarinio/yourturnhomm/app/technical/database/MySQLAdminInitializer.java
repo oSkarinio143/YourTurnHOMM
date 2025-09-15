@@ -3,7 +3,7 @@ package pl.oskarinio.yourturnhomm.app.technical.database;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.oskarinio.yourturnhomm.domain.model.user.Role;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
-import pl.oskarinio.yourturnhomm.domain.port.repository.UserRepository;
+import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
 
 import java.time.Clock;
 import java.time.Instant;

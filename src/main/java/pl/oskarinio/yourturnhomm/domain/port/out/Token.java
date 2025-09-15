@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.port.communication;
+package pl.oskarinio.yourturnhomm.domain.port.out;
 
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 

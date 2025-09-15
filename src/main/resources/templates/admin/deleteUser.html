@@ -23,7 +23,7 @@
             margin-bottom: 30px;
         }
 
-        .userManagement-container {
+        .user-container {
             display: flex;
             align-items: center;
             background: #fff;
@@ -34,11 +34,11 @@
             position: relative;
         }
 
-        .userManagement-stats {
+        .user-stats {
             flex-grow: 1;
         }
 
-        .userManagement-stats p {
+        .user-stats p {
             margin: 4px 0;
         }
 
@@ -177,14 +177,14 @@
 <body>
 <div class="main-container">
     <h1>Usuń użytkownika</h1>
-    <div th:each="userManagement : ${users}">
-        <div class="userManagement-container" th:data-username="${userManagement.username}">
-            <div class="userManagement-stats">
-                <p><strong>Nazwa użytkownika:</strong> <span th:text="${userManagement.username}"/></p>
-                <p><strong>Role:</strong> <span th:text="${#strings.listJoin(userManagement.roles, ', ')}"/></p>
-                <p><strong>Data rejestracji:</strong> <span th:text="${#dates.format(userManagement.registrationDate, 'dd-MM-yyyy HH:mm')}"/></p>
+    <div th:each="user : ${users}">
+        <div class="user-container" th:data-username="${user.username}">
+            <div class="user-stats">
+                <p><strong>Nazwa użytkownika:</strong> <span th:text="${user.username}"/></p>
+                <p><strong>Role:</strong> <span th:text="${#strings.listJoin(user.roles, ', ')}"/></p>
+                <p><strong>Data rejestracji:</strong> <span th:text="${#dates.format(user.registrationDate, 'dd-MM-yyyy HH:mm')}"/></p>
             </div>
-            <button class="remove-button js-delete-trigger" th:if="${userManagement.username != adminUsername and userManagement.username != thisUsername}">
+            <button class="remove-button js-delete-trigger" th:if="${user.username != adminUsername and user.username != thisUsername}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m3 0a.5.5 0 0 0-1 0v8.5a.5.5 0 0 0 1 0zM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
                 </svg>
@@ -223,7 +223,7 @@
 
         deleteButtons.forEach(button => {
             button.addEventListener('click', function() {
-                const userContainer = this.closest('.userManagement-container');
+                const userContainer = this.closest('.user-container');
                 const username = userContainer.dataset.username;
                 if (userToDeleteInput) {
                     userToDeleteInput.value = username;

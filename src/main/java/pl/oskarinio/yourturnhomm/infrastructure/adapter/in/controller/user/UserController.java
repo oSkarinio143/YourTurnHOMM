@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +19,8 @@ import pl.oskarinio.yourturnhomm.domain.port.user.UserManagement;
 import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.LoginFormRequest;
 import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.RegisterFormRequest;
 import pl.oskarinio.yourturnhomm.infrastructure.db.mapper.MapStruct;
+
+import java.util.List;
 
 @Slf4j
 @RequestMapping(Route.MAIN)
@@ -58,7 +61,11 @@ class UserController {
         log.info("Uzytkownik probuje sie zalogowac");
         if (bindingResult.hasErrors()){
             log.warn("Logowanie nie udane");
-            redirectAttributes.addFlashAttribute("errorMessage", userManagement.prepareErrorMessage(bindingResult.getAllErrors()));
+            List<String> errorMessages = bindingResult.getAllErrors()
+                            .stream()
+                            .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                            .toList();
+            redirectAttributes.addFlashAttribute("errorMessage", userManagement.prepareErrorMessage(errorMessages));
             return Route.REDIRECT + Route.LOGIN;
         }
         UserServiceData userServiceData = login.loginUser(mapper.toLoginForm(loginFormRequest));
@@ -83,7 +90,11 @@ class UserController {
         log.info("Uzytkownik probuje sie zarejestrowac");
         if(bindingResult.hasErrors()) {
             log.warn("Rejestracja nie udana");
-            redirectAttributes.addFlashAttribute("errorMessage", userManagement.prepareErrorMessage(bindingResult.getAllErrors()));
+            List<String> errorMessages = bindingResult.getAllErrors()
+                    .stream()
+                    .map(v -> v.getDefaultMessage())
+                    .toList();
+            redirectAttributes.addFlashAttribute("errorMessage", userManagement.prepareErrorMessage(errorMessages));
             return Route.REDIRECT + Route.REGISTER;
         }
         UserServiceData userServiceData = register.registerUser(mapper.toRegisterForm(registerFormRequest));

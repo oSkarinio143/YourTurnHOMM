@@ -6,7 +6,7 @@ import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
 import pl.oskarinio.yourturnhomm.domain.model.user.Role;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
-import pl.oskarinio.yourturnhomm.domain.port.repository.UserRepository;
+import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
 import pl.oskarinio.yourturnhomm.domain.port.user.UserManagement;
 
 import java.time.Clock;

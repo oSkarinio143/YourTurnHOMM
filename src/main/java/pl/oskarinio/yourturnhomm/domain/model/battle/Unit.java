@@ -2,8 +2,7 @@ package pl.oskarinio.yourturnhomm.domain.model.battle;
 
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @RequiredArgsConstructor

@@ -1,7 +1,5 @@
 package pl.oskarinio.yourturnhomm.infrastructure.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,7 +11,7 @@ import java.nio.file.Paths;
 @Component
 public class ImagePathConverter {
 
-    private String convertImageToPath(String name, MultipartFile image) throws IOException {
+    public String convertImageToPath(String name, MultipartFile image) throws IOException {
         String fileName = name + ".png";
         Path path = Paths.get("unit-images", fileName);
         Files.createDirectories(path.getParent());

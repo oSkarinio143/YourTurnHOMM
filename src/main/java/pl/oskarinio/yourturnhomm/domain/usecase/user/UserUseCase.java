@@ -4,8 +4,8 @@ import pl.oskarinio.yourturnhomm.domain.model.exception.UsernameNotFoundExceptio
 import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
-import pl.oskarinio.yourturnhomm.domain.port.repository.UserRepository;
-import pl.oskarinio.yourturnhomm.infrastructure.port.communication.Token;
+import pl.oskarinio.yourturnhomm.domain.port.out.Token;
+import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
 
 import java.time.Clock;
 import java.time.Instant;

@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.oskarinio.yourturnhomm.domain.model.form.RegisterForm;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
-import pl.oskarinio.yourturnhomm.domain.port.repository.UserRepository;
+import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
 import pl.oskarinio.yourturnhomm.domain.port.user.Register;
 import pl.oskarinio.yourturnhomm.domain.port.user.UserManagement;
 import pl.oskarinio.yourturnhomm.domain.usecase.user.RegisterUseCase;

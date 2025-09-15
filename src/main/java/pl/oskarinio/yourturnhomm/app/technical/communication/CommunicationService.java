@@ -6,7 +6,7 @@ import pl.oskarinio.yourturnhomm.infrastructure.port.communication.Communication
 import pl.oskarinio.yourturnhomm.infrastructure.usecase.communication.CommunicationUseCase;
 
 @Service
-public class CommunicationService implements Communication {
+public class CommunicationService implements Communication, pl.oskarinio.yourturnhomm.domain.port.out.MessageSender {
     private final CommunicationUseCase communicationUseCase;
 
     public CommunicationService(){

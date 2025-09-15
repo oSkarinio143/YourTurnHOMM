@@ -16,11 +16,6 @@
     <appender name="TECHNICAL" class="ch.qos.logback.core.FileAppender">
         <file>logs/technical.log</file>
         <append>false</append>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>INFO</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [userId=%X{userId:-anon}, traceId=%X{traceId:-brak}] - %msg%n</pattern>
         </encoder>
@@ -49,12 +44,13 @@
             <OnMatch>ACCEPT</OnMatch>
             <OnMismatch>DENY</OnMismatch>
         </filter>
+
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} [traceId=%X{traceId:-brak}] - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <root level="TRACE">
+    <root level="DEBUG">
         <appender-ref ref = "ERROR" additivity = "false"/>
         <appender-ref ref = "CONSOLE"/>
         <appender-ref ref = "TECHNICAL"/>

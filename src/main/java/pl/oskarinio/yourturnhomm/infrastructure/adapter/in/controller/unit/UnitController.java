@@ -10,8 +10,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.oskarinio.yourturnhomm.app.technical.communication.ExceptionMessageCreatorService;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
-import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 import pl.oskarinio.yourturnhomm.domain.port.unit.UnitManagement;
+import pl.oskarinio.yourturnhomm.infrastructure.config.ImagePathConverter;
+import pl.oskarinio.yourturnhomm.infrastructure.db.entity.UnitEntity;
+import pl.oskarinio.yourturnhomm.infrastructure.db.mapper.UnitMapper;
 
 import java.io.IOException;
 
@@ -20,12 +22,14 @@ import java.io.IOException;
 @RequestMapping(Route.MAIN)
 class UnitController {
 
-    private final UnitManagement databaseUseCase;
+    private final UnitManagement unitManagementUseCase;
     private final ExceptionMessageCreatorService exceptionHandlerService;
+    private final ImagePathConverter imagePathConverter;
 
-    public UnitController(UnitManagement databaseUseCase, ExceptionMessageCreatorService exceptionHandlerService) {
-        this.databaseUseCase = databaseUseCase;
+    public UnitController(UnitManagement unitManagementUseCase, ExceptionMessageCreatorService exceptionHandlerService, ImagePathConverter imagePathConverter) {
+        this.unitManagementUseCase = unitManagementUseCase;
         this.exceptionHandlerService = exceptionHandlerService;
+        this.imagePathConverter = imagePathConverter;
     }
 
     @GetMapping(Route.USER + Route.DATABASE)
@@ -41,7 +45,7 @@ class UnitController {
     }
 
     @PostMapping(Route.ADMIN + Route.DATABASE + Route.ADD)
-    public String handleAddUnit(@Valid @ModelAttribute Unit unit,
+    public String handleAddUnit(@Valid @ModelAttribute UnitEntity unitEntity,
                                 BindingResult bindingResult,
                                 RedirectAttributes redirectAttributes,
                                 @RequestParam MultipartFile image) throws IOException{
@@ -52,34 +56,34 @@ class UnitController {
             return Route.REDIRECT + Route.ADMIN + Route.DATABASE + Route.ADD;
         }
         log.debug("Jednostka zostala dodana do bazy danych");
-        databaseUseCase.addUnit(unit, image);
+        unitManagementUseCase.addUnit(UnitMapper.toDomain(unitEntity), imagePathConverter.convertImageToPath(unitEntity.getName(), image));
         return Route.REDIRECT + Route.USER + Route.DATABASE;
     }
 
     @GetMapping(Route.USER + Route.DATABASE + Route.SHOW)
     public String viewUnits(Model model){
         log.info("Uzytkownik wyswietla liste jednostek");
-        model.addAttribute("units", databaseUseCase.getAllUnits());
+        model.addAttribute("units", unitManagementUseCase.getAllUnits());
         return Route.PACKAGE_DATABASE + Route.VIEW_SHOW_UNITS;
     }
 
     @GetMapping(Route.ADMIN + Route.DATABASE + Route.DELETE)
     public String deleteUnit(Model model){
         log.info("Uzytkownik wybier jednostke do usuniecia");
-        model.addAttribute("units", databaseUseCase.getAllUnits());
+        model.addAttribute("units", unitManagementUseCase.getAllUnits());
         return Route.PACKAGE_DATABASE + Route.VIEW_DELETE_UNIT;
     }
 
     @PostMapping(Route.ADMIN + Route.DATABASE + Route.DELETE)
     public String handleDeleteUnit(@RequestParam String name) {
-        databaseUseCase.removeUnit(name);
+        unitManagementUseCase.removeUnit(name);
         log.debug("Jednostka zostala usunieta z bazy danych");
         return Route.REDIRECT + Route.USER + Route.DATABASE;
     }
 
     @GetMapping(Route.ADMIN + Route.DATABASE + Route.MODIFY)
     public String handleModify(Model model){
-        model.addAttribute("units", databaseUseCase.getAllUnits());
+        model.addAttribute("units", unitManagementUseCase.getAllUnits());
         return Route.PACKAGE_DATABASE + Route.VIEW_MODIFY;
     }
 
@@ -87,21 +91,21 @@ class UnitController {
     public String handleModifyUnit(@RequestParam String name,
                                    Model model) {
 
-        model.addAttribute("unit", databaseUseCase.getSingleUnit(name));
+        model.addAttribute("unit", unitManagementUseCase.getSingleUnit(name));
         return Route.PACKAGE_DATABASE + Route.VIEW_MODIFY_UNIT;
     }
 
     @PostMapping(Route.ADMIN + Route.DATABASE + Route.MODIFY + Route.UNIT)
-    public String saveModifiedUnit(@Valid @ModelAttribute Unit unit,
+    public String saveModifiedUnit(@Valid @ModelAttribute UnitEntity unitEntity,
                                    BindingResult bindingResult,
                                    RedirectAttributes redirectAttributes){
 
         if(bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("incorrectMessage", exceptionHandlerService.createMessageValidError(bindingResult));
-            redirectAttributes.addAttribute("name", unit.getName());
+            redirectAttributes.addAttribute("name", unitEntity.getName());
             return Route.REDIRECT + Route.ADMIN + Route.DATABASE + Route.MODIFY + Route.UNIT;
         }
-        databaseUseCase.modifyUnit(unit);
+        unitManagementUseCase.modifyUnit(UnitMapper.toDomain(unitEntity));
         return Route.REDIRECT + Route.ADMIN + Route.DATABASE + Route.MODIFY;
     }
 }

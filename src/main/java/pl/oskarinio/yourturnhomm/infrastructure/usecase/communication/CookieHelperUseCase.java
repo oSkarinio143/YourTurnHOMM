@@ -7,7 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.web.util.WebUtils;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
-import pl.oskarinio.yourturnhomm.infrastructure.port.communication.Token;
+import pl.oskarinio.yourturnhomm.domain.port.out.Token;
 
 import java.util.Arrays;
 import java.util.List;

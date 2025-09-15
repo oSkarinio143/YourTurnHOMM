@@ -1,31 +1,25 @@
 package pl.oskarinio.yourturnhomm.domain.usecase.unit;
 
-import jakarta.transaction.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 import pl.oskarinio.yourturnhomm.domain.model.exception.DuplicateUnitException;
 import pl.oskarinio.yourturnhomm.domain.model.exception.TransactionSystemAddException;
-import pl.oskarinio.yourturnhomm.domain.port.repository.UnitRepository;
+import pl.oskarinio.yourturnhomm.domain.port.out.UnitRepository;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 public class UnitManagementUseCase {
 
     private final UnitRepository unitRepository;
 
+
     public UnitManagementUseCase(UnitRepository unitRepository) {
         this.unitRepository = unitRepository;
     }
 
-    public void addUnit(Unit unit, MultipartFile image) throws IOException {
+    public void addUnit(Unit unit, String imagePath) {
         if (unitRepository.existsById(unit.getName())) {
             throw new DuplicateUnitException("Jednostka o tej nazwie jest już w bazie");
         }
-        String imagePath = getImagePath(unit.getName(), image);
         unit.setImagePath(imagePath);
         try {
             unitRepository.save(unit);
@@ -42,13 +36,11 @@ public class UnitManagementUseCase {
         return unitRepository.getReferenceById(name);
     }
 
-    @Transactional
     public void removeUnit(String name) {
         Unit unit = unitRepository.getReferenceById(name);
         unitRepository.delete(unit);
     }
 
-    @Transactional
     public void modifyUnit(Unit unit) {
         Unit oldUnit = unitRepository.getReferenceById(unit.getName());
         oldUnit.setAttack(unit.getAttack());
@@ -61,13 +53,4 @@ public class UnitManagementUseCase {
         oldUnit.setDescription(unit.getDescription());
         unitRepository.save(oldUnit);
     }
-
-    private String getImagePath(String name, MultipartFile image) throws IOException {
-        String fileName = name + ".png";
-        Path path = Paths.get("unit-images", fileName);
-        Files.createDirectories(path.getParent()); // jeśli folder nie istnieje
-        Files.write(path, image.getBytes());
-        return "/" + path.toString();
-    }
-
 }

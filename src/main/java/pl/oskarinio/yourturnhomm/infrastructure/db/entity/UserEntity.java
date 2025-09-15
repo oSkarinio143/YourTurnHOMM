@@ -1,17 +1,20 @@
 package pl.oskarinio.yourturnhomm.infrastructure.db.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import pl.oskarinio.yourturnhomm.domain.model.user.Role;
 
 import java.time.Instant;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @RequiredArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
+@Data
 @Table(name = "app_user")
 public class UserEntity {
 

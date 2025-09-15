@@ -3,7 +3,7 @@ package pl.oskarinio.yourturnhomm.domain.usecase.user;
 import pl.oskarinio.yourturnhomm.domain.model.exception.UsernameNotFoundException;
 import pl.oskarinio.yourturnhomm.domain.model.user.Role;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
-import pl.oskarinio.yourturnhomm.domain.port.repository.UserRepository;
+import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
 
 import java.util.Arrays;
 import java.util.List;
