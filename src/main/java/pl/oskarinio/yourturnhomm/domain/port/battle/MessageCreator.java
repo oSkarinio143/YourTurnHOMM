@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.domain.port.battle;
+package pl.oskarinio.yourturnhomm.infrastructure.port.communication;
 
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
 

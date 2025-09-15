@@ -1,6 +1,5 @@
 package pl.oskarinio.yourturnhomm.domain.usecase.user;
 
-import org.springframework.validation.ObjectError;
 import pl.oskarinio.yourturnhomm.domain.model.exception.UsernameNotFoundException;
 import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
@@ -40,9 +39,9 @@ public class UserUseCase {
         return new RefreshToken(refreshTokenString, now, now.plus(TOKEN_REFRESH_SECONDS, ChronoUnit.SECONDS));
     }
 
-    public String prepareErrorMessage(List<ObjectError> errorsMessageList){
+    public String prepareErrorMessage(List<String> errorsMessageList){
         StringBuilder errorMessage = new StringBuilder();
-        errorsMessageList.forEach(v -> errorMessage.append(v.getDefaultMessage() + "<br>"));
+        errorsMessageList.forEach(message -> errorMessage.append(message + "<br>"));
         return errorMessage.toString();
     }
 

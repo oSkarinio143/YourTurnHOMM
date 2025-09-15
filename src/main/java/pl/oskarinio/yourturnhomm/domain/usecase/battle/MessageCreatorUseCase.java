@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.domain.usecase.battle;
+package pl.oskarinio.yourturnhomm.infrastructure.usecase.communication;
 
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
 import pl.oskarinio.yourturnhomm.infrastructure.port.communication.Communication;

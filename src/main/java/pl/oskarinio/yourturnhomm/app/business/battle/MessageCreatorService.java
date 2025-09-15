@@ -1,10 +1,10 @@
-package pl.oskarinio.yourturnhomm.app.business.battle;
+package pl.oskarinio.yourturnhomm.app.technical.communication;
 
 import org.springframework.stereotype.Service;
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
-import pl.oskarinio.yourturnhomm.domain.port.battle.MessageCreator;
-import pl.oskarinio.yourturnhomm.domain.usecase.battle.MessageCreatorUseCase;
 import pl.oskarinio.yourturnhomm.infrastructure.port.communication.Communication;
+import pl.oskarinio.yourturnhomm.infrastructure.port.communication.MessageCreator;
+import pl.oskarinio.yourturnhomm.infrastructure.usecase.communication.MessageCreatorUseCase;
 
 @Service
 public class MessageCreatorService implements MessageCreator {

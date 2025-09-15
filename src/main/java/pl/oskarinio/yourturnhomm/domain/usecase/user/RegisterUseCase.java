@@ -4,6 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.oskarinio.yourturnhomm.domain.model.form.RegisterForm;
 import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
 import pl.oskarinio.yourturnhomm.domain.model.user.Role;
+import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 import pl.oskarinio.yourturnhomm.domain.port.repository.UserRepository;
 import pl.oskarinio.yourturnhomm.domain.port.user.UserManagement;
@@ -44,7 +45,7 @@ public class RegisterUseCase {
     private void saveData(UserServiceData userServiceData){
         Instant now = Instant.now(clock);
         RefreshToken refreshToken = new RefreshToken(userServiceData.getRefreshToken(), now, now.plus(TOKEN_REFRESH_SECONDS, ChronoUnit.SECONDS));
-        pl.oskarinio.yourturnhomm.domain.model.user.User user = new pl.oskarinio.yourturnhomm.domain.model.user.User(userServiceData.getUsername(), userServiceData.getPassword(), now);
+        User user = new User(userServiceData.getUsername(), userServiceData.getPassword(), now);
         user.setRoles(userServiceData.getRoles());
         this.userManagement.setRefreshToken(user, refreshToken);
         userRepository.save(user);
