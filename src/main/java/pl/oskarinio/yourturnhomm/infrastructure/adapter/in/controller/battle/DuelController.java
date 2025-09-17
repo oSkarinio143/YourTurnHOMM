@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.oskarinio.yourturnhomm.app.technical.communication.ExceptionMessageCreatorService;
+import pl.oskarinio.yourturnhomm.app.technology.communication.ExceptionMessageCreatorService;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Side;
 import pl.oskarinio.yourturnhomm.domain.model.form.DuelForm;

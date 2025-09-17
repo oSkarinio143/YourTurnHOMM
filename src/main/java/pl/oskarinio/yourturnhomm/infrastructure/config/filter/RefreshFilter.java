@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
-import pl.oskarinio.yourturnhomm.app.technical.communication.CookieHelperService;
+import pl.oskarinio.yourturnhomm.app.technology.communication.CookieHelperService;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;

@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.app.technical.communication;
+package pl.oskarinio.yourturnhomm.app.technology.communication;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;

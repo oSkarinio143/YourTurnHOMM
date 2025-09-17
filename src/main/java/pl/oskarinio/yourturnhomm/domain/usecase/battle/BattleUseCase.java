@@ -20,7 +20,6 @@ public class BattleUseCase {
     }
 
     public void prepareBattle(DuelForm duelForm){
-
         AttackInfo attackInfo = prepareAttackInfo(duelForm);
         startBattle(attackInfo);
     }

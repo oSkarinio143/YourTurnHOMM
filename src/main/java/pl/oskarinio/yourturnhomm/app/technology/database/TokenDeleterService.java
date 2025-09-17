@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.app.technical.database;
+package pl.oskarinio.yourturnhomm.app.technology.database;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

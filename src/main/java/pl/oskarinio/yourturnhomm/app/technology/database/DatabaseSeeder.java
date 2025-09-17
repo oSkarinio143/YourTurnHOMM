@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.app.technical.database;
+package pl.oskarinio.yourturnhomm.app.technology.database;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

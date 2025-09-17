@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.app.technical.database;
+package pl.oskarinio.yourturnhomm.app.technology.database;
 
 import org.springframework.stereotype.Component;
 import pl.oskarinio.yourturnhomm.infrastructure.usecase.database.RefreshTokenRepositoryUseCase;

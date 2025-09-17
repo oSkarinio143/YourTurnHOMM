@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.app.technical.database;
+package pl.oskarinio.yourturnhomm.app.technology.database;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.oskarinio.yourturnhomm.domain.model.user.Role;
@@ -8,7 +8,7 @@ import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
 import java.time.Clock;
 import java.time.Instant;
 
-public class H2AdminInitializer {
+public class MySQLAdminInitializer{
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -16,11 +16,11 @@ public class H2AdminInitializer {
     private String adminUsername;
     private String adminPassword;
 
-    public H2AdminInitializer(UserRepository userRepository,
-                              PasswordEncoder passwordEncoder,
-                              Clock clock,
-                              String adminUsername,
-                              String adminPassword) {
+    public MySQLAdminInitializer(UserRepository userRepository,
+                                 PasswordEncoder passwordEncoder,
+                                 Clock clock,
+                                 String adminUsername,
+                                 String adminPassword) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.clock = clock;
@@ -29,11 +29,13 @@ public class H2AdminInitializer {
     }
 
     public void initializeProfile() {
-        if (userRepository.count() == 0) {
+        if (adminUsername == null || adminUsername.isBlank() || adminPassword == null || adminPassword.isBlank())
+            return;
+        if (!userRepository.findByUsername(adminUsername).isPresent()) {
             User adminUser = new User();
             adminUser.setUsername(adminUsername);
             adminUser.setPassword(passwordEncoder.encode(adminPassword));
-            adminUser.setRegistrationDate(Instant.now());
+            adminUser.setRegistrationDate(Instant.now(clock));
             adminUser.addRole(Role.ROLE_USER);
             adminUser.addRole(Role.ROLE_ADMIN);
             userRepository.save(adminUser);

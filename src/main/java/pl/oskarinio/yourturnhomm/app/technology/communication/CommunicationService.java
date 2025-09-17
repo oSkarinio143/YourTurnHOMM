@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.app.technical.communication;
+package pl.oskarinio.yourturnhomm.app.technology.communication;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;

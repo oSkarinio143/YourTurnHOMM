@@ -3,7 +3,7 @@ package pl.oskarinio.yourturnhomm.infrastructure.usecase.communication;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-import pl.oskarinio.yourturnhomm.app.technical.communication.ExceptionMessageCreatorService;
+import pl.oskarinio.yourturnhomm.app.technology.communication.ExceptionMessageCreatorService;
 import pl.oskarinio.yourturnhomm.infrastructure.port.communication.ExceptionMessageCreator;
 
 @Service
