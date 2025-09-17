@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import pl.oskarinio.yourturnhomm.infrastructure.UserRepositoryUseCase;
+import pl.oskarinio.yourturnhomm.infrastructure.usecase.database.UserRepositoryUseCase;
 
 import java.time.Clock;
 import java.time.ZoneId;

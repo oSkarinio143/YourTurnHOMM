@@ -1,6 +1,5 @@
 package pl.oskarinio.yourturnhomm.domain.usecase.battle;
 
-import lombok.extern.slf4j.Slf4j;
 import pl.oskarinio.yourturnhomm.domain.model.battle.AttackInfo;
 import pl.oskarinio.yourturnhomm.domain.model.battle.BattleUnit;
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
@@ -8,7 +7,6 @@ import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 import pl.oskarinio.yourturnhomm.domain.model.form.DuelForm;
 import pl.oskarinio.yourturnhomm.domain.port.battle.Queue;
 
-@Slf4j
 public class BattleUseCase {
     private final Queue queue;
 
@@ -22,18 +20,6 @@ public class BattleUseCase {
     }
 
     public void prepareBattle(DuelForm duelForm){
-        log.debug("Wybor zakonczony, przygotowanie pojedynku. userUUID = {}",
-                duelForm.getUserUUID());
-        log.trace("Lewa strona: jednostka = {}, ilosc = {}, bohaterAtak = {}, bohaterObrona = {}",
-                duelForm.getLeftUnit().getName(),
-                duelForm.getLeftQuantity(),
-                duelForm.getLeftHeroAttack(),
-                duelForm.getLeftHeroDefense());
-        log.trace("Prawa strona: jednostka = {}, ilosc = {}, bohaterAtak = {}, bohaterObrona = {}",
-                duelForm.getRightUnit().getName(),
-                duelForm.getRightQuantity(),
-                duelForm.getRightHeroAttack(),
-                duelForm.getRightHeroDefense());
 
         AttackInfo attackInfo = prepareAttackInfo(duelForm);
         startBattle(attackInfo);
@@ -84,11 +70,6 @@ public class BattleUseCase {
     }
 
     private void startBattle(AttackInfo attackInfo){
-        log.info("Start pojedynku. UserUUID = {}, szybszaJednostka = {}, wolniejszaJednostka = {}",
-                attackInfo.getUserUUID(),
-                attackInfo.getFasterUnit().getName(),
-                attackInfo.getSlowerUnit().getName());
-
         RoundInfo roundInfo = new RoundInfo(attackInfo.getUserUUID(), 1, 2);
         while (attackInfo.getFasterQuantity() != 0 && attackInfo.getSlowerQuantity() != 0){
             startRound(roundInfo, attackInfo);
@@ -98,19 +79,12 @@ public class BattleUseCase {
     }
 
     private void startRound(RoundInfo roundInfo, AttackInfo attackInfo){
-        log.trace("Start rundy. rundaNumer = {}",
-                roundInfo.getRoundCounter());
-
         startAttackFaster(roundInfo, attackInfo);
         startAttackSlower(roundInfo, attackInfo);
         isWinner(roundInfo);
-
-        log.trace("Koniec rundy. rundaNumer = {} ",
-                roundInfo.getRoundCounter());
     }
 
     private void sendRoundMessages(RoundInfo roundInfo){
-        log.trace("Wysłanie wiadomości z przebiegu rundy");
         RoundInfo snapshotRoundInfo = roundInfo.clone();
         queue.createQueue(snapshotRoundInfo);
     }
@@ -121,29 +95,19 @@ public class BattleUseCase {
     }
 
     private void startAttackFaster(RoundInfo roundInfo, AttackInfo attackInfo){
-        log.trace("Szybsza jednostka atakuje ");
 
         setRoundInfoAttack(attackInfo, attackInfo.getFasterUnit(), attackInfo.getSlowerUnit(), attackInfo.getFasterQuantity());
         attackInfo.setSlowerQuantity(countLiveUnitsAfterAttack(attackInfo, attackInfo.getFasterQuantity(), attackInfo.getSlowerQuantity()));
         setRoundInfoFaster(roundInfo, attackInfo);
 
-        log.trace("SzybszaJednostka: dmg = {}, pozostaloZywychJednostek = {}, iloscPokonanychWrogow = {}",
-                roundInfo.getFasterDmg(),
-                roundInfo.getFasterLiveUnits(),
-                roundInfo.getSlowerDeathUnits());
     }
 
     private void startAttackSlower(RoundInfo roundInfo, AttackInfo attackInfo){
-        log.trace("Wolniejsza jednostka atakuje");
 
         setRoundInfoAttack(attackInfo, attackInfo.getSlowerUnit(), attackInfo.getFasterUnit(), attackInfo.getSlowerQuantity());
         attackInfo.setFasterQuantity(countLiveUnitsAfterAttack(attackInfo, attackInfo.getSlowerQuantity(), attackInfo.getFasterQuantity()));
         setRoundInfoSlower(roundInfo, attackInfo);
 
-        log.trace("WolniejszaJednostka: dmg = {}, pozostaloZywychJednostek = {}, iloscPokonanychWrogow = {}",
-                roundInfo.getSlowerDmg(),
-                roundInfo.getSlowerLiveUnits(),
-                roundInfo.getFasterDeathUnits());
     }
 
     private void setRoundInfoAttack(AttackInfo attackInfo, BattleUnit atkUnit, BattleUnit defUnit, int attackingQuantity){
@@ -270,13 +234,12 @@ public class BattleUseCase {
 
     private boolean isWinner(RoundInfo roundInfo){
         if(roundInfo.getSlowerLiveUnits() == 0) {
-            log.info("Zwyciezca zostaje = {}", roundInfo.getFasterUnit().getName());
             roundInfo.setWinnerUnit(roundInfo.getFasterUnit());
             roundInfo.setLoserUnit(roundInfo.getSlowerUnit());
             return true;
         }
         if(roundInfo.getFasterLiveUnits() == 0){
-            log.info("Zwyciezca zostaje = {}", roundInfo.getSlowerUnit().getName());
+
             roundInfo.setWinnerUnit(roundInfo.getSlowerUnit());
             roundInfo.setLoserUnit(roundInfo.getFasterUnit());
             return true;

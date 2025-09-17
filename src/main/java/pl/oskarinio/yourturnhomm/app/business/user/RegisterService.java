@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pl.oskarinio.yourturnhomm.domain.model.form.RegisterForm;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
-import pl.oskarinio.yourturnhomm.domain.port.out.PasswordEncoder;
+import pl.oskarinio.yourturnhomm.domain.port.out.PasswordEncoderPort;
 import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
 import pl.oskarinio.yourturnhomm.domain.port.user.Register;
 import pl.oskarinio.yourturnhomm.domain.port.user.UserManagement;
@@ -19,10 +19,10 @@ public class RegisterService implements Register {
 
     public RegisterService(UserRepository userRepository,
                            UserManagement userManagement,
-                           PasswordEncoder passwordEncoder,
+                           PasswordEncoderPort passwordEncoderPort,
                            Clock clock,
                            @Value("${token.refresh.seconds}") long refreshSeconds) {
-        this.registerUseCase = new RegisterUseCase(userRepository, userManagement, passwordEncoder, clock, refreshSeconds);
+        this.registerUseCase = new RegisterUseCase(userRepository, userManagement, passwordEncoderPort, clock, refreshSeconds);
     }
 
     @Transactional

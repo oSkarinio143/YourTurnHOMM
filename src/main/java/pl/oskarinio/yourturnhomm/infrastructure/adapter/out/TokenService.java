@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.app.technical.communication;
+package pl.oskarinio.yourturnhomm.infrastructure.adapter.out;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

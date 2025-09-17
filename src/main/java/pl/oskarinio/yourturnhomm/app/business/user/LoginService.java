@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import pl.oskarinio.yourturnhomm.domain.model.form.LoginForm;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
-import pl.oskarinio.yourturnhomm.domain.port.out.PasswordEncoder;
+import pl.oskarinio.yourturnhomm.domain.port.out.PasswordEncoderPort;
 import pl.oskarinio.yourturnhomm.domain.port.user.Login;
 import pl.oskarinio.yourturnhomm.domain.port.user.UserManagement;
 import pl.oskarinio.yourturnhomm.domain.usecase.user.LoginUseCase;
@@ -13,8 +13,8 @@ import pl.oskarinio.yourturnhomm.domain.usecase.user.LoginUseCase;
 public class LoginService implements Login {
     private final LoginUseCase loginUseCase;
 
-    public LoginService(UserManagement userManagement, PasswordEncoder passwordEncoder) {
-        this.loginUseCase = new LoginUseCase(userManagement, passwordEncoder);
+    public LoginService(UserManagement userManagement, PasswordEncoderPort passwordEncoderPort) {
+        this.loginUseCase = new LoginUseCase(userManagement, passwordEncoderPort);
     }
 
     @Transactional

@@ -11,8 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import pl.oskarinio.yourturnhomm.infrastructure.UserRepositoryUseCase;
 import pl.oskarinio.yourturnhomm.infrastructure.db.entity.UserEntity;
+import pl.oskarinio.yourturnhomm.infrastructure.usecase.database.UserRepositoryUseCase;
 
 import java.io.IOException;
 import java.util.Optional;

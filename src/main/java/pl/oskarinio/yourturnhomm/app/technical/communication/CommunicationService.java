@@ -6,7 +6,7 @@ import pl.oskarinio.yourturnhomm.infrastructure.port.communication.Communication
 import pl.oskarinio.yourturnhomm.infrastructure.usecase.communication.CommunicationUseCase;
 
 @Service
-public class CommunicationService implements Communication, pl.oskarinio.yourturnhomm.domain.port.out.MessageSender {
+public class CommunicationService implements Communication{
     private final CommunicationUseCase communicationUseCase;
 
     public CommunicationService(){
@@ -21,15 +21,5 @@ public class CommunicationService implements Communication, pl.oskarinio.yourtur
     @Override
     public SseEmitter createEmitter(String userUUID) {
         return communicationUseCase.createEmitter(userUUID);
-    }
-
-    @Override
-    public void sendMessage(String userUUID, String message) {
-        communicationUseCase.sendMessage(userUUID,message);
-    }
-
-    @Override
-    public void closeConnection(String userUUID) {
-        communicationUseCase.closeConnection(userUUID);
     }
 }

@@ -1,15 +1,15 @@
-package pl.oskarinio.yourturnhomm.infrastructure.adapter.out;
+package pl.oskarinio.yourturnhomm.app.technical.database;
 
 import org.springframework.stereotype.Component;
-import pl.oskarinio.yourturnhomm.infrastructure.usecase.database.RefreshTokenRepository;
+import pl.oskarinio.yourturnhomm.infrastructure.usecase.database.RefreshTokenRepositoryUseCase;
 
 import java.time.Instant;
 
 @Component
 public class RefreshTokenRepositoryService implements pl.oskarinio.yourturnhomm.infrastructure.port.database.RefreshTokenRepository {
-    private final RefreshTokenRepository refreshTokenRepostiory;
+    private final RefreshTokenRepositoryUseCase refreshTokenRepostiory;
 
-    public RefreshTokenRepositoryService(RefreshTokenRepository jpaRepository) {
+    public RefreshTokenRepositoryService(RefreshTokenRepositoryUseCase jpaRepository) {
         this.refreshTokenRepostiory = jpaRepository;
     }
 

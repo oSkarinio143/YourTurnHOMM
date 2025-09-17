@@ -5,17 +5,17 @@ import pl.oskarinio.yourturnhomm.domain.model.form.LoginForm;
 import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
-import pl.oskarinio.yourturnhomm.domain.port.out.PasswordEncoder;
+import pl.oskarinio.yourturnhomm.domain.port.out.PasswordEncoderPort;
 import pl.oskarinio.yourturnhomm.domain.port.user.UserManagement;
 
 public class LoginUseCase {
 
     private final UserManagement userManagement;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoderPort passwordEncoderPort;
 
-    public LoginUseCase(UserManagement userManagement, PasswordEncoder passwordEncoder) {
+    public LoginUseCase(UserManagement userManagement, PasswordEncoderPort passwordEncoderPort) {
         this.userManagement = userManagement;
-        this.passwordEncoder = passwordEncoder;
+        this.passwordEncoderPort = passwordEncoderPort;
     }
 
     public UserServiceData loginUser(LoginForm loginForm){
@@ -45,6 +45,6 @@ public class LoginUseCase {
     }
 
     private boolean isPasswordMatching(String loginPassword, String databasePassword){
-        return passwordEncoder.matches(loginPassword, databasePassword);
+        return passwordEncoderPort.matches(loginPassword, databasePassword);
     }
 }
