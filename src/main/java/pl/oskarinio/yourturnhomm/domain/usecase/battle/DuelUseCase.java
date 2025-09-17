@@ -18,7 +18,6 @@ public class DuelUseCase {
     public void loadUnit(DuelForm duelForm, Side side, String tempUnitName){
         if(side != null) {
             Unit unit = unitRepository.getReferenceById(tempUnitName);
-            System.out.println(unit.getImagePath());
             if (side == Side.LEFT)
                 duelForm.setLeftUnit(unit);
             if (side == Side.RIGHT)

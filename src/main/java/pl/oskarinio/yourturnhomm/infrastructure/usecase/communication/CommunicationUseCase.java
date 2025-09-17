@@ -1,5 +1,6 @@
 package pl.oskarinio.yourturnhomm.infrastructure.usecase.communication;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
@@ -7,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Component
 public class CommunicationUseCase {
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
 

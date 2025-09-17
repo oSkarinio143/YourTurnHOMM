@@ -1,6 +1,6 @@
 package pl.oskarinio.yourturnhomm.infrastructure.adapter.out;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
 import pl.oskarinio.yourturnhomm.infrastructure.db.entity.UserEntity;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-@Component
+@Service
 public class UserRepositoryService implements UserRepository {
     private UserRepositoryUseCase userRepositoryUseCase;
 

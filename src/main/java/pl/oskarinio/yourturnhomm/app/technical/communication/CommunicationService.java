@@ -9,8 +9,8 @@ import pl.oskarinio.yourturnhomm.infrastructure.usecase.communication.Communicat
 public class CommunicationService implements Communication{
     private final CommunicationUseCase communicationUseCase;
 
-    public CommunicationService(){
-        this.communicationUseCase = new CommunicationUseCase();
+    public CommunicationService(CommunicationUseCase communicationUseCase){
+        this.communicationUseCase = communicationUseCase;
     }
 
     @Override
