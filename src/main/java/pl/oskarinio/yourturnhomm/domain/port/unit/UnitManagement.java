@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface UnitManagement {
-    void addUnit(Unit unit, String imagePath) throws IOException;
+    void addUnit(Unit unit) throws IOException;
     List<Unit> getAllUnits();
     Unit getSingleUnit(String name);
     void removeUnit(String name);

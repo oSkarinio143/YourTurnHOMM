@@ -16,11 +16,9 @@ public class UnitManagementUseCase {
         this.unitRepository = unitRepository;
     }
 
-    public void addUnit(Unit unit, String imagePath) {
-        if (unitRepository.existsById(unit.getName())) {
+    public void addUnit(Unit unit) {
+        if (unitRepository.existsById(unit.getName()))
             throw new DuplicateUnitException("Jednostka o tej nazwie jest już w bazie");
-        }
-        unit.setImagePath(imagePath);
         try {
             unitRepository.save(unit);
         } catch (RuntimeException ex) {
@@ -42,15 +40,6 @@ public class UnitManagementUseCase {
     }
 
     public void modifyUnit(Unit unit) {
-        Unit oldUnit = unitRepository.getReferenceById(unit.getName());
-        oldUnit.setAttack(unit.getAttack());
-        oldUnit.setDefense(unit.getDefense());
-        oldUnit.setShots(unit.getShots());
-        oldUnit.setMinDamage(unit.getMinDamage());
-        oldUnit.setMaxDamage(unit.getMaxDamage());
-        oldUnit.setHp(unit.getHp());
-        oldUnit.setSpeed(unit.getSpeed());
-        oldUnit.setDescription(unit.getDescription());
-        unitRepository.save(oldUnit);
+        unitRepository.save(unit);
     }
 }

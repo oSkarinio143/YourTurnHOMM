@@ -1,5 +1,6 @@
 package pl.oskarinio.yourturnhomm.app.business.battle;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import pl.oskarinio.yourturnhomm.domain.port.battle.Battle;
 import pl.oskarinio.yourturnhomm.domain.port.battle.Queue;
 import pl.oskarinio.yourturnhomm.domain.usecase.battle.BattleUseCase;
 
+@Slf4j
 @Service
 public class BattleService implements Battle {
 
@@ -19,9 +21,10 @@ public class BattleService implements Battle {
         this.battleUseCase = new BattleUseCase(queue, atkRate, defRate);
     }
 
-    @Async
+    @Async("taskExecutor")
     @Override
     public void prepareBattle(DuelForm duelForm) {
+        log.debug("Przygotowuję bitwę.");
         battleUseCase.prepareBattle(duelForm);
     }
 }

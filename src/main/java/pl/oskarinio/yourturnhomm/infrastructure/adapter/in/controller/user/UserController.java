@@ -58,9 +58,9 @@ class UserController {
                         RedirectAttributes redirectAttributes,
                         HttpServletResponse response) {
 
-        log.info("Uzytkownik probuje sie zalogowac");
+        log.info("Uzytkownik rozpoczyna logowanie");
         if (bindingResult.hasErrors()){
-            log.warn("Logowanie nie udane");
+            log.warn("Logowanie nie udane, wprowadzono niepoprawne dane");
             List<String> errorMessages = bindingResult.getAllErrors()
                             .stream()
                             .map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -87,9 +87,9 @@ class UserController {
                            RedirectAttributes redirectAttributes,
                            HttpServletResponse response){
 
-        log.info("Uzytkownik probuje sie zarejestrowac");
+        log.info("Uzytkownik rozpoczyna rejestracje");
         if(bindingResult.hasErrors()) {
-            log.warn("Rejestracja nie udana");
+            log.warn("Rejestracja nie udana, wprowadzono niepoprawne dane");
             List<String> errorMessages = bindingResult.getAllErrors()
                     .stream()
                     .map(v -> v.getDefaultMessage())
@@ -108,6 +108,8 @@ class UserController {
     public String logoutUser(RedirectAttributes redirectAttributes,
                              HttpServletResponse response,
                              HttpServletRequest request){
+
+        log.info("Uzytkownik rozpoczyna wylogowanie");
         String username = cookieHelperService.getUsernameFromCookie(request);
         cookieHelperService.removeAccessCookie(response);
         cookieHelperService.removeRefreshCookie(response);

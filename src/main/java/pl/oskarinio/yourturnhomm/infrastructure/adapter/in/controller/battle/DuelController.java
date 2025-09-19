@@ -44,7 +44,7 @@ class DuelController {
     public String prepareDuel(Model model,
                               @ModelAttribute DuelFormRequest duelFormRequest){
 
-        log.info("Uzytkownik przygotowuje pojedynek");
+        log.info("Uzytkownik w menu pojedynku");
         if(duelFormRequest.getUserUUID() != null)
             messageSender.closeConnection(duelFormRequest.getUserUUID());
         model.addAttribute("duelForm", duelFormRequest);
@@ -69,10 +69,11 @@ class DuelController {
                            @RequestParam(required = false) Side side,
                            @RequestParam(required = false) String tempUnitName){
 
+        System.out.println("Poprzednia jednostka - " + duelFormRequest.getLeftUnit());
         DuelForm duelForm = mapper.toDuelForm(duelFormRequest);
         duel.loadUnit(duelForm, side, tempUnitName);
         model.addAttribute("duelForm", duelForm);
-        log.debug("Jednostka zaladowana");
+        log.info("Jednostka zostala zaladowana,  {}",tempUnitName);
         return Route.PACKAGE_DUEL + Route.DUEL;
     }
 
@@ -83,15 +84,15 @@ class DuelController {
                               Model model){
 
         if(bindingResult.hasErrors()){
-            log.warn("Nie udalo sie rozpoczac pojedynku - wprowadzono zle dane");
+            log.warn("Nie udalo sie rozpoczac pojedynku - Uzytkownik wprowadzil niepoprawne dane");
             redirectAttributes.addFlashAttribute("incorrectMessage", exceptionMessageCreatorService.createMessageValidError(bindingResult));
             redirectAttributes.addFlashAttribute("duelForm", duelFormRequest);
             return Route.REDIRECT + Route.USER + Route.DUEL;
         }
+        log.info("Uzytkownik w intefejsie bitwy");
         duelFormRequest.setUserUUID(communication.createUserUUID());
         model.addAttribute("duelForm", duelFormRequest);
         duel.loadBattle(mapper.toDuelForm(duelFormRequest));
-        log.info("Uzytkownik rozpoczyna pojedynek");
         return Route.PACKAGE_DUEL + Route.BATTLE;
     }
 }

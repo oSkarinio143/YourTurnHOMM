@@ -407,6 +407,7 @@
     </button>
     <form class="hidden" id="saveForm" th:action="@{/oskarinio143/YourTurnHOMM/admin/database/modify/unit}" method="post">
       <input type="hidden" name="name" th:value="${unit.name}">
+      <input type="hidden" name="imagePath" th:value="${unit.imagePath}">
       <button type="submit" class="btn btn-save">
         <i class="fas fa-save"></i> Zapisz
       </button>

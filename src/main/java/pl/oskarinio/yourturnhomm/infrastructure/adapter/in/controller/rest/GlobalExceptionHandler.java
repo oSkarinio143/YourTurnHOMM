@@ -16,12 +16,14 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateUnitException.class)
     public String handleDuplicateUnitException(DuplicateUnitException exception, RedirectAttributes attributes){
+        log.warn("Dodanie jednostki nieudane - jednostka juz istnieje");
         attributes.addFlashAttribute("duplicateMessage", exception.getMessage());
         return Route.REDIRECT + Route.ADMIN + Route.DATABASE + Route.ADD;
     }
 
     @ExceptionHandler (UsernameNotFoundException.class)
     public String handleUsernameNotFoundException(RedirectAttributes redirectAttributes, UsernameNotFoundException usernameNotFoundException) {
+        log.warn("Logowanie nieudane - brak uzytnowika w bazie");
         redirectAttributes.addFlashAttribute("errorMessage", "Uzytkownik " + usernameNotFoundException.getMessage() + " nie istnieje w bazie danych");
         return Route.REDIRECT + Route.LOGIN;
     }

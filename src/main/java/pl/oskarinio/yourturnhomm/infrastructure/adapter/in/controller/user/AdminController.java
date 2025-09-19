@@ -29,7 +29,8 @@ class AdminController {
         this.cookieHelper = cookieHelper;
     }
 
-    @ModelAttribute("users")
+    //Dostarcza liste uzytkownikow kazdej metodzie w klasie
+    @ModelAttribute(Route.USERS_LIST)
     public List<User> addUsersListModel(){
         List<User> userList = admin.getUserList();
         return admin.getUserList();
@@ -37,7 +38,7 @@ class AdminController {
 
     @GetMapping
     public String choseAdminOption(){
-        log.info("Admin w panelu admina");
+        log.info("Uzytkownik administrator w panelu admina");
         return Route.PACKAGE_ADMIN + Route.ADMIN;
     }
 
@@ -49,7 +50,7 @@ class AdminController {
 
     @GetMapping(Route.DELETE)
     public String deleteUserView(Model model, HttpServletRequest request){
-        log.info("Admin wybier uzytkownika do usuniecia");
+        log.info("Admin wybiera uzytkownika do usuniecia");
         model.addAttribute("adminUsername", adminUsername);
         model.addAttribute("thisUsername", cookieHelper.getUsernameFromCookie(request));
         return Route.PACKAGE_ADMIN + Route.VIEW_DELETE_USER;

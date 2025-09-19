@@ -24,7 +24,8 @@ public class Unit {
     private Integer speed;
     @NonNull
     private String description;
-    @NonNull
     private String imagePath;
 
+    public Unit(String name, int atk, int def, int minDmg, int maxDmg, int hp, int speed, String desc, String imgPath) {
+    }
 }

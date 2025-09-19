@@ -2,17 +2,17 @@ package pl.oskarinio.yourturnhomm.domain.usecase.battle;
 
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
 import pl.oskarinio.yourturnhomm.domain.port.battle.MessageCreator;
+import pl.oskarinio.yourturnhomm.domain.port.out.MdcScheduledExecutor;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class QueueUseCase {
-    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private final MdcScheduledExecutor scheduler;
     private final MessageCreator messageCreator;
 
-    public QueueUseCase(MessageCreator messageCreator) {
+    public QueueUseCase(MessageCreator messageCreator, MdcScheduledExecutor scheduler) {
         this.messageCreator = messageCreator;
+        this.scheduler = scheduler;
     }
 
     public void createQueue(RoundInfo roundInfo){

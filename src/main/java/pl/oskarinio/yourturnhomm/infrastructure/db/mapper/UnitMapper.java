@@ -16,6 +16,7 @@ public class UnitMapper {
                 unit.getImagePath());
         if(unit.getShots() != null)
             unitEnt.setShots(unit.getShots());
+        System.out.println(unitEnt.getImagePath());
         return unitEnt;
     }
 
@@ -27,8 +28,9 @@ public class UnitMapper {
                 unitEntity.getMaxDamage(),
                 unitEntity.getHp(),
                 unitEntity.getSpeed(),
-                unitEntity.getDescription(),
-                unitEntity.getImagePath());
+                unitEntity.getDescription());
+        if(unitEntity.getImagePath() != null)
+            unit.setImagePath(unitEntity.getImagePath());
         if(unitEntity.getShots() != null) {
             unit.setShots(unitEntity.getShots());
         }
