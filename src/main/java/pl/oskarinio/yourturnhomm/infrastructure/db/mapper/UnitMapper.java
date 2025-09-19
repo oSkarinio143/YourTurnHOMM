@@ -16,7 +16,6 @@ public class UnitMapper {
                 unit.getImagePath());
         if(unit.getShots() != null)
             unitEnt.setShots(unit.getShots());
-        System.out.println(unitEnt.getImagePath());
         return unitEnt;
     }
 

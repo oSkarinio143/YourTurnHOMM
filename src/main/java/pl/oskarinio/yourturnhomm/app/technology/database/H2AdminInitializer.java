@@ -43,7 +43,7 @@ public class H2AdminInitializer {
             userRepository.save(adminUser);
             log.info("Konto administratora utworzone. Nazwa = {}", adminUsername);
         } else {
-            log.debug("Baza nie jest pusta – pomijam inicjalizację admina.");
+            log.debug("Konto administratora już istnieje. Nazwa = {}", adminUsername);
         }
     }
 }

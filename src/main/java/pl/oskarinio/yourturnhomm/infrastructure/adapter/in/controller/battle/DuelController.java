@@ -69,7 +69,6 @@ class DuelController {
                            @RequestParam(required = false) Side side,
                            @RequestParam(required = false) String tempUnitName){
 
-        System.out.println("Poprzednia jednostka - " + duelFormRequest.getLeftUnit());
         DuelForm duelForm = mapper.toDuelForm(duelFormRequest);
         duel.loadUnit(duelForm, side, tempUnitName);
         model.addAttribute("duelForm", duelForm);

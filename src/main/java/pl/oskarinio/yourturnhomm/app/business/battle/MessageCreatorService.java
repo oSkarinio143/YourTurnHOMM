@@ -1,7 +1,6 @@
 package pl.oskarinio.yourturnhomm.app.business.battle;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
 import pl.oskarinio.yourturnhomm.domain.port.battle.MessageCreator;
@@ -19,7 +18,6 @@ public class MessageCreatorService implements MessageCreator {
 
     @Override
     public void sendRoundMess(RoundInfo roundInfo) {
-        System.out.println("Mdcek - " + MDC.get("traceId"));
         log.debug("Wysyłam wiadomość o rozpoczęciu rundy. Runda = {}", roundInfo.getRoundCounter());
         messageCreatorUseCase.sendRoundMess(roundInfo);
     }

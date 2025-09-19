@@ -2,10 +2,10 @@ package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.controller.rest;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 
 @Slf4j
@@ -19,5 +19,7 @@ class MainController {
         if (errorMessage != null)
             model.addAttribute("adminErrorMessage", errorMessage.toString());
         return Route.VIEW_MODE;
+
+
     }
 }
