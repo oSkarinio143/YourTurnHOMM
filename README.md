@@ -1,4 +1,5 @@
 PREZENTACJA PROJEKTU (2 MINUTY) - https://www.youtube.com/watch?v=xfvLEBHoVVo
+
 PREZENTACJA KODU (6 MINUT) - https://www.youtube.com/watch?v=2GtfnAiVhPM
 
 
