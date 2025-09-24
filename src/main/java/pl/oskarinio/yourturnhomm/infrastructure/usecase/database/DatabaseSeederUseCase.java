@@ -39,7 +39,9 @@ public class DatabaseSeederUseCase {
                                int speed,
                                String desc,
                                String imgPath){
-        Unit newUnit = new Unit(name, atk, def, minDmg, maxDmg, hp, speed, desc, imgPath);
+        Unit newUnit = new Unit(name, atk, def, minDmg, maxDmg, hp, speed, desc);
+        newUnit.setImagePath(imgPath);
+        System.out.println("Met 1 - " + newUnit.getName());
         unitRepository.save(newUnit);
     }
 
