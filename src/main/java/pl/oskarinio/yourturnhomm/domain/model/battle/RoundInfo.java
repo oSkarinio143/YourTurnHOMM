@@ -37,8 +37,7 @@ public class RoundInfo implements Cloneable{
     @Override
     public RoundInfo clone() {
         try {
-            RoundInfo copy = (RoundInfo) super.clone();
-            return copy;
+            return (RoundInfo) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError("Clone Exception");
         }

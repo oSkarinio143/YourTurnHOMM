@@ -4,6 +4,7 @@ import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 import pl.oskarinio.yourturnhomm.infrastructure.db.entity.UnitEntity;
 
 public class UnitMapper {
+    private UnitMapper(){}
     public static UnitEntity toEntity(Unit unit){
         UnitEntity unitEnt = new UnitEntity(unit.getName(),
                 unit.getAttack(),

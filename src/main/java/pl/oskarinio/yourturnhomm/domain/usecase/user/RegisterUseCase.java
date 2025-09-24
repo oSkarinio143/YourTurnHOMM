@@ -18,7 +18,7 @@ public class RegisterUseCase {
     private final UserManagement userManagement;
     private final PasswordEncoderPort passwordEncoderPort;
     private final Clock clock;
-    private long TOKEN_REFRESH_SECONDS;
+    private final long TOKEN_REFRESH_SECONDS;
 
     public RegisterUseCase(UserRepository userRepository, UserManagement userManagement, PasswordEncoderPort passwordEncoderPort, Clock clock, long refreshSeconds) {
         this.userRepository = userRepository;

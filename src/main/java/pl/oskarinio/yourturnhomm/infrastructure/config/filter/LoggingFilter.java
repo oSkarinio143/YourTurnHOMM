@@ -12,13 +12,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import pl.oskarinio.yourturnhomm.infrastructure.db.entity.UserEntity;
-import pl.oskarinio.yourturnhomm.infrastructure.usecase.database.UserRepositoryUseCase;
+import pl.oskarinio.yourturnhomm.infrastructure.usecase.database.repository.UserRepositoryUseCase;
 
 import java.io.IOException;
 import java.util.Optional;
 
 @Component
-public class LoggingFilter extends OncePerRequestFilter {
+class LoggingFilter extends OncePerRequestFilter {
 
     private final Tracer tracer;
     private final UserRepositoryUseCase userRepositoryUseCase;
@@ -52,5 +52,4 @@ public class LoggingFilter extends OncePerRequestFilter {
         String traceId = currentSpan != null ? currentSpan.context().traceId() : "none";
         MDC.put("traceId", traceId);
     }
-
 }

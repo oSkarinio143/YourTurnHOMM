@@ -5,6 +5,7 @@ import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.infrastructure.db.entity.UserEntity;
 
 public class UserMapper {
+    private UserMapper(){}
     public static User toDomain(UserEntity userEntity){
         User user = new User(userEntity.getUsername(), userEntity.getPassword(), userEntity.getRegistrationDate());
         user.setId(userEntity.getId());

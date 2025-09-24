@@ -74,7 +74,7 @@ services:
   logstash:
     image: docker.elastic.co/logstash/logstash:8.10.2
     container_name: logstash
-    command: logstash -f /usr/share/logstash/pipeline/yourturn.conf --log.level debug
+    command: logstash -f /usr/share/logstash/pipeline/yourturn.conf
     volumes:
       - ./logstash-pipeline:/usr/share/logstash/pipeline
       - ./logs:/logs:ro

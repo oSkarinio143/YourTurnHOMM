@@ -15,8 +15,8 @@ import java.util.List;
 
 public class CookieHelperUseCase {
     private final Token token;
-    private long TOKEN_ACCESS_SECONDS;
-    private long TOKEN_REFRESH_SECONDS;
+    private final long TOKEN_ACCESS_SECONDS;
+    private final long TOKEN_REFRESH_SECONDS;
 
     public CookieHelperUseCase(Token token, long accessSeconds, long refreshSeconds) {
         this.token = token;

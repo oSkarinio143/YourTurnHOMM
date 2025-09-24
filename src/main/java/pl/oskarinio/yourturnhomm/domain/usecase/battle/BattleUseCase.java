@@ -7,11 +7,13 @@ import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 import pl.oskarinio.yourturnhomm.domain.model.form.DuelForm;
 import pl.oskarinio.yourturnhomm.domain.port.battle.Queue;
 
+import java.util.stream.IntStream;
+
 public class BattleUseCase {
     private final Queue queue;
 
-    private double ATK_RATE;
-    private double DEF_RATE;
+    private final double ATK_RATE;
+    private final double DEF_RATE;
 
     public BattleUseCase(Queue queue, double atkRate, double defRate) {
         this.queue = queue;
@@ -207,12 +209,9 @@ public class BattleUseCase {
     private int drawDmg(BattleUnit battleUnit, int quantity){
         int minDmg = battleUnit.getMinDmg();
         int maxDmg = battleUnit.getMaxDmg();
-        int sumDmg = 0;
-        for (int i = 0; i < quantity; i++) {
-            int singDmg = drawSingDmg(minDmg, maxDmg);
-            sumDmg += singDmg;
-        }
-        return sumDmg;
+        return IntStream.range(0, quantity)
+                .map(i -> drawSingDmg(minDmg, maxDmg))
+                .sum();
     }
 
     private int drawSingDmg(int minDmg, int maxDmg){

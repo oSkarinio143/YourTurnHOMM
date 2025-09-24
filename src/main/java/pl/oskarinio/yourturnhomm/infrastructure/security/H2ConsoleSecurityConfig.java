@@ -8,11 +8,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
+//Konfiguracja dla konsoli dla bazy H2
 @Configuration
 @Profile("h2")
-public class H2ConsoleSecurityConfig {
+class H2ConsoleSecurityConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain h2ConsoleSecurityFilterChain(HttpSecurity http) throws Exception {

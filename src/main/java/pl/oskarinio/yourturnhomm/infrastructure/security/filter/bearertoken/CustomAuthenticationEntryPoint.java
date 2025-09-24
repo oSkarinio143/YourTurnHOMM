@@ -1,6 +1,5 @@
 package pl.oskarinio.yourturnhomm.infrastructure.security.filter.bearertoken;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
@@ -10,11 +9,12 @@ import pl.oskarinio.yourturnhomm.domain.model.Route;
 
 import java.io.IOException;
 
+//Automatyczne przekierowanie dla uzytkownikow próbujących wejść na nieistniejący endpoint
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException, IOException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         response.sendRedirect(Route.MAIN + Route.LOGIN);
     }
 }

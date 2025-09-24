@@ -11,7 +11,7 @@ public class DatabaseSeederUseCase {
         this.unitRepository = unitRepository;
     }
 
-    public void seedUnits(){
+    public void  seedUnits(){
         if(unitRepository.count() == 0) {
             saveSingleUnit("Pikinier",       4, 5, 1, 3,   10, 4, "odporny na szarżę",                            "https://oskarinio143.github.io/Heroes3assets/images/pikinier.png");
             saveSingleUnit("Halabardnik",    6, 5, 2, 3,   10, 5, "odporny na szarżę",                            "https://oskarinio143.github.io/Heroes3assets/images/halabardnik.png");

@@ -6,8 +6,8 @@ import org.springframework.core.task.TaskDecorator;
 
 import java.util.Map;
 
-public class MdcTaskDecorator implements TaskDecorator {
-
+//Opakowanie dla ThreadPoolTaskExecutor, które zawiera Mdc wątku, z którego został uruchomiony
+class MdcTaskDecorator implements TaskDecorator {
     @Override
     @NonNull
     public Runnable decorate(@NonNull Runnable runnable) {

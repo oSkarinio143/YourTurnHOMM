@@ -7,21 +7,21 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.header.HeaderWriterFilter;
-import pl.oskarinio.yourturnhomm.infrastructure.config.filter.LoggingFilter;
+import pl.oskarinio.yourturnhomm.domain.model.Route;
+import pl.oskarinio.yourturnhomm.infrastructure.config.filter.RefreshFilter;
 import pl.oskarinio.yourturnhomm.infrastructure.security.filter.CspNonceFilter;
 import pl.oskarinio.yourturnhomm.infrastructure.security.filter.bearertoken.CookieBearerTokenResolver;
-import pl.oskarinio.yourturnhomm.infrastructure.security.filter.bearertoken.CustomAuthenticationEntryPoint;
-import pl.oskarinio.yourturnhomm.infrastructure.config.filter.RefreshFilter;
 import pl.oskarinio.yourturnhomm.infrastructure.security.filter.bearertoken.CustomAccessDeniedHandler;
-import pl.oskarinio.yourturnhomm.domain.model.Route;
+import pl.oskarinio.yourturnhomm.infrastructure.security.filter.bearertoken.CustomAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
@@ -42,7 +42,7 @@ class SecurityConfig {
                                            CookieBearerTokenResolver cookieBearerTokenResolver,
                                            RefreshFilter refreshFilter) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
@@ -59,13 +59,13 @@ class SecurityConfig {
                         .accessDeniedHandler(customAccessDeniedHandler)
                         .authenticationEntryPoint(customAuthenticationEntryPoint)
                 )
-                .httpBasic(basic -> basic.disable())
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers
                         .httpStrictTransportSecurity(hsts -> hsts
                                 .maxAgeInSeconds(31536000)
                         )
                         .contentTypeOptions(Customizer.withDefaults())
-                        .frameOptions(frameOptions -> frameOptions.deny())
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::deny)
                         .contentSecurityPolicy(csp -> csp
                                 .policyDirectives("default-src 'self'; " +
                                         "style-src 'self' 'nonce-{nonce}';" +

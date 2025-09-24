@@ -5,7 +5,7 @@ import pl.oskarinio.yourturnhomm.infrastructure.port.database.RefreshTokenReposi
 import java.time.Clock;
 import java.time.Instant;
 
-
+//Czysci wygasłe RefreshTokeny co 24 godziny
 public class TokenDeleterUseCase {
     private final RefreshTokenRepository refreshTokenRepository;
     private final Clock clock;

@@ -15,8 +15,8 @@ public class H2AdminInitializer {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final Clock clock;
-    private String adminUsername;
-    private String adminPassword;
+    private final String adminUsername;
+    private final String adminPassword;
 
     public H2AdminInitializer(UserRepository userRepository,
                               PasswordEncoder passwordEncoder,

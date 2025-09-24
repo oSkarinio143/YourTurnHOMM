@@ -6,7 +6,7 @@ import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
 import pl.oskarinio.yourturnhomm.infrastructure.db.entity.UserEntity;
 import pl.oskarinio.yourturnhomm.infrastructure.db.mapper.UserMapper;
-import pl.oskarinio.yourturnhomm.infrastructure.usecase.database.UserRepositoryUseCase;
+import pl.oskarinio.yourturnhomm.infrastructure.usecase.database.repository.UserRepositoryUseCase;
 
 import java.time.Instant;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.function.Function;
 @Slf4j
 @Service
 public class UserRepositoryService implements UserRepository {
-    private UserRepositoryUseCase userRepositoryUseCase;
+    private final UserRepositoryUseCase userRepositoryUseCase;
 
     public UserRepositoryService(UserRepositoryUseCase userRepositoryUseCaseJpa) {
         this.userRepositoryUseCase = userRepositoryUseCaseJpa;

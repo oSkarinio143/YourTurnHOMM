@@ -4,7 +4,8 @@ import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
 import pl.oskarinio.yourturnhomm.infrastructure.db.entity.RefreshTokenEntity;
 
 class RefreshTokenMapper {
-    public static RefreshToken toDomain(RefreshTokenEntity refreshTokenEntity){
+    private RefreshTokenMapper(){}
+    static RefreshToken toDomain(RefreshTokenEntity refreshTokenEntity){
         RefreshToken refreshToken = new RefreshToken(refreshTokenEntity.getTokenHash(),
                 refreshTokenEntity.getCreationDate(),
                 refreshTokenEntity.getExpirationDate());
@@ -12,7 +13,7 @@ class RefreshTokenMapper {
         return refreshToken;
     }
 
-    public static RefreshTokenEntity toEntity(RefreshToken refreshToken){
+    static RefreshTokenEntity toEntity(RefreshToken refreshToken){
         RefreshTokenEntity refreshTokenEntity = new RefreshTokenEntity(refreshToken.getTokenHash(),
                 refreshToken.getCreationDate(),
                 refreshToken.getExpirationDate());

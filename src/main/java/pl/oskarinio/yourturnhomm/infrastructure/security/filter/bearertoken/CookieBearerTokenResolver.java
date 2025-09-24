@@ -9,6 +9,7 @@ import pl.oskarinio.yourturnhomm.domain.model.Route;
 
 import java.util.List;
 
+//Sprawdza, czy token jest w ciasteczku
 @Component
 public class CookieBearerTokenResolver implements BearerTokenResolver {
 
@@ -22,13 +23,11 @@ public class CookieBearerTokenResolver implements BearerTokenResolver {
         Cookie cookieAccess = WebUtils.getCookie(request, COOKIE_ACCESS_TOKEN);
         String path = request.getRequestURI();
 
-        if(PUBLIC_PATHS.contains(path)) {
+        if(PUBLIC_PATHS.contains(path))
             return null;
-        }
 
-        if (cookieAccess != null && !cookieAccess.getValue().isEmpty()) {
+        if (cookieAccess != null && !cookieAccess.getValue().isEmpty())
             return cookieAccess.getValue();
-        }
 
         if(request.getAttribute("accessToken") != null)
             return request.getAttribute("accessToken").toString();

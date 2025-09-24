@@ -18,8 +18,8 @@ public class UserUseCase {
     private final UserRepository userRepository;
     private final Token token;
     private final Clock clock;
-    private long TOKEN_ACCESS_SECONDS;
-    private long TOKEN_REFRESH_SECONDS;
+    private final long TOKEN_ACCESS_SECONDS;
+    private final long TOKEN_REFRESH_SECONDS;
 
     public UserUseCase(UserRepository userRepository, Token token, Clock clock, long accessSeconds, long refreshSeconds) {
         this.userRepository = userRepository;

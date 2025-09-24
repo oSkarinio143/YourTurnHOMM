@@ -14,11 +14,12 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+//Filter generuje i udostępnia nonce, zapobiega niechcianym skryptom
 public class CspNonceFilter extends GenericFilterBean {
     private static final int NONCE_SIZE = 32; //recommended is at least 128 bits/16 bytes
     private static final String CSP_NONCE_ATTRIBUTE = "cspNonce";
 
-    private SecureRandom secureRandom = new SecureRandom();
+    private final SecureRandom secureRandom = new SecureRandom();
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
@@ -36,7 +37,7 @@ public class CspNonceFilter extends GenericFilterBean {
     }
 
     static class CSPNonceResponseWrapper extends HttpServletResponseWrapper {
-        private String nonce;
+        private final String nonce;
 
         CSPNonceResponseWrapper(HttpServletResponse response, String nonce) {
             super(response);

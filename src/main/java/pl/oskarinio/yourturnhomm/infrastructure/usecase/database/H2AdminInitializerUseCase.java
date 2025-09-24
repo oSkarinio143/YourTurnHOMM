@@ -12,7 +12,7 @@ import java.time.Clock;
 
 @Component
 @Profile("h2")
-public class H2AdminInitializerUseCase implements CommandLineRunner {
+class H2AdminInitializerUseCase implements CommandLineRunner {
     private final H2AdminInitializer h2AdminInitializer;
 
     public H2AdminInitializerUseCase(UserRepository userRepository,
@@ -24,7 +24,7 @@ public class H2AdminInitializerUseCase implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         h2AdminInitializer.initializeProfile();
     }
 }

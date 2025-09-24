@@ -15,8 +15,8 @@ public class MySQLAdminInitializer{
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final Clock clock;
-    private String adminUsername;
-    private String adminPassword;
+    private final String adminUsername;
+    private final String adminPassword;
 
     public MySQLAdminInitializer(UserRepository userRepository,
                                  PasswordEncoder passwordEncoder,

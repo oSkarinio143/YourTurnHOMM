@@ -8,7 +8,6 @@ import pl.oskarinio.yourturnhomm.domain.port.out.UnitRepository;
 import pl.oskarinio.yourturnhomm.domain.port.unit.UnitManagement;
 import pl.oskarinio.yourturnhomm.domain.usecase.unit.UnitManagementUseCase;
 
-import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -20,7 +19,7 @@ public class UnitManagementService implements UnitManagement {
         this.unitManagementUseCase = new UnitManagementUseCase(unitRepository);
     }
     @Override
-    public void addUnit(Unit unit) throws IOException {
+    public void addUnit(Unit unit) {
         log.debug("Rozpoczynam proces dodawania jednostki. Nazwa = {}", unit.getName());
         unitManagementUseCase.addUnit(unit);
     }

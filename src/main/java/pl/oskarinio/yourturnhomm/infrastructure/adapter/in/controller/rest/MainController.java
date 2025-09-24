@@ -19,7 +19,5 @@ class MainController {
         if (errorMessage != null)
             model.addAttribute("adminErrorMessage", errorMessage.toString());
         return Route.VIEW_MODE;
-
-
     }
 }

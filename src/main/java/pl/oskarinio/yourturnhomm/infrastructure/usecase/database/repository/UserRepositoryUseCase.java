@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.usecase.database;
+package pl.oskarinio.yourturnhomm.infrastructure.usecase.database.repository;
 
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

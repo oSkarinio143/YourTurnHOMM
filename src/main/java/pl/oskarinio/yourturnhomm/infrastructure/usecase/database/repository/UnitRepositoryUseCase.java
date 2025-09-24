@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.usecase.database;
+package pl.oskarinio.yourturnhomm.infrastructure.usecase.database.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import pl.oskarinio.yourturnhomm.infrastructure.db.entity.UnitEntity;

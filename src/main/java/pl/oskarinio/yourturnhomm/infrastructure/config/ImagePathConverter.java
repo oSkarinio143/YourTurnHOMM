@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+//Zapisuje przesłany plik na dysku i zwraca ścieżkę do niego
 @Component
 public class ImagePathConverter {
 
@@ -16,6 +17,6 @@ public class ImagePathConverter {
         Path path = Paths.get("unit-images", fileName);
         Files.createDirectories(path.getParent());
         Files.write(path, image.getBytes());
-        return "/" + path.toString();
+        return "/" + path;
     }
 }

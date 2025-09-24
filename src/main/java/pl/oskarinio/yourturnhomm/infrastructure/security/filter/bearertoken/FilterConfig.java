@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.config;
+package pl.oskarinio.yourturnhomm.infrastructure.security.filter.bearertoken;
 
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;

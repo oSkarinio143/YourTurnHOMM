@@ -8,9 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 
+//Kontroller do przechwytywania błędów
 @Slf4j
 @Controller
-public class CustomErrorController implements ErrorController {
+class CustomErrorController implements ErrorController {
 
     @RequestMapping(Route.ERROR)
     public String handleError(HttpServletRequest request) {
