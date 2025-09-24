@@ -31,7 +31,7 @@ public class TokenUseCase {
         Date expiration = Date.from(now.plus(seconds, ChronoUnit.SECONDS));
         return Jwts.builder()
                 .setSubject(loginServiceData.getUsername())
-                .claim("roles", loginServiceData.getRoles())  // możesz dodać inne dane
+                .claim("roles", loginServiceData.getRoles())
                 .setIssuedAt(issuedAt)
                 .setExpiration(expiration)
                 .signWith(secretKey, SignatureAlgorithm.HS256)
