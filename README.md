@@ -1,5 +1,6 @@
 
 # YourTurnHOMM
+Backend jest tworzony przeze mnie z sugerowaniem się AI, zwłaszcza przy elementach związanych z bezpieczeństwem czy konfiguracją, niemal wszystko pisałem sam. Frontend jest wygenerowany, z moimi małymi poprawkami, dla elementów które nie działały
 
 Symulator pojedynków bazujący na mechanikach i jednostkach z gry **Heroes of Might & Magic 3**. 
 
