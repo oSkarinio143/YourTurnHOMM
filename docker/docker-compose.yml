@@ -105,5 +105,3 @@ networks:
 volumes:
   mysql-data:
     driver: local
-  h2_data:
-    driver: local
