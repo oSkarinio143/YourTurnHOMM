@@ -20,7 +20,6 @@ public class BattleUnit {
     private int hp;
     private int hpLeft;
     private int shots;
-    private boolean isRange;
 
     private BattleUnit(BattleUnitBuilder battleUnit){
         this.name = battleUnit.name;
@@ -34,7 +33,6 @@ public class BattleUnit {
         this.hp = battleUnit.hp;
         this.hpLeft = battleUnit.hp;
         this.shots = battleUnit.shots;
-        this.isRange = shots > 0;
     }
 
     public static class BattleUnitBuilder {
@@ -47,7 +45,6 @@ public class BattleUnit {
         private int maxDmg;
         private int speed;
         private int hp;
-        private int hpLeft;
         private int shots;
 
         public BattleUnitBuilder name(String name){
@@ -95,11 +92,6 @@ public class BattleUnit {
             return this;
         }
 
-        public BattleUnitBuilder leftHp(int hpLeft) {
-            this.hpLeft = hpLeft;
-            return this;
-        }
-
         public BattleUnitBuilder shoots(int shots) {
             this.shots = shots;
             return this;
@@ -109,5 +101,4 @@ public class BattleUnit {
             return new BattleUnit(this);
         }
     }
-
 }

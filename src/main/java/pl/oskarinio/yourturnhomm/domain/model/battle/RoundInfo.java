@@ -18,7 +18,7 @@ public class RoundInfo implements Cloneable{
     private int roundCounter;
 
     @NonNull
-    private int MessageDelay;
+    private int messageDelay;
     private int fasterDmg;
     private int slowerDmg;
     private int fasterDeathUnits;

@@ -63,7 +63,6 @@ public class BattleUseCase {
                 .maxDmg(unit.getMaxDamage())
                 .speed(unit.getSpeed())
                 .hp(unit.getHp())
-                .leftHp(unit.getHp())
                 .build();
         if (unit.getShots() != null)
             battleUnit.setShots(unit.getShots());

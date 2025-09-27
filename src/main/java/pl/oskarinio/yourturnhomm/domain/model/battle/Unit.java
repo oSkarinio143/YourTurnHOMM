@@ -25,7 +25,4 @@ public class Unit {
     @NonNull
     private String description;
     private String imagePath;
-
-    public Unit(String name, int atk, int def, int minDmg, int maxDmg, int hp, int speed, String desc, String imgPath) {
-    }
 }
