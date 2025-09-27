@@ -7,5 +7,5 @@ import org.springframework.boot.test.context.SpringBootTest;
 class YourTurnHOMMApplicationTests {
 
 	@Test
-	void contextLoads() {}
+	void contextLoad() {}
 }

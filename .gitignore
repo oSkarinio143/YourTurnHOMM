@@ -39,3 +39,5 @@ docker/.env-h2v
 #Log
 *.log
 app-log.txt
+
+/src/test/
