@@ -41,4 +41,4 @@ docker/.env-h2v
 app-log.txt
 
 /src/test/
-/workflows/
+.github/workflows/
