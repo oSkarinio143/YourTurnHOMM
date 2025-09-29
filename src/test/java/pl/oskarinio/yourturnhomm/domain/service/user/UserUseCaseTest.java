@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.domain.service.user.userUseCase;
+package pl.oskarinio.yourturnhomm.domain.service.user;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

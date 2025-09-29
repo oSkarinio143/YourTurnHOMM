@@ -12,18 +12,17 @@ import pl.oskarinio.yourturnhomm.domain.port.out.UnitRepository;
 import pl.oskarinio.yourturnhomm.domain.usecase.unit.UnitManagementUseCase;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class UnitManagmentAddTest {
+class UnitManagmentUseCaseTest {
 
     @Mock
     private UnitRepository unitRepository;
 
+    private String TEST_UNIT_NAME = "unit";
+
     private UnitManagementUseCase useCase;
-
-
 
     @BeforeEach
     void setUp() {
@@ -31,17 +30,33 @@ class UnitManagmentAddTest {
     }
 
     @Test
-    void unitExistsInDatabase(){
-        Unit unit = new Unit("Pirat", 2, 2, 2, 2, 2, 2, "");
+    void addUnit_correctValues(){
+        Unit unit = new Unit(TEST_UNIT_NAME, 2, 2, 2, 2, 2, 2, "");
+
+        when(unitRepository.existsById(TEST_UNIT_NAME)).thenReturn(false);
+        useCase.addUnit(unit);
+
+        verify(unitRepository).save(unit);
+    }
+
+    @Test
+    void addUnit_unitExist_resultDuplicateUnitException(){
+        Unit unit = new Unit(TEST_UNIT_NAME, 2, 2, 2, 2, 2, 2, "");
+
         when(unitRepository.existsById(unit.getName())).thenReturn(true);
 
         assertThrows(DuplicateUnitException.class, () -> useCase.addUnit(unit));
     }
 
     @Test
-    void throwTransactionSystemAddException(){
-        Unit unit = new Unit("Pirat", 2, 2, 2, 2, 2, 2, "");
+    void addUnit_runtimeException_resultTransactionSystemAddException(){
+        Unit unit = new Unit(TEST_UNIT_NAME, 2, 2, 2, 2, 2, 2, "");
+
+        when(unitRepository.existsById(unit.getName())).thenReturn(false);
         doThrow(new RuntimeException()).when(unitRepository).save(unit);
+
         assertThrows(TransactionSystemAddException.class, () -> useCase.addUnit(unit));
+        verify(unitRepository).existsById(unit.getName());
+        verify(unitRepository).save(unit);
     }
 }

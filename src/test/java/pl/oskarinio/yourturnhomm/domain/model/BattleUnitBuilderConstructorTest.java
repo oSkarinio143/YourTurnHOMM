@@ -7,7 +7,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class BattleUnitBuilderConstructorTest {
     @Test
-    void builderSetsAllFieldsCorrectly() {
+    void builder_correctValues() {
         BattleUnit unit = new BattleUnit.BattleUnitBuilder()
                 .name("Archer")
                 .basicAtk(5)

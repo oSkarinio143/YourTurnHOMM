@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class RoundInfoCloneTest {
 
     @Test
-    void cloneOriginalAreDifferent() {
+    void clone_correctValues() {
         BattleUnit bu = new BattleUnit.BattleUnitBuilder()
                 .name("X")
                 .hp(100)
