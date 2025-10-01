@@ -1,10 +1,10 @@
 package pl.oskarinio.yourturnhomm.domain.model.form;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 public class RegisterForm {
 
     private String username;
