@@ -17,19 +17,19 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static pl.oskarinio.yourturnhomm.domain.service.battle.BattleTestHelper.getRoundInfo;
+import static pl.oskarinio.yourturnhomm.domain.service.battle.BattleTestHelper.getUSERUUID;
 
 @ExtendWith(MockitoExtension.class)
-public class MessageCreatorUseCaseTest {
-
+class MessageCreatorUseCaseTest {
     @Mock
     private MessageSender messageSender;
-
     @Captor
     private ArgumentCaptor<UUID> captorUuid;
     @Captor
     private ArgumentCaptor<String> captorMessage;
 
-    private UUID TEST_USERUUID = UUID.randomUUID();
+    private static final UUID TEST_USERUUID = getUSERUUID();
 
     private MessageCreatorUseCase messageCreatorUseCase;
 
@@ -104,31 +104,5 @@ public class MessageCreatorUseCaseTest {
         assertThat(captorUuid.getValue()).isEqualTo(TEST_USERUUID);
         assertThat(captorMessage.getValue()).isEqualTo("VICTORY:testUnit gina. testUnit wygrywaja pojedynek");
         verify(messageSender).closeConnection(TEST_USERUUID);
-    }
-
-    private RoundInfo getRoundInfo(){
-        RoundInfo roundInfo = new RoundInfo(TEST_USERUUID, 1, 100);
-        roundInfo.setFasterDmg(200);
-        roundInfo.setSlowerDmg(100);
-        roundInfo.setFasterDeathUnits(2);
-        roundInfo.setSlowerDeathUnits(1);
-        roundInfo.setFasterLiveUnits(20);
-        roundInfo.setSlowerLiveUnits(10);
-        roundInfo.setFasterUnit(getTestUnit(10));
-        roundInfo.setSlowerUnit(getTestUnit(1));
-        roundInfo.setWinnerUnit(getTestUnit());
-        roundInfo.setLoserUnit(getTestUnit());
-        roundInfo.setWinner(true);
-        roundInfo.setFasterLastAttackUnits(30);
-        roundInfo.setTempDelay(1000);
-        return roundInfo;
-    }
-
-    private BattleUnit getTestUnit(){
-        return new BattleUnit("testUnit", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-    }
-
-    private BattleUnit getTestUnit(int speed){
-        return new BattleUnit("testUnit", 1, 2, 3, 4, 5, 6, speed, 8, 9, 10);
     }
 }
