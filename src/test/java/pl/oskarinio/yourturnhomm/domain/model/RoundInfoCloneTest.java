@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import pl.oskarinio.yourturnhomm.domain.model.battle.BattleUnit;
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 class RoundInfoCloneTest {
 
@@ -14,7 +16,8 @@ class RoundInfoCloneTest {
                 .hp(100)
                 .build();
 
-        RoundInfo original = new RoundInfo("user-1", 1, 50);
+        UUID uuid = UUID.randomUUID();
+        RoundInfo original = new RoundInfo(uuid, 1, 50);
         original.setFasterUnit(bu);
         original.setFasterDmg(10);
         original.setWinnerUnit(bu);

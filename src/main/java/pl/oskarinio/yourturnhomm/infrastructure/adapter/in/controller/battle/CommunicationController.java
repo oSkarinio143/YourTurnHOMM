@@ -7,6 +7,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.infrastructure.port.communication.Communication;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping(Route.MAIN + Route.DUEL)
 @CrossOrigin(origins = "*")
@@ -19,13 +21,13 @@ class CommunicationController {
     }
 
     @GetMapping(Route.GENERATEUUID)
-    public String generateUUID(){
+    public UUID generateUUID(){
         log.debug("Rozpoczynam tworzenie userUUID");
         return communication.createUserUUID();
     }
 
     @GetMapping(path = Route.BATTLE + Route.STREAM, produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter stream(@RequestParam String userUUID) {
+    public SseEmitter stream(@RequestParam UUID userUUID) {
         log.trace("Rozpoczynam tworzenie emittera, userUUID = {}", userUUID);
         return communication.createEmitter(userUUID);
     }

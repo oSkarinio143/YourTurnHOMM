@@ -1,6 +1,8 @@
 package pl.oskarinio.yourturnhomm.domain.port.out;
 
+import java.util.UUID;
+
 public interface MessageSender {
-    void sendMessage(String userUUID, String message);
-    void closeConnection(String userUUID);
+    void sendMessage(UUID userUUID, String message);
+    void closeConnection(UUID userUUID);
 }

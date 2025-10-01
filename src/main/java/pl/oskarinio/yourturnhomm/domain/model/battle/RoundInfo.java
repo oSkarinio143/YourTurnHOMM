@@ -5,6 +5,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Setter
 @Getter
 @RequiredArgsConstructor
@@ -12,13 +14,14 @@ import lombok.Setter;
 public class RoundInfo implements Cloneable{
 
     @NonNull
-    private String userUUID;
+    private UUID userUUID;
 
     @NonNull
     private int roundCounter;
 
     @NonNull
     private int messageDelay;
+
     private int fasterDmg;
     private int slowerDmg;
     private int fasterDeathUnits;

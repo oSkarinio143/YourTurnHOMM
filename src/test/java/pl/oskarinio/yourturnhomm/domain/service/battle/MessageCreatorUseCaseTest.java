@@ -25,17 +25,16 @@ public class MessageCreatorUseCaseTest {
     private MessageSender messageSender;
 
     @Captor
-    private ArgumentCaptor<String> captorUuid;
+    private ArgumentCaptor<UUID> captorUuid;
     @Captor
     private ArgumentCaptor<String> captorMessage;
 
-    private String TEST_USERUUID = "uuid123";
-    private String TEST_MESSAGE = "message123";
+    private UUID TEST_USERUUID = UUID.randomUUID();
 
     private MessageCreatorUseCase messageCreatorUseCase;
 
     @BeforeEach
-    void SetUP(){
+    void SetUp(){
         messageCreatorUseCase = new MessageCreatorUseCase(messageSender);
     }
 
@@ -47,6 +46,64 @@ public class MessageCreatorUseCaseTest {
         verify(messageSender).sendMessage(captorUuid.capture(), captorMessage.capture());
         assertThat(captorUuid.getValue()).isEqualTo(TEST_USERUUID);
         assertThat(captorMessage.getValue()).isEqualTo("ROUND:Runda 1");
+    }
+
+    @Test
+    void sendAttackFasterMessage_killUnit_resultMessageAttackFasterKill(){
+        RoundInfo roundInfo = getRoundInfo();
+
+        messageCreatorUseCase.sendAttackFasterMess(roundInfo);
+
+        verify(messageSender).sendMessage(captorUuid.capture(), captorMessage.capture());
+        assertThat(captorUuid.getValue()).isEqualTo(TEST_USERUUID);
+        assertThat(captorMessage.getValue()).isEqualTo("ATTACKF:Jednostka 30xtestUnit atakuje pierwsza, zadajac 200.<br>Pokonuje 1xtestUnit");
+    }
+
+    @Test
+    void sendAttackFasterMessage_noKillUnit_resultMessageAttackFasterBasic(){
+        RoundInfo roundInfo = getRoundInfo();
+        roundInfo.setSlowerDeathUnits(0);
+
+        messageCreatorUseCase.sendAttackFasterMess(roundInfo);
+
+        verify(messageSender).sendMessage(captorUuid.capture(), captorMessage.capture());
+        assertThat(captorUuid.getValue()).isEqualTo(TEST_USERUUID);
+        assertThat(captorMessage.getValue()).isEqualTo("ATTACKF:Jednostka 30xtestUnit atakuje pierwsza, zadajac 200.");
+    }
+
+    @Test
+    void sendAttackSlowerMessage_killUnit_resultMessageAttackSlowerKill(){
+        RoundInfo roundInfo = getRoundInfo();
+
+        messageCreatorUseCase.sendAttackSlowerMess(roundInfo);
+
+        verify(messageSender).sendMessage(captorUuid.capture(), captorMessage.capture());
+        assertThat(captorUuid.getValue()).isEqualTo(TEST_USERUUID);
+        assertThat(captorMessage.getValue()).isEqualTo("ATTACKS:Jednostka 10xtestUnit atakuje druga, zadajac 100.<br>Pokonuje 2xtestUnit");
+    }
+
+    @Test
+    void sendAttackSlowerMessage_noKillUnit_resultMessageAttackSlowerBasic(){
+        RoundInfo roundInfo = getRoundInfo();
+        roundInfo.setFasterDeathUnits(0);
+
+        messageCreatorUseCase.sendAttackSlowerMess(roundInfo);
+
+        verify(messageSender).sendMessage(captorUuid.capture(), captorMessage.capture());
+        assertThat(captorUuid.getValue()).isEqualTo(TEST_USERUUID);
+        assertThat(captorMessage.getValue()).isEqualTo("ATTACKS:Jednostka 10xtestUnit atakuje druga, zadajac 100.");
+    }
+
+    @Test
+    void sendWinnerMessage_correctValues(){
+        RoundInfo roundInfo = getRoundInfo();
+
+        messageCreatorUseCase.sendWinnerMess(roundInfo);
+
+        verify(messageSender).sendMessage(captorUuid.capture(), captorMessage.capture());
+        assertThat(captorUuid.getValue()).isEqualTo(TEST_USERUUID);
+        assertThat(captorMessage.getValue()).isEqualTo("VICTORY:testUnit gina. testUnit wygrywaja pojedynek");
+        verify(messageSender).closeConnection(TEST_USERUUID);
     }
 
     private RoundInfo getRoundInfo(){
@@ -68,12 +125,10 @@ public class MessageCreatorUseCaseTest {
     }
 
     private BattleUnit getTestUnit(){
-        BattleUnit unit = new BattleUnit("testUnit", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        return unit;
+        return new BattleUnit("testUnit", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
     }
 
     private BattleUnit getTestUnit(int speed){
-        BattleUnit unit = new BattleUnit("testUnit", 1, 2, 3, 4, 5, 6, speed, 8, 9, 10);
-        return unit;
+        return new BattleUnit("testUnit", 1, 2, 3, 4, 5, 6, speed, 8, 9, 10);
     }
 }
