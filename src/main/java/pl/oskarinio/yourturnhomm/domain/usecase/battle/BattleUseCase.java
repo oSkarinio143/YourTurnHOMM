@@ -7,18 +7,21 @@ import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 import pl.oskarinio.yourturnhomm.domain.model.form.DuelForm;
 import pl.oskarinio.yourturnhomm.domain.port.battle.Queue;
 
+import java.util.Random;
 import java.util.stream.IntStream;
 
 public class BattleUseCase {
     private final Queue queue;
+    private final Random random;
 
     private final double ATK_RATE;
     private final double DEF_RATE;
 
-    public BattleUseCase(Queue queue, double atkRate, double defRate) {
+    public BattleUseCase(Queue queue, double atkRate, double defRate, Random random) {
         this.queue = queue;
         this.ATK_RATE = atkRate;
         this.DEF_RATE = defRate;
+        this.random = random;
     }
 
     public void prepareBattle(DuelForm duelForm){
@@ -136,7 +139,7 @@ public class BattleUseCase {
         if(leftUnit.getSpeed() > rightUnit.getSpeed())
             return  leftUnit;
         if(leftUnit.getSpeed() == rightUnit.getSpeed()){
-            int drawNumb = (int) (Math.random()*2);
+            int drawNumb = (random.nextInt(2));
             if(drawNumb == 0)
                 return leftUnit;
         }
@@ -214,7 +217,7 @@ public class BattleUseCase {
     }
 
     private int drawSingDmg(int minDmg, int maxDmg){
-        return (int) (Math.random() * (maxDmg - minDmg + 1) + minDmg);
+        return random.nextInt((maxDmg - minDmg + 1)) + minDmg;
     }
 
     private double countBonusAtkRate(BattleUnit unit, BattleUnit enemyUnit){

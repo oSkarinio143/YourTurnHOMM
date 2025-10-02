@@ -43,7 +43,7 @@ class QueueUseCaseTest {
     }
 
     @Test
-    void createQueue(){
+    void createQueue_correctValues(){
         RoundInfo roundInfo = getRoundInfo();
 
         queueUseCase.createQueue(roundInfo);

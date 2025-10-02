@@ -56,7 +56,7 @@ class MessageCreatorUseCaseTest {
 
         verify(messageSender).sendMessage(captorUuid.capture(), captorMessage.capture());
         assertThat(captorUuid.getValue()).isEqualTo(TEST_USERUUID);
-        assertThat(captorMessage.getValue()).isEqualTo("ATTACKF:Jednostka 30xtestUnit atakuje pierwsza, zadajac 200.<br>Pokonuje 1xtestUnit");
+        assertThat(captorMessage.getValue()).isEqualTo("ATTACKF:Jednostka 30xwinnerUnit atakuje pierwsza, zadajac 200.<br>Pokonuje 1xloserUnit");
     }
 
     @Test
@@ -68,7 +68,7 @@ class MessageCreatorUseCaseTest {
 
         verify(messageSender).sendMessage(captorUuid.capture(), captorMessage.capture());
         assertThat(captorUuid.getValue()).isEqualTo(TEST_USERUUID);
-        assertThat(captorMessage.getValue()).isEqualTo("ATTACKF:Jednostka 30xtestUnit atakuje pierwsza, zadajac 200.");
+        assertThat(captorMessage.getValue()).isEqualTo("ATTACKF:Jednostka 30xwinnerUnit atakuje pierwsza, zadajac 200.");
     }
 
     @Test
@@ -79,7 +79,7 @@ class MessageCreatorUseCaseTest {
 
         verify(messageSender).sendMessage(captorUuid.capture(), captorMessage.capture());
         assertThat(captorUuid.getValue()).isEqualTo(TEST_USERUUID);
-        assertThat(captorMessage.getValue()).isEqualTo("ATTACKS:Jednostka 10xtestUnit atakuje druga, zadajac 100.<br>Pokonuje 2xtestUnit");
+        assertThat(captorMessage.getValue()).isEqualTo("ATTACKS:Jednostka 10xloserUnit atakuje druga, zadajac 100.<br>Pokonuje 2xwinnerUnit");
     }
 
     @Test
@@ -91,7 +91,7 @@ class MessageCreatorUseCaseTest {
 
         verify(messageSender).sendMessage(captorUuid.capture(), captorMessage.capture());
         assertThat(captorUuid.getValue()).isEqualTo(TEST_USERUUID);
-        assertThat(captorMessage.getValue()).isEqualTo("ATTACKS:Jednostka 10xtestUnit atakuje druga, zadajac 100.");
+        assertThat(captorMessage.getValue()).isEqualTo("ATTACKS:Jednostka 10xloserUnit atakuje druga, zadajac 100.");
     }
 
     @Test
@@ -102,7 +102,7 @@ class MessageCreatorUseCaseTest {
 
         verify(messageSender).sendMessage(captorUuid.capture(), captorMessage.capture());
         assertThat(captorUuid.getValue()).isEqualTo(TEST_USERUUID);
-        assertThat(captorMessage.getValue()).isEqualTo("VICTORY:testUnit gina. testUnit wygrywaja pojedynek");
+        assertThat(captorMessage.getValue()).isEqualTo("VICTORY:loserUnit gina. winnerUnit wygrywaja pojedynek");
         verify(messageSender).closeConnection(TEST_USERUUID);
     }
 }
