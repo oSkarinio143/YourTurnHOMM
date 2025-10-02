@@ -7,7 +7,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.oskarinio.yourturnhomm.domain.model.battle.BattleUnit;
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
 import pl.oskarinio.yourturnhomm.domain.port.out.MessageSender;
 import pl.oskarinio.yourturnhomm.domain.usecase.battle.MessageCreatorUseCase;
@@ -16,9 +15,8 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static pl.oskarinio.yourturnhomm.domain.service.battle.BattleTestHelper.getRoundInfo;
-import static pl.oskarinio.yourturnhomm.domain.service.battle.BattleTestHelper.getUSERUUID;
+import static pl.oskarinio.yourturnhomm.domain.service.battle.BattleUtilities.getRoundInfo;
+import static pl.oskarinio.yourturnhomm.domain.service.battle.BattleUtilities.getUserUUID;
 
 @ExtendWith(MockitoExtension.class)
 class MessageCreatorUseCaseTest {
@@ -29,7 +27,7 @@ class MessageCreatorUseCaseTest {
     @Captor
     private ArgumentCaptor<String> captorMessage;
 
-    private static final UUID TEST_USERUUID = getUSERUUID();
+    private static final UUID TEST_USERUUID = getUserUUID();
 
     private MessageCreatorUseCase messageCreatorUseCase;
 

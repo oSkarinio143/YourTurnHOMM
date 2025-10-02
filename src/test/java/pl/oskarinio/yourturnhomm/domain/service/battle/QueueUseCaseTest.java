@@ -21,8 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static pl.oskarinio.yourturnhomm.domain.service.battle.BattleTestHelper.getRoundInfo;
-import static pl.oskarinio.yourturnhomm.domain.service.battle.BattleTestHelper.getUSERUUID;
+import static pl.oskarinio.yourturnhomm.domain.service.battle.BattleUtilities.getRoundInfo;
+import static pl.oskarinio.yourturnhomm.domain.service.battle.BattleUtilities.getUserUUID;
 
 @ExtendWith(MockitoExtension.class)
 class QueueUseCaseTest {
@@ -33,7 +33,7 @@ class QueueUseCaseTest {
     @Captor
     private ArgumentCaptor<Runnable> captorRunnable;
 
-    private static final UUID TEST_USERUUID = getUSERUUID();
+    private static final UUID TEST_USERUUID = getUserUUID();
 
     private QueueUseCase queueUseCase;
 

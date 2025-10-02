@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static pl.oskarinio.yourturnhomm.domain.service.battle.BattleTestHelper.*;
+import static pl.oskarinio.yourturnhomm.domain.service.battle.BattleUtilities.*;
 
 @ExtendWith(MockitoExtension.class)
 public class BattleUseCaseTest {
@@ -30,7 +30,7 @@ public class BattleUseCaseTest {
 
     private final double ATK_RATE = 0.05;
     private final double DEF_RATE = 0.025;
-    private static final UUID TEST_USERUUID = getUSERUUID();
+    private static final UUID TEST_USERUUID = getUserUUID();
 
     private BattleUseCase battleUseCase;
 

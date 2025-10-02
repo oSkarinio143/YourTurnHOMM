@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
 import static pl.oskarinio.yourturnhomm.domain.model.user.Role.ROLE_USER;
 
 @ExtendWith(MockitoExtension.class)
-public class RegisterUseCaseTest {
+class RegisterUseCaseTest {
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -36,7 +36,6 @@ public class RegisterUseCaseTest {
     @Mock
     private Clock clock;
 
-    private final long REFRESH_TOKEN_SECONDS = 100000L;
     private static final Instant TEST_INSTANT = Instant.parse("2023-10-27T10:15:30.00Z");
 
     @Captor
@@ -49,11 +48,11 @@ public class RegisterUseCaseTest {
 
     @BeforeEach
     void SetUp(){
-        registerUseCase = new RegisterUseCase(userRepository, userManagement, passwordEncoderPort, clock, REFRESH_TOKEN_SECONDS);
+        registerUseCase = new RegisterUseCase(userRepository, userManagement, passwordEncoderPort, clock, 100000L);
     }
 
     @Test
-    public void registerUser_correctValues(){
+    void registerUser_correctValues(){
         String username = "user";
         String password = "pwd";
         String confirmPasswrod = "pwd";
@@ -87,7 +86,7 @@ public class RegisterUseCaseTest {
         assertThat(userServiceData.getUsername()).isEqualTo(username);
         assertThat(userServiceData.getAccessToken()).isEqualTo(accessTokenString);
         assertThat(userServiceData.getRefreshToken()).isEqualTo(refreshTokenString);
-        assertThat(userServiceData.getRoles().toString()).isEqualTo("[ROLE_USER]");
+        assertThat(userServiceData.getRoles()).hasToString("[ROLE_USER]");
     }
 
     @Test

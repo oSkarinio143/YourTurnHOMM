@@ -1,18 +1,24 @@
 package pl.oskarinio.yourturnhomm.domain.service.battle;
 
+import lombok.Getter;
 import pl.oskarinio.yourturnhomm.domain.model.battle.BattleUnit;
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 import pl.oskarinio.yourturnhomm.domain.model.form.DuelForm;
 
 import java.util.UUID;
-
-class BattleTestHelper {
+@Getter
+class BattleUtilities {
 
     private static final UUID TEST_USERUUID = UUID.randomUUID();
+    private static final String TEST_UNIT = "testUnit";
 
-    static UUID getUSERUUID(){
+    static UUID getUserUUID(){
         return TEST_USERUUID;
+    }
+
+    static String getUnitName(){
+        return TEST_UNIT;
     }
 
     static RoundInfo getRoundInfo(){
@@ -34,10 +40,6 @@ class BattleTestHelper {
         roundInfo.setFasterLastAttackUnits(30);
         roundInfo.setTempDelay(1);
         return roundInfo;
-    }
-
-    private static BattleUnit getTestBattleUnit(String name, int attack, int heroAttack, int defense, int heroDefense, int minDamage, int maxDamage, int speed, int hp, int shots){
-        return new BattleUnit(name, attack, heroAttack, defense, heroDefense, minDamage, maxDamage, speed, hp, hp, shots);
     }
 
     static DuelForm getDuelFormLeftUnitFasterWinner(){
@@ -81,7 +83,15 @@ class BattleTestHelper {
         return duelForm;
     }
 
+    static Unit getTestUnit(String name){
+        return new Unit(name, 10, 10, 10, 10, 10, 10, TEST_UNIT);
+    }
+
     private static Unit getTestUnit(String name, int attack, int defense, int minDamage, int maxDamage, int hp, int speed, String description){
         return new Unit(name, attack, defense, minDamage, maxDamage, hp, speed, description);
+    }
+
+    private static BattleUnit getTestBattleUnit(String name, int attack, int heroAttack, int defense, int heroDefense, int minDamage, int maxDamage, int speed, int hp, int shots){
+        return new BattleUnit(name, attack, heroAttack, defense, heroDefense, minDamage, maxDamage, speed, hp, hp, shots);
     }
 }
