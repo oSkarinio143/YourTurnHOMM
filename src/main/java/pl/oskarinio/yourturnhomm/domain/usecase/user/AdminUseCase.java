@@ -24,7 +24,7 @@ public class AdminUseCase {
 
     public void deleteUser(String username){
         Optional<User> userOpt = userRepository.findByUsername(username);
-        if(!userOpt.isPresent())
+        if(userOpt.isEmpty())
             throw new UsernameNotFoundException();
 
         User user = userOpt.get();

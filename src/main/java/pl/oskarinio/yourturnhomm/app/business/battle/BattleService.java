@@ -9,6 +9,8 @@ import pl.oskarinio.yourturnhomm.domain.port.battle.Battle;
 import pl.oskarinio.yourturnhomm.domain.port.battle.Queue;
 import pl.oskarinio.yourturnhomm.domain.usecase.battle.BattleUseCase;
 
+import java.util.Random;
+
 @Slf4j
 @Service
 public class BattleService implements Battle {
@@ -18,7 +20,7 @@ public class BattleService implements Battle {
     public BattleService(Queue queue,
                          @Value("${battle.rates.attack}") double atkRate,
                          @Value("${battle.rates.defense}") double defRate){
-        this.battleUseCase = new BattleUseCase(queue, atkRate, defRate);
+        this.battleUseCase = new BattleUseCase(queue, atkRate, defRate, new Random());
     }
 
     @Async("taskExecutor")

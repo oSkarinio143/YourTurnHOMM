@@ -5,12 +5,14 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @RequiredArgsConstructor
 public class AttackInfo {
     @NonNull
-    private String UserUUID;
+    private UUID UserUUID;
     private BattleUnit atkUnit;
     private BattleUnit defUnit;
     private BattleUnit fasterUnit;

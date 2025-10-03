@@ -3,7 +3,7 @@ package pl.oskarinio.yourturnhomm.domain.usecase.battle;
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
 import pl.oskarinio.yourturnhomm.domain.port.out.MessageSender;
 
-public class MessageCreatorUseCase {
+public class  MessageCreatorUseCase {
     private final MessageSender messageSender;
 
     public MessageCreatorUseCase(MessageSender messageSender) {

@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import pl.oskarinio.yourturnhomm.domain.port.out.MessageSender;
 import pl.oskarinio.yourturnhomm.infrastructure.usecase.communication.CommunicationUseCase;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 public class MessageSenderService implements MessageSender {
@@ -15,13 +17,13 @@ public class MessageSenderService implements MessageSender {
     }
 
     @Override
-    public void sendMessage(String userUUID, String message) {
+    public void sendMessage(UUID userUUID, String message) {
         log.trace("Wysylam wiadomosc do uzytkownika. UUID = {}", userUUID);
         communicationUseCase.sendMessage(userUUID, message);
     }
 
     @Override
-    public void closeConnection(String userUUID) {
+    public void closeConnection(UUID userUUID) {
         log.debug("Zamykam polaczenie z uzytkownikiem. UUID = {}", userUUID);
         communicationUseCase.closeConnection(userUUID);
     }

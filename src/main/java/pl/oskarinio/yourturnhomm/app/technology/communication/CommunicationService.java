@@ -6,6 +6,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import pl.oskarinio.yourturnhomm.infrastructure.port.communication.Communication;
 import pl.oskarinio.yourturnhomm.infrastructure.usecase.communication.CommunicationUseCase;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 public class CommunicationService implements Communication{
@@ -16,14 +18,14 @@ public class CommunicationService implements Communication{
     }
 
     @Override
-    public String createUserUUID() {
-        String uuid = communicationUseCase.createUserUUID();
+    public UUID createUserUUID() {
+        UUID uuid = communicationUseCase.createUserUUID();
         log.debug("Tworze nowe userUUID. UUID = {}", uuid);
         return uuid;
     }
 
     @Override
-    public SseEmitter createEmitter(String userUUID) {
+    public SseEmitter createEmitter(UUID userUUID) {
         log.debug("Tworze emitter dla uzytkownika. UUID = {}", userUUID);
         return communicationUseCase.createEmitter(userUUID);
     }

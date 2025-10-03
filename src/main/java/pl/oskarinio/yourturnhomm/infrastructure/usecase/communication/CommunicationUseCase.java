@@ -10,23 +10,23 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class CommunicationUseCase {
-    private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
+    private final Map<UUID, SseEmitter> emitters = new ConcurrentHashMap<>();
 
-    public String createUserUUID(){
-        String userUUID;
+    public UUID createUserUUID(){
+        UUID userUUID;
         do {
-            userUUID = UUID.randomUUID().toString();
+            userUUID = UUID.randomUUID();
         } while (emitters.containsKey(userUUID));
         return userUUID;
     }
 
-    public SseEmitter createEmitter(String userUUID){
+    public SseEmitter createEmitter(UUID userUUID){
         SseEmitter emitter = new SseEmitter(3600000L);
         emitters.put(userUUID, emitter);
         return emitter;
     }
 
-    public void sendMessage(String userUUID, String message) {
+    public void sendMessage(UUID userUUID, String message) {
         SseEmitter userEmitter = emitters.get(userUUID);
         if(userEmitter != null) {
             try {
@@ -38,7 +38,7 @@ public class CommunicationUseCase {
         }
     }
 
-    public void closeConnection(String userUUID){
+    public void closeConnection(UUID userUUID){
         SseEmitter userEmitter = emitters.get(userUUID);
         if(userEmitter != null){
             try {

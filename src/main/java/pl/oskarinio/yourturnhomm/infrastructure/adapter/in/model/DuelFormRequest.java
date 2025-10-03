@@ -8,12 +8,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 
+import java.util.UUID;
+
 @NoArgsConstructor
 @Getter
 @Setter
 public class DuelFormRequest {
 
-    private String userUUID;
+    private UUID userUUID;
 
     @NotNull
     private Unit leftUnit;
