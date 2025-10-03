@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.domain.service.user;
+package pl.oskarinio.yourturnhomm.domain.usecase.user;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,6 @@ import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 import pl.oskarinio.yourturnhomm.domain.port.out.PasswordEncoderPort;
 import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
 import pl.oskarinio.yourturnhomm.domain.port.user.UserManagement;
-import pl.oskarinio.yourturnhomm.domain.usecase.user.RegisterUseCase;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -23,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static pl.oskarinio.yourturnhomm.domain.model.user.Role.ROLE_USER;
 
 @ExtendWith(MockitoExtension.class)
 class RegisterUseCaseTest {

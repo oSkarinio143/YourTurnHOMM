@@ -8,7 +8,7 @@ import org.owasp.html.Sanitizers;
 class XssRequestWrapper extends HttpServletRequestWrapper {
     private static final PolicyFactory POLICY = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
 
-    public XssRequestWrapper(HttpServletRequest request) {
+    XssRequestWrapper(HttpServletRequest request) {
         super(request);
     }
 

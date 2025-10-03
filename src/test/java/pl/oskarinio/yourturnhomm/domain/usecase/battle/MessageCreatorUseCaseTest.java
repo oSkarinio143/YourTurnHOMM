@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.domain.service.battle;
+package pl.oskarinio.yourturnhomm.domain.usecase.battle;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,14 +9,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
 import pl.oskarinio.yourturnhomm.domain.port.out.MessageSender;
-import pl.oskarinio.yourturnhomm.domain.usecase.battle.MessageCreatorUseCase;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
-import static pl.oskarinio.yourturnhomm.domain.service.battle.BattleUtilities.getRoundInfo;
-import static pl.oskarinio.yourturnhomm.domain.service.battle.BattleUtilities.getUserUUID;
+import static pl.oskarinio.yourturnhomm.domain.usecase.battle.BattleUtilities.getRoundInfo;
+import static pl.oskarinio.yourturnhomm.domain.usecase.battle.BattleUtilities.getUserUUID;
 
 @ExtendWith(MockitoExtension.class)
 class MessageCreatorUseCaseTest {

@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.domain.service.battle;
+package pl.oskarinio.yourturnhomm.domain.usecase.battle;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,11 +12,10 @@ import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 import pl.oskarinio.yourturnhomm.domain.model.form.DuelForm;
 import pl.oskarinio.yourturnhomm.domain.port.battle.Battle;
 import pl.oskarinio.yourturnhomm.domain.port.out.UnitRepository;
-import pl.oskarinio.yourturnhomm.domain.usecase.battle.DuelUseCase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
-import static pl.oskarinio.yourturnhomm.domain.service.battle.BattleUtilities.*;
+import static pl.oskarinio.yourturnhomm.domain.usecase.battle.BattleUtilities.*;
 
 @ExtendWith(MockitoExtension.class)
 class DuelUseCaseTest {

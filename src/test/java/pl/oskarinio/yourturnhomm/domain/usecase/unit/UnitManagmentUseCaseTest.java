@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.domain.service.unit;
+package pl.oskarinio.yourturnhomm.domain.usecase.unit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,6 @@ import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 import pl.oskarinio.yourturnhomm.domain.model.exception.DuplicateUnitException;
 import pl.oskarinio.yourturnhomm.domain.model.exception.TransactionSystemAddException;
 import pl.oskarinio.yourturnhomm.domain.port.out.UnitRepository;
-import pl.oskarinio.yourturnhomm.domain.usecase.unit.UnitManagementUseCase;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
