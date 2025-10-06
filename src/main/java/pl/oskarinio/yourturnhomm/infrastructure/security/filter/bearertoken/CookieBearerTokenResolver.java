@@ -23,6 +23,7 @@ public class CookieBearerTokenResolver implements BearerTokenResolver {
         Cookie cookieAccess = WebUtils.getCookie(request, COOKIE_ACCESS_TOKEN);
         String path = request.getRequestURI();
 
+
         if(PUBLIC_PATHS.contains(path))
             return null;
 

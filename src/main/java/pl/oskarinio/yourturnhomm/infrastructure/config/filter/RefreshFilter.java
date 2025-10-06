@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -28,29 +29,30 @@ import java.util.Optional;
 
 @Component
 public class RefreshFilter extends OncePerRequestFilter {
-    @Autowired
-    private Token token;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private CookieHelperService cookieHelperService;
-    @Autowired
-    private Clock clock;
-    @Value("${token.access.seconds}")
-    private long TOKEN_ACCESS_SECONDS;
-    @Value("${token.refresh.seconds}")
-    private long TOKEN_REFRESH_SECONDS;
+    private final Token token;
+    private final UserRepository userRepository;
+    private final CookieHelperService cookieHelperService;
+    private final Clock clock;
+
+    private static final long TOKEN_ACCESS_SECONDS = 900;
+    private static final long TOKEN_REFRESH_SECONDS = 604800;
 
     private static final List<String> PUBLIC_PATHS = new ArrayList<>(List.of(
             Route.MAIN + Route.LOGIN,
             Route.MAIN + Route.REGISTER,
             Route.FAVICON));
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    public RefreshFilter(Token token, UserRepository userRepository, CookieHelperService cookieHelperService, Clock clock){
+        this.token = token;
+        this.userRepository = userRepository;
+        this.cookieHelperService = cookieHelperService;
+        this.clock = clock;
+    }
 
+    @Override
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
         if (continueIfPublicPath(request, response, filterChain))
             return;
 
@@ -63,7 +65,7 @@ public class RefreshFilter extends OncePerRequestFilter {
         Cookie cookieRefresh = WebUtils.getCookie(request, "refreshToken");
         String tokenRefresh = getTokenRefresh(cookieRefresh);
 
-        if(continueIfRefreshBad(cookieRefresh, cookieAccess, tokenRefresh, response, request, filterChain))
+        if(continueIfRefreshBad(cookieRefresh, tokenRefresh, response, request, filterChain))
             return;
 
         String username = token.extractUsername(tokenRefresh);
@@ -95,7 +97,7 @@ public class RefreshFilter extends OncePerRequestFilter {
                                              HttpServletRequest request,
                                              HttpServletResponse response,
                                              FilterChain filterChain) throws ServletException, IOException {
-        if (cookieAccess != null && !token.isTokenExpiredSafe(tokenAccess)) {
+        if (cookieAccess != null && cookieAccess.getValue() != null && !token.isTokenExpiredSafe(tokenAccess)) {
             filterChain.doFilter(request, response);
             return true;
         }
@@ -103,19 +105,18 @@ public class RefreshFilter extends OncePerRequestFilter {
     }
 
     private String getTokenAccess(Cookie cookieAccess){
-        if (cookieAccess != null && !cookieAccess.getValue().isBlank())
+        if (cookieAccess != null && cookieAccess.getValue() != null && !cookieAccess.getValue().isBlank())
             return cookieAccess.getValue();
         return null;
     }
 
     private String getTokenRefresh(Cookie cookieRefresh) {
-        if (cookieRefresh != null && !cookieRefresh.getValue().isBlank())
+        if (cookieRefresh != null && cookieRefresh.getValue() != null && !cookieRefresh.getValue().isBlank())
             return cookieRefresh.getValue();
         return null;
     }
 
     private boolean continueIfRefreshBad(Cookie cookieRefresh,
-                                         Cookie cookieAccess,
                                          String tokenRefresh,
                                          HttpServletResponse response,
                                          HttpServletRequest request,
