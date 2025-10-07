@@ -3,6 +3,7 @@ package pl.oskarinio.yourturnhomm.infrastructure.config.filter;
 import io.micrometer.tracing.Span;
 import io.micrometer.tracing.TraceContext;
 import io.micrometer.tracing.Tracer;
+import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.MDC;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -39,14 +42,20 @@ class LoggingFilterTest {
     private static final String TEST_TRACE_VALUE = "traceId";
     private static final String TEST_USER_VALUE = "userId";
     private static final long TEST_ID = 123;
-    private TestWebUtilities webUtilities;
+    private MockHttpServletRequest request;
+    private MockHttpServletResponse response;
+    private FilterChain filterChain;
 
     private LoggingFilter loggingFilter;
 
     @BeforeEach
     void SetUp(){
-        webUtilities = new TestWebUtilities();
         loggingFilter = new LoggingFilter(tracer, userRepositoryUseCase);
+
+        TestWebUtilities webUtilities = new TestWebUtilities();
+        request = webUtilities.getRequest();
+        response =  webUtilities.getResponse();
+        filterChain = webUtilities.getFilterChain();
     }
 
     @Test
@@ -77,13 +86,13 @@ class LoggingFilterTest {
         testContext.setAuthentication(testAuth);
         SecurityContextHolder.setContext(testContext);
 
-        loggingFilter.doFilterInternal(webUtilities.getRequest(), webUtilities.getResponse(), webUtilities.getFilterChain());
+        loggingFilter.doFilterInternal(request, response, filterChain);
     }
 
     private void doFilterInternal_assert() throws ServletException, IOException {
         assertThat(MDC.get(TEST_TRACE_VALUE)).isEqualTo(TEST_TRACE);
         assertThat(MDC.get(TEST_USER_VALUE)).isEqualTo(String.valueOf(TEST_ID));
-        verify(webUtilities.getFilterChain()).doFilter(webUtilities.getRequest(), webUtilities.getResponse());
+        verify(filterChain).doFilter(request, response);
     }
 
     private void doFilterInternal_clear(){

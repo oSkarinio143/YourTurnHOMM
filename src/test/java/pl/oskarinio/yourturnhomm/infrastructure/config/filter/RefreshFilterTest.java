@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.util.WebUtils;
@@ -19,11 +18,14 @@ import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 import pl.oskarinio.yourturnhomm.domain.port.out.Token;
 import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
+import pl.oskarinio.yourturnhomm.infrastructure.config.TestWebUtilities;
 
 import java.io.IOException;
 import java.time.Clock;
 import java.time.Instant;
-import java.util.*;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -50,20 +52,25 @@ class RefreshFilterTest {
     private static final String PUBLIC_PATH = Route.MAIN + Route.REGISTER;
     private static final String UNPUBLIC_PATH = Route.MAIN;
     private static final Instant TEST_INSTANT = Instant.parse("2025-10-06T10:15:30.00Z");
-
+    private MockHttpServletRequest request;
+    private MockHttpServletResponse response;
+    private FilterChain filterChain;
     private RefreshFilter refreshFilter;
 
     @BeforeEach
     void SetUp(){
         refreshFilter = new RefreshFilter(token, userRepository, cookieHelperService, clock);
+
+        TestWebUtilities webUtilities = new TestWebUtilities();
+        request = webUtilities.getRequest();
+        response =  webUtilities.getResponse();
+        filterChain = webUtilities.getFilterChain();
     }
 
     @Test
     @DisplayName("Publiczna sciezka, metoda nic nie robi")
     void doFilterInternal_publcPath_nothingHappened() throws ServletException, IOException {
-        FilterChain filterChain = mock(FilterChain.class);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        MockHttpServletRequest request = getPathWithDetails(PUBLIC_PATH, false);
+        setRequestPathWithDetails(PUBLIC_PATH, false);
 
         refreshFilter.doFilterInternal(request,response,filterChain);
 
@@ -73,9 +80,7 @@ class RefreshFilterTest {
     @Test
     @DisplayName("Niepubliczna sciezka, accessToken poprawny, metoda nic nie robi")
     void doFilterInternal_accessTokenCorrect_nothingHappened() throws ServletException, IOException {
-        FilterChain filterChain = mock(FilterChain.class);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        MockHttpServletRequest request = getPathWithDetails(UNPUBLIC_PATH, true);
+        setRequestPathWithDetails(UNPUBLIC_PATH, true);
 
         when(token.isTokenExpiredSafe(ACCESS_TOKEN_VALUE)).thenReturn(false);
         refreshFilter.doFilterInternal(request,response,filterChain);
@@ -88,9 +93,7 @@ class RefreshFilterTest {
     @Test
     @DisplayName("Niepubliczna ścieżka, accessToken null, refreshToken null, metoda czysci cookies")
     void doFilterInternal_tokenRefreshNullAccessNull_clearCookies() throws ServletException, IOException {
-        FilterChain filterChain = mock(FilterChain.class);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        MockHttpServletRequest request = getPathWithDetails(UNPUBLIC_PATH, false);
+        setRequestPathWithDetails(UNPUBLIC_PATH, false);
 
         refreshFilter.doFilterInternal(request,response,filterChain);
 
@@ -100,9 +103,7 @@ class RefreshFilterTest {
     @Test
     @DisplayName("Niepubliczna ścieżka, accessToken niepoprawny, refreshToken null, metoda czysci cookies")
     void doFilterInternal_tokenRefreshNullAccessIncorrect_clearCookies() throws ServletException, IOException {
-        FilterChain filterChain = mock(FilterChain.class);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        MockHttpServletRequest request = getPathWithDetails(UNPUBLIC_PATH, false);
+        setRequestPathWithDetails(UNPUBLIC_PATH, false);
         setCookies(request, FALSE_TOKEN_VALUE, null);
 
         when(token.isTokenExpiredSafe(FALSE_TOKEN_VALUE)).thenReturn(true);
@@ -114,9 +115,7 @@ class RefreshFilterTest {
     @Test
     @DisplayName("Niepubliczna ścieżka, accessToken null, refreshToken niepoprawny, metoda czysci cookies")
     void doFilterInternal_tokenRefreshIncorrectAccessNull_clearCookies() throws ServletException, IOException {
-        FilterChain filterChain = mock(FilterChain.class);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        MockHttpServletRequest request = getPathWithDetails(UNPUBLIC_PATH, false);
+        setRequestPathWithDetails(UNPUBLIC_PATH, false);
         setCookies(request, null, FALSE_TOKEN_VALUE);
 
         when(token.isTokenExpiredSafe(FALSE_TOKEN_VALUE)).thenReturn(true);
@@ -128,9 +127,7 @@ class RefreshFilterTest {
     @Test
     @DisplayName("Niepubliczna ścieżka, accessToken niepoprawny, refreshToken niepoprawny, metoda czysci cookies")
     void doFilterInternal_tokenRefreshIncorrectAccessIncorrect_clearCookies() throws ServletException, IOException {
-        FilterChain filterChain = mock(FilterChain.class);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        MockHttpServletRequest request = getPathWithDetails(UNPUBLIC_PATH, false);
+        setRequestPathWithDetails(UNPUBLIC_PATH, false);
         setCookies(request, FALSE_TOKEN_VALUE, FALSE_TOKEN_VALUE);
 
         when(token.isTokenExpiredSafe(FALSE_TOKEN_VALUE)).thenReturn(true);
@@ -142,9 +139,7 @@ class RefreshFilterTest {
     @Test
     @DisplayName("Niepubliczna ścieżka, accessToken niepoprawny, refreshToken poprawny, użytkownik niepoprawny, metoda czysci cookies")
     void doFilterInternal_userIncorrect_clearCookies() throws ServletException, IOException {
-        FilterChain filterChain = mock(FilterChain.class);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        MockHttpServletRequest request = getPathWithDetails(UNPUBLIC_PATH, false);
+        setRequestPathWithDetails(UNPUBLIC_PATH, false);
         setCookies(request, null, REFRESH_TOKEN_VALUE);
 
         when(token.extractUsername(REFRESH_TOKEN_VALUE)).thenReturn(TEST_USER);
@@ -157,9 +152,7 @@ class RefreshFilterTest {
     @Test
     @DisplayName("Niepubliczna ścieżka, accessToken niepoprawny, refreshToken poprawny, użytkownik poprawny, metoda ustawia nowy accessToken")
     void doFilterInternal_correctValues_setAccessToken() throws ServletException, IOException {
-        FilterChain filterChain = mock(FilterChain.class);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        MockHttpServletRequest request = getPathWithDetails(UNPUBLIC_PATH, false);
+        setRequestPathWithDetails(UNPUBLIC_PATH, false);
         setCookies(request, null, REFRESH_TOKEN_VALUE);
         User user = getUser();
 
@@ -172,12 +165,10 @@ class RefreshFilterTest {
         assertThat(request.getAttribute(COOKIE_ACCESS_TOKEN)).isEqualTo(ACCESS_TOKEN_VALUE);
     }
 
-    private MockHttpServletRequest getPathWithDetails(String pathAccessLevel, boolean whetherSetCookies){
-        MockHttpServletRequest request = new MockHttpServletRequest();
+    private void setRequestPathWithDetails(String pathAccessLevel, boolean whetherSetCookies){
         request.setRequestURI(pathAccessLevel);
         if(whetherSetCookies)
             setCookies(request,ACCESS_TOKEN_VALUE,REFRESH_TOKEN_VALUE);
-        return request;
     }
 
     private void setCookies(MockHttpServletRequest request, String accessTokenValue, String refreshTokenValue){
