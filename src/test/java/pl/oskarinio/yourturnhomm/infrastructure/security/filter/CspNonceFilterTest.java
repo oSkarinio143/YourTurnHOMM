@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.infrastructure.config.filter;
+package pl.oskarinio.yourturnhomm.infrastructure.security.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -6,7 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import pl.oskarinio.yourturnhomm.infrastructure.security.filter.CspNonceFilter;
 
 import java.io.IOException;
 import java.util.Base64;
@@ -15,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.StatusResultMatchersExtensionsKt.isEqualTo;
 
-public class CspNonceFilterTest {
+class CspNonceFilterTest {
     private static final int ATTRIBUTE_SIZE = 32;
     private static final String ATTRIBUTE_NAME = "cspNonce";
 
