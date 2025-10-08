@@ -1,15 +1,12 @@
 package pl.oskarinio.yourturnhomm.infrastructure.security.filter.bearertoken;
 
-import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.infrastructure.config.TestWebUtilities;
-import pl.oskarinio.yourturnhomm.infrastructure.config.filter.RefreshFilter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,9 +16,6 @@ class CookieBearerTokenResolverTest {
     private static final String COOKIE_ACCESS_TOKEN = "accessToken";
     private static final String ACCESS_TOKEN_VALUE = "accessTokenValue";
     private MockHttpServletRequest request;
-    private MockHttpServletResponse response;
-    private FilterChain filterChain;
-    private RefreshFilter refreshFilter;
 
     private CookieBearerTokenResolver cookieBearerTokenResolver;
 
@@ -31,8 +25,6 @@ class CookieBearerTokenResolverTest {
 
         TestWebUtilities webUtilities = new TestWebUtilities();
         request = webUtilities.getRequest();
-        response =  webUtilities.getResponse();
-        filterChain = webUtilities.getFilterChain();
     }
 
     @Test

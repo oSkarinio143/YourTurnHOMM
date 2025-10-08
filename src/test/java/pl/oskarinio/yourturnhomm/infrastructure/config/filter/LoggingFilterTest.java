@@ -6,6 +6,7 @@ import io.micrometer.tracing.Tracer;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -59,6 +60,7 @@ class LoggingFilterTest {
     }
 
     @Test
+    @DisplayName("Ustawiam domyślne wartości, metoda sprawdza czy filter poprawnie ustawia userId i traceId")
     void doFilterInternal_correctValues_setCorrectTraceUserId() throws ServletException, IOException {
         doFilterInternal_arrange();
         doFilterInternal_act();
