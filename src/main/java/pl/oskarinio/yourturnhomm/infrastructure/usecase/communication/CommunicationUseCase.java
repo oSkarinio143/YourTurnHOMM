@@ -6,11 +6,14 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class CommunicationUseCase {
-    private final Map<UUID, SseEmitter> emitters = new ConcurrentHashMap<>();
+    private final Map<UUID, SseEmitter> emitters;
+
+    public CommunicationUseCase (Map<UUID, SseEmitter> emitters){
+        this.emitters = emitters;
+    }
 
     public UUID createUserUUID(){
         UUID userUUID;
@@ -43,12 +46,11 @@ public class CommunicationUseCase {
         if(userEmitter != null){
             try {
                 userEmitter.send("CLOSE");
-            } catch (IOException e) {
-                emitters.remove(userUUID);
+            } catch (IOException ignored) {
+            } finally {
                 userEmitter.complete();
+                emitters.remove(userUUID);
             }
-            userEmitter.complete();
-            emitters.remove(userUUID);
         }
     }
 }

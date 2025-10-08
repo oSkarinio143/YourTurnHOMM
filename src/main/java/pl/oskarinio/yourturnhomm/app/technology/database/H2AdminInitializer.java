@@ -5,12 +5,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.oskarinio.yourturnhomm.domain.model.user.Role;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
+import pl.oskarinio.yourturnhomm.infrastructure.port.database.ProfileInitializer;
 
 import java.time.Clock;
 import java.time.Instant;
 
 @Slf4j
-public class H2AdminInitializer {
+public class H2AdminInitializer implements ProfileInitializer {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -30,6 +31,7 @@ public class H2AdminInitializer {
         this.adminPassword = adminPassword;
     }
 
+    @Override
     public void initializeProfile() {
         log.info("Inicjalizuję profil H2...");
         if (userRepository.count() == 0) {
