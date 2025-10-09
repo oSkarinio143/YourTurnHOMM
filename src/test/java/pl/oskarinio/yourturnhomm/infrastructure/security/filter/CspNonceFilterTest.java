@@ -15,8 +15,9 @@ import java.util.Base64;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CspNonceFilterTest {
-    private static final int ATTRIBUTE_SIZE = 32;
     private static final String ATTRIBUTE_NAME = "cspNonce";
+    private static final int ATTRIBUTE_SIZE = 32;
+
     private MockHttpServletRequest request;
     private MockHttpServletResponse response;
     private FilterChain filterChain;

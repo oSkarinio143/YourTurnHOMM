@@ -38,11 +38,12 @@ class LoggingFilterTest {
     @Mock
     private UserRepositoryUseCase userRepositoryUseCase;
 
-    private static final String TEST_TRACE = "TEST_TRACE";
-    private static final String TEST_USER = "TEST_USER";
-    private static final String TEST_TRACE_VALUE = "traceId";
-    private static final String TEST_USER_VALUE = "userId";
-    private static final long TEST_ID = 123;
+    private static final String TRACE = "testTrace";
+    private static final String USERNAME = "testUser";
+    private static final String TRACE_VALUE = "traceId";
+    private static final String USER_VALUE = "userId";
+    private static final long USER_ID = 123;
+
     private MockHttpServletRequest request;
     private MockHttpServletResponse response;
     private FilterChain filterChain;
@@ -72,15 +73,15 @@ class LoggingFilterTest {
         Span span = mock(Span.class);
         when(tracer.currentSpan()).thenReturn(span);
         when(span.context()).thenReturn(mock(TraceContext.class));
-        when(span.context().traceId()).thenReturn(TEST_TRACE);
+        when(span.context().traceId()).thenReturn(TRACE);
 
         UserEntity user = getUser();
-        when(userRepositoryUseCase.findByUsername(TEST_USER)).thenReturn(Optional.of(user));
+        when(userRepositoryUseCase.findByUsername(USERNAME)).thenReturn(Optional.of(user));
     }
 
     private void doFilterInternal_act() throws ServletException, IOException {
         Authentication testAuth = new UsernamePasswordAuthenticationToken(
-                TEST_USER,
+                USERNAME,
                 null,
                 List.of(new SimpleGrantedAuthority(ROLE_USER.toString()))
         );
@@ -92,8 +93,8 @@ class LoggingFilterTest {
     }
 
     private void doFilterInternal_assert() throws ServletException, IOException {
-        assertThat(MDC.get(TEST_TRACE_VALUE)).isEqualTo(TEST_TRACE);
-        assertThat(MDC.get(TEST_USER_VALUE)).isEqualTo(String.valueOf(TEST_ID));
+        assertThat(MDC.get(TRACE_VALUE)).isEqualTo(TRACE);
+        assertThat(MDC.get(USER_VALUE)).isEqualTo(String.valueOf(USER_ID));
         verify(filterChain).doFilter(request, response);
     }
 
@@ -104,8 +105,8 @@ class LoggingFilterTest {
 
     private UserEntity getUser(){
         UserEntity user = new UserEntity();
-        user.setUsername(TEST_USER);
-        user.setId(TEST_ID);
+        user.setUsername(USERNAME);
+        user.setId(USER_ID);
         return user;
     }
 }

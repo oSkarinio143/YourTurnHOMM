@@ -42,16 +42,17 @@ class RefreshFilterTest {
     @Mock
     private UserRepository userRepository;
 
+    private static final String PUBLIC_PATH = Route.MAIN + Route.REGISTER;
+    private static final String UNPUBLIC_PATH = Route.MAIN;
     private static final String COOKIE_ACCESS_TOKEN = "accessToken";
     private static final String COOKIE_REFRESH_TOKEN = "refreshToken";
     private static final String ACCESS_TOKEN_VALUE = "accessTokenValue";
     private static final String REFRESH_TOKEN_VALUE = "refreshTokenValue";
     private static final String FALSE_TOKEN_VALUE = "falseTokenValue";
-    private static final String TEST_USER = "testUser";
-    private static final String TEST_PASSWORD = "1234";
-    private static final String PUBLIC_PATH = Route.MAIN + Route.REGISTER;
-    private static final String UNPUBLIC_PATH = Route.MAIN;
-    private static final Instant TEST_INSTANT = Instant.parse("2025-10-06T10:15:30.00Z");
+    private static final String USERNAME = "testUsername";
+    private static final String PASSWORD = "1234";
+    private static final Instant INSTANT = Instant.parse("2025-10-06T10:15:30.00Z");
+
     private MockHttpServletRequest request;
     private MockHttpServletResponse response;
     private FilterChain filterChain;
@@ -142,8 +143,8 @@ class RefreshFilterTest {
         setRequestPathWithDetails(UNPUBLIC_PATH, false);
         setCookies(request, null, REFRESH_TOKEN_VALUE);
 
-        when(token.extractUsername(REFRESH_TOKEN_VALUE)).thenReturn(TEST_USER);
-        when(userRepository.findByUsername(TEST_USER)).thenReturn(Optional.empty());
+        when(token.extractUsername(REFRESH_TOKEN_VALUE)).thenReturn(USERNAME);
+        when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.empty());
         refreshFilter.doFilterInternal(request,response,filterChain);
 
         verify(cookieHelperService).clearCookies(response, request);
@@ -156,9 +157,9 @@ class RefreshFilterTest {
         setCookies(request, null, REFRESH_TOKEN_VALUE);
         User user = getUser();
 
-        when(clock.instant()).thenReturn(TEST_INSTANT);
-        when(token.extractUsername(REFRESH_TOKEN_VALUE)).thenReturn(TEST_USER);
-        when(userRepository.findByUsername(TEST_USER)).thenReturn(Optional.of(user));
+        when(clock.instant()).thenReturn(INSTANT);
+        when(token.extractUsername(REFRESH_TOKEN_VALUE)).thenReturn(USERNAME);
+        when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
         when(token.generateToken(any(UserServiceData.class), anyLong())).thenReturn(ACCESS_TOKEN_VALUE);
         refreshFilter.doFilterInternal(request,response,filterChain);
 
@@ -179,8 +180,8 @@ class RefreshFilterTest {
 
     private User getUser(){
         User user = new User();
-        user.setUsername(TEST_USER);
-        user.setPassword(TEST_PASSWORD);
+        user.setUsername(USERNAME);
+        user.setPassword(PASSWORD);
         user.setRoles(Set.of(ROLE_USER));
         return user;
     }

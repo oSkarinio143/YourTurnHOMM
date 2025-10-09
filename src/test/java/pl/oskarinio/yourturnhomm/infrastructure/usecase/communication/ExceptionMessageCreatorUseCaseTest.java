@@ -20,6 +20,7 @@ import static org.mockito.Mockito.when;
 class ExceptionMessageCreatorUseCaseTest {
     @Mock
     private MessageSource messageSource;
+
     private BindingResult bindingResult;
     private FieldError fieldError;
     private ObjectError trueObjectError;

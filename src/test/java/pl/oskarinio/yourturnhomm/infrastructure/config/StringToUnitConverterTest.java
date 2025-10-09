@@ -17,7 +17,9 @@ import static org.mockito.Mockito.when;
 class StringToUnitConverterTest {
     @Mock
     private UnitManagement unitManagement;
-    private final String TEST_UNIT = "testUnit";
+
+    private static final String UNIT_NAME = "testUnit";
+
     private StringToUnitConverter stringToUnitConverter;
 
     @BeforeEach
@@ -37,12 +39,16 @@ class StringToUnitConverterTest {
     @Test
     @DisplayName("zrodlo jest poprawne, zwraca jednostke")
     void convert_sourceCorrect_returnUnit(){
-        String source = TEST_UNIT;
-        Unit testUnit = new Unit();
-        testUnit.setName(TEST_UNIT);
-        when(unitManagement.getSingleUnit(TEST_UNIT)).thenReturn(testUnit);
+        Unit testUnit = getUnit();
+        when(unitManagement.getSingleUnit(UNIT_NAME)).thenReturn(testUnit);
 
-        Unit convertedUnit = stringToUnitConverter.convert(source);
+        Unit convertedUnit = stringToUnitConverter.convert(UNIT_NAME);
         assertThat(convertedUnit.getName()).isEqualTo(testUnit.getName());
+    }
+
+    private Unit getUnit(){
+        Unit testUnit = new Unit();
+        testUnit.setName(UNIT_NAME);
+        return testUnit;
     }
 }

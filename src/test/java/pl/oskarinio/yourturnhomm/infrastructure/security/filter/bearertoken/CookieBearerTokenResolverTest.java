@@ -15,6 +15,7 @@ class CookieBearerTokenResolverTest {
     private static final String UNPUBLIC_PATH = Route.MAIN;
     private static final String COOKIE_ACCESS_TOKEN = "accessToken";
     private static final String ACCESS_TOKEN_VALUE = "accessTokenValue";
+
     private MockHttpServletRequest request;
 
     private CookieBearerTokenResolver cookieBearerTokenResolver;

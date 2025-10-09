@@ -19,7 +19,9 @@ import static org.mockito.Mockito.*;
 class CommunicationUseCaseTest {
     @Mock
     private Map<UUID, SseEmitter> emitters;
+
     private static final String TEST_MESSAGE = "testMessage";
+
     private UUID randomUUID;
     private SseEmitter emitter;
 

@@ -29,7 +29,7 @@ public class LoginUseCaseTest {
     private PasswordEncoderPort passwordEncoderPort;
 
     private static final Instant TEST_INSTANT = Instant.parse("2023-10-27T10:15:30.00Z");
-    private final long REFRESH_TOKEN_SECONDS = 100000L;
+    private static final long REFRESH_TOKEN_SECONDS = 100000L;
 
     private LoginUseCase loginUseCase;
 

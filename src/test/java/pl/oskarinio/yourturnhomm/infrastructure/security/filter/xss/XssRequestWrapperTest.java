@@ -13,11 +13,12 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class XssRequestWrapperTest {
+class XssRequestWrapperTest {
+    private static final String PARAMETER = "testParameter";
+    private static final String CLEAN_VALUE = "testValue";
+    private static final String UNCLEAN_VALUE = "<script>testValue</script>";
+
     private MockHttpServletRequest request;
-    private static final String TEST_PARAMETER = "testParameter";
-    private static final String TEST_CORRECT_VALUE = "testValue";
-    private String TEST_UNCLEAR_VALUE;
 
     private XssRequestWrapper xssRequestWrapper;
 
@@ -32,19 +33,19 @@ public class XssRequestWrapperTest {
     @Test
     @DisplayName("Parametr jest czysty, zwraca tą samą wartość")
     void getParameterValues_setClearParameter_returnSameParamter(){
-        request.setParameters(Map.of(TEST_PARAMETER, TEST_CORRECT_VALUE));
+        request.setParameters(Map.of(PARAMETER, CLEAN_VALUE));
 
-        String[] parameterValues = xssRequestWrapper.getParameterValues(TEST_PARAMETER);
+        String[] parameterValues = xssRequestWrapper.getParameterValues(PARAMETER);
 
-        assertThat(parameterValues[0]).isEqualTo(TEST_CORRECT_VALUE);
+        assertThat(parameterValues[0]).isEqualTo(CLEAN_VALUE);
     }
 
     @Test
     @DisplayName("Parametr nie jest czysty, oczyszcza go i zwraca")
     void getParameterValues_setUnclearParameter_retrunClearParameter(){
-        request.setParameters(Map.of(TEST_PARAMETER, "<script>testValue</script>"));
+        request.setParameters(Map.of(PARAMETER, UNCLEAN_VALUE));
 
-        String[] parameterValues = xssRequestWrapper.getParameterValues(TEST_PARAMETER);
+        String[] parameterValues = xssRequestWrapper.getParameterValues(PARAMETER);
 
         assertThat(parameterValues[0]).doesNotContain("script");
     }
@@ -52,13 +53,13 @@ public class XssRequestWrapperTest {
     @Test
     @DisplayName("Tablica parametrów, oczyszcza nieczyste i zwraca")
     void getParameterValues_setParametersTable_retrunClearParameters(){
-        String[] parameters = {"<script>testValue</script>", TEST_CORRECT_VALUE, "<img>"};
-        request.setParameters(Map.of(TEST_PARAMETER, parameters));
+        String[] parameters = {UNCLEAN_VALUE, CLEAN_VALUE, "<img>"};
+        request.setParameters(Map.of(PARAMETER, parameters));
 
-        String[] parameterValues = xssRequestWrapper.getParameterValues(TEST_PARAMETER);
+        String[] parameterValues = xssRequestWrapper.getParameterValues(PARAMETER);
 
         assertThat(parameterValues[0]).doesNotContain("script");
-        assertThat(parameterValues[1]).isEqualTo(TEST_CORRECT_VALUE);
+        assertThat(parameterValues[1]).isEqualTo(CLEAN_VALUE);
         assertThat(parameterValues[2]).doesNotContain("img");
     }
 
