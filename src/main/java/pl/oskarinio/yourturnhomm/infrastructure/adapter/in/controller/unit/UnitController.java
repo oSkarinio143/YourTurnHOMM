@@ -53,7 +53,7 @@ class UnitController {
         log.info("Uzytkownik wprowadzil dane");
         if(bindingResult.hasErrors()){
             log.warn("Dodawanie jednostki nie udalo sie, wprowadzono niepoprawne dane");
-            redirectAttributes.addFlashAttribute("incorrectMessage", exceptionHandlerService.createMessageValidError(bindingResult));
+            redirectAttributes.addFlashAttribute("incorrectMessage", exceptionHandlerService.createErrorMessage(bindingResult));
             return Route.REDIRECT + Route.ADMIN + Route.DATABASE + Route.ADD;
         }
         unitEntity.setImagePath(imagePathConverter.convertImageToPath(unitEntity.getName(), image));
@@ -108,7 +108,7 @@ class UnitController {
         log.info("Uzytkownik wprowadza dane");
         if(bindingResult.hasErrors()){
             log.warn("Modyfikacja jednostki nie udala sie, wprowadzono niepoprane dane");
-            redirectAttributes.addFlashAttribute("incorrectMessage", exceptionHandlerService.createMessageValidError(bindingResult));
+            redirectAttributes.addFlashAttribute("incorrectMessage", exceptionHandlerService.createErrorMessage(bindingResult));
             redirectAttributes.addAttribute("name", unitEntity.getName());
             return Route.REDIRECT + Route.ADMIN + Route.DATABASE + Route.MODIFY + Route.UNIT;
         }
