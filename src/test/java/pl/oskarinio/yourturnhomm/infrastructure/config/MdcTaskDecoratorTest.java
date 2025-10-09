@@ -34,6 +34,7 @@ class MdcTaskDecoratorTest {
             mdcValueAfterClear.set(MDC.get(MDC_KEY));
         };
 
+        assertThat(mdcValue.get()).isNull();
         startThread(checkIsMdcAndIsClear);
 
         assertThat(mdcValue.get()).isEqualTo(MDC_VALUE);
