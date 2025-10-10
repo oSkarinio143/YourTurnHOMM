@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.domain.service.battle;
+package pl.oskarinio.yourturnhomm.domain.usecase.battle;
 
 import lombok.Getter;
 import pl.oskarinio.yourturnhomm.domain.model.battle.BattleUnit;

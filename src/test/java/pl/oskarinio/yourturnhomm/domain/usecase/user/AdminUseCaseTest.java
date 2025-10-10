@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.domain.service.user;
+package pl.oskarinio.yourturnhomm.domain.usecase.user;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,9 +14,7 @@ import pl.oskarinio.yourturnhomm.domain.model.exception.UsernameNotFoundExceptio
 import pl.oskarinio.yourturnhomm.domain.model.user.Role;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
-import pl.oskarinio.yourturnhomm.domain.usecase.user.AdminUseCase;
 
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
 

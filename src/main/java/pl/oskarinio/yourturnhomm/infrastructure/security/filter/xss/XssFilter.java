@@ -14,7 +14,7 @@ import java.io.IOException;
 //Filter wykorzystuje wrapper, czyści przychodzące dane, zapobiega atakom xss
 @Component
 @Order(1)
-class XssFilter extends OncePerRequestFilter {
+public class XssFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, FilterChain filterChain)

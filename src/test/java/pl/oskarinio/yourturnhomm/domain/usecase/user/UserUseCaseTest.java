@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.domain.service.user;
+package pl.oskarinio.yourturnhomm.domain.usecase.user;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,6 @@ import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 import pl.oskarinio.yourturnhomm.domain.port.out.Token;
 import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
-import pl.oskarinio.yourturnhomm.domain.usecase.user.UserUseCase;
 
 import java.time.Clock;
 import java.time.Instant;

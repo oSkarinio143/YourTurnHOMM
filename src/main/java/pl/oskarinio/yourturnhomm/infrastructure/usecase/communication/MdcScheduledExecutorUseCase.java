@@ -9,16 +9,17 @@ import java.util.concurrent.TimeUnit;
 
 //Opakowanie dla ScheduledExecutorService, które zawiera Mdc wątku, z którego został uruchomiony
 public class MdcScheduledExecutorUseCase {
-    private final ScheduledExecutorService delegate;
+    private final ScheduledExecutorService scheduler;
 
-    public MdcScheduledExecutorUseCase(ScheduledExecutorService delegate) {
-        this.delegate = delegate;
+    public MdcScheduledExecutorUseCase(ScheduledExecutorService scheduler) {
+        this.scheduler = scheduler;
     }
 
     public ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit) {
         Map<String, String> contextMap = MDC.getCopyOfContextMap();
-        return delegate.schedule(() -> {
-            if (contextMap != null) MDC.setContextMap(contextMap);
+        return scheduler.schedule(() -> {
+            if (contextMap != null)
+                MDC.setContextMap(contextMap);
             try {
                 command.run();
             } finally {

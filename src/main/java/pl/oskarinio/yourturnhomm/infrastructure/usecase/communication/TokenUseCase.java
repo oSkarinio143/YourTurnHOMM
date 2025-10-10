@@ -16,17 +16,14 @@ import java.util.Date;
 public class TokenUseCase {
     private final SecretKey secretKey;
     private final Clock clock;
-    private Instant now;
 
     public TokenUseCase(String secretKeyString, Clock clock){
-        this.secretKey = Keys.hmacShaKeyFor(
-                Base64.getDecoder().decode(secretKeyString)
-        );
+        this.secretKey = Keys.hmacShaKeyFor(Base64.getDecoder().decode(secretKeyString));
         this.clock = clock;
     }
 
     public String generateToken(UserServiceData loginServiceData, long seconds) {
-        now = Instant.now(clock);
+        Instant now = Instant.now(clock);
         Date issuedAt = Date.from(now);
         Date expiration = Date.from(now.plus(seconds, ChronoUnit.SECONDS));
         return Jwts.builder()
@@ -47,8 +44,17 @@ public class TokenUseCase {
                 .getSubject();
     }
 
+
+    public boolean isTokenExpiredSafe(String token){
+        boolean isTokenExpired = true;
+        try{
+            isTokenExpired = isTokenExpired(token);
+        }catch (ExpiredJwtException | IllegalArgumentException ignored){}
+        return isTokenExpired;
+    }
+
     private boolean isTokenExpired(String token) {
-        now = Instant.now(clock);
+        Instant now = Instant.now(clock);
         Date expirationDate = Date.from(now);
         Date expiration = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
@@ -57,14 +63,6 @@ public class TokenUseCase {
                 .getBody()
                 .getExpiration();
         return expiration.before(expirationDate);
-    }
-
-    public boolean isTokenExpiredSafe(String token){
-        boolean isTokenExpired = true;
-        try{
-            isTokenExpired = isTokenExpired(token);
-        }catch (ExpiredJwtException | IllegalArgumentException ignored){}
-        return isTokenExpired;
     }
 }
 

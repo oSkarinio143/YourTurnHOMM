@@ -1,10 +1,8 @@
-package pl.oskarinio.yourturnhomm.domain.service.user;
+package pl.oskarinio.yourturnhomm.domain.usecase.user;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.oskarinio.yourturnhomm.domain.model.form.LoginForm;
@@ -12,13 +10,10 @@ import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 import pl.oskarinio.yourturnhomm.domain.port.out.PasswordEncoderPort;
-import pl.oskarinio.yourturnhomm.domain.port.user.Login;
 import pl.oskarinio.yourturnhomm.domain.port.user.UserManagement;
-import pl.oskarinio.yourturnhomm.domain.usecase.user.LoginUseCase;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -34,7 +29,7 @@ public class LoginUseCaseTest {
     private PasswordEncoderPort passwordEncoderPort;
 
     private static final Instant TEST_INSTANT = Instant.parse("2023-10-27T10:15:30.00Z");
-    private final long REFRESH_TOKEN_SECONDS = 100000L;
+    private static final long REFRESH_TOKEN_SECONDS = 100000L;
 
     private LoginUseCase loginUseCase;
 

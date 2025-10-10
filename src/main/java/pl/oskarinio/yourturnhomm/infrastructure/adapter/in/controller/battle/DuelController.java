@@ -84,7 +84,7 @@ class DuelController {
 
         if(bindingResult.hasErrors()){
             log.warn("Nie udalo sie rozpoczac pojedynku - Uzytkownik wprowadzil niepoprawne dane");
-            redirectAttributes.addFlashAttribute("incorrectMessage", exceptionMessageCreatorService.createMessageValidError(bindingResult));
+            redirectAttributes.addFlashAttribute("incorrectMessage", exceptionMessageCreatorService.createErrorMessage(bindingResult));
             redirectAttributes.addFlashAttribute("duelForm", duelFormRequest);
             return Route.REDIRECT + Route.USER + Route.DUEL;
         }

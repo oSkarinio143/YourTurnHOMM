@@ -16,7 +16,7 @@ import java.util.Base64;
 
 //Filter generuje i udostępnia nonce, zapobiega niechcianym skryptom
 public class CspNonceFilter extends GenericFilterBean {
-    private static final int NONCE_SIZE = 32; //recommended is at least 128 bits/16 bytes
+    private static final int NONCE_SIZE = 32;
     private static final String CSP_NONCE_ATTRIBUTE = "cspNonce";
 
     private final SecureRandom secureRandom = new SecureRandom();
@@ -36,7 +36,7 @@ public class CspNonceFilter extends GenericFilterBean {
         chain.doFilter(request, new CSPNonceResponseWrapper(response, nonce));
     }
 
-    static class CSPNonceResponseWrapper extends HttpServletResponseWrapper {
+    private static class CSPNonceResponseWrapper extends HttpServletResponseWrapper {
         private final String nonce;
 
         CSPNonceResponseWrapper(HttpServletResponse response, String nonce) {

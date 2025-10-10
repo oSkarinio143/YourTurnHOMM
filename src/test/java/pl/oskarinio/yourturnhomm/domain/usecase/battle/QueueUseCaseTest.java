@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.domain.service.battle;
+package pl.oskarinio.yourturnhomm.domain.usecase.battle;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
 import pl.oskarinio.yourturnhomm.domain.port.battle.MessageCreator;
 import pl.oskarinio.yourturnhomm.domain.port.out.MdcScheduledExecutor;
-import pl.oskarinio.yourturnhomm.domain.usecase.battle.QueueUseCase;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,8 +20,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static pl.oskarinio.yourturnhomm.domain.service.battle.BattleUtilities.getRoundInfo;
-import static pl.oskarinio.yourturnhomm.domain.service.battle.BattleUtilities.getUserUUID;
+import static pl.oskarinio.yourturnhomm.domain.usecase.battle.BattleUtilities.getRoundInfo;
+import static pl.oskarinio.yourturnhomm.domain.usecase.battle.BattleUtilities.getUserUUID;
 
 @ExtendWith(MockitoExtension.class)
 class QueueUseCaseTest {

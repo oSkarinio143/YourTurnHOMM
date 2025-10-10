@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm.domain.service.battle;
+package pl.oskarinio.yourturnhomm.domain.usecase.battle;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
 import pl.oskarinio.yourturnhomm.domain.model.form.DuelForm;
 import pl.oskarinio.yourturnhomm.domain.port.battle.Queue;
-import pl.oskarinio.yourturnhomm.domain.usecase.battle.BattleUseCase;
 
 import java.util.Random;
 import java.util.UUID;
@@ -19,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static pl.oskarinio.yourturnhomm.domain.service.battle.BattleUtilities.*;
+import static pl.oskarinio.yourturnhomm.domain.usecase.battle.BattleUtilities.*;
 
 @ExtendWith(MockitoExtension.class)
 public class BattleUseCaseTest {

@@ -10,18 +10,18 @@ import pl.oskarinio.yourturnhomm.domain.port.unit.UnitManagement;
 @Slf4j
 @Component
 class StringToUnitConverter implements Converter<String, Unit> {
-    private final UnitManagement unitUseCase;
+    private final UnitManagement unitManagement;
 
-    public StringToUnitConverter(UnitManagement unitUseCase) {
-        this.unitUseCase = unitUseCase;
+    public StringToUnitConverter(UnitManagement unitManagement) {
+        this.unitManagement = unitManagement;
     }
 
     @Override
     public Unit convert(String source) {
-        if(source != null && !source.isBlank()){
+        if(source != null && !source.isBlank())
             log.debug("Wykonuje konwertowanie stringa na prawdziwa jednostke. zrodlo = {}", source);
-            }
-        if (source == null || source.isBlank()) return null;
-        return unitUseCase.getSingleUnit(source);
+        if (source == null || source.isBlank())
+            return null;
+        return unitManagement.getSingleUnit(source);
     }
 }
