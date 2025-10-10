@@ -33,7 +33,7 @@ class MdcScheduledExecutorUseCaseTest {
     }
 
     @Test
-    @DisplayName("MDC ustawione w wątku, ustawiam w innym wątku, Mdc poprawnie ustawione")
+    @DisplayName("MDC ustawione w wątku, ustawiam w innym wątku, rezultat Mdc poprawnie ustawione")
     void schedule_correctMDC_resultMdcSetCorrectly() throws ExecutionException, InterruptedException {
         Runnable runnable = () -> mdcValue.compareAndSet(null, MDC.get(MDC_KEY));
         MDC.setContextMap(Map.of(MDC_KEY, MDC_VALUE));
@@ -45,7 +45,7 @@ class MdcScheduledExecutorUseCaseTest {
     }
 
     @Test
-    @DisplayName("MDC null, ustawiam w innym wątku, MDC null")
+    @DisplayName("MDC null, ustawiam w innym wątku, rezultat MDC null")
     void schedule_nullMDC_resultMdcNull() throws ExecutionException, InterruptedException {
         Runnable runnable = () -> mdcValue.compareAndSet(null, MDC.get(MDC_KEY));
 
@@ -56,7 +56,7 @@ class MdcScheduledExecutorUseCaseTest {
     }
 
     @Test
-    @DisplayName("MDC ustawione w drugim wątku, czyszczę MDC, MDC null")
+    @DisplayName("MDC ustawione w drugim wątku, czyszczę MDC, rezultat MDC null")
     void schedule_setMdc_clearedMdc() throws ExecutionException, InterruptedException {
         Runnable firstTask = () -> mdcValue.compareAndSet(null, MDC.get(MDC_KEY));
         MDC.setContextMap(Map.of(MDC_KEY, MDC_VALUE));

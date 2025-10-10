@@ -62,14 +62,14 @@ public class CookieHelperUseCase {
     }
 
     public void removeAccessCookie(HttpServletResponse response){
-        Cookie cookie = new Cookie("accessToken", null);
+        Cookie cookie = new Cookie("accessToken", "");
         cookie.setPath("/");
         cookie.setMaxAge(0);
         response.addCookie(cookie);
     }
 
     public void removeRefreshCookie(HttpServletResponse response){
-        Cookie cookie = new Cookie("refreshToken", null);
+        Cookie cookie = new Cookie("refreshToken", "");
         cookie.setPath("/");
         cookie.setMaxAge(0);
         response.addCookie(cookie);

@@ -9,9 +9,9 @@ import static org.mockito.Mockito.mock;
 
 @Data
 public class TestWebUtilities {
-    private MockHttpServletRequest request = new MockHttpServletRequest();;
-    private MockHttpServletResponse response = new MockHttpServletResponse();;
-    private FilterChain filterChain = mock(FilterChain.class);;
+    private MockHttpServletRequest request = new MockHttpServletRequest();
+    private MockHttpServletResponse response = new MockHttpServletResponse();
+    private FilterChain filterChain = mock(FilterChain.class);
 
     public void resetUtilities(){
         request = new MockHttpServletRequest();
