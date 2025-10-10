@@ -1,31 +1,32 @@
 package pl.oskarinio.yourturnhomm.domain.usecase.battle;
 
-import lombok.Getter;
 import pl.oskarinio.yourturnhomm.domain.model.battle.BattleUnit;
 import pl.oskarinio.yourturnhomm.domain.model.battle.RoundInfo;
 import pl.oskarinio.yourturnhomm.domain.model.battle.Unit;
 import pl.oskarinio.yourturnhomm.domain.model.form.DuelForm;
 
 import java.util.UUID;
-@Getter
 class BattleUtilities {
 
-    private static final UUID TEST_USERUUID = UUID.randomUUID();
-    private static final String TEST_UNIT = "testUnit";
+    private static final UUID USER_UUID = UUID.randomUUID();
+    private static final String UNIT_NAME = "testUnit";
+    private static final String WINNER_UNIT_NAME = "winnerUnit";
+    private static final String LOSER_UNIT_NAME = "loserUnit";
+    
 
     static UUID getUserUUID(){
-        return TEST_USERUUID;
+        return USER_UUID;
     }
 
     static String getUnitName(){
-        return TEST_UNIT;
+        return UNIT_NAME;
     }
 
     static RoundInfo getRoundInfo(){
-        BattleUnit winnerUnit = getTestBattleUnit("winnerUnit", 10, 10, 10, 10, 50, 50, 20, 100,0);
-        BattleUnit losingUnit = getTestBattleUnit("loserUnit", 1,1,1,1,1,1,3, 5,0);
+        BattleUnit winnerUnit = getTestBattleUnit(WINNER_UNIT_NAME, 10, 10, 10, 10, 50, 50, 20, 100,0);
+        BattleUnit losingUnit = getTestBattleUnit(LOSER_UNIT_NAME, 1,1,1,1,1,1,3, 5,0);
 
-        RoundInfo roundInfo = new RoundInfo(TEST_USERUUID, 1, 1);
+        RoundInfo roundInfo = new RoundInfo(USER_UUID, 1, 1);
         roundInfo.setFasterDmg(200);
         roundInfo.setSlowerDmg(100);
         roundInfo.setFasterDeathUnits(2);
@@ -44,9 +45,9 @@ class BattleUtilities {
 
     static DuelForm getDuelFormLeftUnitFasterWinner(){
         DuelForm duelForm = new DuelForm();
-        duelForm.setUserUUID(TEST_USERUUID);
-        duelForm.setLeftUnit(getTestUnit("winningUnit",10,10,10,50,100,20,"Strong"));
-        duelForm.setRightUnit(getTestUnit("losingUnit",1,1,1,1,5,3, "Weak"));
+        duelForm.setUserUUID(USER_UUID);
+        duelForm.setLeftUnit(getTestUnit(WINNER_UNIT_NAME,10,10,10,50,100,20,"Strong"));
+        duelForm.setRightUnit(getTestUnit(LOSER_UNIT_NAME,1,1,1,1,5,3, "Weak"));
         duelForm.setLeftQuantity(5);
         duelForm.setRightQuantity(10);
         duelForm.setLeftHeroAttack(5);
@@ -58,7 +59,7 @@ class BattleUtilities {
 
     static DuelForm getDuelFormWithoutSetSides(){
         DuelForm duelForm = new DuelForm();
-        duelForm.setUserUUID(TEST_USERUUID);
+        duelForm.setUserUUID(USER_UUID);
         duelForm.setLeftQuantity(5);
         duelForm.setRightQuantity(10);
         duelForm.setLeftHeroAttack(5);
@@ -71,9 +72,9 @@ class BattleUtilities {
 
     static DuelForm getDuelFormWithHeroZeroStats(){
         DuelForm duelForm = new DuelForm();
-        duelForm.setUserUUID(TEST_USERUUID);
-        duelForm.setLeftUnit(getTestUnit("winningUnit",10,10,50,50,100,20,"Strong"));
-        duelForm.setRightUnit(getTestUnit("losingUnit",1,1,1,1,5,3, "Weak"));
+        duelForm.setUserUUID(USER_UUID);
+        duelForm.setLeftUnit(getTestUnit(WINNER_UNIT_NAME,10,10,50,50,100,20,"Strong"));
+        duelForm.setRightUnit(getTestUnit(LOSER_UNIT_NAME,1,1,1,1,5,3, "Weak"));
         duelForm.setLeftQuantity(5);
         duelForm.setRightQuantity(10);
         duelForm.setLeftHeroAttack(null);
@@ -83,8 +84,8 @@ class BattleUtilities {
         return duelForm;
     }
 
-    static Unit getTestUnit(String name){
-        return new Unit(name, 10, 10, 10, 10, 10, 10, TEST_UNIT);
+    static Unit getTestUnit(){
+        return new Unit(UNIT_NAME, 10, 10, 10, 10, 10, 10, "desc");
     }
 
     private static Unit getTestUnit(String name, int attack, int defense, int minDamage, int maxDamage, int hp, int speed, String description){

@@ -14,13 +14,13 @@ public class BattleUseCase {
     private final Queue queue;
     private final Random random;
 
-    private final double ATK_RATE;
-    private final double DEF_RATE;
+    private final double ATTACK_RATE;
+    private final double DEFENSE_RATE;
 
     public BattleUseCase(Queue queue, double atkRate, double defRate, Random random) {
         this.queue = queue;
-        this.ATK_RATE = atkRate;
-        this.DEF_RATE = defRate;
+        this.ATTACK_RATE = atkRate;
+        this.DEFENSE_RATE = defRate;
         this.random = random;
     }
 
@@ -222,13 +222,13 @@ public class BattleUseCase {
 
     private double countBonusAtkRate(BattleUnit unit, BattleUnit enemyUnit){
         //Różnica statystyk ataku i obrony jednostek zwiększa atak za każdy punkt o 5%
-        double unitAtk = 1 + (ATK_RATE * ((unit.getBasicAtk() + unit.getHeroAtk()) - (enemyUnit.getBasicDef() + enemyUnit.getHeroDef())));
+        double unitAtk = 1 + (ATTACK_RATE * ((unit.getBasicAtk() + unit.getHeroAtk()) - (enemyUnit.getBasicDef() + enemyUnit.getHeroDef())));
         return Math.max(1, Math.min(unitAtk, 4));
     }
 
     private double countBonusDefRate(BattleUnit unit, BattleUnit enemyUnit){
         //Różnica statystyk ataku i obrony jednostek zwiększa obronę za każdy punkt o 2.5%
-        double enemyDef = 1 - (DEF_RATE * ((unit.getBasicDef() + unit.getHeroDef()) - (enemyUnit.getBasicAtk() + enemyUnit.getHeroAtk())));
+        double enemyDef = 1 - (DEFENSE_RATE * ((unit.getBasicDef() + unit.getHeroDef()) - (enemyUnit.getBasicAtk() + enemyUnit.getHeroAtk())));
         return Math.min(1, Math.max(enemyDef, 0.7));
     }
 

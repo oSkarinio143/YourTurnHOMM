@@ -1,6 +1,7 @@
 package pl.oskarinio.yourturnhomm.domain.usecase.battle;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -22,84 +23,80 @@ class MessageCreatorUseCaseTest {
     @Mock
     private MessageSender messageSender;
     @Captor
-    private ArgumentCaptor<UUID> captorUuid;
+    private ArgumentCaptor<UUID> captorUUID;
     @Captor
     private ArgumentCaptor<String> captorMessage;
 
-    private static final UUID TEST_USERUUID = getUserUUID();
+    private static final UUID USER_UUID = getUserUUID();
+
+    private RoundInfo roundInfo;
 
     private MessageCreatorUseCase messageCreatorUseCase;
 
     @BeforeEach
     void SetUp(){
         messageCreatorUseCase = new MessageCreatorUseCase(messageSender);
+        roundInfo = getRoundInfo();
     }
 
     @Test
-    void sendRoundMessage_correctValues(){
-        RoundInfo roundInfo = getRoundInfo();
+    @DisplayName("Poprawne roundInfo, wysyła wiadomość")
+    void sendRoundMessage_correctRoundInfo_resultMessageRoundSend(){
         messageCreatorUseCase.sendRoundMess(roundInfo);
 
-        verify(messageSender).sendMessage(captorUuid.capture(), captorMessage.capture());
-        assertThat(captorUuid.getValue()).isEqualTo(TEST_USERUUID);
+        verify(messageSender).sendMessage(captorUUID.capture(), captorMessage.capture());
+        assertThat(captorUUID.getValue()).isEqualTo(USER_UUID);
         assertThat(captorMessage.getValue()).isEqualTo("ROUND:Runda 1");
     }
 
     @Test
-    void sendAttackFasterMessage_killUnit_resultMessageAttackFasterKill(){
-        RoundInfo roundInfo = getRoundInfo();
-
+    @DisplayName("")
+    void sendAttackFasterMessage_fasterKill_resultMessageAttackFasterKillSend(){
         messageCreatorUseCase.sendAttackFasterMess(roundInfo);
 
-        verify(messageSender).sendMessage(captorUuid.capture(), captorMessage.capture());
-        assertThat(captorUuid.getValue()).isEqualTo(TEST_USERUUID);
+        verify(messageSender).sendMessage(captorUUID.capture(), captorMessage.capture());
+        assertThat(captorUUID.getValue()).isEqualTo(USER_UUID);
         assertThat(captorMessage.getValue()).isEqualTo("ATTACKF:Jednostka 30xwinnerUnit atakuje pierwsza, zadajac 200.<br>Pokonuje 1xloserUnit");
     }
 
     @Test
-    void sendAttackFasterMessage_noKillUnit_resultMessageAttackFasterBasic(){
-        RoundInfo roundInfo = getRoundInfo();
+    void sendAttackFasterMessage_fasterNotKill_resultMessageAttackFasterNotKillSend(){
         roundInfo.setSlowerDeathUnits(0);
 
         messageCreatorUseCase.sendAttackFasterMess(roundInfo);
 
-        verify(messageSender).sendMessage(captorUuid.capture(), captorMessage.capture());
-        assertThat(captorUuid.getValue()).isEqualTo(TEST_USERUUID);
+        verify(messageSender).sendMessage(captorUUID.capture(), captorMessage.capture());
+        assertThat(captorUUID.getValue()).isEqualTo(USER_UUID);
         assertThat(captorMessage.getValue()).isEqualTo("ATTACKF:Jednostka 30xwinnerUnit atakuje pierwsza, zadajac 200.");
     }
 
     @Test
-    void sendAttackSlowerMessage_killUnit_resultMessageAttackSlowerKill(){
-        RoundInfo roundInfo = getRoundInfo();
-
+    void sendAttackSlowerMessage_slowerKill_resultMessageAttackSlowerKillSend(){
         messageCreatorUseCase.sendAttackSlowerMess(roundInfo);
 
-        verify(messageSender).sendMessage(captorUuid.capture(), captorMessage.capture());
-        assertThat(captorUuid.getValue()).isEqualTo(TEST_USERUUID);
+        verify(messageSender).sendMessage(captorUUID.capture(), captorMessage.capture());
+        assertThat(captorUUID.getValue()).isEqualTo(USER_UUID);
         assertThat(captorMessage.getValue()).isEqualTo("ATTACKS:Jednostka 10xloserUnit atakuje druga, zadajac 100.<br>Pokonuje 2xwinnerUnit");
     }
 
     @Test
-    void sendAttackSlowerMessage_noKillUnit_resultMessageAttackSlowerBasic(){
-        RoundInfo roundInfo = getRoundInfo();
+    void sendAttackSlowerMessage_noKillUnit_resultMessageAttackSlowerNotKillSend(){
         roundInfo.setFasterDeathUnits(0);
 
         messageCreatorUseCase.sendAttackSlowerMess(roundInfo);
 
-        verify(messageSender).sendMessage(captorUuid.capture(), captorMessage.capture());
-        assertThat(captorUuid.getValue()).isEqualTo(TEST_USERUUID);
+        verify(messageSender).sendMessage(captorUUID.capture(), captorMessage.capture());
+        assertThat(captorUUID.getValue()).isEqualTo(USER_UUID);
         assertThat(captorMessage.getValue()).isEqualTo("ATTACKS:Jednostka 10xloserUnit atakuje druga, zadajac 100.");
     }
 
     @Test
-    void sendWinnerMessage_correctValues(){
-        RoundInfo roundInfo = getRoundInfo();
-
+    void sendWinnerMessage_correctRoundInfo_resultMessageWinnerSend(){
         messageCreatorUseCase.sendWinnerMess(roundInfo);
 
-        verify(messageSender).sendMessage(captorUuid.capture(), captorMessage.capture());
-        assertThat(captorUuid.getValue()).isEqualTo(TEST_USERUUID);
+        verify(messageSender).sendMessage(captorUUID.capture(), captorMessage.capture());
+        assertThat(captorUUID.getValue()).isEqualTo(USER_UUID);
         assertThat(captorMessage.getValue()).isEqualTo("VICTORY:loserUnit gina. winnerUnit wygrywaja pojedynek");
-        verify(messageSender).closeConnection(TEST_USERUUID);
+        verify(messageSender).closeConnection(USER_UUID);
     }
 }

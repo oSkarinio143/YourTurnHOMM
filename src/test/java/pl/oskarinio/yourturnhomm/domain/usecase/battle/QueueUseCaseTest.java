@@ -1,6 +1,7 @@
 package pl.oskarinio.yourturnhomm.domain.usecase.battle;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -13,15 +14,11 @@ import pl.oskarinio.yourturnhomm.domain.port.battle.MessageCreator;
 import pl.oskarinio.yourturnhomm.domain.port.out.MdcScheduledExecutor;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.inOrder;
 import static pl.oskarinio.yourturnhomm.domain.usecase.battle.BattleUtilities.getRoundInfo;
-import static pl.oskarinio.yourturnhomm.domain.usecase.battle.BattleUtilities.getUserUUID;
 
 @ExtendWith(MockitoExtension.class)
 class QueueUseCaseTest {
@@ -32,8 +29,6 @@ class QueueUseCaseTest {
     @Captor
     private ArgumentCaptor<Runnable> captorRunnable;
 
-    private static final UUID TEST_USERUUID = getUserUUID();
-
     private QueueUseCase queueUseCase;
 
     @BeforeEach
@@ -42,16 +37,23 @@ class QueueUseCaseTest {
     }
 
     @Test
-    void createQueue_correctValues(){
+    @DisplayName("Poprawne RoundInfo, kolejka stworzona")
+    void createQueue_correctRoundInfo_resultQueueCreated(){
         RoundInfo roundInfo = getRoundInfo();
-
         queueUseCase.createQueue(roundInfo);
+        createQueue_assertOrder();
+        createQueue_assertMessages(roundInfo);
+    }
+
+    private void createQueue_assertOrder(){
         InOrder inOrderScheduler = inOrder(scheduler);
         inOrderScheduler.verify(scheduler).schedule(captorRunnable.capture(), eq(1L), eq(TimeUnit.SECONDS));
         inOrderScheduler.verify(scheduler).schedule(captorRunnable.capture(), eq(2L), eq(TimeUnit.SECONDS));
         inOrderScheduler.verify(scheduler).schedule(captorRunnable.capture(), eq(3L), eq(TimeUnit.SECONDS));
         inOrderScheduler.verify(scheduler).schedule(captorRunnable.capture(), eq(4L), eq(TimeUnit.SECONDS));
+    }
 
+    private void createQueue_assertMessages(RoundInfo roundInfo){
         List<Runnable> runnables = captorRunnable.getAllValues();
         runnables.forEach(Runnable::run);
 
@@ -61,4 +63,5 @@ class QueueUseCaseTest {
         inOrderMessageCreator.verify(messageCreator).sendAttackSlowerMess(roundInfo);
         inOrderMessageCreator.verify(messageCreator).sendWinnerMess(roundInfo);
     }
+
 }

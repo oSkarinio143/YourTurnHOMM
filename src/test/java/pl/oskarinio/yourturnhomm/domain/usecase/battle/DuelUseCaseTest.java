@@ -1,6 +1,7 @@
 package pl.oskarinio.yourturnhomm.domain.usecase.battle;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,27 +24,37 @@ class DuelUseCaseTest {
     private UnitRepository unitRepository;
     private Battle battle;
 
+    private static final String UNIT_NAME = BattleUtilities.getUnitName();
+
+    private DuelForm duelForm;
+
     private DuelUseCase duelUseCase;
 
     @BeforeEach
     void SetUp(){
         duelUseCase = new DuelUseCase(unitRepository, battle);
-    }
 
+        duelForm = getDuelFormWithoutSetSides();
+    }
 
     @ParameterizedTest
     @EnumSource(value = Side.class, names = {"LEFT","RIGHT"})
-    void loadUnit_sideHasValue_resultSetUnitThisSide(Side side){
-        DuelForm duelForm = getDuelFormWithoutSetSides();
-        Unit testUnit = getTestUnit(getUnitName());
-        when(unitRepository.getReferenceById(getUnitName())).thenReturn(testUnit);
+    @DisplayName("Strona left/right, ładuje jednostkę na stronie left/right")
+    void loadUnit_sideCorrectValue_resultSetUnitThisSide(Side side){
+        Unit testUnit = getTestUnit();
+        when(unitRepository.getReferenceById(UNIT_NAME)).thenReturn(testUnit);
 
-        duelUseCase.loadUnit(duelForm, side, getUnitName());
+        duelUseCase.loadUnit(duelForm, side, UNIT_NAME);
 
-        if(side.equals(Side.LEFT)){
-            assertThat(duelForm.getLeftUnit()).isEqualTo(testUnit);
+        loadUnit_assert(testUnit,side);
+    }
+
+    private void loadUnit_assert(Unit testUnit, Side side){
+        if(side.equals(Side.LEFT)) {
             assertThat(duelForm.getRightUnit()).isNull();
+            assertThat(duelForm.getLeftUnit()).isEqualTo(testUnit);
         }
+
         if(side.equals(Side.RIGHT)){
             assertThat(duelForm.getRightUnit()).isEqualTo(testUnit);
             assertThat(duelForm.getLeftUnit()).isNull();
@@ -51,12 +62,9 @@ class DuelUseCaseTest {
     }
 
     @Test
+    @DisplayName("Strona null, nic sie nie dzieje")
     void loadUnit_sideIsNull_resultNothingHappened(){
-        DuelForm duelForm = getDuelFormWithoutSetSides();
-        String tempUnitName = "testUnit";
-        Side side = null;
-
-        duelUseCase.loadUnit(duelForm, side, tempUnitName);
+        duelUseCase.loadUnit(duelForm, null, UNIT_NAME);
 
         assertThat(duelForm.getLeftUnit()).isNull();
         assertThat(duelForm.getRightUnit()).isNull();
