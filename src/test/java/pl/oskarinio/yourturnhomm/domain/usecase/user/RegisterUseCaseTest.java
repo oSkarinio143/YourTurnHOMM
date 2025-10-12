@@ -1,6 +1,7 @@
 package pl.oskarinio.yourturnhomm.domain.usecase.user;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -22,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class RegisterUseCaseTest {
@@ -33,15 +35,21 @@ class RegisterUseCaseTest {
     private PasswordEncoderPort passwordEncoderPort;
     @Mock
     private Clock clock;
-
-    private static final Instant TEST_INSTANT = Instant.parse("2023-10-27T10:15:30.00Z");
-
     @Captor
     private ArgumentCaptor<User> captorUser;
-
     @Captor
     private ArgumentCaptor<RefreshToken> captorRefreshToken;
 
+    private static final Instant TEST_INSTANT = Instant.parse("2023-10-27T10:15:30.00Z");
+    private static final String ACCESS_TOKEN = "accessToken";
+    private static final String REFRESH_TOKEN = "refreshToken";
+    private static final String USERNAME = "testUsername";
+    private static final String PASSWORD = "testPassword";
+    private static final String HASHED_PASSWORD = "testHashedPassword";
+    private static final String CONFIRM_PASSWORD = "testConfirmPassword";
+    private UserServiceData userServiceData;
+    private RegisterForm registerForm;
+    
     private RegisterUseCase registerUseCase;
 
     @BeforeEach
@@ -50,46 +58,68 @@ class RegisterUseCaseTest {
     }
 
     @Test
-    void registerUser_correctValues(){
-        String username = "user";
-        String password = "pwd";
-        String confirmPasswrod = "pwd";
-        String accessTokenString = "1234";
-        String refreshTokenString = "4321";
-        String hashedPassword = "hashedPassword";
-        RegisterForm registerForm = new RegisterForm(username, password, confirmPasswrod);
-
-        when(passwordEncoderPort.encode(registerForm.getPassword())).thenReturn(hashedPassword);
+    @DisplayName("RegisterForm z ustawionymi poprawnymi wartościami, zwraca userServiceData z ustawionymi wartościami")
+    void registerUser_correctValues_resultUserServiceData(){
+        registerForm = new RegisterForm(USERNAME, PASSWORD, CONFIRM_PASSWORD);
+        registerUser_act();
+        registerUser_assert();
+    }
+    
+    private void registerUser_act(){
+        when(passwordEncoderPort.encode(registerForm.getPassword())).thenReturn(HASHED_PASSWORD);
         when(clock.instant()).thenReturn(TEST_INSTANT);
+        
         doAnswer(invocation -> {
-            UserServiceData userServiceData = invocation.getArgument(0);
-            userServiceData.setAccessToken(accessTokenString);
-            userServiceData.setRefreshToken(refreshTokenString);
+            UserServiceData tempUserServiceData = invocation.getArgument(0);
+            tempUserServiceData.setAccessToken(ACCESS_TOKEN);
+            tempUserServiceData.setRefreshToken(REFRESH_TOKEN);
             return null;
         }).when(userManagement).generateAndSetTokens(any(UserServiceData.class));
 
-        UserServiceData userServiceData = registerUseCase.registerUser(registerForm);
-
+        userServiceData = registerUseCase.registerUser(registerForm);
+    }
+    
+    private void registerUser_assert(){
         verify(passwordEncoderPort).encode(registerForm.getPassword());
         verify(userManagement).setRefreshToken(captorUser.capture(), captorRefreshToken.capture());
         verify(clock).instant();
-        User capturedUser = captorUser.getValue();
-        RefreshToken capturdRefreshToken = captorRefreshToken.getValue();
 
-        assertThat(capturedUser.getUsername()).isEqualTo(username);
-        assertThat(capturedUser.getPassword()).isEqualTo(hashedPassword);
-        assertThat(capturdRefreshToken.getTokenHash()).isEqualTo(refreshTokenString);
-        assertThat(capturdRefreshToken.getCreationDate()).isEqualTo(TEST_INSTANT);
-
-        assertThat(userServiceData.getUsername()).isEqualTo(username);
-        assertThat(userServiceData.getAccessToken()).isEqualTo(accessTokenString);
-        assertThat(userServiceData.getRefreshToken()).isEqualTo(refreshTokenString);
+        assertCaptured();
+        assertUserServiceData();
+    }
+    
+    private void assertUserServiceData(){
+        assertThat(userServiceData.getUsername()).isEqualTo(USERNAME);
+        assertThat(userServiceData.getAccessToken()).isEqualTo(ACCESS_TOKEN);
+        assertThat(userServiceData.getRefreshToken()).isEqualTo(REFRESH_TOKEN);
         assertThat(userServiceData.getRoles()).hasToString("[ROLE_USER]");
     }
 
+    private void assertCaptured(){
+        User capturedUser = captorUser.getValue();
+        RefreshToken capturdRefreshToken = captorRefreshToken.getValue();
+
+        assertThat(capturedUser.getUsername()).isEqualTo(USERNAME);
+        assertThat(capturedUser.getPassword()).isEqualTo(HASHED_PASSWORD);
+        assertThat(capturdRefreshToken.getTokenHash()).isEqualTo(REFRESH_TOKEN);
+        assertThat(capturdRefreshToken.getCreationDate()).isEqualTo(TEST_INSTANT);
+    }
+
     @Test
-    public void RegisterUser_RegisterFormNull_resultNullPointerException(){
-        RegisterForm registerForm = null;
+    @DisplayName("RegisterForm z null Password, rzuca NullPointerException")
+    void registerUser_nullPassword_resultNullPointerException(){
+        registerForm = new RegisterForm(USERNAME, PASSWORD, CONFIRM_PASSWORD);
+        when(passwordEncoderPort.encode(registerForm.getPassword())).thenReturn(null);
+
         assertThrows(NullPointerException.class, () -> registerUseCase.registerUser(registerForm));
+        verify(clock, never()).instant();
+    }
+
+    @Test
+    @DisplayName("RegisterForm jest null, rzuca NullPointerException")
+    void RegisterUser_registerFormNull_resultNullPointerException(){
+        registerForm = null;
+        assertThrows(NullPointerException.class, () -> registerUseCase.registerUser(registerForm));
+        verify(clock, never()).instant();
     }
 }

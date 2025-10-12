@@ -1,6 +1,7 @@
 package pl.oskarinio.yourturnhomm.domain.usecase.user;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -34,8 +35,10 @@ class UserUseCaseTest {
 
     private static final long ACCESS_TOKEN_SECONDS = 1000L;
     private static final long REFRESH_TOKEN_SECONDS = 100000L;
-    private static final String TEST_USERNAME = "user";
-    private static final Instant TEST_INSTANT = Instant.parse("2023-10-27T10:15:30.00Z");
+    private static final Instant INSTANT = Instant.parse("2023-10-27T10:15:30.00Z");
+    private static final String USERNAME = "testUsername";
+    private static final String ACCESS_TOKEN = "accessToken";
+    private static final String REFRESH_TOKEN = "refreshToken";
 
     private UserUseCase userUseCase;
 
@@ -45,82 +48,94 @@ class UserUseCaseTest {
     }
 
     @Test
-    void generateAndSetTokensTest_correctValues(){
-        UserServiceData userData = new UserServiceData(TEST_USERNAME, "1234");
-        String accessToken = "accessToken";
-        String refreshToken = "refreshToken";
+    @DisplayName("Poprawny użytkownik, tworzy i ustawia tokeny")
+    void generateAndSetTokens_correctUser_resultTokensSet(){
+        UserServiceData userData = new UserServiceData(USERNAME, "testPassword");
 
-        when(token.generateToken(userData, ACCESS_TOKEN_SECONDS)).thenReturn(accessToken);
-        when(token.generateToken(userData, REFRESH_TOKEN_SECONDS)).thenReturn(refreshToken);
+        when(token.generateToken(userData, ACCESS_TOKEN_SECONDS)).thenReturn(ACCESS_TOKEN);
+        when(token.generateToken(userData, REFRESH_TOKEN_SECONDS)).thenReturn(REFRESH_TOKEN);
         userUseCase.generateAndSetTokens(userData);
 
-        assertThat(userData.getAccessToken()).isEqualTo(accessToken);
-        assertThat(userData.getRefreshToken()).isEqualTo(refreshToken);
+        generateAndSetTokens_assert(userData);
+    }
+
+    private void generateAndSetTokens_assert(UserServiceData userData){
+        assertThat(userData.getAccessToken()).isEqualTo(ACCESS_TOKEN);
+        assertThat(userData.getRefreshToken()).isEqualTo(REFRESH_TOKEN);
         verify(token).generateToken(userData, ACCESS_TOKEN_SECONDS);
         verify(token).generateToken(userData, REFRESH_TOKEN_SECONDS);
     }
 
     @Test
-    void getRefreshToken_correctValues(){
-        String refreshTokenString = "refreshToken";
+    @DisplayName("Poprawna nazwa RefreshToken, zwraca refreshToken ")
+    void getRefreshToken_correctRefreshTokenName_resultRefreshTokenReturned(){
+        when(clock.instant()).thenReturn(INSTANT);
 
-        when(clock.instant()).thenReturn(TEST_INSTANT);
+        RefreshToken refreshToken = userUseCase.getRefreshToken(REFRESH_TOKEN);
 
-        RefreshToken refreshToken = userUseCase.getRefreshToken(refreshTokenString);
-
-        assertThat(refreshToken.getTokenHash()).isEqualTo(refreshTokenString);
-        assertThat(refreshToken.getCreationDate()).isEqualTo(TEST_INSTANT);
-        assertThat(refreshToken.getExpirationDate()).isEqualTo(TEST_INSTANT.plus(REFRESH_TOKEN_SECONDS, ChronoUnit.SECONDS));
-        verify(clock).instant();
+        assertThat(refreshToken.getTokenHash()).isEqualTo(REFRESH_TOKEN);
+        assertThat(refreshToken.getCreationDate()).isEqualTo(INSTANT);
+        assertThat(refreshToken.getExpirationDate()).isEqualTo(INSTANT.plus(REFRESH_TOKEN_SECONDS, ChronoUnit.SECONDS));
     }
 
     @Test
-    void prepareMessageError_correctValues(){
+    @DisplayName("Poprawne komunikaty błędów, zwraca przygotowaną wiadomość")
+    void prepareMessageError_basicErrorsMessages_resultMessagePrepared(){
         List<String> errorMessageList = new ArrayList<>(List.of("error1", "error2"));
         String errorMessage = userUseCase.prepareErrorMessage(errorMessageList);
         assertThat(errorMessage).isEqualTo("error1<br>error2<br>");
     }
 
     @Test
-    void prepareErrorMessage_setEmptyList_resultEmptyList() {
+    @DisplayName("Puste komunikaty błędów, zwraca pustą wiadomość")
+    void prepareErrorMessage_emptyList_resultEmptyList() {
         List<String> emptyErrorList = new ArrayList<>();
-
         String errorMessage = userUseCase.prepareErrorMessage(emptyErrorList);
-
         assertThat(errorMessage).isEmpty();
     }
 
     @Test
-    void prepareErrorMessage_nullAndEmptyWordsInList_resultCorrectString() {
-        List<String> errorsWithNulls = new ArrayList<>();
-        errorsWithNulls.add("Błąd numer 1");
-        errorsWithNulls.add(null);
-        errorsWithNulls.add("");
-        errorsWithNulls.add("Błąd numer 4");
+    @DisplayName("Null, puste, poprawne komuniakty błędów, zwraca przygotowaną wiadomość")
+    void prepareErrorMessage_nullEmptyCorrectWordsInList_resultMessagePrepared() {
+        List<String> errors = prepareNullEmptyCorrectMessagesList();
+        String errorMessage = userUseCase.prepareErrorMessage(errors);
+        assertThat(errorMessage).isEqualTo("error1<br>null<br><br>error2<br>");
+    }
 
-        String errorMessage = userUseCase.prepareErrorMessage(errorsWithNulls);
+    private List<String> prepareNullEmptyCorrectMessagesList(){
+        List<String> errors = new ArrayList<>();
+        errors.add("error1");
+        errors.add(null);
+        errors.add("");
+        errors.add("error2");
 
-        assertThat(errorMessage).isEqualTo("Błąd numer 1<br>null<br><br>Błąd numer 4<br>");
+        return errors;
     }
 
     @Test
-    void getUserByUsername_correctValues(){
-        User user = getTestUser();
-        when(userRepository.findByUsername(TEST_USERNAME)).thenReturn(Optional.of(user));
-        User foundUser = userUseCase.getUserByUsernameOrThrow(TEST_USERNAME);
+    @DisplayName("Poprawny username, zwraca użytkownika")
+    void getUserByUsername_correctUsername_resultUserReturned(){
+        User user = getUser();
+        when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
+
+        User foundUser = userUseCase.getUserByUsernameOrThrow(USERNAME);
+
         assertThat(foundUser).isEqualTo(user);
-        verify(userRepository).findByUsername(TEST_USERNAME);
+        verify(userRepository).findByUsername(USERNAME);
     }
 
     @Test
-    void getUserByUsername_nonExistenceUser_resultUsernameNotFoundException(){
-        String nonExistentUsername = "ghostUser";
-        when(userRepository.findByUsername(nonExistentUsername)).thenReturn(Optional.empty());
-        assertThrows(UsernameNotFoundException.class, () -> userUseCase.getUserByUsernameOrThrow(nonExistentUsername));
-        verify(userRepository).findByUsername(nonExistentUsername);
+    @DisplayName("Niepoprawny username, rzuca UsernameNotFoundException")
+    void getUserByUsername_incorrectUsername_resultUsernameNotFoundException(){
+        String falseUsername = "falseUsername";
+        when(userRepository.findByUsername(falseUsername)).thenReturn(Optional.empty());
+
+        assertThrows(UsernameNotFoundException.class, () -> userUseCase.getUserByUsernameOrThrow(falseUsername));
+        verify(userRepository).findByUsername(falseUsername);
     }
 
     @Test
+    @DisplayName("Null username, rzuca UsernameNotFoundException")
     void getUserByUsername_nullUsername_resultUsernameNotFoundException() {
         String nullUsername = null;
         when(userRepository.findByUsername(nullUsername)).thenReturn(Optional.empty());
@@ -130,34 +145,35 @@ class UserUseCaseTest {
     }
 
     @Test
-    void deleteToken_correctValues(){
-        User user = getUserWithUsername(TEST_USERNAME);
+    @DisplayName("Poprawny user, usuwa token")
+    void deleteToken_correctUser_resultTokenDeleted(){
+        User user = getUserWithUsername(USERNAME);
         UserUseCase spiedUserUseCase = spy(userUseCase);
 
-        when(userRepository.findByUsername(TEST_USERNAME)).thenReturn(Optional.of(user));
-        spiedUserUseCase.deleteToken(TEST_USERNAME);
+        when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
+        spiedUserUseCase.deleteToken(USERNAME);
 
         assertThat(user.getRefreshToken()).isNull();
-        verify(userRepository).findByUsername(TEST_USERNAME);
+        verify(userRepository).findByUsername(USERNAME);
         verify(spiedUserUseCase).setRefreshToken(user,null);
     }
 
     @Test
-    public void setRefreshToken_correctValues(){
-        User user = getTestUser();
-
-        when(clock.instant()).thenReturn(TEST_INSTANT);
+    @DisplayName("Poprawny user, refreshToken, token ustawiony")
+    void setRefreshToken_correctUser_resultTokenSet(){
+        User user = getUser();
+        when(clock.instant()).thenReturn(INSTANT);
         RefreshToken refreshToken = userUseCase.getRefreshToken("refreshToken");
 
         userUseCase.setRefreshToken(user, refreshToken);
+
         assertThat(user.getRefreshToken()).isEqualTo(refreshToken);
     }
 
-    @Test
-    public void setRefreshToken_setNullRefreshToken_resultNullRefreshToken(){
-        User user = getTestUser();
-        user.setRefreshToken(mock(RefreshToken.class));
-
+    @Test()
+    @DisplayName("Poprawny user, refreshToken null, token zostaje null")
+    void setRefreshToken_setNullRefreshToken_resultNullRefreshToken(){
+        User user = getUser();
         userUseCase.setRefreshToken(user, null);
         assertThat(user.getRefreshToken()).isNull();
     }
@@ -168,8 +184,8 @@ class UserUseCaseTest {
         return user;
     }
 
-    private User getTestUser(){
-        return getUserWithUsername(TEST_USERNAME);
+    private User getUser(){
+        return getUserWithUsername(USERNAME);
     }
 }
 
