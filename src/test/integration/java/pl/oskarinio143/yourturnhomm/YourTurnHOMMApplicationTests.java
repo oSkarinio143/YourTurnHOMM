@@ -1,4 +1,4 @@
-package pl.oskarinio.yourturnhomm;
+package pl.oskarinio143.yourturnhomm;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
