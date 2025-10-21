@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.util.WebUtils;
-import pl.oskarinio.yourturnhomm.app.technology.communication.CookieHelperService;
+import pl.oskarinio.yourturnhomm.app.technology.communication.CookieHelper;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
@@ -36,7 +36,7 @@ class RefreshFilterTest {
     @Mock
     private Token token;
     @Mock
-    private CookieHelperService cookieHelperService;
+    private CookieHelper cookieHelperService;
     @Mock
     private Clock clock;
     @Mock

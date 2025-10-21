@@ -16,7 +16,7 @@ import java.util.List;
 @Slf4j
 @Controller
 @RequestMapping(Route.MAIN + Route.ADMIN)
-class AdminController {
+public class AdminController {
 
     private final Admin admin;
     private final CookieHelper cookieHelper;

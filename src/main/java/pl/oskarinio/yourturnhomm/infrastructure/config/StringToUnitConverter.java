@@ -12,7 +12,7 @@ import pl.oskarinio.yourturnhomm.domain.port.unit.UnitManagement;
 class StringToUnitConverter implements Converter<String, Unit> {
     private final UnitManagement unitManagement;
 
-    public StringToUnitConverter(UnitManagement unitManagement) {
+    StringToUnitConverter(UnitManagement unitManagement) {
         this.unitManagement = unitManagement;
     }
 

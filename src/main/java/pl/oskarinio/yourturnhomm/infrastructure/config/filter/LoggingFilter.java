@@ -24,7 +24,7 @@ class LoggingFilter extends OncePerRequestFilter {
     private final Tracer tracer;
     private final UserRepositoryUseCase userRepositoryUseCase;
 
-    public LoggingFilter(Tracer tracer, UserRepositoryUseCase userRepositoryUseCase) {
+    LoggingFilter(Tracer tracer, UserRepositoryUseCase userRepositoryUseCase) {
         this.tracer = tracer;
         this.userRepositoryUseCase = userRepositoryUseCase;
     }

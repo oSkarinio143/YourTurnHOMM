@@ -20,7 +20,7 @@ import java.io.IOException;
 @Slf4j
 @Controller
 @RequestMapping(Route.MAIN)
-class UnitController {
+public class UnitController {
 
     private final UnitManagement unitManagementUseCase;
     private final ExceptionMessageCreatorService exceptionHandlerService;

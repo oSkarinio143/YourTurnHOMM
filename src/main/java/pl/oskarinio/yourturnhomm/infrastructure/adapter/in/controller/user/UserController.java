@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.oskarinio.yourturnhomm.app.technology.communication.CookieHelperService;
+import pl.oskarinio.yourturnhomm.app.technology.communication.CookieHelper;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 import pl.oskarinio.yourturnhomm.domain.port.user.Login;
@@ -25,19 +25,19 @@ import java.util.List;
 @Slf4j
 @RequestMapping(Route.MAIN)
 @Controller
-class UserController {
+public class UserController {
 
     private final UserManagement userManagement;
     private final Register register;
     private final Login login;
-    private final CookieHelperService cookieHelperService;
+    private final CookieHelper cookieHelper;
     private final MapStruct mapper;
 
-    public UserController(UserManagement userManagement, Register register, Login login, CookieHelperService cookieHelperService, MapStruct mapper) {
+    public UserController(UserManagement userManagement, Register register, Login login, CookieHelper cookieHelper, MapStruct mapper) {
         this.userManagement = userManagement;
         this.register = register;
         this.login = login;
-        this.cookieHelperService = cookieHelperService;
+        this.cookieHelper = cookieHelper;
         this.mapper = mapper;
     }
 
@@ -69,7 +69,7 @@ class UserController {
             return Route.REDIRECT + Route.LOGIN;
         }
         UserServiceData userServiceData = login.loginUser(mapper.toLoginForm(loginFormRequest));
-        cookieHelperService.setCookieTokens(userServiceData, response);
+        cookieHelper.setCookieTokens(userServiceData, response);
         redirectAttributes.addFlashAttribute("welcomeUserMessage","Udało się poprawnie zalogować użytkownika");
         log.info("Uzytkownik zostal zalogowany");
         return Route.REDIRECT;
@@ -98,7 +98,7 @@ class UserController {
             return Route.REDIRECT + Route.REGISTER;
         }
         UserServiceData userServiceData = register.registerUser(mapper.toRegisterForm(registerFormRequest));
-        cookieHelperService.setCookieTokens(userServiceData, response);
+        cookieHelper.setCookieTokens(userServiceData, response);
         redirectAttributes.addFlashAttribute("welcomeUserMessage", "Udało się zarejestrować użytkownika");
         log.info("Uzytkownik zostal zarejestrowany");
         return Route.REDIRECT;
@@ -110,9 +110,9 @@ class UserController {
                              HttpServletRequest request){
 
         log.info("Uzytkownik rozpoczyna wylogowanie");
-        String username = cookieHelperService.getUsernameFromCookie(request);
-        cookieHelperService.removeAccessCookie(response);
-        cookieHelperService.removeRefreshCookie(response);
+        String username = cookieHelper.getUsernameFromCookie(request);
+        cookieHelper.removeAccessCookie(response);
+        cookieHelper.removeRefreshCookie(response);
         userManagement.deleteToken(username);
         redirectAttributes.addFlashAttribute("logoutMessage", "Użytkownik został wylogowany");
         log.info("Uzytkownik zostal wylogowany");

@@ -7,17 +7,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 import pl.oskarinio.yourturnhomm.domain.port.out.Token;
-import pl.oskarinio.yourturnhomm.infrastructure.port.communication.CookieHelper;
 import pl.oskarinio.yourturnhomm.infrastructure.usecase.communication.CookieHelperUseCase;
 
 @Slf4j
 @Service
-public class CookieHelperService implements CookieHelper {
+public class CookieHelper implements pl.oskarinio.yourturnhomm.infrastructure.port.communication.CookieHelper {
     private final CookieHelperUseCase cookieHelperUseCase;
 
-    public CookieHelperService(Token token,
-                               @Value("${token.access.seconds}") long accessSeconds,
-                               @Value("${token.refresh.seconds}") long refreshSeconds) {
+    public CookieHelper(Token token,
+                        @Value("${token.access.seconds}") long accessSeconds,
+                        @Value("${token.refresh.seconds}") long refreshSeconds) {
         this.cookieHelperUseCase = new CookieHelperUseCase(token, accessSeconds, refreshSeconds);
     }
 

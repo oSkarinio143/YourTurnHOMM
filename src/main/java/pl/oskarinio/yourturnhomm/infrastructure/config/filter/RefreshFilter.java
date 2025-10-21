@@ -9,7 +9,7 @@ import lombok.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
-import pl.oskarinio.yourturnhomm.app.technology.communication.CookieHelperService;
+import pl.oskarinio.yourturnhomm.app.technology.communication.CookieHelper;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
@@ -29,7 +29,7 @@ import java.util.Optional;
 public class RefreshFilter extends OncePerRequestFilter {
     private final Token token;
     private final UserRepository userRepository;
-    private final CookieHelperService cookieHelperService;
+    private final CookieHelper cookieHelperService;
     private final Clock clock;
 
     private static final long TOKEN_ACCESS_SECONDS = 900;
@@ -40,7 +40,7 @@ public class RefreshFilter extends OncePerRequestFilter {
             Route.MAIN + Route.REGISTER,
             Route.FAVICON));
 
-    public RefreshFilter(Token token, UserRepository userRepository, CookieHelperService cookieHelperService, Clock clock){
+    public RefreshFilter(Token token, UserRepository userRepository, CookieHelper cookieHelperService, Clock clock){
         this.token = token;
         this.userRepository = userRepository;
         this.cookieHelperService = cookieHelperService;

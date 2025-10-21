@@ -2,6 +2,7 @@ package pl.oskarinio.yourturnhomm.infrastructure.adapter.in.controller.rest;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
@@ -14,9 +15,9 @@ import pl.oskarinio.yourturnhomm.domain.model.Route;
 class CustomErrorController implements ErrorController {
 
     @RequestMapping(Route.ERROR)
-    public String handleError(HttpServletRequest request) {
+    public String handleError(HttpServletRequest request, HttpServletResponse response) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         log.error("Wystapil blad - {}", status);
-        return Route.REDIRECT;
+        return "redirect:/oskarinio143/YourTurnHOMM";
     }
 }
