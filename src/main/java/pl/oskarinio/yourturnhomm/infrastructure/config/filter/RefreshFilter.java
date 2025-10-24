@@ -9,13 +9,13 @@ import lombok.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
-import pl.oskarinio.yourturnhomm.app.technology.communication.CookieHelper;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.user.RefreshToken;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 import pl.oskarinio.yourturnhomm.domain.port.out.Token;
 import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
+import pl.oskarinio.yourturnhomm.infrastructure.port.communication.CookieHelper;
 
 import java.io.IOException;
 import java.time.Clock;
@@ -29,7 +29,7 @@ import java.util.Optional;
 public class RefreshFilter extends OncePerRequestFilter {
     private final Token token;
     private final UserRepository userRepository;
-    private final CookieHelper cookieHelperService;
+    private final CookieHelper cookieHelper;
     private final Clock clock;
 
     private static final long TOKEN_ACCESS_SECONDS = 900;
@@ -40,10 +40,10 @@ public class RefreshFilter extends OncePerRequestFilter {
             Route.MAIN + Route.REGISTER,
             Route.FAVICON));
 
-    public RefreshFilter(Token token, UserRepository userRepository, CookieHelper cookieHelperService, Clock clock){
+    public RefreshFilter(Token token, UserRepository userRepository, CookieHelper cookieHelper, Clock clock){
         this.token = token;
         this.userRepository = userRepository;
-        this.cookieHelperService = cookieHelperService;
+        this.cookieHelper = cookieHelper;
         this.clock = clock;
     }
 
@@ -63,7 +63,7 @@ public class RefreshFilter extends OncePerRequestFilter {
         Cookie cookieRefresh = WebUtils.getCookie(request, "refreshToken");
         String tokenRefresh = getTokenRefresh(cookieRefresh);
 
-        if(continueIfRefreshBad(cookieRefresh, tokenRefresh, response, request, filterChain))
+        if(continueIfRefreshBad(cookieAccess, cookieRefresh, tokenRefresh, response, request, filterChain))
             return;
 
         String username = token.extractUsername(tokenRefresh);
@@ -114,13 +114,15 @@ public class RefreshFilter extends OncePerRequestFilter {
         return null;
     }
 
-    private boolean continueIfRefreshBad(Cookie cookieRefresh,
+    private boolean continueIfRefreshBad(Cookie cookieAccess,
+                                         Cookie cookieRefresh,
                                          String tokenRefresh,
                                          HttpServletResponse response,
                                          HttpServletRequest request,
                                          FilterChain filterChain) throws ServletException, IOException {
         if (cookieRefresh == null || token.isTokenExpiredSafe(tokenRefresh)) {
-            cookieHelperService.clearCookies(response, request);
+            if(cookieRefresh != null || cookieAccess != null)
+                cookieHelper.clearCookies(response, request);
             filterChain.doFilter(request, response);
             return true;
         }
@@ -132,7 +134,7 @@ public class RefreshFilter extends OncePerRequestFilter {
                                       HttpServletResponse response,
                                       FilterChain filterChain) throws ServletException, IOException {
         if (userOptional.isEmpty()) {
-            cookieHelperService.clearCookies(response, request);
+            cookieHelper.clearCookies(response, request);
             filterChain.doFilter(request, response);
             return true;
         }
@@ -162,7 +164,7 @@ public class RefreshFilter extends OncePerRequestFilter {
         userServiceData.setAccessToken(accessTokenNew);
         userServiceData.setRefreshToken(refreshTokenNew);
         saveRefreshToken(refreshTokenNew, user);
-        cookieHelperService.setCookieTokens(userServiceData, response);
+        cookieHelper.setCookieTokens(userServiceData, response);
         request.setAttribute("accessToken", accessTokenNew);
     }
 }

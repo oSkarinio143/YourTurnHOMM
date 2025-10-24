@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.oskarinio.yourturnhomm.app.technology.communication.CookieHelper;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 import pl.oskarinio.yourturnhomm.domain.port.user.Login;
@@ -19,6 +18,7 @@ import pl.oskarinio.yourturnhomm.domain.port.user.UserManagement;
 import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.LoginFormRequest;
 import pl.oskarinio.yourturnhomm.infrastructure.adapter.in.model.RegisterFormRequest;
 import pl.oskarinio.yourturnhomm.infrastructure.db.mapper.MapStruct;
+import pl.oskarinio.yourturnhomm.infrastructure.port.communication.CookieHelper;
 
 import java.util.List;
 

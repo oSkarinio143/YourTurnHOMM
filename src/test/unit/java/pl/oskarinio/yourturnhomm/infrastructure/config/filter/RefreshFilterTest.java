@@ -12,13 +12,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.util.WebUtils;
-import pl.oskarinio.yourturnhomm.app.technology.communication.CookieHelper;
 import pl.oskarinio.yourturnhomm.domain.model.Route;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.model.user.UserServiceData;
 import pl.oskarinio.yourturnhomm.domain.port.out.Token;
 import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
 import pl.oskarinio.yourturnhomm.infrastructure.config.TestWebUtilities;
+import pl.oskarinio.yourturnhomm.infrastructure.port.communication.CookieHelper;
 
 import java.io.IOException;
 import java.time.Clock;
@@ -36,7 +36,7 @@ class RefreshFilterTest {
     @Mock
     private Token token;
     @Mock
-    private CookieHelper cookieHelperService;
+    private CookieHelper cookieHelper;
     @Mock
     private Clock clock;
     @Mock
@@ -60,7 +60,7 @@ class RefreshFilterTest {
 
     @BeforeEach
     void SetUp(){
-        refreshFilter = new RefreshFilter(token, userRepository, cookieHelperService, clock);
+        refreshFilter = new RefreshFilter(token, userRepository, cookieHelper, clock);
 
         TestWebUtilities webUtilities = new TestWebUtilities();
         request = webUtilities.getRequest();
@@ -86,7 +86,7 @@ class RefreshFilterTest {
         when(token.isTokenExpiredSafe(ACCESS_TOKEN_VALUE)).thenReturn(false);
         refreshFilter.doFilterInternal(request,response,filterChain);
 
-        verify(cookieHelperService, never()).setCookieTokens(any(), any());
+        verify(cookieHelper, never()).setCookieTokens(any(), any());
         String futureAccessToken = Objects.requireNonNull(WebUtils.getCookie(request, COOKIE_ACCESS_TOKEN)).getValue();
         assertThat(futureAccessToken).isEqualTo(ACCESS_TOKEN_VALUE);
     }
@@ -98,7 +98,7 @@ class RefreshFilterTest {
 
         refreshFilter.doFilterInternal(request,response,filterChain);
 
-        verify(cookieHelperService).clearCookies(response, request);
+        verify(cookieHelper, never()).clearCookies(response, request);
     }
 
     @Test
@@ -110,7 +110,7 @@ class RefreshFilterTest {
         when(token.isTokenExpiredSafe(FALSE_TOKEN_VALUE)).thenReturn(true);
         refreshFilter.doFilterInternal(request,response,filterChain);
 
-        verify(cookieHelperService).clearCookies(response, request);
+        verify(cookieHelper).clearCookies(response, request);
     }
 
     @Test
@@ -122,7 +122,7 @@ class RefreshFilterTest {
         when(token.isTokenExpiredSafe(FALSE_TOKEN_VALUE)).thenReturn(true);
         refreshFilter.doFilterInternal(request,response,filterChain);
 
-        verify(cookieHelperService).clearCookies(response, request);
+        verify(cookieHelper).clearCookies(response, request);
     }
 
     @Test
@@ -134,7 +134,7 @@ class RefreshFilterTest {
         when(token.isTokenExpiredSafe(FALSE_TOKEN_VALUE)).thenReturn(true);
         refreshFilter.doFilterInternal(request,response,filterChain);
 
-        verify(cookieHelperService).clearCookies(response, request);
+        verify(cookieHelper).clearCookies(response, request);
     }
 
     @Test
@@ -147,7 +147,7 @@ class RefreshFilterTest {
         when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.empty());
         refreshFilter.doFilterInternal(request,response,filterChain);
 
-        verify(cookieHelperService).clearCookies(response, request);
+        verify(cookieHelper).clearCookies(response, request);
     }
 
     @Test

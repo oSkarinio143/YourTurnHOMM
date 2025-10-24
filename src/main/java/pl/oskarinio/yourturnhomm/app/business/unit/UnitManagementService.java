@@ -30,6 +30,7 @@ public class UnitManagementService implements UnitManagement {
         return unitManagementUseCase.getAllUnits();
     }
 
+    @Transactional
     @Override
     public Unit getSingleUnit(String name) {
         log.trace("Pobieranie jednostki. Nazwa = {}", name);

@@ -17,8 +17,9 @@ public class UnitManagementUseCase {
     }
 
     public void addUnit(Unit unit) {
-        if (unitRepository.existsById(unit.getName()))
+        if (unitRepository.existsById(unit.getName())) {
             throw new DuplicateUnitException("Jednostka o tej nazwie jest już w bazie");
+        }
         try {
             unitRepository.save(unit);
         } catch (RuntimeException ex) {

@@ -21,13 +21,12 @@ import java.io.IOException;
 @Controller
 @RequestMapping(Route.MAIN)
 public class UnitController {
-
-    private final UnitManagement unitManagementUseCase;
+    private final UnitManagement unitManagement;
     private final ExceptionMessageCreatorService exceptionHandlerService;
     private final ImagePathConverter imagePathConverter;
 
-    public UnitController(UnitManagement unitManagementUseCase, ExceptionMessageCreatorService exceptionHandlerService, ImagePathConverter imagePathConverter) {
-        this.unitManagementUseCase = unitManagementUseCase;
+    public UnitController(UnitManagement unitManagement, ExceptionMessageCreatorService exceptionHandlerService, ImagePathConverter imagePathConverter) {
+        this.unitManagement = unitManagement;
         this.exceptionHandlerService = exceptionHandlerService;
         this.imagePathConverter = imagePathConverter;
     }
@@ -57,7 +56,7 @@ public class UnitController {
             return Route.REDIRECT + Route.ADMIN + Route.DATABASE + Route.ADD;
         }
         unitEntity.setImagePath(imagePathConverter.convertImageToPath(unitEntity.getName(), image));
-        unitManagementUseCase.addUnit(UnitMapper.toDomain(unitEntity));
+        unitManagement.addUnit(UnitMapper.toDomain(unitEntity));
         log.info("Jednostka zostala dodana do bazy danych");
         return Route.REDIRECT + Route.USER + Route.DATABASE;
     }
@@ -65,21 +64,21 @@ public class UnitController {
     @GetMapping(Route.USER + Route.DATABASE + Route.SHOW)
     public String viewUnits(Model model){
         log.info("Uzytkownik wyswietla liste jednostek");
-        model.addAttribute("units", unitManagementUseCase.getAllUnits());
+        model.addAttribute("units", unitManagement.getAllUnits());
         return Route.PACKAGE_DATABASE + Route.VIEW_SHOW_UNITS;
     }
 
     @GetMapping(Route.ADMIN + Route.DATABASE + Route.DELETE)
     public String deleteUnit(Model model){
         log.info("Uzytkownik w menu usuniecia jednostki, uruchamiam liste jednostek");
-        model.addAttribute("units", unitManagementUseCase.getAllUnits());
+        model.addAttribute("units", unitManagement.getAllUnits());
         return Route.PACKAGE_DATABASE + Route.VIEW_DELETE_UNIT;
     }
 
     @PostMapping(Route.ADMIN + Route.DATABASE + Route.DELETE)
     public String handleDeleteUnit(@RequestParam String name) {
         log.info("Uzytkownik wybral jednostke do usuniecia");
-        unitManagementUseCase.removeUnit(name);
+        unitManagement.removeUnit(name);
         log.info("Jednostka zostala usunieta");
         return Route.REDIRECT + Route.USER + Route.DATABASE;
     }
@@ -87,7 +86,7 @@ public class UnitController {
     @GetMapping(Route.ADMIN + Route.DATABASE + Route.MODIFY)
     public String handleModify(Model model){
         log.info("Uzytkownik w menu modyfikacji jednostki, uruchamiam liste jednostek");
-        model.addAttribute("units", unitManagementUseCase.getAllUnits());
+        model.addAttribute("units", unitManagement.getAllUnits());
         return Route.PACKAGE_DATABASE + Route.VIEW_MODIFY;
     }
 
@@ -96,7 +95,7 @@ public class UnitController {
                                    Model model) {
 
         log.info("Uzytkownik wybral jednostke do modyfikacji");
-        model.addAttribute("unit", unitManagementUseCase.getSingleUnit(name));
+        model.addAttribute("unit", unitManagement.getSingleUnit(name));
         return Route.PACKAGE_DATABASE + Route.VIEW_MODIFY_UNIT;
     }
 
@@ -107,12 +106,12 @@ public class UnitController {
 
         log.info("Uzytkownik wprowadza dane");
         if(bindingResult.hasErrors()){
-            log.warn("Modyfikacja jednostki nie udala sie, wprowadzono niepoprane dane");
+            log.warn("Modyfikacja jednostki nie udala sie, wprowadzono niepoprawne dane");
             redirectAttributes.addFlashAttribute("incorrectMessage", exceptionHandlerService.createErrorMessage(bindingResult));
             redirectAttributes.addAttribute("name", unitEntity.getName());
             return Route.REDIRECT + Route.ADMIN + Route.DATABASE + Route.MODIFY + Route.UNIT;
         }
-        unitManagementUseCase.modifyUnit(UnitMapper.toDomain(unitEntity));
+        unitManagement.modifyUnit(UnitMapper.toDomain(unitEntity));
         log.info("Jednostka zostala zmodyfikowana");
         return Route.REDIRECT + Route.ADMIN + Route.DATABASE + Route.MODIFY;
     }
