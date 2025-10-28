@@ -110,10 +110,12 @@ public class UserController {
                              HttpServletRequest request){
 
         log.info("Uzytkownik rozpoczyna wylogowanie");
+
         String username = cookieHelper.getUsernameFromCookie(request);
         cookieHelper.removeAccessCookie(response);
         cookieHelper.removeRefreshCookie(response);
         userManagement.deleteToken(username);
+
         redirectAttributes.addFlashAttribute("logoutMessage", "Użytkownik został wylogowany");
         log.info("Uzytkownik zostal wylogowany");
         return Route.REDIRECT + Route.LOGIN;

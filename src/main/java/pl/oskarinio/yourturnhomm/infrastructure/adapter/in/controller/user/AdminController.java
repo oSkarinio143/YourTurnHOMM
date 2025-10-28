@@ -17,7 +17,6 @@ import java.util.List;
 @Controller
 @RequestMapping(Route.MAIN + Route.ADMIN)
 public class AdminController {
-
     private final Admin admin;
     private final CookieHelper cookieHelper;
 

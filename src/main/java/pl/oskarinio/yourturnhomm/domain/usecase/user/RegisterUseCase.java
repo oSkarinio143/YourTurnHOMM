@@ -46,8 +46,9 @@ public class RegisterUseCase {
         Instant now = Instant.now(clock);
         RefreshToken refreshToken = new RefreshToken(userServiceData.getRefreshToken(), now, now.plus(TOKEN_REFRESH_SECONDS, ChronoUnit.SECONDS));
         User user = new User(userServiceData.getUsername(), userServiceData.getPassword(), now);
+
         user.setRoles(userServiceData.getRoles());
-        this.userManagement.setRefreshToken(user, refreshToken);
+        userManagement.setRefreshToken(user, refreshToken);
         userRepository.save(user);
     }
 }

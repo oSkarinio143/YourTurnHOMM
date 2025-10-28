@@ -53,6 +53,7 @@ public class UserUseCase {
     public void deleteToken(String username){
         Optional<User> userOptional = userRepository.findByUsername(username);
         userOptional.ifPresent(user -> setRefreshToken(user, null));
+        userRepository.save(userOptional.get());
     }
 
     public void setRefreshToken(User user, RefreshToken refreshToken){

@@ -70,6 +70,8 @@ public class CookieHelperUseCase {
 
     public void removeRefreshCookie(HttpServletResponse response){
         Cookie cookie = new Cookie("refreshToken", "");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge(0);
         response.addCookie(cookie);

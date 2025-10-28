@@ -27,8 +27,8 @@ public class RegisterService implements Register {
         this.registerUseCase = new RegisterUseCase(userRepository, userManagement, passwordEncoderPort, clock, refreshSeconds);
     }
 
-    @Transactional
     @Override
+    @Transactional
     public UserServiceData registerUser(RegisterForm registerForm) {
         log.debug("Rejestruję użytkownika. Nazwa = {}", registerForm.getUsername());
         return registerUseCase.registerUser(registerForm);

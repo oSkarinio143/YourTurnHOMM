@@ -2,6 +2,7 @@ package pl.oskarinio.yourturnhomm.infrastructure.adapter.out;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.oskarinio.yourturnhomm.domain.model.user.User;
 import pl.oskarinio.yourturnhomm.domain.port.out.UserRepository;
 import pl.oskarinio.yourturnhomm.infrastructure.db.entity.UserEntity;
@@ -23,6 +24,7 @@ public class UserRepositoryService implements UserRepository {
     }
 
     @Override
+    @Transactional
     public Optional<User> findByUsername(String username) {
         log.debug("Szukam w bazie uzytkownika. Nazwa = {}", username);
         return userRepositoryUseCase.findByUsername(username).map(UserMapper::toDomain);
@@ -54,6 +56,7 @@ public class UserRepositoryService implements UserRepository {
     }
 
     @Override
+    @Transactional
     public List<User> findAll() {
         log.trace("Zwracam wszystkich uzytkownikow z bazy");
         List<UserEntity> userEntities = userRepositoryUseCase.findAll();
