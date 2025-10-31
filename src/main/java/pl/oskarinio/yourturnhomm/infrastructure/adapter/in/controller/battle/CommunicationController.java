@@ -20,13 +20,6 @@ class CommunicationController {
         this.communication = communication;
     }
 
-    @GetMapping(Route.GENERATEUUID)
-    public UUID generateUUID(){
-        System.out.println("Generuje UUID");
-        log.debug("Rozpoczynam tworzenie userUUID");
-        return communication.createUserUUID();
-    }
-
     @GetMapping(path = Route.BATTLE + Route.STREAM, produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter stream(@RequestParam UUID userUUID) {
         System.out.println(userUUID);
