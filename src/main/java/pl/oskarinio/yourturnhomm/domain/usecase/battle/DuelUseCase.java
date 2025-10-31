@@ -25,6 +25,8 @@ public class DuelUseCase {
         }
     }
     public void loadBattle(DuelForm duelForm){
+        System.out.println("Laduje Battla");
+        System.out.println("zmapowany UUID - " + duelForm.getUserUUID());
         battle.prepareBattle(duelForm);
     }
 }

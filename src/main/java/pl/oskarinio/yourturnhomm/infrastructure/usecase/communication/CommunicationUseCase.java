@@ -25,16 +25,23 @@ public class CommunicationUseCase {
 
     public SseEmitter createEmitter(UUID userUUID){
         SseEmitter emitter = new SseEmitter(3600000L);
+        System.out.println("dodaje emitter " + emitter);
+        System.out.println("UUID dodanego " + userUUID);
         emitters.put(userUUID, emitter);
         return emitter;
     }
 
     public void sendMessage(UUID userUUID, String message) {
         SseEmitter userEmitter = emitters.get(userUUID);
+        System.out.println(emitters.values());
+        System.out.println(emitters.size());
+        System.out.println("UUID sprawdzanego " + userUUID);
         if(userEmitter != null) {
             try {
+                System.out.println("zara wysle wiadomosc");
                 userEmitter.send(message);
             } catch (IOException e) {
+                System.out.println("zamykam");
                 userEmitter.completeWithError(e);
                 emitters.remove(userUUID);
             }
@@ -42,6 +49,7 @@ public class CommunicationUseCase {
     }
 
     public void closeConnection(UUID userUUID){
+        System.out.println("zamykam");
         SseEmitter userEmitter = emitters.get(userUUID);
         if(userEmitter != null){
             try {

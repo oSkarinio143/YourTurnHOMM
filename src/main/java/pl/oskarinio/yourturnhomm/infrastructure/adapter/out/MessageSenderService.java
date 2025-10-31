@@ -18,6 +18,7 @@ public class MessageSenderService implements MessageSender {
 
     @Override
     public void sendMessage(UUID userUUID, String message) {
+        System.out.println("Wysylam wiad");
         log.trace("Wysylam wiadomosc do uzytkownika. UUID = {}", userUUID);
         communicationUseCase.sendMessage(userUUID, message);
     }

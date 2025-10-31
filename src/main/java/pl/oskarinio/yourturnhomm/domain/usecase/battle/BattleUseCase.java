@@ -88,6 +88,7 @@ public class BattleUseCase {
     }
 
     private void sendRoundMessages(RoundInfo roundInfo){
+        System.out.println("laduje kolejke");
         RoundInfo snapshotRoundInfo = roundInfo.clone();
         queue.createQueue(snapshotRoundInfo);
     }
