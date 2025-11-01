@@ -82,15 +82,12 @@ class DuelController {
                               RedirectAttributes redirectAttributes,
                               Model model) throws InterruptedException {
 
-        System.out.println("battle");
         if(bindingResult.hasErrors()){
             log.warn("Nie udalo sie rozpoczac pojedynku - Uzytkownik wprowadzil niepoprawne dane");
             redirectAttributes.addFlashAttribute("incorrectMessage", exceptionMessageCreatorService.createErrorMessage(bindingResult));
             redirectAttributes.addFlashAttribute("duelForm", duelFormRequest);
             return Route.REDIRECT + Route.USER + Route.DUEL;
         }
-        System.out.println("Tworze Battla");
-        System.out.println("przed battle UUID - " + duelFormRequest.getUserUUID());
         log.info("Uzytkownik w intefejsie bitwy");
         duelFormRequest.setUserUUID(communication.createUserUUID());
         model.addAttribute("duelForm", duelFormRequest);

@@ -58,7 +58,6 @@ public class UserController {
                         RedirectAttributes redirectAttributes,
                         HttpServletResponse response) {
 
-        System.out.println("Logi");
         log.info("Uzytkownik rozpoczyna logowanie");
         if (bindingResult.hasErrors()){
             log.warn("Logowanie nie udane, wprowadzono niepoprawne dane");

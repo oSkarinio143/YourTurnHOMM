@@ -18,7 +18,6 @@ public class MessageCreatorService implements MessageCreator {
 
     @Override
     public void sendRoundMess(RoundInfo roundInfo) {
-        System.out.println("Laduje wiad");
         log.debug("Wysyłam wiadomość o rozpoczęciu rundy. Runda = {}", roundInfo.getRoundCounter());
         messageCreatorUseCase.sendRoundMess(roundInfo);
     }

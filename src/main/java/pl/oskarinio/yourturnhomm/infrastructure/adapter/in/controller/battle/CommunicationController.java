@@ -22,8 +22,6 @@ class CommunicationController {
 
     @GetMapping(path = Route.BATTLE + Route.STREAM, produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter stream(@RequestParam UUID userUUID) {
-        System.out.println(userUUID);
-        System.out.println("Wysylam emiter");
         log.trace("Rozpoczynam tworzenie emittera, userUUID = {}", userUUID);
         return communication.createEmitter(userUUID);
     }
